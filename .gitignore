@@ -20,3 +20,6 @@ out/
 *.hprof
 *.keystore
 !debug.keystore
+
+# Release keystore (kept as GitHub secret KEYSTORE_BASE64)
+release.keystore

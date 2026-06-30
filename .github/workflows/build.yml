@@ -27,6 +27,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Decode keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > release.keystore
+            echo "Keystore decoded from secrets"
+          else
+            echo "No KEYSTORE_BASE64 secret, using debug keystore"
+          fi
+
       - name: Build debug APK (google flavor)
         run: ./gradlew assembleGoogleDebug
 
@@ -38,11 +49,17 @@ jobs:
 
       - name: Build release APK (google flavor, signed)
         env:
-          STORE_FILE: debug.keystore
-          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || 'android' }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'androiddebugkey' }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'android' }}
-        run: ./gradlew assembleGoogleRelease
+          STORE_FILE: release.keystore
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ]; then
+            ./gradlew assembleGoogleRelease
+          else
+            echo "Signing secrets not set, building with debug keystore"
+            STORE_FILE="debug.keystore" ./gradlew assembleGoogleRelease
+          fi
 
       - name: Upload release APK
         uses: actions/upload-artifact@v4
