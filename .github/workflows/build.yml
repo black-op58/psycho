@@ -21,12 +21,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Decode keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -38,10 +32,16 @@ jobs:
             echo "No KEYSTORE_BASE64 secret, using debug keystore"
           fi
 
-      - name: Build debug APK (google flavor)
-        run: ./gradlew assembleGoogleDebug
+      - name: Build debug APK
+        run: chmod +x gradlew && ./gradlew assembleGoogleDebug --no-configuration-cache
 
-      - name: Build release APK (google flavor, signed)
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SaninTV-debug
+          path: app/build/outputs/apk/google/debug/*.apk
+
+      - name: Build release APK
         env:
           STORE_FILE: release.keystore
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
@@ -49,42 +49,38 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           if [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ]; then
-            ./gradlew assembleGoogleRelease
+            chmod +x gradlew && ./gradlew assembleGoogleRelease --no-configuration-cache
           else
-            echo "Signing secrets not set, building with debug keystore"
-            STORE_FILE="debug.keystore" ./gradlew assembleGoogleRelease
+            chmod +x gradlew && STORE_FILE="debug.keystore" ./gradlew assembleGoogleRelease --no-configuration-cache
           fi
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SaninTV-release-signed
+          path: app/build/outputs/apk/google/release/*.apk
 
       - name: Create GitHub Release
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          APK_PATH="app/build/outputs/apk/google/release"
-          DEBUG_PATH="app/build/outputs/apk/google/debug"
-          
-          RELEASE_APK=$(ls "$APK_PATH"/*.apk 2>/dev/null | head -1)
-          DEBUG_APK=$(ls "$DEBUG_PATH"/*.apk 2>/dev/null | head -1)
+          RELEASE_APK=$(ls app/build/outputs/apk/google/release/*.apk 2>/dev/null | head -1)
+          DEBUG_APK=$(ls app/build/outputs/apk/google/debug/*.apk 2>/dev/null | head -1)
           
           VERSION="build-$(date +%Y%m%d-%H%M%S)"
           TAG="v$VERSION"
-          
           ASSETS=""
-          if [ -n "$RELEASE_APK" ]; then
-            ASSETS="$RELEASE_APK"
-          fi
-          if [ -n "$DEBUG_APK" ]; then
-            ASSETS="$ASSETS $DEBUG_APK"
-          fi
+          
+          [ -n "$RELEASE_APK" ] && ASSETS="$RELEASE_APK"
+          [ -n "$DEBUG_APK" ] && ASSETS="$ASSETS $DEBUG_APK"
           
           if [ -z "$ASSETS" ]; then
             echo "No APK files found!"
             exit 1
           fi
           
-          # Delete existing release with same tag if it exists
           gh release delete "$TAG" --yes 2>/dev/null || true
-          
           gh release create "$TAG" \
             --title "SaninTV $VERSION" \
             --notes "Auto-built from commit ${{ github.sha }}" \
