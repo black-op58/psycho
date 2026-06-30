@@ -21,25 +21,19 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Decode keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-        run: |
-          if [ -n "$KEYSTORE_BASE64" ]; then
-            echo "$KEYSTORE_BASE64" | base64 -d > release.keystore
-            echo "Keystore decoded from secrets"
-          else
-            echo "No KEYSTORE_BASE64 secret, using debug keystore"
-          fi
+        run: echo "$KEYSTORE_BASE64" | base64 -d > release.keystore
+
+      - name: Grant permission
+        run: chmod +x gradlew
 
       - name: Build debug APK
-        run: chmod +x gradlew && ./gradlew assembleGoogleDebug --no-configuration-cache
-
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: SaninTV-debug
-          path: app/build/outputs/apk/google/debug/*.apk
+        run: ./gradlew assembleGoogleDebug
 
       - name: Build release APK
         env:
@@ -47,12 +41,13 @@ jobs:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          if [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ]; then
-            chmod +x gradlew && ./gradlew assembleGoogleRelease --no-configuration-cache
-          else
-            chmod +x gradlew && STORE_FILE="debug.keystore" ./gradlew assembleGoogleRelease --no-configuration-cache
-          fi
+        run: ./gradlew assembleGoogleRelease
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SaninTV-debug
+          path: app/build/outputs/apk/google/debug/*.apk
 
       - name: Upload release APK
         uses: actions/upload-artifact@v4
@@ -67,21 +62,14 @@ jobs:
         run: |
           RELEASE_APK=$(ls app/build/outputs/apk/google/release/*.apk 2>/dev/null | head -1)
           DEBUG_APK=$(ls app/build/outputs/apk/google/debug/*.apk 2>/dev/null | head -1)
-          
           VERSION="build-$(date +%Y%m%d-%H%M%S)"
           TAG="v$VERSION"
           ASSETS=""
-          
           [ -n "$RELEASE_APK" ] && ASSETS="$RELEASE_APK"
           [ -n "$DEBUG_APK" ] && ASSETS="$ASSETS $DEBUG_APK"
-          
           if [ -z "$ASSETS" ]; then
             echo "No APK files found!"
             exit 1
           fi
-          
           gh release delete "$TAG" --yes 2>/dev/null || true
-          gh release create "$TAG" \
-            --title "SaninTV $VERSION" \
-            --notes "Auto-built from commit ${{ github.sha }}" \
-            $ASSETS
+          gh release create "$TAG" --title "SaninTV $VERSION" --notes "Auto-built from commit ${{ github.sha }}" $ASSETS
