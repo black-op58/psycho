@@ -41,12 +41,6 @@ jobs:
       - name: Build debug APK (google flavor)
         run: ./gradlew assembleGoogleDebug
 
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: SaninTV-debug
-          path: app/build/outputs/apk/google/debug/*.apk
-
       - name: Build release APK (google flavor, signed)
         env:
           STORE_FILE: release.keystore
@@ -61,8 +55,37 @@ jobs:
             STORE_FILE="debug.keystore" ./gradlew assembleGoogleRelease
           fi
 
-      - name: Upload release APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: SaninTV-release-signed
-          path: app/build/outputs/apk/google/release/*.apk
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          APK_PATH="app/build/outputs/apk/google/release"
+          DEBUG_PATH="app/build/outputs/apk/google/debug"
+          
+          RELEASE_APK=$(ls "$APK_PATH"/*.apk 2>/dev/null | head -1)
+          DEBUG_APK=$(ls "$DEBUG_PATH"/*.apk 2>/dev/null | head -1)
+          
+          VERSION="build-$(date +%Y%m%d-%H%M%S)"
+          TAG="v$VERSION"
+          
+          ASSETS=""
+          if [ -n "$RELEASE_APK" ]; then
+            ASSETS="$RELEASE_APK"
+          fi
+          if [ -n "$DEBUG_APK" ]; then
+            ASSETS="$ASSETS $DEBUG_APK"
+          fi
+          
+          if [ -z "$ASSETS" ]; then
+            echo "No APK files found!"
+            exit 1
+          fi
+          
+          # Delete existing release with same tag if it exists
+          gh release delete "$TAG" --yes 2>/dev/null || true
+          
+          gh release create "$TAG" \
+            --title "SaninTV $VERSION" \
+            --notes "Auto-built from commit ${{ github.sha }}" \
+            $ASSETS
