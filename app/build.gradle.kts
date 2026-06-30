@@ -11,6 +11,15 @@ android {
     namespace = "com.sanin.tv"
     compileSdk = 35
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(System.getenv("STORE_FILE") ?: "debug.keystore")
+            storePassword = System.getenv("STORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.sanin.tv"
         minSdk = 23
@@ -26,14 +35,17 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
+            signingConfig = signingConfigs.getByName("release")
         }
         create("alpha") {
             initWith(getByName("release"))
             applicationIdSuffix = ".alpha"
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

@@ -27,7 +27,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build debug APK
+      - name: Build debug APK (google flavor)
         run: ./gradlew assembleGoogleDebug
 
       - name: Upload debug APK
@@ -36,11 +36,16 @@ jobs:
           name: SaninTV-debug
           path: app/build/outputs/apk/google/debug/*.apk
 
-      - name: Build release APK (unsigned)
+      - name: Build release APK (google flavor, signed)
+        env:
+          STORE_FILE: debug.keystore
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || 'android' }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'androiddebugkey' }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'android' }}
         run: ./gradlew assembleGoogleRelease
 
       - name: Upload release APK
         uses: actions/upload-artifact@v4
         with:
-          name: SaninTV-release-unsigned
+          name: SaninTV-release-signed
           path: app/build/outputs/apk/google/release/*.apk
