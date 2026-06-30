@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false"
+    tools:context=".settings.SettingsAccountActivity">
+
+    <LinearLayout
+        android:id="@+id/settingsAccountsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
+
+        <!-- Back Button -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/nav_bg_inv"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:translationZ="4dp">
+            <ImageButton
+                android:id="@+id/accountSettingsBack"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@color/nav_bg_inv"
+                android:padding="16dp"
+                app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Profile Banner Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profileBannerCard"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="-24dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/nav_bg_inv"
+            android:translationZ="0dp">
+
+            <ImageView
+                android:id="@+id/profileBannerImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/profileBannerScrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99000000" />
+
+            <LinearLayout
+                android:id="@+id/profileBannerContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/profileUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/username"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:elevation="2dp" />
+
+                <TextView
+                    android:id="@+id/profileTokenExpiry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="#87CEEB"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    android:elevation="2dp"
+                    tools:text="Reconnect in 30 days"
+                    tools:visibility="visible" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Avatar + Account Info (overlapping the banner) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profileAvatarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40dp"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="4dp"
+            android:translationZ="6dp"
+            app:cardBackgroundColor="?attr/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileAvatar"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle"
+                    app:srcCompat="@drawable/ic_round_person_24"
+                    android:contentDescription="@string/username" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="8dp">
+
+                    <TextView
+                        android:id="@+id/profileAccountLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/accounts"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/profileAccountSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/manage_accounts"
+                        android:textColor="?attr/colorSecondary"
+                        android:textSize="13sp"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/settingsAccountHelp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_round_help_24"
+                    app:tint="?attr/colorPrimary"
+                    android:contentDescription="@string/account_help" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Account Cards Container -->
+        <LinearLayout
+            android:id="@+id/accountCardsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp">
+
+            <!-- AniList Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/settingsAnilistCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/settingsAnilistIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="@string/anilist"
+                        app:srcCompat="@drawable/ic_anilist"
+                        app:tint="?attr/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/settingsAnilistLoginStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/anilist"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@+id/settingsAnilistIcon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/settingsAnilistLoginAction"
+                        android:layout_marginStart="16dp" />
+
+                    <TextView
+                        android:id="@+id/settingsAnilistLoginAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@string/login"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="14sp"
+                        android:paddingVertical="8dp"
+                        android:paddingHorizontal="16dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintStart_toEndOf="@+id/settingsAnilistIcon"
+                        app:layout_constraintTop_toBottomOf="@+id/settingsAnilistLoginStatus"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginStart="16dp" />
+
+                    <LinearLayout
+                        android:id="@+id/settingsAnilistUserInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/settingsAnilistUsernameDisplay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="@string/username"
+                            android:textColor="?attr/colorSecondary"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/settingsAnilistTokenExpiryDisplay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-4dp"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="?attr/colorPrimary"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            tools:text="Reconnect in 30 days"
+                            tools:visibility="visible" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/settingsAnilistAvatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle"
+                        app:srcCompat="@drawable/ic_round_person_24"
+                        android:contentDescription="@string/anilist"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- MAL Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/settingsMalCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="?attr/colorSurface">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/settingsMalIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="@string/myanimelist"
+                        app:srcCompat="@drawable/ic_myanimelist"
+                        app:tint="?attr/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/settingsMalLoginStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/myanimelist"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@+id/settingsMalIcon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/settingsMalLoginAction"
+                        android:layout_marginStart="16dp" />
+
+                    <TextView
+                        android:id="@+id/settingsMalLoginAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@string/login"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="14sp"
+                        android:paddingVertical="8dp"
+                        android:paddingHorizontal="16dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintStart_toEndOf="@+id/settingsMalIcon"
+                        app:layout_constraintTop_toBottomOf="@+id/settingsMalLoginStatus"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginStart="16dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Settings RecyclerView -->
+        <com.sanin.tv.FadingEdgeRecyclerView
+            android:id="@+id/settingsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            android:requiresFadingEdge="vertical"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_settings" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
