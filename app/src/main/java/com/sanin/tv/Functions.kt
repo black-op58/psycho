@@ -258,7 +258,9 @@ val baselineHeight = if (view.isVisible && !isVerticalSidebar) view.measuredHeig
 val isVerticalSidebar = navBar.height > navBar.width && isLandscape
 val barHeight = if (navBar.isVisible && !isVerticalSidebar) navBar.measuredHeight else 0
         clipToPadding = false
-        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (isLandscape) navBarHeight else navBarHeight + barHeight) + extraPaddingBottom        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }}
+        setPadding(paddingLeft, paddingTop, paddingRight, (if (isLandscape) navBarHeight else navBarHeight + barHeight) + extraPaddingBottom        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0
+        }
+}
 post { updateLayout()}
 navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
 rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
@@ -269,7 +271,9 @@ val isVerticalSidebar = navBar.height > navBar.width && isLandscape
 val barHeight = if (navBar.isVisible && !isVerticalSidebar) navBar.measuredHeight else 0
 val overlayHeight = if (overlayView.isVisible) overlayView.measuredHeight else 0
         clipToPadding = false
-        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (isLandscape) navBarHeight else navBarHeight + barHeight) + overlayHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }}
+        setPadding(paddingLeft, paddingTop, paddingRight, (if (isLandscape) navBarHeight else navBarHeight + barHeight) + overlayHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0
+        }
+}
 post { updateLayout()}
 navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
 overlayView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}

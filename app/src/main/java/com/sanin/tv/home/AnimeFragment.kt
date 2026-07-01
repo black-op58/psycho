@@ -57,7 +57,11 @@ KeyEvent.KEYCODE_DPAD_LEFT -> {
     val prev = (currentItem - 1).coerceAtLeast(0)                        setCurrentItem(prev, true)
 true
 }
-else -> false                }}}
+else -> false
+                }
+        }
+    }
+}
 // Scroll-to-top FAB visibility.        binding.animePageRecyclerView?.addOnScrollListener(
 object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
     override fun onScrolled(                    rv: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int                ) {                    super.onScrolled(rv, dx, dy)
