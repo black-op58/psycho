@@ -1,1 +1,20 @@
-<resources>    <declare-styleable name="AppWidgetAttrs">        <attr name="appWidgetPadding" format="dimension" />        <attr name="appWidgetInnerRadius" format="dimension" />        <attr name="appWidgetRadius" format="dimension" />    </declare-styleable></resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AppWidgetAttrs">
+        <attr name="appWidgetPadding" format="dimension" />
+        <attr name="appWidgetInnerRadius" format="dimension" />
+        <attr name="appWidgetRadius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="GestureImageView">
+        <attr name="gest_disableGestures" format="boolean" />
+        <attr name="gest_doubleTapZoom" format="float" />
+        <attr name="gest_maxZoom" format="float" />
+        <attr name="gest_restrictRotation" format="boolean" />
+        <attr name="gest_rotationEnabled" format="boolean" />
+        <attr name="panEnabled" format="boolean" />
+        <attr name="zoomEnabled" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="AnimatedBottomBar">
+        <attr name="abb_isVerticalBar" format="boolean" />
+    </declare-styleable>
+</resources>
