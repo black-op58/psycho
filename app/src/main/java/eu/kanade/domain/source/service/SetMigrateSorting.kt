@@ -5,6 +5,8 @@ private val preferences: SourcePreferences,) {
         p
     }
 
-enum class Mode {        ALPHABETICAL,        TOTAL,    }
+enum class Mode {
+        ALPHABETICAL,        TOTAL,    }
 
-enum class Direction {        ASCENDING,        DESCENDING,    }}
+enum class Direction {
+        ASCENDING,        DESCENDING,    }}

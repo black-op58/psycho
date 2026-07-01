@@ -20,14 +20,17 @@ override fun onNext(t: T) {
         c
 
 override fun onCompleted() {
-if (cont.isActive) {                        cont.resumeWithException(                            IllegalStateException(                                "Should have invoked onNext",                            ),                        )                    }
+if (cont.isActive) {
+        cont.resumeWithException(                            IllegalStateException(                                "Should have invoked onNext",                            ),                        )
+                    }
 }
 
 override fun onError(e: Throwable) {                    
         /
 val token = cont.tryResumeWithException(e)
-if (token != null) {                        cont.completeResume(token)                    }}
-},        ),    )}
-
+if (token != null) {
+        cont.completeResume(token)                    }}
+},        ),    )
+ }
 private fun <T> CancellableContinuation<T>.unsubscribeOnCancellation(sub: Subscription) =    invokeOnCancellation { 
         s

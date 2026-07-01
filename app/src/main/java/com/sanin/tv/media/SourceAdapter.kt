@@ -14,8 +14,8 @@ private val dialogFragment: SourceSearchDialogFragment,
 private val scope: CoroutineScope) : RecyclerView.Adapter<SourceAdapter.SourceViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SourceViewHolder {
     val binding =            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return SourceViewHolder(binding)    }
-
+return SourceViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
     val binding = holder.binding
 val character = sources[position]        binding.itemCompactImage.loadImage(character.coverUrl, 200)        binding.itemCompactTitle.isSelected = true
@@ -31,4 +31,5 @@ val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root
 
 var a = true            itemView.setOnLongClickListener {                
         a
-}}
+}
+}

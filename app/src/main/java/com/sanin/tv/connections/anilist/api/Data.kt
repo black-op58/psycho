@@ -9,8 +9,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("Viewer")            
-val user: com.sanin.tv.connections.anilist.api.User?        )    }
-
+val user: com.sanin.tv.connections.anilist.api.User?        )
+     }
 @Serializable    
 data class Media(        
 @SerialName("data")        
@@ -20,8 +20,8 @@ data class Data(
 @SerialName("Media")            
 val media: com.sanin.tv.connections.anilist.api.Media?,            
 @SerialName("Page")            
-val page: com.sanin.tv.connections.anilist.api.Page?        )    }
-
+val page: com.sanin.tv.connections.anilist.api.Page?        )
+     }
 @Serializable    
 data class MediaList(        
 @SerialName("data")        
@@ -29,8 +29,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("Page")            
-val page: com.sanin.tv.connections.anilist.api.Page?        )    }
-
+val page: com.sanin.tv.connections.anilist.api.Page?        )
+     }
 @Serializable    
 data class Page(        
 @SerialName("data")        
@@ -51,8 +51,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("Character")            
-val character: com.sanin.tv.connections.anilist.api.Character?        )    }
-
+val character: com.sanin.tv.connections.anilist.api.Character?        )
+     }
 @Serializable    
 data class Studio(        
 @SerialName("data")        
@@ -60,8 +60,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("Studio")            
-val studio: com.sanin.tv.connections.anilist.api.Studio?        )    }
-
+val studio: com.sanin.tv.connections.anilist.api.Studio?        )
+     }
 @Serializable    
 data class Author(        
 @SerialName("data")        
@@ -69,7 +69,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("Staff")            
-val author: Staff?        )    }
+val author: Staff?        )
+    }
 //
 data class MediaList(//        
 val data: Data?//    ){//        
@@ -83,8 +84,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("MediaListCollection")            
-val mediaListCollection: com.sanin.tv.connections.anilist.api.MediaListCollection?        )    }
-
+val mediaListCollection: com.sanin.tv.connections.anilist.api.MediaListCollection?        )
+     }
 @Serializable    
 data class ToggleFollow(        
 @SerialName("data")        

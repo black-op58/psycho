@@ -41,48 +41,49 @@ object TmdbApi {
     private fun getInternalFile(): File {
         val ctx = App.context ?: return File(CACHE_FILE)
         return File(ctx.getDir(CACHE_DIR, Context.MODE_PRIVATE), CACHE_FILE)
-    }
-
+      }
     private fun getSafCacheFile(): DocumentFile? {
         val ctx = App.context ?: return null
-        val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri)
+        val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri);
         if (uriStr.isBlank()) return null
         val tree = DocumentFile.fromTreeUri(ctx, Uri.parse(uriStr)) ?: return null
         return tree.findFile(CACHE_FILE)
-    }
-
+      }
     private fun getSafCacheTree(): DocumentFile? {
         val ctx = App.context ?: return null
-        val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri)
+        val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri);
         if (uriStr.isBlank()) return null
         return DocumentFile.fromTreeUri(ctx, Uri.parse(uriStr))
-    }
-
+      }
     // ── Disk I/O ─────────────────────────────────────────
 
     private fun readDiskRaw(): String? {
         val ctx = App.context ?: return null
         val safFile = getSafCacheFile()
         return if (safFile != null) {
-            ctx.contentResolver.openInputStream(safFile.uri)?.use { it.readText() }
-        } else {
-            val f = getInternalFile()
-            if (f.exists()) f.readText() else null
+        ctx.contentResolver.openInputStream(safFile.uri)?.use { it.readText()
+ }
+        }
+        else {
+            val f = getInternalFile();
+        if (f.exists()) f.readText() else null
         }
     }
 
     private fun writeDiskRaw(json: String) {
         val ctx = App.context ?: return
-        val tree = getSafCacheTree()
+        val tree = getSafCacheTree();
         if (tree != null) {
-            val safFile = tree.findFile(CACHE_FILE)
+        val safFile = tree.findFile(CACHE_FILE)
                 ?: tree.createFile("application/json", CACHE_FILE) ?: return
-            ctx.contentResolver.openOutputStream(safFile.uri, "w")?.use { it.write(json.toByteArray()) }
-        } else {
+            ctx.contentResolver.openOutputStream(safFile.uri, "w")?.use { it.write(json.toByteArray())
+ }
+        }
+        else {
             val f = getInternalFile()
             f.parentFile?.mkdirs()
             f.writeText(json)
-        }
+         }
     }
 
     @Synchronized
@@ -94,18 +95,20 @@ object TmdbApi {
             val map = Mapper.json.decodeFromString<Map<String, String>>(raw)
             map.forEach { (k, v) -> cache[k.toInt()] = v }
             Logger.log("TmdbApi: loaded ${map.size} cache entries")
-        } catch (e: Exception) {
-            Logger.log("TmdbApi: disk load failed — ${e.message}")
-        }
+         }
+        catch (e: Exception) {
+        Logger.log("TmdbApi: disk load failed — ${e.message}")
+         }
     }
 
     @Synchronized
     private fun saveToDisk() {
         try {
             writeDiskRaw(Mapper.json.encodeToString(cache.mapKeys { it.key.toString() }))
-        } catch (e: Exception) {
-            Logger.log("TmdbApi: disk save failed — ${e.message}")
-        }
+         }
+        catch (e: Exception) {
+        Logger.log("TmdbApi: disk save failed — ${e.message}")
+         }
     }
 
     // ── Storage migration ────────────────────────────────
@@ -116,32 +119,35 @@ object TmdbApi {
             val json = readDiskRaw()
             val newTree = DocumentFile.fromTreeUri(ctx, newTreeUri)
             val newFile = newTree?.findFile(CACHE_FILE)
-                ?: newTree?.createFile("application/json", CACHE_FILE)
-            if (newFile != null && json != null) {
-                ctx.contentResolver.openOutputStream(newFile.uri, "w")
-                    ?.use { it.write(json.toByteArray()) }
+                ?: newTree?.createFile("application/json", CACHE_FILE);
+        if (newFile != null && json != null) {
+        ctx.contentResolver.openOutputStream(newFile.uri, "w")
+                    ?.use { it.write(json.toByteArray())
+ }
             }
             getSafCacheFile()?.delete() ?: getInternalFile().delete()
             diskLoaded = false
-        } catch (e: Exception) {
-            Logger.log("TmdbApi: SAF migration failed — ${e.message}")
         }
+        catch (e: Exception) {
+        Logger.log("TmdbApi: SAF migration failed — ${e.message}")
+         }
     }
 
     fun resetStorageToInternal() {
         val ctx = App.context ?: return
         try {
             val json = readDiskRaw()
-            getSafCacheFile()?.delete()
-            if (json != null) {
-                val f = getInternalFile()
+            getSafCacheFile()?.delete();
+        if (json != null) {
+        val f = getInternalFile()
                 f.parentFile?.mkdirs()
                 f.writeText(json)
-            }
+             }
             diskLoaded = false
-        } catch (e: Exception) {
-            Logger.log("TmdbApi: reset to internal failed — ${e.message}")
         }
+        catch (e: Exception) {
+        Logger.log("TmdbApi: reset to internal failed — ${e.message}")
+         }
     }
 
     // ── Public helpers ────────────────────────────────────
@@ -156,12 +162,13 @@ object TmdbApi {
 
     private fun extractLogoUrl(element: JsonElement): String? {
         return when (element) {
-            is JsonObject -> {
+        is JsonObject -> {
                 val logoKeys = listOf("clearlogo", "clearLogo", "logo", "logoImage")
                 val direct = logoKeys.firstNotNullOfOrNull { 
         k
                     (element[key] as? JsonPrimitive)?.contentOrNull
-                        ?.takeIf { isUrl(it) }
+                        ?.takeIf { isUrl(it)
+ }
                 }
                 if (direct != null) return direct
 
@@ -174,7 +181,8 @@ object TmdbApi {
                     ?.let { (it["url"] as? JsonPrimitive)?.contentOrNull?.takeIf { u -> isUrl(u) } }
             }
             is JsonArray -> {
-                element.filterIsInstance<JsonObject>().firstNotNullOfOrNull { extractLogoUrl(it) }
+                element.filterIsInstance<JsonObject>().firstNotNullOfOrNull { extractLogoUrl(it)
+ }
             }
             else -> null
         }
@@ -188,7 +196,8 @@ object TmdbApi {
     suspend fun getLogoUrl(anilistId: Int, isAnime: Boolean): String? {
         if (!isAnime) return null
 
-        if (!diskLoaded) withContext(Dispatchers.IO) { loadFromDisk() }
+        if (!diskLoaded) withContext(Dispatchers.IO) { loadFromDisk()
+ }
         cache[anilistId]?.let { return it.ifEmpty { null } }
 
         return withContext(Dispatchers.IO) {
@@ -197,8 +206,7 @@ object TmdbApi {
                     val response = client.get("$ANIZIP_API$anilistId")
                     val jsonElement = Mapper.json.parseToJsonElement(response.text)
                     extractLogoUrl(jsonElement)
-                }
-
+                  }
                 val logoUrl = if (url != null) "$IMAGE_PROXY$url" else ""
 
                 cache[anilistId] = logoUrl
@@ -207,10 +215,12 @@ object TmdbApi {
                 Logger.log("TmdbApi: anilist=$anilistId → ${logoUrl.ifEmpty { "no logo" }}")
                 logoUrl.ifEmpty { null }
 
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Logger.log("TmdbApi: fallback anilist=$anilistId → ${e.message}")
+            }
+        catch (e: CancellationException) {
+        throw e
+            }
+        catch (e: Exception) {
+        Logger.log("TmdbApi: fallback anilist=$anilistId → ${e.message}")
                 null
             }
         }
@@ -223,8 +233,9 @@ object TmdbApi {
             getSafCacheFile()?.delete()
             getInternalFile().delete()
             Logger.log("TmdbApi: cache cleared")
-        } catch (e: Exception) {
-            Logger.log("TmdbApi: clearCache error — ${e.message}")
-        }
+         }
+        catch (e: Exception) {
+        Logger.log("TmdbApi: clearCache error — ${e.message}")
+         }
     }
 }

@@ -51,7 +51,9 @@ binding.notificationRecyclerView.adapter = adapter        binding.notificationRe
             getList()
         resetCountIfNeeded()
             binding.notificationProgressBar.isVisible = false}
-binding.notificationSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear();
+binding.notificationSwipeRefresh.setOnRefreshListener {
+        lifecycleScope.launch {
+        adapter.clear();
         currentPage = 1
                 resetCountIfNeeded()
         getList()
@@ -60,68 +62,97 @@ binding.notificationRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                
         s
-if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.notificationRefresh.isVisible = true                        getList()                        binding.notificationRefresh.isVisible = false
+if (shouldLoadMore()) {
+        lifecycleScope.launch {
+        binding.notificationRefresh.isVisible = true                        getList()                        binding.notificationRefresh.isVisible = false
                     }}}
-})    }
-
+})
+     }
 private fun resetCountIfNeeded() {
 if (type == ONE) return
-when (type) {            USER -> {                PrefManager.setVal(PrefName.UnreadUserNotifications, 0)            }
-MEDIA -> {                PrefManager.setVal(PrefName.UnreadMediaNotifications, 0)}
-SUBSCRIPTION -> {                PrefManager.setVal(PrefName.UnreadSubscriptionNotifications, 0)}
-COMMENT -> {                PrefManager.setVal(PrefName.UnreadCommentNotifications, 0)}
+when (type) {
+        USER -> {
+        PrefManager.setVal(PrefName.UnreadUserNotifications, 0)
+            }
+MEDIA -> {
+        PrefManager.setVal(PrefName.UnreadMediaNotifications, 0)
+}
+SUBSCRIPTION -> {
+        PrefManager.setVal(PrefName.UnreadSubscriptionNotifications, 0)
+}
+COMMENT -> {
+        PrefManager.setVal(PrefName.UnreadCommentNotifications, 0)
+}
 ONE -> {}}
-countResetCallback?.invoke(type, true)    }
-
+countResetCallback?.invoke(type, true)
+     }
 private suspend 
 fun getList() {
-    val list = when (type) {            
+    val list = when (type) {
         O
     MEDIA -> getNotificationsFiltered(type = true) { it.media != null || it.notificationType == com.sanin.tv.connections.anilist.api.NotificationType.MEDIA_DELETION.value}
     USER -> getNotificationsFiltered { it.media == null && it.notificationType != com.sanin.tv.connections.anilist.api.NotificationType.RELATED_MEDIA_ADDITION.value}
-    SUBSCRIPTION -> getSubscriptions()            COMMENT -> getComments()}
+    SUBSCRIPTION -> getSubscriptions()            COMMENT -> getComments()
+}
     adapter.addAll(list.map { NotificationItem(it, type, adapter, ::onClick) })
-if (adapter.itemCount == 0) {            binding.emptyTextView.isVisible = true        }
+if (adapter.itemCount == 0) {
+        binding.emptyTextView.isVisible = true        }
 }
 
 private suspend 
 fun getNotificationsFiltered(        reset: Boolean = true,        type: Boolean? = null,        filter: (Notification) -> Boolean    ): List<Notification> {
     val userId =            Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull() ?: 0
 val res = Anilist.query.getNotifications(userId, currentPage, reset, type)?.data?.page        currentPage = res?.pageInfo?.currentPage?.plus(1) ?: 1        hasNextPage = res?.pageInfo?.hasNextPage ?: false
-return res?.notifications?.filter(filter) ?: listOf()    }
-
+return res?.notifications?.filter(filter) ?: listOf()
+     }
 private fun getSubscriptions(): List<Notification> {
     val list = PrefManager.getNullableVal<List<SubscriptionStore>>(            PrefName.SubscriptionNotificationStore,            null        ) ?: listOf()
-return list            .sortedByDescending { (it.time / 1000L).toInt() }
-.filter { it.image != null } // to remove old data            .map {                Notification(                    it.type,                    System.currentTimeMillis().toInt(),                    commentId = it.mediaId,                    mediaId = it.mediaId,                    notificationType = it.type,                    context = it.title + ": " + it.content,                    createdAt = (it.time / 1000L).toInt(),                    image = it.image,                    banner = it.banner ?: it.image                )}
+return list            .sortedByDescending { (it.time / 1000L).toInt()
+ }
+.filter { it.image != null } // to remove old data            .map {
+        Notification(                    it.type,                    System.currentTimeMillis().toInt(),                    commentId = it.mediaId,                    mediaId = it.mediaId,                    notificationType = it.type,                    context = it.title + ": " + it.content,                    createdAt = (it.time / 1000L).toInt(),                    image = it.image,                    banner = it.banner ?: it.image                )
+}
 }
 
 private fun getComments(): List<Notification> {
     val list = PrefManager.getNullableVal<List<CommentStore>>(            PrefName.CommentNotificationStore,            null        ) ?: listOf()
-return list            .sortedByDescending { (it.time / 1000L).toInt() }
-.map {                Notification(                    it.type.toString(),                    System.currentTimeMillis().toInt(),                    commentId = it.commentId,                    notificationType = it.type.toString(),                    mediaId = it.mediaId,                    context = it.title + "\n" + it.content,                    createdAt = (it.time / 1000L).toInt(),                )}
+return list            .sortedByDescending { (it.time / 1000L).toInt()
+ }
+.map {
+        Notification(                    it.type.toString(),                    System.currentTimeMillis().toInt(),                    commentId = it.commentId,                    notificationType = it.type.toString(),                    mediaId = it.mediaId,                    context = it.title + "\n" + it.content,                    createdAt = (it.time / 1000L).toInt(),                )
+}
 }
 
 private fun shouldLoadMore(): Boolean {
     val layoutManager =            (binding.notificationRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()        
 val adapter = binding.notificationRecyclerView.adapter
-return hasNextPage && !binding.notificationRefresh.isVisible && adapter?.itemCount != 0 &&                layoutManager == (adapter!!.itemCount - 1) &&                !binding.notificationRecyclerView.canScrollVertically(1)    }
-
+return hasNextPage && !binding.notificationRefresh.isVisible && adapter?.itemCount != 0 &&                layoutManager == (adapter!!.itemCount - 1) &&                !binding.notificationRecyclerView.canScrollVertically(1)
+     }
 fun onClick(id: Int, optional: Int?, type: NotificationClickType) {
-    val intent = when (type) {            
+    val intent = when (type) {
         N
-    NotificationClickType.MEDIA -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("mediaId", id)}
-    NotificationClickType.ACTIVITY -> Intent(                requireContext(),                FeedActivity::class.java            ).apply {                putExtra("activityId", id)}
-    NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+    NotificationClickType.MEDIA -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {
         putExtra("mediaId", id)
-                putExtra("commentId", optional ?: -1)}
+}
+    NotificationClickType.ACTIVITY -> Intent(                requireContext(),                FeedActivity::class.java            ).apply {
+        putExtra("activityId", id)
+}
+    NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {
+        putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+        putExtra("mediaId", id)
+                putExtra("commentId", optional ?: -1)
+}
     NotificationClickType.UNDEFINED -> null}
-    intent?.let {            ContextCompat.startActivity(requireContext(), it, null)}
+    intent?.let {
+        ContextCompat.startActivity(requireContext(), it, null)
+}
     }
 
 override fun onResume() {        
         s
-if (this::binding.isInitialized) {            binding.root.requestLayout()        }
+if (this::binding.isInitialized) {
+        binding.root.requestLayout()
+        }
 }
 
 fun onVisible() {        
@@ -133,8 +164,11 @@ enum class NotificationClickType { USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
 enum class NotificationType { MEDIA, USER, SUBSCRIPTION, COMMENT, ONE }
 
 fun newInstance(            type: NotificationType,             id: Int = -1,            countResetCallback: ((NotificationType, Boolean) -> Unit)? = null        ): NotificationFragment {
-return NotificationFragment().apply {                this.countResetCallback = countResetCallback                arguments = Bundle().apply {                    putSerializable("type", type)
+return NotificationFragment().apply {
+        this.countResetCallback = countResetCallback                arguments = Bundle().apply {
+        putSerializable("type", type)
         putInt("id", id)
                 }}}
-}}
+}
+}
 }

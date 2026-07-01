@@ -13,21 +13,22 @@ object AnilistLinkParser {
         val trimmed = link.trim()
         
         // Try raw numeric ID first
-        trimmed.toIntOrNull()?.let { return AnilistLinkResult(it, "ANIME") }
-
+        trimmed.toIntOrNull()?.let { return AnilistLinkResult(it, "ANIME")
+  }
         // Try parsing URL
         try {
             val url = java.net.URI(trimmed)
             val path = url.path?.trim('/') ?: return null
-            val parts = path.split("/")
-            if (parts.size >= 2) {
-                val type = parts[0].uppercase()
-                val id = parts[1].toIntOrNull()
-                if (id != null && (type == "ANIME" || type == "MANGA")) {
+            val parts = path.split("/");
+        if (parts.size >= 2) {
+        val type = parts[0].uppercase()
+                val id = parts[1].toIntOrNull();
+        if (id != null && (type == "ANIME" || type == "MANGA")) {
                     return AnilistLinkResult(id, type)
-                }
+                 }
             }
-        } catch (_: Exception) {}
+        }
+        catch (_: Exception) {}
 
         return null
     }

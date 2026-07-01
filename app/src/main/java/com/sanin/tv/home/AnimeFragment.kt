@@ -50,11 +50,14 @@ val scope = viewLifecycleOwner.lifecycleScope
 var height = statusBarHeight
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout
-if (displayCutout != null && displayCutout.boundingRects.size > 0) {                height = max(                    statusBarHeight,                    min(                        displayCutout.boundingRects[0].width(),                        displayCutout.boundingRects[0].height()                    )                )            }}
-animePageAdapter = AnimePageAdapter(            requireActivity(),            requireActivity().supportFragmentManager,            viewLifecycleOwner.lifecycle        )        binding.animeViewPager.adapter = animePageAdapter        binding.animeViewPager.offscreenPageLimit = 1        binding.animeViewPager.apply {            isFocusable = true            getChildAt(0)?.setOnKeyListener { _, keyCode, event ->
+if (displayCutout != null && displayCutout.boundingRects.size > 0) {
+        height = max(                    statusBarHeight,                    min(                        displayCutout.boundingRects[0].width(),                        displayCutout.boundingRects[0].height()                    )                )            }}
+animePageAdapter = AnimePageAdapter(            requireActivity(),            requireActivity().supportFragmentManager,            viewLifecycleOwner.lifecycle        )        binding.animeViewPager.adapter = animePageAdapter        binding.animeViewPager.offscreenPageLimit = 1        binding.animeViewPager.apply {
+        isFocusable = true            getChildAt(0)?.setOnKeyListener { _, keyCode, event ->
 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val count = animePageAdapter.itemCount
-when (keyCode) {                    KeyEvent.KEYCODE_DPAD_RIGHT -> {
+when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_RIGHT -> {
     val next = (currentItem + 1).coerceAtMost(count - 1)
         setCurrentItem(next, true)
 true                    }
@@ -72,34 +75,39 @@ else -> false
 object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
     override fun onScrolled(                    rv: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int                ) {                    
         s
-if (dy > 0) {                        // Scrolling down — hide FAB after a short delay.                        rv.postDelayed({
+if (dy > 0) {
+        // Scrolling down — hide FAB after a short delay.                        rv.postDelayed({
 if (_binding != null)                                binding.animePageScrollTop.visibility = View.GONE
                         }, 300)                    }}}
 )
         animePageAdapter.ready.observe(viewLifecycleOwner) { i ->
-if (i) {                model.getUpdated().observe(viewLifecycleOwner) {
+if (i) {
+        model.getUpdated().observe(viewLifecycleOwner) {
 if (it != null)
         animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()), it)
-                }
+                 }
 model.getMovies().observe(viewLifecycleOwner) {
 if (it != null)
         animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()), it)
-                }
+                 }
 model.getTopRated().observe(viewLifecycleOwner) {
 if (it != null)
         animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)
-                }
+                 }
 model.getMostFav().observe(viewLifecycleOwner) {
 if (it != null)
         animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)
-                }
-if (animePageAdapter.trendingViewPager != null) {                    animePageAdapter.updateHeight()
+                 }
+if (animePageAdapter.trendingViewPager != null) {
+        animePageAdapter.updateHeight()
         model.getTrending().observe(viewLifecycleOwner) {
-if (it != null) {                            animePageAdapter.updateTrending(                                MediaAdaptor(
+if (it != null) {
+        animePageAdapter.updateTrending(                                MediaAdaptor(
 if (PrefManager.getVal(PrefName.SmallView)) 3 else 2,                                    it,                                    requireActivity(),                                    viewPager = animePageAdapter.trendingViewPager                                )                            )
         animePageAdapter.updateAvatar()
                         }}}
-binding.animePageScrollTop.translationY = -navBarHeight.toFloat()}
+binding.animePageScrollTop.translationY = -navBarHeight.toFloat()
+}
 }
 
 fun load() = scope.launch(Dispatchers.Main) {            
@@ -112,12 +120,23 @@ var running = false
 val live = Refresh.activity.getOrPut(this.hashCode()) { 
         M
 live.observe(viewLifecycleOwner) {
-if (it && !running) {                running = true                scope.launch {                    withContext(Dispatchers.IO) {
+if (it && !running) {
+        running = true                scope.launch {
+        withContext(Dispatchers.IO) {
     val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
-if (rescueMode) {                            withContext(Dispatchers.Main) { load() }
-} else {                            Anilist.userid =                                PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)                                    ?.toIntOrNull()
-if (Anilist.userid == null) {                                getUserId(requireContext()) { load() }
-} else {                                scope.launch(Dispatchers.IO) {                                    getUserId(requireContext()) { load() }}}}}
+if (rescueMode) {
+        withContext(Dispatchers.Main) { load()
+ }
+}
+        else {
+        Anilist.userid =                                PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)                                    ?.toIntOrNull()
+if (Anilist.userid == null) {
+        getUserId(requireContext()) { load()
+ }
+}
+        else {
+        scope.launch(Dispatchers.IO) {
+        getUserId(requireContext()) { load() }}}}}
 model.loaded = true
 val loadTrending = async(Dispatchers.IO) { 
         m
@@ -137,8 +156,12 @@ loadPopular.await()
 
 override fun onResume() {
 if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true
-if (animePageAdapter.trendingViewPager != null) {            binding.root.requestApplyInsets()
+if (animePageAdapter.trendingViewPager != null) {
+        binding.root.requestApplyInsets()
         binding.root.requestLayout()
+         }
+if (this::animePageAdapter.isInitialized && _binding != null) {
+        animePageAdapter.updateNotificationCount()
         }
-if (this::animePageAdapter.isInitialized && _binding != null) {            animePageAdapter.updateNotificationCount()        }
-super.onResume()    }
+super.onResume()
+     }

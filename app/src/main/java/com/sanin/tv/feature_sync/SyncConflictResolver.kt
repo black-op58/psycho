@@ -40,13 +40,12 @@ object SyncConflictResolver {
                 malStatus = malEntry.status,
                 anilistScore = aniEntry.score,
                 malScore = malEntry.score
-            )
-
-            if (conflict.hasAnyConflict) {
-                Logger.log("$TAG: Conflict found for ${aniEntry.title} — " +
+            );
+        if (conflict.hasAnyConflict) {
+        Logger.log("$TAG: Conflict found for ${aniEntry.title} — " +
                         "AL=${aniEntry.progress}/${aniEntry.status}, MAL=${malEntry.progress}/${malEntry.status}")
                 conflicts.add(conflict)
-            }
+             }
         }
 
         Logger.log("$TAG: Found ${conflicts.size} conflicts out of ${anilistList.size} shared entries")
@@ -65,31 +64,33 @@ object SyncConflictResolver {
     ): Boolean {
     return try {
     when (resolution) {
-                SyncResolution.USE_ANILIST -> {
+        SyncResolution.USE_ANILIST -> {
                     pushToMAL(conflict, conflict.anilistProgress, conflict.anilistStatus)
-                }
+                 }
                 SyncResolution.USE_MAL -> {
                     pushToAnilist(conflict, conflict.malProgress, conflict.malStatus)
-                }
+                 }
                 SyncResolution.USE_HIGHER -> {
     val progress = maxOf(conflict.anilistProgress ?: 0, conflict.malProgress ?: 0)
                     pushToAnilist(conflict, progress, null)
                     pushToMAL(conflict, progress, null)
-                }
+                 }
                 SyncResolution.USE_LOWER -> {
     val progress = minOf(conflict.anilistProgress ?: 0, conflict.malProgress ?: 0)
                     pushToAnilist(conflict, progress, null)
                     pushToMAL(conflict, progress, null)
-                }
+                 }
                 SyncResolution.MANUAL -> {
                     manualProgress?.let { p ->
                         pushToAnilist(conflict, p, manualStatus)
                         pushToMAL(conflict, p, manualStatus)
                     } ?: false
-                }
+                
+}
             }
-        } catch (e: Exception) {
-            Logger.log("$TAG: Failed to resolve conflict for ${conflict.mediaName}: ${e.message}")
+        }
+        catch (e: Exception) {
+        Logger.log("$TAG: Failed to resolve conflict for ${conflict.mediaName}: ${e.message}")
             false
         }
     }
@@ -113,8 +114,9 @@ object SyncConflictResolver {
                 progressVolumes = null
             )
             true
-        } catch (e: Exception) {
-            Logger.log("$TAG: AniList push failed: ${e.message}")
+        }
+        catch (e: Exception) {
+        Logger.log("$TAG: AniList push failed: ${e.message}")
             false
         }
     }
@@ -137,8 +139,9 @@ object SyncConflictResolver {
                 episode = progress
             )
             true
-        } catch (e: Exception) {
-            Logger.log("$TAG: MAL push failed: ${e.message}")
+        }
+        catch (e: Exception) {
+        Logger.log("$TAG: MAL push failed: ${e.message}")
             false
         }
     }
@@ -160,4 +163,4 @@ object SyncConflictResolver {
         val status: String?,
         val score: Float?
     )
-}
+  }

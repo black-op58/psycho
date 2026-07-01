@@ -39,7 +39,7 @@ class SourceSearchDialogFragment : DialogFragment() {
 
         binding.sourceSearchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                performSearch(binding.sourceSearchInput.text.toString())
+        performSearch(binding.sourceSearchInput.text.toString())
                 true
             } else false
         }
@@ -57,12 +57,12 @@ class SourceSearchDialogFragment : DialogFragment() {
                     fontFamily = androidx.core.content.res.ResourcesCompat.getFont(parent.context, com.sanin.tv.R.font.poppins)
                     setTextColor(androidx.core.content.ContextCompat.getColor(parent.context, com.sanin.tv.R.color.bg_white))
                     setBackgroundResource(com.sanin.tv.R.drawable.ui_bg)
-                }
+                 }
                 return SearchResultViewHolder(textView)
-            }
+             }
             override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
                 holder.bind(searchResults[position])
-            }
+             }
             override fun getItemCount() = searchResults.size
         }
         binding.sourceSearchResults.adapter = adapter
@@ -79,8 +79,9 @@ class SourceSearchDialogFragment : DialogFragment() {
         s
                 searchResults.addAll(results)
                 adapter?.notifyDataSetChanged()
-            } catch (e: Exception) {
-                // Silently handle
+             }
+        catch (e: Exception) {
+        // Silently handle
             }
         }
     }
@@ -93,7 +94,7 @@ class SourceSearchDialogFragment : DialogFragment() {
                 body(graphql)
                 header("Content-Type", "application/json")
                 header("Accept", "application/json")
-            }
+             }
             val json = Mapper.json.parseToJsonElement(response.text)
             val mediaList = json.jsonObject["data"]?.jsonObject?.get("Page")?.jsonObject?.get("media")?.jsonArray
             mediaList?.map { element ->
@@ -106,9 +107,11 @@ class SourceSearchDialogFragment : DialogFragment() {
                 val cover = obj["coverImage"]?.jsonObject?.get("large")?.jsonPrimitive?.contentOrNull
                 SearchResultItem(title, cover, id)
             } ?: emptyList()
-        } catch (e: Exception) {
-            emptyList()
-        }
+         
+}
+        catch (e: Exception) {
+        emptyList()
+         }
     }
 
     override fun onDestroyView() {
@@ -118,11 +121,9 @@ class SourceSearchDialogFragment : DialogFragment() {
 
     override fun dismiss() {
         super.dismiss()
-    }
-
+      }
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
-}
-
+  }
 class SearchResultViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
     fun bind(item: SourceSearchDialogFragment.SearchResultItem) {
         (itemView as? android.widget.TextView)?.text = item.title
@@ -130,12 +131,12 @@ class SearchResultViewHolder(itemView: View) : androidx.recyclerview.widget.Recy
             // Notify parent of selection
             // The source search dialog result would be handled by the caller
             dismiss()
-        }
+         }
     }
 
     private fun dismiss() {
         val dialog = itemView.context as? androidx.fragment.app.FragmentActivity
-        val fragment = dialog?.supportFragmentManager?.findFragmentByTag("source_search")
+        val fragment = dialog?.supportFragmentManager?.findFragmentByTag("source_search");
         if (fragment is DialogFragment) fragment.dismiss()
-    }
+     }
 }

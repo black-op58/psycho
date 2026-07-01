@@ -49,19 +49,21 @@ object StreamFetcher {
         }
 
         for (provider in providers) {
-            try {
+        try {
                 Logger.log("StreamFetcher: trying ${provider.name} for \"$animeTitle\" ep$episodeNumber")
-                val result = fetchFromProvider(provider, animeTitle, malId, episodeNumber, isDub)
-                if (result != null) {
-                    Logger.log("StreamFetcher: ✓ ${provider.name} → ${result.url.take(80)}")
+                val result = fetchFromProvider(provider, animeTitle, malId, episodeNumber, isDub);
+        if (result != null) {
+        Logger.log("StreamFetcher: ✓ ${provider.name} → ${result.url.take(80)}")
                     return result
                 }
                 Logger.log("StreamFetcher: ${provider.name} returned null — trying next")
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Logger.log("StreamFetcher: ${provider.name} threw ${e.javaClass.simpleName}: ${e.message}")
+             }
+        catch (e: CancellationException) {
+        throw e
             }
+        catch (e: Exception) {
+        Logger.log("StreamFetcher: ${provider.name} threw ${e.javaClass.simpleName}: ${e.message}")
+             }
         }
 
         Logger.log("StreamFetcher: all providers exhausted for \"$animeTitle\" ep$episodeNumber")
@@ -89,5 +91,5 @@ object StreamFetcher {
             AnimePaheScraper.fetch(provider.baseUrl, title, episode)
         ProviderType.CUSTOM ->
             CustomScraper.fetch(provider.baseUrl, title, episode)
-    }
+     }
 }

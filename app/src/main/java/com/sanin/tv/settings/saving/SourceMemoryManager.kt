@@ -46,8 +46,7 @@ object SourceMemoryManager {
 
     fun init(context: Context) {
         prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    }
-
+      }
     // ─── Key helpers ─────────────────────────────────────────────────────────
 
     private fun keySource(id: Int)  = "src_$id"
@@ -78,8 +77,7 @@ object SourceMemoryManager {
             .putInt(keyLang(mediaId),    lang)
             .putLong(keySavedAt(mediaId), System.currentTimeMillis())
             .apply()
-    }
-
+      }
     // ─── Load ────────────────────────────────────────────────────────────────
 
     /**
@@ -92,7 +90,7 @@ object SourceMemoryManager {
         if (!prefs.contains(keySource(mediaId))) return null
 
         if (expiryHours != -1) {
-            val savedAt = prefs.getLong(keySavedAt(mediaId), 0L)
+        val savedAt = prefs.getLong(keySavedAt(mediaId), 0L)
             val expiryMs = expiryHours * 3_600_000L
             if (System.currentTimeMillis() - savedAt > expiryMs) {
                 clear(mediaId)
@@ -103,16 +101,14 @@ object SourceMemoryManager {
         val source  = prefs.getInt(keySource(mediaId),     -1)
         val server  = prefs.getInt(keyServer(mediaId),     -1)
         val quality = prefs.getString(keyQuality(mediaId), "") ?: ""
-        val lang    = prefs.getInt(keyLang(mediaId),        0)
-
+        val lang    = prefs.getInt(keyLang(mediaId),        0);
         if (source == -1) return null
         return SourceMemory(source, server, quality, lang)
-    }
-
+      }
     /** Return how many hours until this entry expires, or null if not saved / already expired. */
     fun hoursUntilExpiry(mediaId: Int, expiryHours: Int): Long? {
         if (expiryHours <= 0) return null
-        val savedAt = prefs.getLong(keySavedAt(mediaId), 0L)
+        val savedAt = prefs.getLong(keySavedAt(mediaId), 0L);
         if (savedAt == 0L) return null
         val expiryMs = expiryHours * 3_600_000L
         val remainingMs = expiryMs - (System.currentTimeMillis() - savedAt)
@@ -129,9 +125,8 @@ object SourceMemoryManager {
             .remove(keyLang(mediaId))
             .remove(keySavedAt(mediaId))
             .apply()
-    }
-
+      }
     fun clearAll() {
         prefs.edit().clear().apply()
-    }
+     }
 }

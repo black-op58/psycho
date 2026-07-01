@@ -8,7 +8,8 @@ companion object {        /**         * @return a json string of the packed pref
 fun pack(map: Map<Location, SharedPreferences>): String {
     val prefsMap = packagePreferences(map)            
 val gson = Gson()
-return gson.toJson(prefsMap)        }
+return gson.toJson(prefsMap)
+        }
 /**         * @return true if successful, false if error         */
 fun unpack(decryptedJson: String): Boolean {
     val gson = Gson()            
@@ -26,7 +27,8 @@ val value = typeValueMap["value"]                    innerMap[key] =
 when (typeName) {  //weirdly null sometimes so cast to string                            "kotlin.Int" -> (value as? Double)?.toInt()                            "kotlin.String" -> value.toString()                            "kotlin.Boolean" -> value as? Boolean                            "kotlin.Float" -> value.toString().toFloatOrNull()                            "kotlin.Long" -> (value as? Double)?.toLong()                            "java.util.HashSet" -> value as? ArrayList<*>
 else -> null                        }}
 deserializedMap[prefName] = innerMap            }
-return unpackagePreferences(deserializedMap)        }
+return unpackagePreferences(deserializedMap)
+        }
 /**         * @return a map of location names to a map of preference names to their values         */
 private fun packagePreferences(map: Map<Location, SharedPreferences>): Map<String, Map<String, *>> {
     val result = mutableMapOf<String, Map<String, *>>()
@@ -50,5 +52,7 @@ return success        }
 private fun locationFromString(location: String): Location {
     val loc = Location.entries.find { 
         i
-return loc ?: throw IllegalArgumentException("Location not found")        }
-}}
+return loc ?: throw IllegalArgumentException("Location not found")
+        }
+}
+}

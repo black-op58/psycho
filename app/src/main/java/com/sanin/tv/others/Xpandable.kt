@@ -17,29 +17,39 @@ override fun onAttachedToWindow() {
         g
 if (expanded) hideAll() else showAll()
         postDelayed({
-                expanded = !expanded            }, 300)        }
+                expanded = !expanded            }, 300)
+        }
 if (!expanded) children.forEach {
-if (it != getChildAt(0)) {                it.visibility = GONE            }}
-super.onAttachedToWindow()    }
-
+if (it != getChildAt(0)) {
+        it.visibility = GONE            }}
+super.onAttachedToWindow()
+     }
 private fun hideAll() {        
         c
-if (it != getChildAt(0)) {                ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.5f).setDuration(200).start()
+if (it != getChildAt(0)) {
+        ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.5f).setDuration(200).start()
         ObjectAnimator.ofFloat(it, "translationY", 0f, -32f).setDuration(200).start()
         ObjectAnimator.ofFloat(it, "alpha", 1f, 0f).setDuration(200).start()
         it.postDelayed({
                     it.visibility = GONE                }, 300)            }}
-postDelayed({            listeners.forEach {                it.onRetract()}
-}, 300)    }
-
+postDelayed({
+        listeners.forEach {
+        it.onRetract()
+}
+}, 300)
+     }
 private fun showAll() {        
         c
-if (it != getChildAt(0)) {                it.visibility = VISIBLE                ObjectAnimator.ofFloat(it, "scaleY", 0.5f, 1f).setDuration(200).start()
+if (it != getChildAt(0)) {
+        it.visibility = VISIBLE                ObjectAnimator.ofFloat(it, "scaleY", 0.5f, 1f).setDuration(200).start()
         ObjectAnimator.ofFloat(it, "translationY", -32f, 0f).setDuration(200).start()
         ObjectAnimator.ofFloat(it, "alpha", 0f, 1f).setDuration(200).start()            }}
-postDelayed({            listeners.forEach {                it.onExpand()}
-}, 300)    }
-
+postDelayed({
+        listeners.forEach {
+        it.onExpand()
+}
+}, 300)
+     }
 @Suppress("unused")    
 fun addOnChangeListener(listener: OnChangeListener) {        
         l

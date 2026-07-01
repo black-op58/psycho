@@ -26,7 +26,9 @@ private val sourcesMapFlow = MutableStateFlow(ConcurrentHashMap<Long, AnimeSourc
 private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()    
 override val catalogueSources: Flow<List<AnimeCatalogueSource>> =        sourcesMapFlow.map { 
         i
-init {        scope.launch {            extensionManager.installedExtensionsFlow                .collectLatest { extensions ->
+init {
+        scope.launch {
+        extensionManager.installedExtensionsFlow                .collectLatest { extensions ->
 val mutableMap = ConcurrentHashMap<Long, AnimeSource>(                        mapOf(                            LocalAnimeSource.ID to LocalAnimeSource(                                context,                            ),                        ),                    )                    extensions.forEach { 
         e
 sourcesMapFlow.value = mutableMap}}
@@ -36,7 +38,8 @@ override fun get(sourceKey: Long): AnimeSource? {
 return sourcesMapFlow.value[sourceKey]    }
 
 override fun getOrStub(sourceKey: Long): AnimeSource {
-return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {            runBlocking { createStubSource(sourceKey) }}
+return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {
+        runBlocking { createStubSource(sourceKey) }}
 }
 
 override fun getOnlineSources() =        sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()    

@@ -38,7 +38,7 @@ data class SyncConflict(
         "DROPPED" -> "DROPPED"
         "PLANNING", "PLAN_TO_WATCH" -> "PLANNING"
         else -> s.uppercase()
-    }
+     }
 }
 
 enum class SyncResolution { USE_ANILIST, USE_MAL, USE_HIGHER, USE_LOWER, MANUAL }

@@ -32,19 +32,19 @@ class SearchBottomSheet : BottomSheetDialogFragment() {
         binding.characterSearch.setOnClickListener {
             startActivity(requireContext(), SearchType.CHARACTER)
             dismiss()
-        }
+         }
         binding.staffSearch.setOnClickListener {
             startActivity(requireContext(), SearchType.STAFF)
             dismiss()
-        }
+         }
         binding.studioSearch.setOnClickListener {
             startActivity(requireContext(), SearchType.STUDIO)
             dismiss()
-        }
+         }
         binding.userSearch.setOnClickListener {
             startActivity(requireContext(), SearchType.USER)
             dismiss()
-        }
+         }
     }
 
     private fun startActivity(context: Context, type: SearchType) {
@@ -53,8 +53,7 @@ class SearchBottomSheet : BottomSheetDialogFragment() {
             Intent(context, SearchActivity::class.java).putExtra("type", type.toAnilistString()),
             null
         )
-    }
-
+      }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -62,5 +61,5 @@ class SearchBottomSheet : BottomSheetDialogFragment() {
 
     companion object {
         fun newInstance() = SearchBottomSheet()
-    }
+     }
 }

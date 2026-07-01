@@ -22,15 +22,18 @@ return AnimeLoadResult.Error        }
 val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Aniyomi: ")        
 val versionName = pkgInfo.versionName
 val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
-if (versionName.isNullOrEmpty()) {            Logger.log("Missing versionName for extension $extName")
+if (versionName.isNullOrEmpty()) {
+        Logger.log("Missing versionName for extension $extName")
 return AnimeLoadResult.Error        }
 // Validate lib version
 val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
-if (libVersion == null || libVersion < ANIME_LIB_VERSION_MIN || libVersion > ANIME_LIB_VERSION_MAX) {            Logger.log(                "Lib version is $libVersion, while only versions " +                        "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"            )
+if (libVersion == null || libVersion < ANIME_LIB_VERSION_MIN || libVersion > ANIME_LIB_VERSION_MAX) {
+        Logger.log(                "Lib version is $libVersion, while only versions " +                        "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"            )
 return AnimeLoadResult.Error        }
 
 val isNsfw = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_NSFW") == 1
-if (!loadNsfwSource && isNsfw) {            Logger.log("NSFW extension $pkgName not allowed")
+if (!loadNsfwSource && isNsfw) {
+        Logger.log("NSFW extension $pkgName not allowed")
 return AnimeLoadResult.Error        }
 
 val hasReadme = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_README", 0) == 1
@@ -42,16 +45,22 @@ return AnimeLoadResult.Error        }
 val sources = appInfo.metaData.getString("$ANIME_PACKAGE$XX_METADATA_SOURCE_CLASS")!!            .split("
 ")            .map {
     val sourceClass = it.trim()
-if (sourceClass.startsWith(".")) {                    pkgInfo.packageName + sourceClass
-} else {                    sourceClass                }}
+if (sourceClass.startsWith(".")) {
+        pkgInfo.packageName + sourceClass
+}
+        else {
+        sourceClass                }}
 .flatMap {
 try {
 when (
 val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()                        .newInstance()) {                        
         i
 else -> throw Exception("Unknown source 
-class type! ${obj.javaClass}")                    }
-} catch (e: Throwable) {                    Logger.log("Extension load error: $extName ($it)")
+class type! ${obj.javaClass}")
+                    }
+}
+        catch (e: Throwable) {
+        Logger.log("Extension load error: $extName ($it)")
 return AnimeLoadResult.Error                }
 }
 

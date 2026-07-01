@@ -20,12 +20,13 @@ var pos = arrayListOf<String>()
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
     val binding = ItemGenreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 if (big) binding.genreCard.updateLayoutParams { height = 72f.px }
-return GenreViewHolder(binding)    }
-
+return GenreViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
     val binding = holder.binding
 if (pos.size > position) {
-    val genre = genres[pos[position]]            binding.genreTitle.text = pos[position]            binding.genreImage.loadImage(genre)        }
+    val genre = genres[pos[position]]            binding.genreTitle.text = pos[position]            binding.genreImage.loadImage(genre)
+        }
     }
 
 override fun getItemCount(): Int = genres.size    inner 
@@ -35,10 +36,11 @@ val binding: ItemGenreBinding) :        RecyclerView.ViewHolder(binding.root) {
 if (pos[bindingAdapterPosition].lowercase() == "hentai") {
 if (!Anilist.adult) Toast.makeText(                                    itemView.context,                                    currActivity()?.getString(R.string.content_18),                                    Toast.LENGTH_SHORT                                ).show()
         it.putExtra("hentai", true)
-                            }
+                             }
 },                    null                )}}
 }
 
 fun addGenre(genre: Pair<String, String>) {        
         g
-    }}
+    }
+    }

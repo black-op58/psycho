@@ -33,10 +33,10 @@ object RecommendationEngine {
         forceRefresh: Boolean = false
     ): List<RecommendationGroup> = withContext(Dispatchers.IO) {
     if (!forceRefresh) {
-            loadCache()?.let { cache ->
+        loadCache()?.let { cache ->
                 if (System.currentTimeMillis() - cache.cachedAt < CACHE_TTL_MS) {
                     Logger.log("$TAG: Serving cached recommendations (${cache.groups.size} groups)")
-                    return@withContext cache.groups
+        return@withContext cache.groups
                 }
             }
         }
@@ -48,18 +48,18 @@ object RecommendationEngine {
         // Sample up to 10 most recently updated titles to avoid rate-limiting
         val sampledList = completedList
             .sortedByDescending { it.userUpdatedAt ?: 0L }
-            .take(10)
-
+            .take(10);
         for (media in sampledList) {
     try {
-    val recs = fetchRecommendationsForMedia(media)
-                if (recs.isNotEmpty()) {
+    val recs = fetchRecommendationsForMedia(media);
+        if (recs.isNotEmpty()) {
                     groups.add(RecommendationGroup(becauseOf = media, recommendations = recs))
                     Logger.log("$TAG: ${recs.size} recs for '${media.userPreferredName}'")
-                }
-            } catch (e: Exception) {
-                Logger.log("$TAG: Failed recs for ${media.id}: ${e.message}")
+                 }
             }
+        catch (e: Exception) {
+        Logger.log("$TAG: Failed recs for ${media.id}: ${e.message}")
+             }
         }
 
         // Deduplicate across groups — remove titles already on user's list
@@ -72,8 +72,8 @@ object RecommendationEngine {
                 .distinctBy { it.id }
                 .take(6)
             )
-        }.filter { it.recommendations.isNotEmpty() }
-
+        }.filter { it.recommendations.isNotEmpty()
+  }
         saveCache(RecommendationCache(deduped))
         Logger.log("$TAG: Built ${deduped.size} recommendation groups")
         deduped
@@ -93,7 +93,8 @@ object RecommendationEngine {
 
     /** Get all unique genres from a list of media for genre-match boosting. */
     fun extractGenres(mediaList: List<Media>): List<String> {
-    return mediaList.flatMap { it.genres ?: emptyList() }
+    return mediaList.flatMap { it.genres ?: emptyList()
+ }
             .groupingBy { it }
             .eachCount()
             .entries
@@ -105,10 +106,11 @@ object RecommendationEngine {
     private suspend fun fetchRecommendationsForMedia(media: Media): List<Media> {
     return try {
             AnilistQueries.getRecommendations(media.id)
-        } catch (e: Exception) {
-            Logger.log("$TAG: fetchRecommendationsForMedia failed: ${e.message}")
+         }
+        catch (e: Exception) {
+        Logger.log("$TAG: fetchRecommendationsForMedia failed: ${e.message}")
             emptyList()
-        }
+         }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -117,9 +119,8 @@ object RecommendationEngine {
 
     private fun saveCache(cache: RecommendationCache) {
         PrefManager.setCustomVal(CACHE_KEY, cache)
-    }
-
+      }
     fun clearCache() {
         PrefManager.removeVal(CACHE_KEY)
-    }
+     }
 }

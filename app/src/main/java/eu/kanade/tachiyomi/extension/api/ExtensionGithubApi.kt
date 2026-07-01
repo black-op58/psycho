@@ -2,7 +2,8 @@ package eu.kanade.tachiyomi.extension.api
 
 val libVersion = it.extractLibVersion()                libVersion >= ExtensionLoader.ANIME_LIB_VERSION_MIN && libVersion <= ExtensionLoader.ANIME_LIB_VERSION_MAX
             }
-.map {                AnimeExtension.Available(                    name = it.name.substringAfter("Aniyomi: "),                    pkgName = it.pkg,                    versionName = it.version,                    versionCode = it.code,                    libVersion = it.extractLibVersion(),                    lang = it.lang,                    isNsfw = it.nsfw == 1,                    hasReadme = it.hasReadme == 1,                    hasChangelog = it.hasChangelog == 1,                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),                    apkName = it.apk,                    repository = repository,                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",                )}}
+.map {
+        AnimeExtension.Available(                    name = it.name.substringAfter("Aniyomi: "),                    pkgName = it.pkg,                    versionName = it.version,                    versionCode = it.code,                    libVersion = it.extractLibVersion(),                    lang = it.lang,                    isNsfw = it.nsfw == 1,                    hasReadme = it.hasReadme == 1,                    hasChangelog = it.hasChangelog == 1,                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),                    apkName = it.apk,                    repository = repository,                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",                )}}
 suspend
 fun findAnimeExtensions(): List<AnimeExtension.Available> {
 return withIOContext {
@@ -10,7 +11,8 @@ return withIOContext {
 val repos =                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()            repos.asyncMap {
     val repoUrl = if (it.contains("index.min.json")) {                    
         i
-} else {                    "$it${if (it.endsWith('/')) "" else "/"}index.min.json"                }
+}
+        else {                    "$it${if (it.endsWith('/')) "" else "/"}index.min.json"                }
 try {
     val githubResponse = try {                        
         n
@@ -24,9 +26,10 @@ return null        }
 
 val repoOwner = repoUrlParts[1]        
 val repoName = repoUrlParts[2]        fallbackRepoUrl += "$repoOwner/$repoName"        
-val repoBranch = if (repoUrlParts.size > 3) {            
+val repoBranch = if (repoUrlParts.size > 3) {
         r
-} else {            "main"        }
+}
+        else {            "main"        }
 fallbackRepoUrl += "@$repoBranch"
 return fallbackRepoUrl    }}
 
@@ -51,5 +54,6 @@ val lang: String,
 val name: String,    
 val baseUrl: String,)
 private fun ExtensionJsonObject.extractLibVersion(): Double {
-return version.substringBeforeLast('.').toDouble()}
+return version.substringBeforeLast('.').toDouble()
+}
 }

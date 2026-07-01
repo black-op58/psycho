@@ -15,5 +15,6 @@ val extNames = names.joinToString(", ")
             setSmallIcon(R.drawable.ic_round_favorite_24)
             setContentIntent(NotificationReceiver.openExtensionsPendingActivity(context))
             setAutoCancel(true)
-        }
-}}
+         }
+}
+}

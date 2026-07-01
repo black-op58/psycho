@@ -29,7 +29,12 @@ fun loginIntent(context: Context) {
 val codeChallenge = Base64.encodeToString(codeVerifierBytes, Base64.DEFAULT).trimEnd('=')            .replace("+", "-")            .replace("/", "_")            .replace("\n", "")
         PrefManager.setVal(PrefName.MALCodeChallenge, codeChallenge)        
 val request =            "https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=$clientId&code_challenge=$codeChallenge"
-try {            CustomTabsIntent.Builder().build().launchUrl(                context,                Uri.parse(request)            )        } catch (e: ActivityNotFoundException) {            openLinkInBrowser(request)        }
+try {
+        CustomTabsIntent.Builder().build().launchUrl(                context,                Uri.parse(request)            )
+        }
+        catch (e: ActivityNotFoundException) {
+        openLinkInBrowser(request)
+        }
 }
 
 private suspend 
@@ -39,8 +44,9 @@ return tryWithSuspend {
 val res = client.post(                "https://myanimelist.net/v1/oauth2/token",
 data = mapOf(                    "client_id" to clientId,                    "grant_type" to "refresh_token",                    "refresh_token" to token.refreshToken                )            ).parsed<ResponseToken>()
         saveResponse(res)
-            return@tryWithSuspend res
-        }}
+        return@tryWithSuspend res
+        }
+        }
 suspend
 fun getSavedToken(): Boolean {
 return tryWithSuspend(false) {
@@ -51,8 +57,9 @@ if (System.currentTimeMillis() > res.expiresIn);
         token = res.accessToken
             username = PrefManager.getVal(PrefName.MALUserName, null as String?);
         avatar = PrefManager.getVal(PrefName.MALAvatar, null as String?)
-            return@tryWithSuspend true
-        } ?: false    }
+        return@tryWithSuspend true
+        } ?: false    
+}
 
 fun removeSavedToken() {        
         t
@@ -72,4 +79,5 @@ val accessToken: String,
 val refreshToken: String,    ) : java.io.Serializable {        
 companion object {
     private const val serialVersionUID = 1L        }
-    }}
+    }
+    }

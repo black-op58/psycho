@@ -20,8 +20,8 @@ private val horizontal: Boolean = true, searched: Boolean) :    RecyclerView.Ada
 var bar: ProgressBar? = null    
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressViewHolder {
     val binding =            ItemProgressbarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return ProgressViewHolder(binding)    }
-
+return ProgressViewHolder(binding)
+     }
 @SuppressLint("ClickableViewAccessibility")    
 override fun onBindViewHolder(holder: ProgressViewHolder, position: Int) {
     val progressBar = holder.binding.root        bar = progressBar
@@ -37,11 +37,14 @@ override fun onSingleClick(event: MotionEvent) {}
             doubleClickDetector.onTouchEvent(event)
         v.performClick()            true
         }
-if (ready.value == false) {            ready.postValue(true)        }
+if (ready.value == false) {
+        ready.postValue(true)
+        }
 }
 
 override fun getItemCount(): Int = 1    inner 
 class ProgressViewHolder(
 val binding: ItemProgressbarBinding) :        RecyclerView.ViewHolder(binding.root) {        
         i
-}}
+}
+}

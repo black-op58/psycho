@@ -19,16 +19,20 @@ open fun onReceivedErrorCompat(        view: WebView,        errorCode: Int,    
 @TargetApi(Build.VERSION_CODES.N)    
 final 
 override fun shouldOverrideUrlLoading(        view: WebView,        request: WebResourceRequest,    ): Boolean {
-return shouldOverrideUrlCompat(view, request.url.toString())    }    
+return shouldOverrideUrlCompat(view, request.url.toString())
+        }
 final 
 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-return shouldOverrideUrlCompat(view, url)    }    
+return shouldOverrideUrlCompat(view, url)
+        }
 final 
 override fun shouldInterceptRequest(        view: WebView,        request: WebResourceRequest,    ): WebResourceResponse? {
-return shouldInterceptRequestCompat(view, request.url.toString())    }    
+return shouldInterceptRequestCompat(view, request.url.toString())
+        }
 final 
 override fun shouldInterceptRequest(        view: WebView,        url: String,    ): WebResourceResponse? {
-return shouldInterceptRequestCompat(view, url)    }    
+return shouldInterceptRequestCompat(view, url)
+        }
 final 
 override fun onReceivedError(        view: WebView,        request: WebResourceRequest,        error: WebResourceError,    ) {        
         o

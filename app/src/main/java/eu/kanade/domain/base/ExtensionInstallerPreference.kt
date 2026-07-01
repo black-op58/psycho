@@ -12,20 +12,27 @@ private val context: Context,    preferenceStore: PreferenceStore) : Preference<
     private val basePref = preferenceStore.getEnum(key(), defaultValue())    
 override fun key() = "extension_installer"    
 val entries        get() = ExtensionInstaller.entries.toTypedArray().run {
-if (context.hasMiuiPackageInstaller) {                filter { it != ExtensionInstaller.PACKAGEINSTALLER }
-} else {                toList()            }
+if (context.hasMiuiPackageInstaller) {
+        filter { it != ExtensionInstaller.PACKAGEINSTALLER }
+}
+        else {
+        toList()
+            }
 }
 
-override fun defaultValue() = if (context.hasMiuiPackageInstaller) {        
+override fun defaultValue() = if (context.hasMiuiPackageInstaller) {
         E
-} else {        ExtensionInstaller.PACKAGEINSTALLER    }
+}
+        else {
+        ExtensionInstaller.PACKAGEINSTALLER    }
 
 private fun check(value: ExtensionInstaller): ExtensionInstaller {
-when (value) {            ExtensionInstaller.PACKAGEINSTALLER -> {
+when (value) {
+        ExtensionInstaller.PACKAGEINSTALLER -> {
 if (context.hasMiuiPackageInstaller) return ExtensionInstaller.LEGACY            }
 ExtensionInstaller.SHIZUKU -> {
 if (!context.isShizukuInstalled) return defaultValue()
-}
+ }
 else -> {}
 }
 return value    }
@@ -33,7 +40,9 @@ return value    }
 override fun get(): ExtensionInstaller {
     val value = basePref.get()        
 val checkedValue = check(value)
-if (value != checkedValue) {            basePref.set(checkedValue)        }
+if (value != checkedValue) {
+        basePref.set(checkedValue)
+        }
 return checkedValue    }
 
 override fun set(value: ExtensionInstaller) {        
@@ -42,4 +51,5 @@ override fun set(value: ExtensionInstaller) {
 override fun isSet() = basePref.isSet()    
 override fun delete() = basePref.delete()    
 override fun changes() = basePref.changes()    
-override fun stateIn(scope: CoroutineScope) = basePref.stateIn(scope)}
+override fun stateIn(scope: CoroutineScope) = basePref.stateIn(scope)
+}

@@ -17,30 +17,36 @@ object : CountDownTimer(durationInMillis, 1) {
     override fun onTick(millisUntilFinished: Long) {                
         t
 val percent =                    ((pauseLength + durationInMillis - millisUntilFinished) * 100 / (pauseLength + durationInMillis)).toInt()
-if (percent != prevVal) {                    percentTick.invoke(percent);
+if (percent != prevVal) {
+        percentTick.invoke(percent);
         prevVal = percent
                 }
 }
 
 override fun onFinish() {                
         o
-            }}
-timer.start()    }
-
+            }
+            }
+timer.start()
+     }
 fun cancel() {
-if (::timer.isInitialized) {            timer.cancel()        }
+if (::timer.isInitialized) {
+        timer.cancel()
+        }
 }
 
 fun pause() {
-if (::timer.isInitialized) {            timer.cancel();
+if (::timer.isInitialized) {
+        timer.cancel();
         pauseLength = updateInter
 val - timeLeft        }
 }
 
 fun resume() {
-if (::timer.isInitialized && timeLeft > 0) {            start(timeLeft)
+if (::timer.isInitialized && timeLeft > 0) {
+        start(timeLeft)
         timer.start()
-        }
+         }
 }
 
 fun setOnTimerCompletedListener(onTimerCompleted: () -> Unit) {        

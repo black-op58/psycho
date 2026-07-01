@@ -13,15 +13,19 @@ val lazy: Boolean = false,) {
 @Transient    
 @Volatile
 var status: State = State.IDLE    
-enum class State {        IDLE,        LOADING,        READY,        ERROR,    }
+enum class State {
+        IDLE,        LOADING,        READY,        ERROR,    }
 
 fun copy(        hosterUrl: String = this.hosterUrl,        hosterName: String = this.hosterName,        videoList: List<Video>? = this.videoList,        internalData: String = this.internalData,        lazy: Boolean = this.lazy,    ): Hoster {
-return Hoster(hosterUrl, hosterName, videoList, internalData, lazy)    }
-
-companion object {        const val NO_HOSTER_LIST = "no_hoster_list"        
+return Hoster(hosterUrl, hosterName, videoList, internalData, lazy)
+     }
+companion object {
+        const val NO_HOSTER_LIST = "no_hoster_list"        
 fun List<Video>.toHosterList(): List<Hoster> {
-return listOf(                Hoster(                    hosterUrl = "",                    hosterName = NO_HOSTER_LIST,                    videoList = this,                ),            )        }
-}}
+return listOf(                Hoster(                    hosterUrl = "",                    hosterName = NO_HOSTER_LIST,                    videoList = this,                ),            )
+        }
+}
+}
 
 @Serializable
 data class SerializableHoster(    
@@ -35,4 +39,5 @@ companion object {
         h
 fun String.toHosterList(): List<Hoster> =            Json.decodeFromString<List<SerializableHoster>>(this)                .map { 
         s
-}}
+}
+}

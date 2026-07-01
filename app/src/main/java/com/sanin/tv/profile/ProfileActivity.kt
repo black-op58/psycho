@@ -67,7 +67,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 intent.getSerializableExtra("user") as? Query.UserProfile
 
         if (userId == -1 && passedUser == null) {
-            // Fall back to the logged-in user's own profile
+        // Fall back to the logged-in user's own profile
             userId = Anilist.userid ?: run { finish(); return }
         }
 
@@ -76,8 +76,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         // ── Close / back button ──────────────────────────────────────────
         binding.profileCloseButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
-
+          }
         // ── 3-dot menu: View on AniList | Share Profile | Copy user ID ──
         binding.profileMenuButton.setOnClickListener { anchor ->
             val popup = PopupMenu(this, anchor)
@@ -89,25 +88,24 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 val uid  = loadedUser?.id   ?: userId
                 val url  = "https://anilist.co/user/$name"
                 when (item.itemId) {
-                    1 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        1 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     2 -> {
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, url)
-                        }
+                         }
                         startActivity(Intent.createChooser(shareIntent, "Share Profile"))
-                    }
+                     }
                     3 -> {
                         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         clipboard.setPrimaryClip(ClipData.newPlainText("User ID", uid.toString()))
                         Toast.makeText(this, "Copied: $uid", Toast.LENGTH_SHORT).show()
-                    }
+                     }
                 }
                 true
             }
             popup.show()
-        }
-
+          }
         // ── Populate account sections (no API call needed) ───────────────
         populateAnilistAccount()
         populateMalAccount()
@@ -115,10 +113,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
         // ── Load profile data from AniList API ───────────────────────────
         if (passedUser != null) {
-            populateProfileHeader(passedUser)
+        populateProfileHeader(passedUser)
             populateFavourites(passedUser)
             populateStats(passedUser)
-        } else {
+         }
+        else {
             binding.profileProgressBar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 val profile = withContext(Dispatchers.IO) {
@@ -127,11 +126,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 withContext(Dispatchers.Main) {
                     binding.profileProgressBar.visibility = View.GONE
                     if (profile != null) {
-                        loadedUser = profile
+        loadedUser = profile
                         populateProfileHeader(profile)
                         populateFavourites(profile)
                         populateStats(profile)
-                    }
+                     }
                 }
             }
         }
@@ -144,10 +143,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         binding.profileUserAvatar.loadImage(user.avatar?.large)
         val bgView = binding.profileBannerImage
         if (bgView is com.flaviofaria.kenburnsview.KenBurnsView) {
-            bgView.loadImage(user.bannerImage ?: user.avatar?.large)
-        } else {
+        bgView.loadImage(user.bannerImage ?: user.avatar?.large)
+         }
+        else {
             blurImage(bgView, user.bannerImage ?: user.avatar?.large)
-        }
+         }
     }
 
     // ─── Stats table ───────────────────────────────────────────────────────
@@ -176,7 +176,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     this@ProfileActivity, LinearLayoutManager.HORIZONTAL, false
                 )
                 adapter = MediaAdaptor(MediaAdaptor.STYLE_SMALL, favAnime, this@ProfileActivity)
-            }
+             }
         }
 
         if (!favChars.isNullOrEmpty()) {
@@ -186,14 +186,14 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     this@ProfileActivity, LinearLayoutManager.HORIZONTAL, false
                 )
                 adapter = CharacterAdapter(favChars, this@ProfileActivity)
-            }
+             }
         }
     }
 
     // ─── AniList account card ──────────────────────────────────────────────
     private fun populateAnilistAccount() {
         if (Anilist.token != null) {
-            val expiryDays = Anilist.getTokenExpiryDays()
+        val expiryDays = Anilist.getTokenExpiryDays()
             binding.profileAnilistBanner?.loadImage(Anilist.bg)
             binding.profileAnilistCardAvatar?.loadImage(Anilist.avatar)
             binding.profileAnilistUsername?.text = Anilist.username ?: ""
@@ -203,8 +203,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
             binding.profileAnilistLogout?.setOnClickListener {
                 Anilist.removeSavedToken()
                 recreate()
-            }
-        } else {
+             }
+        }
+        else {
             binding.profileAnilistCardAvatar?.isVisible = false
             binding.profileAnilistBanner?.isVisible = false
             binding.profileAnilistExpiry?.isVisible = false
@@ -212,17 +213,17 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
             binding.profileAnilistLogout?.text = "Login to AniList"
             binding.profileAnilistLogout?.setOnClickListener {
                 startActivity(Intent(this, SettingsAccountActivity::class.java))
-            }
+             }
         }
     }
 
     // ─── MAL account section (no Discord) ─────────────────────────────────
     private fun populateMalAccount() {
         if (MAL.token != null) {
-            binding.profileMalAvatar?.apply {
+        binding.profileMalAvatar?.apply {
                 isVisible = true
                 loadImage(MAL.avatar)
-            }
+             }
             binding.profileMalUsername?.apply {
                 isVisible = true
                 text = MAL.username ?: "MyAnimeList"
@@ -232,8 +233,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 MAL.token = null
                 PrefManager.removeVal(PrefName.MALToken)
                 recreate()
-            }
-        } else {
+             }
+        }
+        else {
             binding.profileMalAvatar?.isVisible = false
             binding.profileMalUsername?.apply {
                 isVisible = true
@@ -242,7 +244,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
             binding.profileMalLogin?.text = "Login"
             binding.profileMalLogin?.setOnClickListener {
                 startActivity(Intent(this, SettingsAccountActivity::class.java))
-            }
+             }
         }
     }
 
@@ -250,16 +252,15 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     private fun populateSettingsRows() {
         binding.profileAnilistSettingsRow?.setOnClickListener {
             startActivity(Intent(this, AnilistSettingsActivity::class.java))
-        }
-
+          }
         val commentsEnabled = PrefManager.getVal(PrefName.CommentsEnabled, 1) == 1
         binding.profileCommentsSwitch?.isChecked = commentsEnabled
         binding.profileCommentsSwitch?.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 0)
-        }
+         }
         binding.profileCommentsRow?.setOnClickListener {
             binding.profileCommentsSwitch?.toggle()
-        }
+         }
     }
 
     // ─── Collapsing app bar offset animation ──────────────────────────────
@@ -272,20 +273,20 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         binding.profileUserAvatarContainer.alpha  = avatarScale
 
         if (percentage >= percent && !isCollapsed) {
-            isCollapsed = true
+        isCollapsed = true
             ObjectAnimator.ofFloat(binding.profileUserName, "alpha", 1f, 0f)
                 .setDuration(animDuration).start()
             (binding.profileBannerImage as? com.flaviofaria.kenburnsview.KenBurnsView)?.pause()
         } else if (percentage < percent && isCollapsed) {
-            isCollapsed = false
+        isCollapsed = false
             ObjectAnimator.ofFloat(binding.profileUserName, "alpha", 0f, 1f)
                 .setDuration(animDuration).start()
             (binding.profileBannerImage as? com.flaviofaria.kenburnsview.KenBurnsView)?.resume()
-        }
+         }
     }
 
     override fun onDestroy() {
         binding.profileAppBar.removeOnOffsetChangedListener(this)
         super.onDestroy()
-    }
+     }
 }

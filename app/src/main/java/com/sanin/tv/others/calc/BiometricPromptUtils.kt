@@ -21,10 +21,12 @@ override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationRes
         s
             }
 }
-return BiometricPrompt(activity, executor, callback)    }
+return BiometricPrompt(activity, executor, callback)
+    }
 /**     * Create a BiometricPrompt.PromptInfo instance     * @param activity: AppCompatActivity     * @return BiometricPrompt.PromptInfo: instance     */
 fun createPromptInfo(activity: AppCompatActivity): BiometricPrompt.PromptInfo =        BiometricPrompt.PromptInfo.Builder().apply {            
         s
             setConfirmationRequired(false)
             setNegativeButtonText(activity.getString(R.string.cancel))
-        }.build()}
+        }.build()
+}

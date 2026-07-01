@@ -33,8 +33,7 @@ object AnimePaheScraper {
             quality      = "720",
             providerName = "AnimePahe"
         )
-    }
-
+      }
     // ── Step 1: search ────────────────────────────────────────────────────────
 
     private suspend fun searchShow(base: String, title: String): AnimePaheShow? {
@@ -43,12 +42,14 @@ object AnimePaheScraper {
             val resp = client.get(
                 "$base/api?m=search&q=$q",
                 headers = mapOf("Referer" to "$base/")
-            )
-            if (resp.statusCode != 200) return null
+            );
+        if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<AnimePaheSearchResp>(resp.text).data.firstOrNull()
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("AnimePaheScraper.searchShow: ${e.message}")
+         }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("AnimePaheScraper.searchShow: ${e.message}")
               null
           }
     }
@@ -61,13 +62,15 @@ object AnimePaheScraper {
             val resp = client.get(
                 "$base/api?m=release&id=$showSession&sort=episode_asc&page=$page",
                 headers = mapOf("Referer" to "$base/")
-            )
-            if (resp.statusCode != 200) return null
+            );
+        if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<AnimePaheReleaseResp>(resp.text)
                 .data.find { it.episode == episode }?.session
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("AnimePaheScraper.findEpisodeSession: ${e.message}")
+        }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("AnimePaheScraper.findEpisodeSession: ${e.message}")
               null
           }
     }
@@ -79,16 +82,18 @@ object AnimePaheScraper {
             val resp = client.get(
                 "$base/api?m=links&id=$showId&session=$epSession&p=kwik",
                 headers = mapOf("Referer" to "$base/")
-            )
-            if (resp.statusCode != 200) return null
+            );
+        if (resp.statusCode != 200) return null
             val links = Mapper.json.decodeFromString<AnimePaheLinksResp>(resp.text)
             val best = links.data.values.flatten().maxByOrNull { 
         q
                 ?: return null
             extractKwikStream(base, best)
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("AnimePaheScraper.resolveStream: ${e.message}")
+         }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("AnimePaheScraper.resolveStream: ${e.message}")
               null
           }
     }
@@ -105,8 +110,11 @@ object AnimePaheScraper {
             val resp = client.get(kwikUrl, headers = mapOf("Referer" to "$base/"))
             val m3u8Regex = Regex("""source\s*=\s*['"]([^'"]+\.m3u8[^'"]*)['"]""")
             m3u8Regex.find(resp.text)?.groupValues?.getOrNull(1)
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) { null }
+         }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        null }
     }
 
     private fun qualityScore(q: String?): Int = when {

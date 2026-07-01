@@ -33,31 +33,37 @@ val thumbFileUrl = videoUri?.let {
 val episodeNumberStr = sEpisode.episode_number.let {
 if (it == -1f) sEpisode.name else {
 if (it % 1f == 0f) it.toInt().toString() else it.toString()                }}
-Episode(                number = episodeNumberStr,                link = sEpisode.url,                title = sEpisode.name,                thumbnail = thumbFileUrl,                extra = extraData,                sEpisode = sEpisode            )        }.sortedBy { MediaNameAdapter.findEpisodeNumber(it.number)}
+Episode(                number = episodeNumberStr,                link = sEpisode.url,                title = sEpisode.name,                thumbnail = thumbFileUrl,                extra = extraData,                sEpisode = sEpisode            )        }.sortedBy { MediaNameAdapter.findEpisodeNumber(it.number)
+}
 }
 
 override suspend 
 fun loadVideoServers(        episodeLink: String,        extra: Map<String, String>?,        sEpisode: SEpisode    ): List<VideoServer> {
-return listOf(            VideoServer(                name = "Local",                offline = false,                extraData = extra            )        )    }
-
+return listOf(            VideoServer(                name = "Local",                offline = false,                extraData = extra            )        )
+     }
 override suspend 
 fun autoSearch(mediaObj: com.sanin.tv.media.Media): ShowResponse? {
     val folderName = mediaObj.folderName ?: mediaObj.name ?: mediaObj.mainName()        
 val sAnime = SAnime.create().apply {            
         t
-return ShowResponse(            name = folderName,            link = folderName,            coverUrl = FileUrl(""),            sAnime = sAnime        )    }
-
+return ShowResponse(            name = folderName,            link = folderName,            coverUrl = FileUrl(""),            sAnime = sAnime        )
+     }
 override suspend 
 fun search(query: String): List<ShowResponse> {
     val searchResults = localSource.getSearchAnime(1, query, localSource.getFilterList())
-return searchResults.animes.map { sAnime ->            ShowResponse(                name = sAnime.title,                link = sAnime.url,                coverUrl = FileUrl(sAnime.thumbnail_url ?: ""),                sAnime = sAnime            )        }
+return searchResults.animes.map { sAnime ->            ShowResponse(                name = sAnime.title,                link = sAnime.url,                coverUrl = FileUrl(sAnime.thumbnail_url ?: ""),                sAnime = sAnime            )
+        }
 }
 
 override suspend 
 fun loadByVideoServers(        episodeUrl: String,        extra: Map<String, String>?,        sEpisode: SEpisode,        callback: (VideoExtractor) -> Unit    ) {
     val server = loadVideoServers(episodeUrl, extra, sEpisode).first()
-        LocalVideoExtractor(server, localSource).apply {            tryWithSuspend {                load()            }
-    callback.invoke(this)}
+        LocalVideoExtractor(server, localSource).apply {
+        tryWithSuspend {
+        load()
+            }
+    callback.invoke(this)
+}
     }
 
 override suspend 
@@ -76,15 +82,23 @@ val sEpisode = SEpisodeImpl().apply {
 
 val videoUri = localSource.getVideoUri(sEpisode)                
 var quality: Int? = null
-if (videoUri != null) {            currContext()?.let { ctx ->                
+if (videoUri != null) {
+        currContext()?.let { ctx ->                
 val retriever = MediaMetadataRetriever()
-try {                    retriever.setDataSource(ctx, videoUri)                    
+try {
+        retriever.setDataSource(ctx, videoUri)                    
 val heightStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
         quality = heightStr?.toIntOrNull()
-                } catch (e: Exception) {                    // Ignore metadata ext errors                } finally {
-try {                        retriever.release()                    } catch (e: Exception) {}}}}
+                 }
+        catch (e: Exception) {
+        // Ignore metadata ext errors                } finally {
+try {
+        retriever.release()
+                    }
+        catch (e: Exception) {}}}}
 // show resolution
-if (quality != null) {            videoServer = videoServer.copy(name = "Local - ${quality}p")        }
-
+if (quality != null) {
+        videoServer = videoServer.copy(name = "Local - ${quality}p")
+         }
 val video = Video(            quality,            VideoType.CONTAINER,            FileUrl(videoUri?.toString() ?: ""),        )
 return VideoContainer(listOf(video))    }}

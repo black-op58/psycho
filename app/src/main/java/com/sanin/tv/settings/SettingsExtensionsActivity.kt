@@ -34,7 +34,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
                         val settingsList = arrayListOf(
                         type = 1,
-                        name = getString(R.string.extension_test),                        desc = getString(R.string.extension_test_desc),                        icon = R.drawable.ic_round_search_sources_24,                        isActivity = true,                        onClick = {                            ContextCompat.startActivity(                                context,                                Intent(context, ParserTestActivity::class.java),                                null                            )                        }
+                        name = getString(R.string.extension_test),                        desc = getString(R.string.extension_test_desc),                        icon = R.drawable.ic_round_search_sources_24,                        isActivity = true,                        onClick = {
+        ContextCompat.startActivity(                                context,                                Intent(context, ParserTestActivity::class.java),                                null                            )
+                        }
                         ),                    Settings(                        type = 1,                        name = getString(R.string.user_agent),                        desc = getString(R.string.user_agent_desc),                        icon = R.drawable.ic_round_video_settings_24,                        onClick = {
     val dialogView = DialogUserAgentBinding.inflate(layoutInflater
 val editText = dialogView.userAgentTextBox                            editText.setText(PrefManager.getVal<String>(PrefName.DefaultUserAgent))
@@ -42,18 +44,31 @@ val editText = dialogView.userAgentTextBox                            editText.s
                                 setTitle(R.string.user_agent)
         setCustomView(dialogView.root)
                                 setPosButton(R.string.ok) {
-                                    PrefManager.setVal(                                        PrefName.DefaultUserAgent,                                        editText.text.toString()                                    )                                }
-setNeutralButton(R.string.reset) {                                    PrefManager.removeVal(PrefName.DefaultUserAgent)
-        editText.setText("")}
-setNegButton(R.string.cancel)                            }.show()}
+                                    PrefManager.setVal(                                        PrefName.DefaultUserAgent,                                        editText.text.toString()                                    )
+                                }
+setNeutralButton(R.string.reset) {
+        PrefManager.removeVal(PrefName.DefaultUserAgent)
+        editText.setText("")
+}
+setNegButton(R.string.cancel)                            }.show()
+}
 ),                    Settings(                        type = 2,                        name = getString(R.string.proxy),                        desc = getString(R.string.proxy_desc),                        icon = R.drawable.swap_horizontal_circle_24,                        isChecked = PrefManager.getVal(PrefName.EnableSocks5Proxy),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.EnableSocks5Proxy, isChecked)
-        restartApp()}
-),                    Settings(                        type = 1,                        name = getString(R.string.proxy_setup),                        desc = getString(R.string.proxy_setup_desc),                        icon = R.drawable.lan_24,                        onClick = {                            ProxyDialogFragment().show(supportFragmentManager, "dialog")}
+        restartApp()
+}
+),                    Settings(                        type = 1,                        name = getString(R.string.proxy_setup),                        desc = getString(R.string.proxy_setup_desc),                        icon = R.drawable.lan_24,                        onClick = {
+        ProxyDialogFragment().show(supportFragmentManager, "dialog")
+}
 ),                    Settings(                        type = 2,                        name = getString(R.string.force_legacy_installer),                        desc = getString(R.string.force_legacy_installer_desc),                        icon = R.drawable.ic_round_new_releases_24,                        isChecked = extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY,                        switch = { isChecked, _ ->
-if (isChecked) {                                extensionInstaller.set(BasePreferences.ExtensionInstaller.LEGACY
-} else {                                extensionInstaller.set(BasePreferences.ExtensionInstaller.PACKAGEINSTALLER)                            }}
-),                    Settings(                        type = 2,                        name = getString(R.string.skip_loading_extension_icons),                        desc = getString(R.string.skip_loading_extension_icons_desc),                        icon = R.drawable.ic_round_no_icon_24,                        isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.SkipExtensionIcons, isChecked)}
-),                    Settings(                        type = 2,                        name = getString(R.string.NSFWExtention),                        desc = getString(R.string.NSFWExtention_desc),                        icon = R.drawable.ic_round_nsfw_24,                        isChecked = PrefManager.getVal(PrefName.NSFWExtension),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.NSFWExtension, isChecked)}
-)                )            ); binding.settingsRecyclerView.adapter = SettingsAdapter(settingsList); settingsRecyclerView.apply {                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+if (isChecked) {
+        extensionInstaller.set(BasePreferences.ExtensionInstaller.LEGACY
+}
+        else {
+        extensionInstaller.set(BasePreferences.ExtensionInstaller.PACKAGEINSTALLER)                            }}
+),                    Settings(                        type = 2,                        name = getString(R.string.skip_loading_extension_icons),                        desc = getString(R.string.skip_loading_extension_icons_desc),                        icon = R.drawable.ic_round_no_icon_24,                        isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.SkipExtensionIcons, isChecked)
+}
+),                    Settings(                        type = 2,                        name = getString(R.string.NSFWExtention),                        desc = getString(R.string.NSFWExtention_desc),                        icon = R.drawable.ic_round_nsfw_24,                        isChecked = PrefManager.getVal(PrefName.NSFWExtension),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.NSFWExtension, isChecked)
+}
+)                )            ); binding.settingsRecyclerView.adapter = SettingsAdapter(settingsList); settingsRecyclerView.apply {
+        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         setHasFixedSize(true)}}
 }

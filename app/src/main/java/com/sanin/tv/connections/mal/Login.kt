@@ -34,6 +34,10 @@ data = mapOf(                            "client_id" to clientId,               
         launch(Dispatchers.Main) {
                         startMainActivity(this
 @Login)                    }}}
-} catch (e: Exception) {            logError(e, snackbar = false)
-        startMainActivity(this)}
-}}
+}
+        catch (e: Exception) {
+        logError(e, snackbar = false)
+        startMainActivity(this)
+}
+}
+}

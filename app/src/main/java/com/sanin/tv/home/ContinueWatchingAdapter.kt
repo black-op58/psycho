@@ -24,27 +24,25 @@ class ContinueWatchingAdapter :
         val title: TextView = itemView.findViewById(R.id.cwTitle)
         val episode: TextView = itemView.findViewById(R.id.cwEpisode)
         val progress: ProgressBar = itemView.findViewById(R.id.cwProgressBar)
-    }
-
+      }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
     val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_continue_watching, parent, false)
         return VH(v)
-    }
-
+      }
     override fun onBindViewHolder(holder: VH, position: Int) {
     val entry = getItem(position)
 
         holder.title.text = entry.mediaTitle
 val epLabel = buildString {
             append("Ep ")
-            append(entry.episodeNumber)
-            if (!entry.episodeTitle.isNullOrBlank() &&
+            append(entry.episodeNumber);
+        if (!entry.episodeTitle.isNullOrBlank() &&
                 !entry.episodeTitle.equals(entry.episodeNumber)
             ) {
                 append(" · ")
                 append(entry.episodeTitle)
-            }
+             }
         }
         holder.episode.text = epLabel
 val pct = (entry.progressFraction * 100f).toInt().coerceIn(0, 100)
@@ -60,9 +58,9 @@ val pct = (entry.progressFraction * 100f).toInt().coerceIn(0, 100)
 val intent = Intent(ctx, MediaDetailsActivity::class.java).apply {
                 putExtra("mediaId", entry.mediaId)
                 putExtra("anime", true)
-            }
+             }
             ctx.startActivity(intent)
-        }
+         }
     }
 
     companion object {

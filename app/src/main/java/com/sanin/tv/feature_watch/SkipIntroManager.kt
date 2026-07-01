@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
  *   // 1. Create once after inflating the view
  *   val skipManager = SkipIntroManager(
  *       skipButton = binding.skipIntroButton,   // a Button/TextView in your layout
- *       onSkip = { seconds -> player.seekTo((seconds * 1000).toLong()) }
+ *       onSkip = { seconds -> player.seekTo((seconds * 1000).toLong())
+ }
  *   )
  *
  *   // 2. Load timestamps when episode starts (you need the MAL ID)
@@ -52,7 +53,7 @@ class SkipIntroManager(
 
         fetchJob = scope.launch {
             result = AniSkipApi.getSkipTimes(malId, episodeNumber)
-        }
+         }
     }
 
     fun onPlayerProgress(currentSeconds: Double) {
@@ -63,21 +64,21 @@ class SkipIntroManager(
         i
 
         if (activeInterval != null && activeInterval != currentInterval) {
-            currentInterval = activeInterval
+        currentInterval = activeInterval
             showButton(activeInterval)
         } else if (activeInterval == null && currentInterval != null) {
-            currentInterval = null
+        currentInterval = null
             hideButton()
-        }
+         }
     }
 
     private fun showButton(interval: AniSkipApi.SkipInterval) {
         val label = when (interval.type) {
-            AniSkipApi.SkipType.OPENING,
+        AniSkipApi.SkipType.OPENING,
             AniSkipApi.SkipType.MIXED_OPENING -> skipButton.context.getString(R.string.skip_intro)
             AniSkipApi.SkipType.ENDING,
             AniSkipApi.SkipType.MIXED_ENDING  -> skipButton.context.getString(R.string.skip_ending)
-        }
+         }
         if (skipButton is android.widget.TextView) skipButton.text = label
 
         skipButton.visibility = View.VISIBLE
@@ -87,7 +88,7 @@ class SkipIntroManager(
         skipButton.setOnClickListener {
             onSkip(interval.endTime)
             hideButton()
-        }
+         }
     }
 
     private fun hideButton() {
@@ -97,12 +98,11 @@ class SkipIntroManager(
         )
         skipButton.visibility = View.GONE
         skipButton.setOnClickListener(null)
-    }
-
+      }
     fun reset() {
         fetchJob?.cancel()
         result = null
         currentInterval = null
         hideButton()
-    }
+     }
 }

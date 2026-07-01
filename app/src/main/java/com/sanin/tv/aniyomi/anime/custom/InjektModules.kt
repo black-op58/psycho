@@ -12,6 +12,6 @@ private val application: Application) : InjektModule {
 override fun InjektScope.registerInjectables() {
 addSingletonFactory {
 BasePreferences(application, get())
-}
+ }
 }
 }

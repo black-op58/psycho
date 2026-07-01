@@ -11,8 +11,8 @@ import kotlinx.coroutines.runBlocking
 class CommentNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {        
         L
-            CommentNotificationTask().execute(context)        }
-
+            CommentNotificationTask().execute(context)
+         }
 val commentInter
 val =            CommentNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.CommentNotificationInterval)]        AlarmManagerScheduler(context).scheduleRepeatingTask(            TaskScheduler.TaskType.COMMENT_NOTIFICATION,            commentInter
 val        )    }}

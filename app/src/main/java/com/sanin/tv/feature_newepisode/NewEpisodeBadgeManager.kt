@@ -50,7 +50,7 @@ object NewEpisodeBadgeManager {
         val isTracking = media.userStatus == "CURRENT" || media.userStatus == "REPEATING"
         if (!isTracking || media.anime == null) return false
 
-        val available = availableEpisodeCount(media)
+        val available = availableEpisodeCount(media);
         if (available <= 0) return false
 
         // Always track in the current session so the snapshot stays up-to-date.
@@ -76,8 +76,7 @@ object NewEpisodeBadgeManager {
         val merged = lastSessionSnapshot.toMutableMap().also { 
         i
         saveSnapshot(context, merged)
-    }
-
+      }
     /**
      * Call from App when all activities stop (app goes to background).
      * Saves current-session episode counts so the next session can diff against them.
@@ -88,7 +87,7 @@ object NewEpisodeBadgeManager {
             val merged = lastSessionSnapshot.toMutableMap()
             merged.putAll(currentSessionCounts)
             saveSnapshot(context, merged)
-        }
+         }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -113,14 +112,16 @@ object NewEpisodeBadgeManager {
             .getString(KEY_SNAPSHOT, null) ?: return emptyMap()
         return try {
             raw.split(",")
-                .filter { it.contains(":") }
+                .filter { it.contains(":")
+ }
                 .associate { entry ->
                     val (k, v) = entry.split(":")
                     k.trim().toInt() to v.trim().toInt()
-                }
-        } catch (_: Exception) {
-            emptyMap()
+                 }
         }
+        catch (_: Exception) {
+        emptyMap()
+         }
     }
 
     /** Serialise map to "id1:count1,id2:count2,..." and write to SharedPreferences. */
@@ -132,5 +133,5 @@ object NewEpisodeBadgeManager {
             .edit()
             .putString(KEY_SNAPSHOT, raw)
             .apply()
-    }
+     }
 }

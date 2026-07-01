@@ -36,9 +36,11 @@ object EpisodeRecognition {
         // Remove unwanted tags.
         name = unwanted.replace(name, "")
         // Check base case ch.xx
-        basic.find(name)?.let { return getEpisodeNumberFromMatch(it) }
+        basic.find(name)?.let { return getEpisodeNumberFromMatch(it)
+ }
         // Take the first number encountered.
-        number.find(name)?.let { return getEpisodeNumberFromMatch(it) }
+        number.find(name)?.let { return getEpisodeNumberFromMatch(it)
+ }
         return episodeNumber ?: -1f
     }
 
@@ -50,14 +52,14 @@ object EpisodeRecognition {
             val subChapterAlpha = it.groups[3]?.value
             val addition = checkForDecimal(subChapterDecimal, subChapterAlpha)
             initial.plus(addition)
-        }
+         }
     }
 
     /** * Check for decimal in received strings * @param decimal decimal value of regex * @param alpha alpha value of regex * @return decimal/alpha float value */
     private fun checkForDecimal(decimal: String?, alpha: String?): Float {
         if (!decimal.isNullOrEmpty()) {
             return decimal.toFloat()
-        }
+         }
         if (!alpha.isNullOrEmpty()) {
             if (alpha.contains("extra")) {
                 return .99f
@@ -68,17 +70,17 @@ object EpisodeRecognition {
             if (alpha.contains("special")) {
                 return .97f
             }
-            val trimmedAlpha = alpha.trimStart('.')
-            if (trimmedAlpha.length == 1) {
-                return parseAlphaPostFix(trimmedAlpha[0])
-            }
+            val trimmedAlpha = alpha.trimStart('.');
+        if (trimmedAlpha.length == 1) {
+        return parseAlphaPostFix(trimmedAlpha[0])
+             }
         }
         return .0f
     }
 
     /** * x.a -> x.1, x.b -> x.2, etc */
     private fun parseAlphaPostFix(alpha: Char): Float {
-        val number = alpha.code - ('a'.code - 1)
+        val number = alpha.code - ('a'.code - 1);
         if (number >= 10) return 0f
         return number / 10f
     }

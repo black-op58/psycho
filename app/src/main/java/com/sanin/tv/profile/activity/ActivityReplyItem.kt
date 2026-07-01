@@ -46,30 +46,53 @@ val markwon = buildMarkwon(context)
         
 val userList = arrayListOf<User>()        reply.likes?.forEach { 
         i
-            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage, isFollowing = i.isFollowing, isFollower = i.isFollower))        }
-binding.activityLikeContainer.setOnLongClickListener {            UsersDialogFragment().apply {                userList(userList)
-        show(fragActivity.supportFragmentManager, "dialog")}
+            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage, isFollowing = i.isFollowing, isFollower = i.isFollower))
+        }
+binding.activityLikeContainer.setOnLongClickListener {
+        UsersDialogFragment().apply {
+        userList(userList)
+        show(fragActivity.supportFragmentManager, "dialog")
+}
 true}
-binding.activityLikeContainer.setOnClickListener {            scope.launch {
+binding.activityLikeContainer.setOnClickListener {
+        scope.launch {
     val res = Anilist.mutation.toggleLike(reply.id, "ACTIVITY_REPLY")
         withContext(Dispatchers.Main) {
 if (res != null) {
-if (reply.isLiked) {                            reply.likeCount = reply.likeCount.minus(1)
-} else {                            reply.likeCount = reply.likeCount.plus(1)                        }
+if (reply.isLiked) {
+        reply.likeCount = reply.likeCount.minus(1)
+ }
+        else {
+        reply.likeCount = reply.likeCount.plus(1)
+                        }
 binding.activityLikeCount.text = (reply.likeCount).toString()                        reply.isLiked = !reply.isLiked
                         binding.activityLike.setColorFilter(if (reply.isLiked) likeColor else notLikeColor)
-} else {                        snackString("Failed to like activity")                    }}}}
-binding.activityReply.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", parentId)                    .putExtra("other", "@${reply.user.name} "),                null            )}
-binding.activityEdit.isVisible = reply.userId == Anilist.userid        binding.activityEdit.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", parentId)                    .putExtra("other", reply.text)                    .putExtra("edit", reply.id),                null            )}
-binding.activityDelete.isVisible = reply.userId == Anilist.userid        binding.activityDelete.setOnClickListener {            scope.launch {
+ }
+        else {
+        snackString("Failed to like activity")                    }}}}
+binding.activityReply.setOnClickListener {
+        ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", parentId)                    .putExtra("other", "@${reply.user.name} "),                null            )
+}
+binding.activityEdit.isVisible = reply.userId == Anilist.userid        binding.activityEdit.setOnClickListener {
+        ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", parentId)                    .putExtra("other", reply.text)                    .putExtra("edit", reply.id),                null            )
+}
+binding.activityDelete.isVisible = reply.userId == Anilist.userid        binding.activityDelete.setOnClickListener {
+        scope.launch {
     val res = Anilist.mutation.deleteActivityReply(reply.id)
         withContext(Dispatchers.Main) {
-if (res) {                        snackString("Deleted")
+if (res) {
+        snackString("Deleted")
         parentAdapter.remove(this
 @ActivityReplyItem)
-} else {                        snackString("Failed to delete")                    }}}}
-binding.activityAvatarContainer.setOnClickListener {            clickCallback(reply.userId, "USER")}
-binding.activityUserName.setOnClickListener {            clickCallback(reply.userId, "USER")}
+ }
+        else {
+        snackString("Failed to delete")                    }}}}
+binding.activityAvatarContainer.setOnClickListener {
+        clickCallback(reply.userId, "USER")
+}
+binding.activityUserName.setOnClickListener {
+        clickCallback(reply.userId, "USER")
+}
 }
 
 override fun getLayout(): Int {

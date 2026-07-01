@@ -11,8 +11,8 @@ import kotlinx.coroutines.runBlocking
 class AnilistNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {        
         L
-            AnilistNotificationTask().execute(context)        }
-
+            AnilistNotificationTask().execute(context)
+         }
 val anilistInter
 val =            AnilistNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.AnilistNotificationInterval)]        AlarmManagerScheduler(context).scheduleRepeatingTask(            TaskScheduler.TaskType.ANILIST_NOTIFICATION,            anilistInter
 val        )    }}

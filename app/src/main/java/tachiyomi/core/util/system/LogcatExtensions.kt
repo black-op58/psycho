@@ -13,6 +13,6 @@ inline fun Any.logcat(
     if (throwable != null) {
         if (msg.isNotBlank()) msg += "\n"
         msg += throwable.asLog()
-    }
+     }
     msg
 }

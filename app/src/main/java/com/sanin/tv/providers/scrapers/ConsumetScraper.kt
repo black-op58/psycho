@@ -37,8 +37,7 @@ object ConsumetScraper {
         val id = searchId("$baseUrl/anime/gogoanime", searchTitle) ?: return null
         val episodeId = gogoanimeEpisodeId("$baseUrl/anime/gogoanime/info/$id", episode) ?: return null
         return streamFromWatch("$baseUrl/anime/gogoanime/watch/$episodeId", "Gogoanime")
-    }
-
+      }
     // ── Zoro / Aniwatch ───────────────────────────────────────────────────────
 
     suspend fun fetchZoro(
@@ -50,57 +49,62 @@ object ConsumetScraper {
         val id = searchId("$baseUrl/anime/zoro", title) ?: return null
         val episodeId = zoroEpisodeId("$baseUrl/anime/zoro/info/$id", episode, isDub) ?: return null
         return streamFromWatch("$baseUrl/anime/zoro/watch/$episodeId", "Zoro")
-    }
-
+      }
     // ── Shared helpers ────────────────────────────────────────────────────────
 
     private suspend fun searchId(searchBase: String, title: String): String? {
         return try {
             val encoded = URLEncoder.encode(title, "UTF-8")
-            val resp = client.get("$searchBase/$encoded")
-            if (resp.statusCode != 200) return null
+            val resp = client.get("$searchBase/$encoded");
+        if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<ConsumetSearchResp>(resp.text).results.firstOrNull()?.id
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("ConsumetScraper.searchId: ${e.message}")
+        }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("ConsumetScraper.searchId: ${e.message}")
               null
           }
     }
 
     private suspend fun gogoanimeEpisodeId(infoUrl: String, episodeNumber: Int): String? {
         return try {
-            val resp = client.get(infoUrl)
-            if (resp.statusCode != 200) return null
+            val resp = client.get(infoUrl);
+        if (resp.statusCode != 200) return null
             val episodes = Mapper.json.decodeFromString<ConsumetInfoResp>(resp.text).episodes
             episodes.find { it.number == episodeNumber }?.id
                 ?: episodes.getOrNull(episodeNumber - 1)?.id
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("ConsumetScraper.gogoanimeEpisodeId: ${e.message}")
+        }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("ConsumetScraper.gogoanimeEpisodeId: ${e.message}")
               null
           }
     }
 
     private suspend fun zoroEpisodeId(infoUrl: String, episodeNumber: Int, isDub: Boolean): String? {
         return try {
-            val resp = client.get(infoUrl)
-            if (resp.statusCode != 200) return null
+            val resp = client.get(infoUrl);
+        if (resp.statusCode != 200) return null
             val episodes = Mapper.json.decodeFromString<ConsumetInfoResp>(resp.text).episodes
             val pool = if (isDub) episodes.filter { 
         i
             pool.find { it.number == episodeNumber }?.id
                 ?: episodes.getOrNull(episodeNumber - 1)?.id
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("ConsumetScraper.zoroEpisodeId: ${e.message}")
+        }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("ConsumetScraper.zoroEpisodeId: ${e.message}")
               null
           }
     }
 
     private suspend fun streamFromWatch(watchUrl: String, providerName: String): StreamFetcher.StreamResult? {
         return try {
-            val resp = client.get(watchUrl)
-            if (resp.statusCode != 200) return null
+            val resp = client.get(watchUrl);
+        if (resp.statusCode != 200) return null
             val body = Mapper.json.decodeFromString<ConsumetWatchResp>(resp.text)
             val best = body.sources.maxByOrNull { 
         q
@@ -110,9 +114,11 @@ object ConsumetScraper {
                 headers      = body.headers ?: emptyMap(),
                 providerName = providerName
             )
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("ConsumetScraper.streamFromWatch[$providerName]: ${e.message}")
+         }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("ConsumetScraper.streamFromWatch[$providerName]: ${e.message}")
               null
           }
     }

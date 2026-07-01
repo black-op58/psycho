@@ -37,8 +37,7 @@ object StatsCalculator {
             val eps = media.userProgress ?: 0
             val duration = media.anime?.episodeDuration ?: AVG_EPISODE_DURATION_MINS
             (eps * duration).toLong()
-        }
-
+          }
         val scores = mediaList.mapNotNull { 
         i
         val avgScore = if (scores.isEmpty()) 0f else scores.average().toFloat()
@@ -61,7 +60,7 @@ object StatsCalculator {
                     it.timeInMillis = updatedAt
                 }.get(java.util.Calendar.YEAR)
                 yearMap[year] = (yearMap[year] ?: 0) + (media.userProgress ?: 0)
-            }
+             }
         }
 
         // Streak calculation using updatedAt timestamps
@@ -101,20 +100,18 @@ object StatsCalculator {
 
     private fun saveCache(stats: WatchStats) {
         PrefManager.setCustomVal(CACHE_KEY, stats)
-    }
-
+      }
     fun clearCache() {
         PrefManager.removeVal(CACHE_KEY)
-    }
-
+      }
     private fun calculateStreaks(mediaList: List<Media>): Pair<Int, Int> {
     val dayFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val watchDays = mediaList
             .mapNotNull { it.userUpdatedAt }
-            .map { dayFormat.format(Date(it)) }
+            .map { dayFormat.format(Date(it))
+ }
             .toSortedSet()
-            .toList()
-
+            .toList();
         if (watchDays.isEmpty()) return Pair(0, 0)
 
         val today = dayFormat.format(Date())
@@ -122,15 +119,16 @@ object StatsCalculator {
         var current = 1
         var temp = 1
 
-        val cal = java.util.Calendar.getInstance()
+        val cal = java.util.Calendar.getInstance();
         for (i in 1 until watchDays.size) {
     val prev = dayFormat.parse(watchDays[i - 1]) ?: continue
             val curr = dayFormat.parse(watchDays[i]) ?: continue
-            val diffDays = ((curr.time - prev.time) / (1000 * 60 * 60 * 24)).toInt()
-            if (diffDays == 1) {
-                temp++
+            val diffDays = ((curr.time - prev.time) / (1000 * 60 * 60 * 24)).toInt();
+        if (diffDays == 1) {
+        temp++
                 if (temp > longest) longest = temp
-            } else {
+            }
+        else {
                 temp = 1
             }
         }
@@ -151,5 +149,5 @@ object StatsCalculator {
         }
 
         return Pair(longest, current)
-    }
+     }
 }

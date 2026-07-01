@@ -16,8 +16,8 @@ fun analyzeImage(inputStream: InputStream) {
     val requestBody = MultipartBody.Builder()            .setType(MultipartBody.FORM)            .addFormDataPart(                "image",                "image.jpg",                inputStream.readBytes().toRequestBody("image/jpeg".toMediaType())            )            .build()        
 val res = try {            
         c
-searchResultLiveData.postValue(res)    }
-
+searchResultLiveData.postValue(res)
+     }
 fun clearResults() {        
         s
 
@@ -53,4 +53,5 @@ val isAdult: Boolean? = null    )
 data class Title(        
 val native: String? = null,        
 val romaji: String? = null,        
-val english: String? = null    )}
+val english: String? = null    )
+}

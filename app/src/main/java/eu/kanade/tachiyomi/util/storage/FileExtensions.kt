@@ -7,5 +7,8 @@ import androidx.core.net.toUri
 import java.io.File
 val Context.cacheImageDir: File    get() = File(cacheDir, "shared_image")/** * Returns the uri of a file * * @param context context of application */
 fun File.getUriCompat(context: Context): Uri {
-return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {        FileProvider.getUriForFile(context, context.packageName + ".provider", this)
-} else {        this.toUri()    }}
+return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        FileProvider.getUriForFile(context, context.packageName + ".provider", this)
+ }
+        else {
+        this.toUri()    }}

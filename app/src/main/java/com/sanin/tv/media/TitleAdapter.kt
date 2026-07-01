@@ -10,8 +10,8 @@ class TitleViewHolder(
 val binding: ItemTitleBinding) :        RecyclerView.ViewHolder(binding.root)    
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitleViewHolder {
     val binding = ItemTitleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return TitleViewHolder(binding)    }
-
+return TitleViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: TitleViewHolder, position: Int) {        
         h
 

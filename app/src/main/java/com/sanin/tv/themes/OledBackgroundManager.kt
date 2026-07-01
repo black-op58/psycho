@@ -31,10 +31,10 @@ object OledBackgroundManager {
 
     fun apply(activity: Activity, oledMode: Int, primaryColor: Int, gradientDir: Int = 0) {
         when (oledMode) {
-            2 -> activity.window.setBackgroundDrawable(GlowSpotsDrawable(primaryColor))
+        2 -> activity.window.setBackgroundDrawable(GlowSpotsDrawable(primaryColor))
             3 -> activity.window.setBackgroundDrawable(GradientBgDrawable(primaryColor, gradientDir))
             4 -> activity.window.setBackgroundDrawable(VignetteBgDrawable(primaryColor))
-        }
+         }
     }
 
     private class GlowSpotsDrawable(private val primaryColor: Int) : Drawable() {
@@ -53,9 +53,9 @@ object OledBackgroundManager {
             val h = bounds.height().toFloat()
             val r = Color.red(primaryColor)
             val g = Color.green(primaryColor)
-            val b = Color.blue(primaryColor)
-            for (spot in spots) {
-                val cx     = spot[0] * w
+            val b = Color.blue(primaryColor);
+        for (spot in spots) {
+        val cx     = spot[0] * w
                 val cy     = spot[1] * h
                 val radius = spot[2] * minOf(w, h)
                 paint.shader = RadialGradient(
@@ -69,7 +69,7 @@ object OledBackgroundManager {
                     Shader.TileMode.CLAMP
                 )
                 canvas.drawCircle(cx, cy, radius, paint)
-            }
+             }
         }
 
         override fun setAlpha(alpha: Int)              { 
@@ -98,7 +98,7 @@ object OledBackgroundManager {
             val x1: Float
             val y1: Float
             when (direction) {
-                1 -> { x0 = w / 2f; y0 = h;        x1 = w / 2f;        y1 = h * 0.30f } // bottom → top
+        1 -> { x0 = w / 2f; y0 = h;        x1 = w / 2f;        y1 = h * 0.30f } // bottom → top
                 2 -> { x0 = 0f;     y0 = h / 2f;   x1 = w * 0.70f;     y1 = h / 2f   } // left → right
                 3 -> { x0 = w;      y0 = h / 2f;   x1 = w * 0.30f;     y1 = h / 2f   } // right → left
                 else -> { x0 = w / 2f; y0 = 0f;    x1 = w / 2f;        y1 = h * 0.70f } // top → bottom
@@ -115,8 +115,7 @@ object OledBackgroundManager {
                 Shader.TileMode.CLAMP
             )
             canvas.drawRect(0f, 0f, w, h, paint)
-        }
-
+          }
         override fun setAlpha(alpha: Int)              { 
         p
         override fun setColorFilter(cf: ColorFilter?)  { 
@@ -148,8 +147,7 @@ object OledBackgroundManager {
                 Shader.TileMode.CLAMP
             )
             canvas.drawRect(0f, 0f, w, h, paint)
-        }
-
+          }
         override fun setAlpha(alpha: Int)              { 
         p
         override fun setColorFilter(cf: ColorFilter?)  { 

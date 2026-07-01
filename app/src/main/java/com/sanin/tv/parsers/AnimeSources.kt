@@ -31,8 +31,7 @@ object AnimeSources : WatchSources() {
 
     init {
         startObservingExtensions()
-    }
-
+      }
     @OptIn(DelicateCoroutinesApi::class)
     private fun startObservingExtensions() {
         GlobalScope.launch {
@@ -44,24 +43,25 @@ object AnimeSources : WatchSources() {
                     currentExtensions = nonNsfw
                     extensionEntries = buildEntries(nonNsfw, pinnedAnimeSources)
                     Logger.log("AnimeSources: updated list — ${list.size} sources")
-                }
-            } catch (e: Exception) {
-                Logger.log("AnimeSources: extension observer failed — ${e.message}")
+                 }
             }
+        catch (e: Exception) {
+        Logger.log("AnimeSources: extension observer failed — ${e.message}")
+             }
         }
     }
 
     fun performReorderAnimeSources() {
         extensionEntries = buildEntries(currentExtensions, pinnedAnimeSources)
-    }
-
+      }
     private fun buildEntries(
         extensions: List<AnimeExtension.Installed>,
         pinned: List<String>
     ): List<Lazier<BaseParser>> {
         val ordered = if (pinned.isEmpty()) {
             extensions
-        } else {
+        }
+        else {
             val byName = extensions.associateBy { 
         i
             val orderedList = pinned.mapNotNull { 
@@ -70,6 +70,6 @@ object AnimeSources : WatchSources() {
         }
         return ordered.map { ext ->
             Lazier<BaseParser>({ DynamicAnimeParser(ext) }, ext.name)
-        }
+         }
     }
 }

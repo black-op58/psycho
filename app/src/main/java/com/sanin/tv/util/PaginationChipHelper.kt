@@ -25,11 +25,15 @@ val endChapterString = MediaNameAdapter.findChapterNumber(names[last - 1])?.let 
         "
                 selectedChip()
         onChipClicked(position, limit * position, last - 1)
-            }
+             }
 chipGroup.addView(chip)
-if (selected == position) {                selectedChip();
+if (selected == position) {
+        selectedChip();
         select = chip
             }
 }
-if (select != null) {            scrollView.post {                scrollView.scrollTo(                    (select!!.left - screenWidth / 2) + (select!!.width / 2),                    0                )            }}
-}}
+if (select != null) {
+        scrollView.post {
+        scrollView.scrollTo(                    (select!!.left - screenWidth / 2) + (select!!.width / 2),                    0                )            }}
+}
+}

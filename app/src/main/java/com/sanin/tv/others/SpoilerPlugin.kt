@@ -13,15 +13,22 @@ import java.util.regex.Pattern
 class SpoilerPlugin(
 private val anilist: Boolean = false) : AbstractMarkwonPlugin() {
     override fun beforeSetText(textView: TextView, markdown: Spanned) {
-if (anilist) {            applySpoilerSpans(markdown as Spannable, ARE)
-} else {            applySpoilerSpans(markdown as Spannable)        }
+if (anilist) {
+        applySpoilerSpans(markdown as Spannable, ARE)
+ }
+        else {
+        applySpoilerSpans(markdown as Spannable)
+        }
 }
 
 private class RedditSpoilerSpan : CharacterStyle() {
     private var revealed = false        
 override fun updateDrawState(tp: TextPaint) {
-if (!revealed) {                // use the same text color                tp.bgColor = Color.DKGRAY                tp.color = Color.DKGRAY
-} else {                // for example keep a bit of black background to remind that it is a spoiler                tp.bgColor = ColorUtils.applyAlpha(Color.DKGRAY, 25)            }
+if (!revealed) {
+        // use the same text color                tp.bgColor = Color.DKGRAY                tp.color = Color.DKGRAY
+}
+        else {                // for example keep a bit of black background to remind that it is a spoiler                tp.bgColor = ColorUtils.applyAlpha(Color.DKGRAY, 25)
+            }
 }
 
 fun setRevealed(revealed: Boolean) {            
@@ -56,4 +63,5 @@ val e = matcher.end()
                 spannable.setSpan(clickableSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )
         spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
-}}
+}
+}

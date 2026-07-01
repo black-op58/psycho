@@ -28,15 +28,16 @@ binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)        binding.ch
         binding.chartView.reload()
         binding.chartView.aa_drawChartWithChartOptions(aaOptions)
         binding.openButton.setOnClickListener {
-            SingleStatActivity.chartOptions = aaOptions            activity.startActivity(                Intent(activity, SingleStatActivity::class.java)            )}
+            SingleStatActivity.chartOptions = aaOptions            activity.startActivity(                Intent(activity, SingleStatActivity::class.java)            )
+}
 }
 
 override fun getLayout(): Int {
 return R.layout.item_chart    }
 
 override fun initializeViewBinding(view: View): ItemChartBinding {
-return ItemChartBinding.bind(view)    }
-
+return ItemChartBinding.bind(view)
+     }
 override fun bind(viewHolder: GroupieViewHolder<ItemChartBinding>, position: Int) {        
         v
     }

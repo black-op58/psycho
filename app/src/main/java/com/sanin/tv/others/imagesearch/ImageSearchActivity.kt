@@ -45,9 +45,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(binding.root)
         binding.uploadImage.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight        }
-binding.uploadImage.setOnClickListener {            viewModel.clearResults()
-        imageSelectionLauncher.launch("image/*")}
-binding.imageSearchTitle.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+binding.uploadImage.setOnClickListener {
+        viewModel.clearResults()
+        imageSelectionLauncher.launch("image/*")
+}
+binding.imageSearchTitle.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+}
 viewModel.searchResultLiveData.observe(this) { result ->            result?.let { displayResult(it)}}
 }
 
@@ -60,14 +64,19 @@ object : ImageSearchResultAdapter.OnItemClickListener {
     override fun onItemClick(searchResult: ImageSearchViewModel.ImageResult) {                
         l
     val id = searchResult.anilist?.id?.toInt()
-if (id == null) {                        toast(getString(R.string.no_anilist_id_found))                        return@launch
+if (id == null) {
+        toast(getString(R.string.no_anilist_id_found))
+        return@launch
                     }
 
 val media = Anilist.query.getMedia(id, false)
         withContext(Dispatchers.Main) {
-                        media?.let {                            startActivity(                                Intent(this
+                        media?.let {
+        startActivity(                                Intent(this
 @ImageSearchActivity, MediaDetailsActivity::class.java)                                    .putExtra("media", it)                            )                        }}}}
 })        recyclerView.post {
-            recyclerView.adapter = adapter            recyclerView.layoutManager = LinearLayoutManager(context)}
-}}
+            recyclerView.adapter = adapter            recyclerView.layoutManager = LinearLayoutManager(context)
+}
+}
+}
 */

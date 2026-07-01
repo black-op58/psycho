@@ -21,10 +21,12 @@ data = data                    )
 val mediaResponse = parseMediaResponseWithGson(response.text)                    
 val mediaMap = mutableMapOf<Int, ReturnedData>()                    mediaResponse.data.forEach { 
         (
-                        mediaMap[mediaItem.id] = ReturnedData(                            mediaItem.title.romaji,                            mediaItem.coverImage.medium,                            mediaItem.coverImage.color                        )                    }
+                        mediaMap[mediaItem.id] = ReturnedData(                            mediaItem.title.romaji,                            mediaItem.coverImage.medium,                            mediaItem.coverImage.color                        )
+                    }
 mediaMap}
-} catch (e: Exception) {
-    val errorMap = mutableMapOf<Int, ReturnedData>()                ids.forEach { 
+}
+        catch (e: Exception) {
+        val errorMap = mutableMapOf<Int, ReturnedData>()                ids.forEach { 
         e
     errorMap}
     }
@@ -33,8 +35,8 @@ private fun parseMediaResponseWithGson(response: String): MediaResponse {
     val gson = Gson()            
 val type = 
 object : TypeToken<MediaResponse>() {}.type
-return gson.fromJson(response, type)        }
-
+return gson.fromJson(response, type)
+         }
 data class ReturnedData(
 val title: String, 
 val coverImage: String, 

@@ -9,7 +9,8 @@ object was previously named "Anify" and called the defunct Anify API. * It is no
 interface so the * rest of the code (MediaDetailsViewModel, AnimeWatchFragment, Anime.kt) does * not need renaming. */
 object Anify {    suspend 
 fun fetchAndParseMetadata(anilistId: Int): Map<String, Episode> {
-return try {            Logger.log("AniZip : fetching episodes for anilist_id=$anilistId")            
+return try {
+        Logger.log("AniZip : fetching episodes for anilist_id=$anilistId")            
 val response = client.get("https://api.ani.zip/mappings?anilist_id=$anilistId")                .parsed<AniZipResponse>()            
 val episodes = response.episodes ?: return emptyMap()            episodes.entries
                 .filter { (key, _) ->                    // Only include numbered episodes (1, 2, 3 …)
@@ -17,11 +18,16 @@ skip specials like "S1", "S2"                    key.toIntOrNull() != null      
 .associate { (key, ep) ->
 val title = ep.title?.en                    key to Episode(                        number = key,                        title = title,                        desc = ep.overview ?: ep.summary,                        thumb = FileUrl[ep.image],                        extra = buildMap {                            
         e
-ep.rating?.let { put("rating", it)}
-ep.seasonNumber?.let { put("season", it.toString())}
+ep.rating?.let { put("rating", it)
+}
+ep.seasonNumber?.let { put("season", it.toString())
+}
 ep.episodeNumber?.let { put("episode", it.toString())}}
-)}
-} catch (e: Exception) {            Logger.log("AniZip : error fetching episodes: ${e.message}")
+)
+}
+}
+        catch (e: Exception) {
+        Logger.log("AniZip : error fetching episodes: ${e.message}")
         emptyMap()}}
 // ── Data models ────────────────────────────────────────────────────────────
 @Serializable    
@@ -68,4 +74,5 @@ val tvdbId: Int? = null,
 @SerialName("imdb_id") 
 val imdbId: String? = null,        
 @SerialName("themoviedb_id") 
-val tmdbId: String? = null    )}
+val tmdbId: String? = null    )
+}

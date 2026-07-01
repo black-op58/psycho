@@ -33,13 +33,13 @@ object EpisodeAiringNotificationService {
     suspend fun checkAndNotify(context: Context) = withContext(Dispatchers.IO) {
     if (!isEnabled()) {
             Logger.log("$TAG: Smart notifications disabled — skipping")
-            return@withContext
+        return@withContext
         }
 
-        val subscriptions = SubscriptionHelper.getSubscriptions()
+        val subscriptions = SubscriptionHelper.getSubscriptions();
         if (subscriptions.isEmpty()) {
             Logger.log("$TAG: No subscriptions, skipping airing check")
-            return@withContext
+        return@withContext
         }
 
         ensureNotificationChannel(context)
@@ -58,9 +58,8 @@ object EpisodeAiringNotificationService {
                 val episodeKey = "${sub.id}_ep${nextAiring.episode}"
 
                 val airedRecently = airingAtMs in (now - TimeUnit.HOURS.toMillis(6))..now
-                val airingVeryShortly = airingAtMs in now..(now + TimeUnit.HOURS.toMillis(1))
-
-                if ((airedRecently || airingVeryShortly) && episodeKey !in seenSet) {
+                val airingVeryShortly = airingAtMs in now..(now + TimeUnit.HOURS.toMillis(1));
+        if ((airedRecently || airingVeryShortly) && episodeKey !in seenSet) {
                     seenSet.add(episodeKey)
                     val timeLabel = if (airedRecently) "just aired" else "airs in < 1 hour"
                     Logger.log("$TAG: Notifying — ${sub.name} ep ${nextAiring.episode} $timeLabel")
@@ -71,17 +70,17 @@ object EpisodeAiringNotificationService {
                         text = "Episode ${nextAiring.episode} $timeLabel!",
                         coverUrl = sub.image
                     )
-                }
-            } catch (e: Exception) {
-                Logger.log("$TAG: Error checking ${sub.name}: ${e.message}")
+                 }
             }
+        catch (e: Exception) {
+        Logger.log("$TAG: Error checking ${sub.name}: ${e.message}")
+             }
         }
 
         saveSeenEpisodes(seenSet)
         PrefManager.setVal(PREFS_LAST_CHECK, now)
         Logger.log("$TAG: Airing check complete")
-    }
-
+      }
     private fun fireNotification(
         context: Context,
         notifId: Int,
@@ -99,8 +98,7 @@ object EpisodeAiringNotificationService {
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
 
         nm.notify(notifId, builder.build())
-    }
-
+      }
     private fun ensureNotificationChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     val channel = NotificationChannel(
@@ -108,7 +106,7 @@ object EpisodeAiringNotificationService {
             ).apply { description = "Alerts when subscribed anime episodes air" }
             val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nm.createNotificationChannel(channel)
-        }
+         }
     }
 
     private fun isEnabled(): Boolean =
@@ -123,5 +121,5 @@ object EpisodeAiringNotificationService {
         // Keep at most 500 entries to avoid unbounded growth
         val trimmed = if (set.size > 500) set.toList().takeLast(500).toSet() else set
         PrefManager.setCustomVal(PREFS_SEEN_EPISODES, trimmed)
-    }
+     }
 }

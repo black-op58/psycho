@@ -35,11 +35,13 @@ return _binding?.root    }
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         b
 val context = requireContext()        binding.replyButton.setOnClickListener {
-            ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", activityId),                null            )        }
+            ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", activityId),                null            )
+        }
 activityId = requireArguments().getInt("activityId")
         loading(true)
         lifecycleScope.launch(Dispatchers.IO) {
-            loadData()}
+            loadData()
+}
 }
 
 private suspend 
@@ -47,12 +49,16 @@ fun loadData() {
     val response = Anilist.query.getReplies(activityId)
         withContext(Dispatchers.Main) {
             loading(false)
-if (response != null) {                replies.clear()
+if (response != null) {
+        replies.clear()
         replies.addAll(response.data.page.activityReplies)
                 adapter.update(
-                    replies.map {                        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) { i, _ ->                            onClick(i)                        }}
+                    replies.map {
+        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) { i, _ ->                            onClick(i)                        }}
 )
-} else {                snackString("Failed to load replies")            }}
+ }
+        else {
+        snackString("Failed to load replies")            }}
 }
 
 private fun onClick(int: Int) {        
@@ -78,10 +84,14 @@ didNotifyClose = true        onDialogClosed?.invoke();
 override fun onResume() {        
         s
         lifecycleScope.launch(Dispatchers.IO) {
-            loadData()        }
+            loadData()
+        }
 }
 
 companion object {
     fun newInstance(activityId: Int): RepliesBottomDialog {
-return RepliesBottomDialog().apply {                arguments = Bundle().apply {                    putInt("activityId", activityId)                }}}
-}}
+return RepliesBottomDialog().apply {
+        arguments = Bundle().apply {
+        putInt("activityId", activityId)                }}}
+}
+}

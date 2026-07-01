@@ -25,12 +25,16 @@ fun setMediaData(media: Media) {
 private fun showPreview(media: Media) {        
         r
             LayoutInflater.from(context),            this,            }
-if (episodesOrChapters != null) {                previewEpisodes.text = episodesOrChapters                previewEpisodes.isVisible = true
-} else {                previewEpisodes.isVisible = false            }
+if (episodesOrChapters != null) {
+        previewEpisodes.text = episodesOrChapters                previewEpisodes.isVisible = true
+}
+        else {
+        previewEpisodes.isVisible = false            }
 previewCard.setOnClickListener {
     val intent = Intent(context, MediaDetailsActivity::class.java).apply {                    
         p
-if (context !is android.app.Activity) {                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)                    }}
+if (context !is android.app.Activity) {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)                    }}
 context.startActivity(intent)}}
 }
 

@@ -44,24 +44,31 @@ override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMarkdownCreatorBinding.inflate(layoutInflater)
         binding.markdownCreatorToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight        }
-binding.markdownOptionsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin += navBarHeight}
+binding.markdownOptionsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        bottomMargin += navBarHeight}
 setContentView(binding.root)
         AndroidBug5497Workaround.assistActivity(this) {}
 
 val params = binding.createButton.layoutParams as ViewGroup.MarginLayoutParams        params.marginEnd = 16 * resources.displayMetrics.density.toInt()        binding.createButton.layoutParams = params
-if (intent.hasExtra("type")) {            type = intent.getStringExtra("type")!!
-} else {            toast("Error: No type")
+if (intent.hasExtra("type")) {
+        type = intent.getStringExtra("type")!!
+}
+        else {
+        toast("Error: No type")
         finish()
 return        }
 
 val editId = intent.getIntExtra("edit", -1)        
 val userId = intent.getIntExtra("userId", -1);
         parentId = intent.getIntExtra("parentId", -1)
-when (type) {            "replyActivity" -> if (parentId == -1) {                toast("Error: No parent ID")
+when (type) {
+        "replyActivity" -> if (parentId == -1) {
+        toast("Error: No parent ID")
         finish()
 return            }
 "message" -> {
-if (editId == -1) {                    binding.privateCheckbox.visibility = ViewGroup.VISIBLE                }}
+if (editId == -1) {
+        binding.privateCheckbox.visibility = ViewGroup.VISIBLE                }}
 }
 
 var private = false        binding.privateCheckbox.setOnCheckedChangeListener { 
@@ -70,38 +77,58 @@ private = isChecked        }
 ping = intent.getStringExtra("other");
         text = ping ?: ""
         binding.editText.setText(text)        binding.editText.addTextChangedListener {
-if (!isPreviewMode) {                text = it.toString()            }}
+if (!isPreviewMode) {
+        text = it.toString()            }}
 previewMarkdown(false)        binding.markdownCreatorBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()}
+            onBackPressedDispatcher.onBackPressed()
+}
 binding.createButton.setOnClickListener {
-if (text.isBlank()) {                toast(getString(R.string.cannot_be_empty))                return@setOnClickListener
+if (text.isBlank()) {
+        toast(getString(R.string.cannot_be_empty))
+        return@setOnClickListener
             }
-customAlertDialog().apply {                setTitle(R.string.warning)
+customAlertDialog().apply {
+        setTitle(R.string.warning)
         setMessage(R.string.post_to_anilist_warning)
                 setPosButton(R.string.ok) {
                     launchIO {
     val isEdit = editId != -1
-val success = when (type) {                            
+val success = when (type) {
         "
-} else {                                Anilist.mutation.postActivity(text)                            }
-//"review" -> Anilist.mutation.postReview(text)                            "replyActivity" -> if (isEdit) {                                Anilist.mutation.postReply(parentId, text, editId)
-} else {                                Anilist.mutation.postReply(parentId, text)                            }
-"message" -> if (isEdit) {                                Anilist.mutation.postMessage(userId, text, editId)
-} else {                                Anilist.mutation.postMessage(userId, text, isPrivate = private)
 }
+        else {
+        Anilist.mutation.postActivity(text)
+                            }
+//"review" -> Anilist.mutation.postReview(text)                            "replyActivity" -> if (isEdit) {
+        Anilist.mutation.postReply(parentId, text, editId)
+ }
+        else {
+        Anilist.mutation.postReply(parentId, text)
+                            }
+"message" -> if (isEdit) {
+        Anilist.mutation.postMessage(userId, text, editId)
+ }
+        else {
+        Anilist.mutation.postMessage(userId, text, isPrivate = private)
+ }
 else -> "Error: Unknown type"                        }
 toast(success)
         finish()}}
-setNeutralButton(R.string.open_rules) {                    openLinkInBrowser("https://anilist.co/forum/thread/14")}
+setNeutralButton(R.string.open_rules) {
+        openLinkInBrowser("https://anilist.co/forum/thread/14")
+}
 setNegButton(R.string.cancel)
         show()}}
-binding.previewCheckbox.setOnClickListener {            isPreviewMode = !isPreviewMode            previewMarkdown(isPreviewMode)
-if (isPreviewMode) {                toast("Preview enabled")
-} else {                toast("Preview disabled")            }}
+binding.previewCheckbox.setOnClickListener {
+        isPreviewMode = !isPreviewMode            previewMarkdown(isPreviewMode)
+if (isPreviewMode) {
+        toast("Preview enabled")
+ }
+        else {
+        toast("Preview disabled")            }}
 binding.editText.requestFocus()
         setupMarkdownButtons()
-    }
-
+      }
 private fun setupMarkdownButtons() {        
         M
 }
@@ -112,21 +139,29 @@ val end = binding.editText.selectionEnd
 if (start != end) {
     val selectedText = binding.editText.text?.substring(start, end) ?: ""            
 val lines = selectedText.split("\n")            
-val newText = when (format) {                
+val newText = when (format) {
         M
-MarkdownFormat.ORDERED_LIST -> {                    lines.mapIndexed { index, line -> "${index + 1}. $line" }.joinToString("\n")
-}
+MarkdownFormat.ORDERED_LIST -> {
+        lines.mapIndexed { index, line -> "${index + 1}. $line" }.joinToString("\n")
+ }
 else -> {
-if (format.syntax.contains("%s")) {                        String.format(format.syntax, selectedText)
-} else {                        format.syntax.substring(0, format.selectionOffset) +                                selectedText +                                format.syntax.substring(format.selectionOffset)                    }}}
+if (format.syntax.contains("%s")) {
+        String.format(format.syntax, selectedText)
+ }
+        else {
+        format.syntax.substring(0, format.selectionOffset) +                                selectedText +                                format.syntax.substring(format.selectionOffset)                    }}}
 binding.editText.text?.replace(start, end, newText)
         binding.editText.setSelection(start + newText.length)
-} else {
-if (format.syntax.contains("%s")) {                showInputDialog(format, start)
-} else {
+ }
+        else {
+if (format.syntax.contains("%s")) {
+        showInputDialog(format, start)
+ }
+        else {
     val newText = format.syntax                binding.editText.text?.insert(start, newText)
         binding.editText.setSelection(start + format.selectionOffset)
-            }}
+             }
+            }
     }
 
 private fun showInputDialog(format: MarkdownFormat, position: Int) {
@@ -139,23 +174,28 @@ inputLayout.addView(inputEditText)
 val container = FrameLayout(this).apply {            
         a
                 ViewGroup.LayoutParams.MATCH_PARENT,                ViewGroup.LayoutParams.MATCH_PARENT            )
-        setPadding(0, 0, 0, 0)        }
-customAlertDialog().apply {            setTitle("Paste your link here")
+        setPadding(0, 0, 0, 0)
+        }
+customAlertDialog().apply {
+        setTitle("Paste your link here")
         setCustomView(container)
             setPosButton(getString(R.string.ok)) {
     val input = inputEditText.text.toString()                
 val formattedText = String.format(format.syntax, input)                binding.editText.text?.insert(position, formattedText)
                 binding.editText.setSelection(position + formattedText.length)
-            }
+             }
 setNegButton(getString(R.string.cancel))        }.show()
         inputEditText.requestFocus()
-    }
-
+      }
 private fun previewMarkdown(preview: Boolean) {
     val markwon = buildMarkwon(this, false, anilist = true)
-if (preview) {            binding.editText.isVisible = false            binding.editText.isEnabled = false            binding.markdownPreview.isVisible = true            markwon.setMarkdown(binding.markdownPreview, AniMarkdown.getBasicAniHTML(text))
-} else {            binding.editText.isVisible = true            binding.markdownPreview.isVisible = false            binding.editText.setText(text)            binding.editText.isEnabled = true
+if (preview) {
+        binding.editText.isVisible = false            binding.editText.isEnabled = false            binding.markdownPreview.isVisible = true            markwon.setMarkdown(binding.markdownPreview, AniMarkdown.getBasicAniHTML(text))
+ }
+        else {
+        binding.editText.isVisible = true            binding.markdownPreview.isVisible = false            binding.editText.setText(text)            binding.editText.isEnabled = true
 val markwonEditor = MarkwonEditor.create(markwon)
         binding.editText.addTextChangedListener(
-                MarkwonEditorTextWatcher.withProcess(markwonEditor)            )        }
+                MarkwonEditorTextWatcher.withProcess(markwonEditor)            )
+        }
 }

@@ -19,8 +19,9 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
             Archive.readSupportFilterAll(archive)
             Archive.readSupportFormatAll(archive)
             Archive.readOpenMemoryUnsafe(archive, buffer, size)
-        } catch (e: ArchiveException) {
-            close()
+         }
+        catch (e: ArchiveException) {
+        close()
             throw e
         }
     }
@@ -42,20 +43,18 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
         buffer.clear()
         Archive.readData(archive, buffer)
         buffer.flip()
-    }
-
+      }
     override fun close() {
         synchronized(lock) {
             if (isClosed) return
             isClosed = true
         }
         Archive.readFree(archive)
-    }
-
+      }
     fun getNextEntry() = Archive.readNextHeader(archive).takeUnless { 
         i
         val name = ArchiveEntry.pathnameUtf8(entry) ?: ArchiveEntry.pathname(entry)?.decodeToString() ?: return null
         val isFile = ArchiveEntry.filetype(entry) == ArchiveEntry.AE_IFREG
         tachiyomi.source.local.archive.ArchiveEntry(name, isFile)
-    }
+     }
 }

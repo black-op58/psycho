@@ -9,9 +9,12 @@ class AlignTagHandler : SimpleTagHandler() {
     override fun getSpans(        configuration: MarkwonConfiguration,        renderProps: RenderProps,        tag: HtmlTag    ): Any {
     val alignment: Layout.Alignment = if (tag.attributes().containsKey("center")) {            
         L
-} else if (tag.attributes().containsKey("end")) {            Layout.Alignment.ALIGN_OPPOSITE
-} else {            Layout.Alignment.ALIGN_NORMAL        }
-return AlignmentSpan.Standard(alignment)    }
-
+} else if (tag.attributes().containsKey("end")) {
+        Layout.Alignment.ALIGN_OPPOSITE
+}
+        else {
+        Layout.Alignment.ALIGN_NORMAL        }
+return AlignmentSpan.Standard(alignment)
+     }
 override fun supportedTags(): Collection<String> {
 return setOf("align")    }}

@@ -14,11 +14,11 @@ private val character: Character,
 private val activity: Activity) :    RecyclerView.Adapter<CharacterDetailsAdapter.GenreViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
     val binding =            ItemCharacterDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return GenreViewHolder(binding)    }
-
+return GenreViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
     val binding = holder.binding
-val desc =            (if (character.id == 4004)                "![za wardo](https://media1.tenor.com/m/_z1tmCJnL2wAAAAd/za-warudo.gif) \n" else "") +                    (if (character.age != null && character.age != "null") "**${currActivity()!!.getString(R.string.age)}** ${character.age}  \n" else "") +                    (if (character.dateOfBirth != null && character.dateOfBirth.toString() != "??" && character.dateOfBirth.toString().isNotEmpty())                        "**${currActivity()!!.getString(R.string.birthday)}** ${character.dateOfBirth.toString()}  \n" else "") +                    (if (character.gender != null && character.gender != "null")                        "**${currActivity()!!.getString(R.string.gender)}** " + when (character.gender) {                            
+val desc =            (if (character.id == 4004)                "![za wardo](https://media1.tenor.com/m/_z1tmCJnL2wAAAAd/za-warudo.gif) \n" else "") +                    (if (character.age != null && character.age != "null") "**${currActivity()!!.getString(R.string.age)}** ${character.age}  \n" else "") +                    (if (character.dateOfBirth != null && character.dateOfBirth.toString() != "??" && character.dateOfBirth.toString().isNotEmpty())                        "**${currActivity()!!.getString(R.string.birthday)}** ${character.dateOfBirth.toString()}  \n" else "") +                    (if (character.gender != null && character.gender != "null")                        "**${currActivity()!!.getString(R.string.gender)}** " + when (character.gender) {
         c
 else -> character.gender                        } + "  \n" else "") + "\n" + (character.description ?: "")        binding.characterDesc.isTextSelectable
 val markWon = buildMarkwon(activity)
@@ -26,9 +26,11 @@ val markWon = buildMarkwon(activity)
         binding.voiceActorRecycler.adapter = AuthorAdapter(character.voiceActor ?: arrayListOf())
         binding.voiceActorRecycler.layoutManager = LinearLayoutManager(
             activity, LinearLayoutManager.HORIZONTAL, false        )
-if (binding.voiceActorRecycler.adapter!!.itemCount == 0) {            binding.voiceActorContainer.visibility = View.GONE        }
+if (binding.voiceActorRecycler.adapter!!.itemCount == 0) {
+        binding.voiceActorContainer.visibility = View.GONE        }
 }
 
 override fun getItemCount(): Int = 1    inner 
 class GenreViewHolder(
-val binding: ItemCharacterDetailsBinding) :        RecyclerView.ViewHolder(binding.root)}
+val binding: ItemCharacterDetailsBinding) :        RecyclerView.ViewHolder(binding.root)
+}

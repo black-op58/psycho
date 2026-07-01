@@ -7,12 +7,18 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
     override suspend 
 fun doWork(): Result {        
         L
-if (System.currentTimeMillis() - lastCheck < 60000) {            Logger.log("AnilistNotificationWorker: doWork skipped")
-return Result.success()        }
+if (System.currentTimeMillis() - lastCheck < 60000) {
+        Logger.log("AnilistNotificationWorker: doWork skipped")
+return Result.success()
+        }
 lastCheck = System.currentTimeMillis()
-return if (AnilistNotificationTask().execute(applicationContext)) {            Result.success()
-} else {            Logger.log("AnilistNotificationWorker: doWork failed")
-        Result.retry()        }
+return if (AnilistNotificationTask().execute(applicationContext)) {
+        Result.success()
+ }
+        else {
+        Logger.log("AnilistNotificationWorker: doWork failed")
+        Result.retry()
+        }
 }
 
 companion object {

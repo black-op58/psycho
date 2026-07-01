@@ -76,7 +76,7 @@ class ExtensionHealthFragment : Fragment() {
             checkedAt == 0L -> "Not checked yet"
             else            -> "Checked " + SimpleDateFormat("HH:mm:ss", Locale.getDefault())
                 .format(Date(checkedAt))
-        }
+         }
     }
 
     private lateinit var recyclerView: RecyclerView
@@ -93,15 +93,15 @@ class ExtensionHealthFragment : Fragment() {
         val root = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, 0, 0, 0)
-        }
-
-        progressBar = ProgressBar(requireContext()).also { root.addView(it) }
-
+          }
+        progressBar = ProgressBar(requireContext()).also { root.addView(it)
+  }
         recheckButton = TextView(requireContext()).apply {
             text = "Re-check all"
             setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
             setPadding(48, 24, 48, 24)
-            setOnClickListener { pingAllSources() }
+            setOnClickListener { pingAllSources()
+ }
         }
         root.addView(recheckButton)
 
@@ -117,19 +117,16 @@ class ExtensionHealthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadSources()
-    }
-
+      }
     override fun onDestroyView() {
         super.onDestroyView()
         pingJob?.cancel()
-    }
-
+      }
     private fun loadSources() {
         val sources = buildSourceList()
         adapter.submitList(sources)
         pingAllSources(sources)
-    }
-
+      }
     /**
      * Build the list of sources from installed extensions.
      * Replace the stub entries below with your actual extension registry lookup,
@@ -141,7 +138,9 @@ class ExtensionHealthFragment : Fragment() {
         try {
             val animeLoader = Class.forName("eu.kanade.tachiyomi.animesource.online.AnimeHttpSource")
             // Replace with your real extension registry — this is a stub
-        } catch (_: ClassNotFoundException) { }
+        }
+        catch (_: ClassNotFoundException) {
+        }
 
         return list.ifEmpty {
             listOf(
@@ -150,7 +149,7 @@ class ExtensionHealthFragment : Fragment() {
                 SourceHealth("stub_3", "MangaDex",   "https://api.mangadex.org","MANGA"),
                 SourceHealth("stub_4", "NovelUpdates","https://www.novelupdates.com","NOVEL"),
             )
-        }
+         }
     }
 
     private fun pingAllSources(sources: List<SourceHealth> = adapter.currentList) {
@@ -162,12 +161,12 @@ class ExtensionHealthFragment : Fragment() {
         s
                 async(Dispatchers.IO) {
                     pingSource(src)
-                }
+                 }
             }.awaitAll()
 
             progressBar.visibility = View.GONE
             adapter.submitList(updated)
-        }
+         }
     }
 
     private fun pingSource(src: SourceHealth): SourceHealth {
@@ -183,9 +182,10 @@ class ExtensionHealthFragment : Fragment() {
             val elapsed = System.currentTimeMillis() - start
             conn.disconnect()
             src.copy(statusMs = elapsed, checkedAt = System.currentTimeMillis(), error = null)
-        } catch (e: Exception) {
-            src.copy(statusMs = -1L, checkedAt = System.currentTimeMillis(), error = e.message)
-        }
+         }
+        catch (e: Exception) {
+        src.copy(statusMs = -1L, checkedAt = System.currentTimeMillis(), error = e.message)
+         }
     }
 
     private inner class HealthAdapter :
@@ -214,19 +214,17 @@ class ExtensionHealthFragment : Fragment() {
                 addView(TextView(ctx).apply { textSize = 10f })                          // time
             }
             return VH(row)
-        }
-
+          }
         override fun onBindViewHolder(holder: VH, position: Int) {
             val src = getItem(position)
             val ctx = holder.root.context
 
             val (dotChar, dotColor) = when (src.status) {
-                SourceHealth.Status.GOOD      -> "●" to ContextCompat.getColor(ctx, android.R.color.holo_green_dark)
+        SourceHealth.Status.GOOD      -> "●" to ContextCompat.getColor(ctx, android.R.color.holo_green_dark)
                 SourceHealth.Status.SLOW      -> "●" to ContextCompat.getColor(ctx, android.R.color.holo_orange_dark)
                 SourceHealth.Status.DOWN      -> "●" to ContextCompat.getColor(ctx, android.R.color.holo_red_dark)
                 SourceHealth.Status.UNCHECKED -> "○" to ContextCompat.getColor(ctx, android.R.color.darker_gray)
-            }
-
+              }
             holder.dot.text = dotChar
             holder.dot.setTextColor(dotColor)
             holder.name.text = src.name

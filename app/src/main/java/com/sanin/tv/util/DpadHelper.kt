@@ -15,7 +15,8 @@ override fun onChildViewDetachedFromWindow(view: View) {}
 })        setOnKeyListener { _, keyCode, event ->
 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val lm = layoutManager as? LinearLayoutManager ?: return@setOnKeyListener false
-when (keyCode) {                KeyEvent.KEYCODE_DPAD_UP -> {
+when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_UP -> {
     val first = lm.findFirstVisibleItemPosition()
 if (first > 0) smoothScrollToPosition(first - 1)                    true
                 }
@@ -40,13 +41,15 @@ else -> false            }}
 }
 
 fun makeFocusable(vararg views: View) {
-for (v in views) {            v.isFocusable = true            v.isFocusableInTouchMode = true        }
+for (v in views) {
+        v.isFocusable = true            v.isFocusableInTouchMode = true        }
 }
 
 fun isDpadKey(keyCode: Int): Boolean = keyCode in listOf(        KeyEvent.KEYCODE_DPAD_UP,        KeyEvent.KEYCODE_DPAD_DOWN,        KeyEvent.KEYCODE_DPAD_LEFT,        KeyEvent.KEYCODE_DPAD_RIGHT,        KeyEvent.KEYCODE_DPAD_CENTER    )    
 fun handleTabDpad(        keyCode: Int,        event: KeyEvent,        currentTab: Int,        tabCount: Int,        selectTab: (Int) -> Unit    ): Boolean {
 if (event.action != KeyEvent.ACTION_DOWN) return false
-return when (keyCode) {            KeyEvent.KEYCODE_DPAD_LEFT -> {
+return when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_LEFT -> {
 if (currentTab > 0) { selectTab(currentTab - 1)
 true } else false            }
 KeyEvent.KEYCODE_DPAD_RIGHT -> {
@@ -54,4 +57,5 @@ if (currentTab < tabCount - 1) { selectTab(currentTab + 1)
 true } else false
 }
 else -> false        }
-}}
+}
+}

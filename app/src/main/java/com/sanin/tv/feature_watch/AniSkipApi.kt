@@ -25,8 +25,7 @@ object AniSkipApi {
         ENDING("ed"),
         MIXED_OPENING("mixed-op"),
         MIXED_ENDING("mixed-ed")
-    }
-
+      }
     data class SkipInterval(
         val type: SkipType,
         val startTime: Double,
@@ -60,16 +59,13 @@ object AniSkipApi {
                 val types = SkipType.entries.joinToString("&") { 
         "
                 val url = "$BASE_URL/$malId/$episodeNumber?$types&episodeLength=0"
-                val json = JSONObject(URL(url).readText())
-
-                if (!json.optBoolean("found", false)) {
+                val json = JSONObject(URL(url).readText());
+        if (!json.optBoolean("found", false)) {
                     return@withContext AniSkipResult(emptyList(), false)
-                }
-
+                  }
                 val results = json.getJSONArray("results")
-                val intervals = mutableListOf<SkipInterval>()
-
-                for (i in 0 until results.length()) {
+                val intervals = mutableListOf<SkipInterval>();
+        for (i in 0 until results.length()) {
                     val item = results.getJSONObject(i)
                     val typeStr = item.getString("skipType")
                     val type = SkipType.entries.firstOrNull { 
@@ -81,11 +77,11 @@ object AniSkipApi {
                         startTime = interval.getDouble("startTime"),
                         endTime = interval.getDouble("endTime")
                     )
-                }
-
+                  }
                 AniSkipResult(intervals, intervals.isNotEmpty())
-            } catch (e: Exception) {
-                AniSkipResult(emptyList(), false)
-            }
+             }
+        catch (e: Exception) {
+        AniSkipResult(emptyList(), false)
+             }
         }
 }

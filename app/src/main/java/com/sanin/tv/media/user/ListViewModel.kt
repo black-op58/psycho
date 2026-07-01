@@ -15,13 +15,14 @@ private val unfilteredLists = MutableLiveData<MutableMap<String, ArrayList<Media
 fun getLists(): LiveData<MutableMap<String, ArrayList<Media>>> = lists    suspend 
 fun loadLists(anime: Boolean, userId: Int, sortOrder: String? = null) {
     val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
-if (rescueMode) {            loadListsFromMAL(anime)
+if (rescueMode) {
+        loadListsFromMAL(anime)
 return        }
 tryWithSuspend {
     val res = Anilist.query.getMediaLists(anime, userId, sortOrder)
         lists.postValue(res)
             unfilteredLists.postValue(res)
-        }
+         }
     }
 
 private suspend 
@@ -33,10 +34,10 @@ fun loadListsFromMAL(anime: Boolean) {
 else                listOf("reading" to "Reading", "completed" to "Completed", "plan_to_read" to "Planned",                    "on_hold" to "Paused", "dropped" to "Dropped")            
 val result = mutableMapOf<String, ArrayList<Media>>()
         lists.postValue(filteredLists)
-    }
-
+      }
 fun searchLists(search: String) {
-if (search.isEmpty()) {            lists.postValue(unfilteredLists.value)
+if (search.isEmpty()) {
+        lists.postValue(unfilteredLists.value)
 return        }
 
 val currentLists = unfilteredLists.value ?: return

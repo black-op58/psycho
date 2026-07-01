@@ -52,8 +52,8 @@ val signatureHash: String,
 override val lang: String? = null,        
 override val isNsfw: Boolean = false,        
 override val hasReadme: Boolean = false,        
-override val hasChangelog: Boolean = false,    ) : AnimeExtension()}
-
+override val hasChangelog: Boolean = false,    ) : AnimeExtension()
+ }
 data class AvailableAnimeSources(    
 val id: Long,    
 val lang: String,    

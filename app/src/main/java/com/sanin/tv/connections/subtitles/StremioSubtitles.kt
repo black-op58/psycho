@@ -28,16 +28,20 @@ if (wyzieSubs.isNotEmpty()) {
     val mapped = wyzieSubs.map {                                
         S
     allSubs.addAll(mapped)}}
-    } catch (e: Exception) {                    e.printStackTrace()}}
+    }
+        catch (e: Exception) {
+        e.printStackTrace()}}
     // 2. Try OpenSubtitles (Stremio) if enabled
-if (providers.contains("Stremio")) {                Logger.log("StremioSubtitles: Fetching OpenSubtitles...")
+if (providers.contains("Stremio")) {
+        Logger.log("StremioSubtitles: Fetching OpenSubtitles...")
 try {
     val imdbId = media.idIMDB
 if (imdbId != null) {
     val isMovie = media.format == "MOVIE"                        
-val url = if (isMovie) {                            
+val url = if (isMovie) {
         "
-} else {                            "$BASE_URL/series/$imdbId:$season:$episode.json"                        }
+}
+        else {                            "$BASE_URL/series/$imdbId:$season:$episode.json"                        }
 
 val request = Request.Builder().url(url).build()                        
 val response = okHttpClient.newCall(request).execute()
@@ -45,10 +49,14 @@ if (response.isSuccessful && response.body != null) {
     val text = response.body!!.string()                            
 val data = Mapper.json.decodeFromString<StremioResponse>(text)
         allSubs.addAll(data.subtitles)
-                        }}
-} catch (e: Exception) {                    e.printStackTrace()}}
+                         }
+                        }
+}
+        catch (e: Exception) {
+        e.printStackTrace()}}
 allSubs}
-}}
+}
+}
 
 @Serializable
 data class StremioResponse(    

@@ -22,13 +22,15 @@ val activity: FragmentActivity) : RecyclerView.Adapter<MediaSocialAdapter.Follow
 class FollowerGridViewHolder(
 val binding: ItemFollowerGridBinding) :        RecyclerView.ViewHolder(binding.root)    
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowerGridViewHolder {
-return FollowerGridViewHolder(            ItemFollowerGridBinding.inflate(                LayoutInflater.from(parent.context),                parent,                false            )        )    }
-
+return FollowerGridViewHolder(            ItemFollowerGridBinding.inflate(                LayoutInflater.from(parent.context),                parent,                false            )        )
+     }
 override fun onBindViewHolder(holder: FollowerGridViewHolder, position: Int) {        
         h
     val user = user[position]            
 val score = user.score?.div(10.0) ?: 0.0            setAnimation(root.context, root)            profileUserName.text = user.name
-            profileInfo.apply {                text = when (user.status) {                    "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(                        R.string.reading                    )
+            profileInfo.apply {
+        text = when (user.status) {
+        "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(                        R.string.reading                    )
 else -> user.status ?: ""                }
 visibility = View.VISIBLE}
 profileCompactUserProgress.text = user.progress.toString()            profileCompactScore.text = score.toString()
@@ -36,8 +38,11 @@ profileCompactUserProgress.text = user.progress.toString()            profileCom
 profileUserAvatar.loadImage(user.pfp)
 val scoreDrawable = if (score == 0.0) R.drawable.score else R.drawable.user_score            profileCompactScoreBG.apply {                
         v
-profileCompactProgressContainer.visibility = View.VISIBLE            profileUserAvatar.setOnClickListener {                ContextCompat.startActivity(                    root.context,                    Intent(root.context, ProfileActivity::class.java)                        .putExtra("userId", user.id),                    null                )}
-profileUserAvatarContainer.setOnLongClickListener {                ImageViewDialog.newInstance(                    activity,                    activity.getString(R.string.avatar, user.name),                    user.pfp                )}}
+profileCompactProgressContainer.visibility = View.VISIBLE            profileUserAvatar.setOnClickListener {
+        ContextCompat.startActivity(                    root.context,                    Intent(root.context, ProfileActivity::class.java)                        .putExtra("userId", user.id),                    null                )
+}
+profileUserAvatarContainer.setOnLongClickListener {
+        ImageViewDialog.newInstance(                    activity,                    activity.getString(R.string.avatar, user.name),                    user.pfp                )}}
 }
 
 override fun getItemCount(): Int = user.size}

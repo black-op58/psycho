@@ -17,8 +17,8 @@ private val authorList: MutableList<Author>,
 private val clickEnabled: Boolean = true) : RecyclerView.Adapter<AuthorAdapter.AuthorViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorViewHolder {
     val binding =            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return AuthorViewHolder(binding)    }
-
+return AuthorViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: AuthorViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
 val author = authorList.getOrNull(position) ?: return        binding.itemCompactRelation.text = author.role        binding.itemCompactImage.loadImage(author.image)        binding.itemCompactTitle.text = author.name
@@ -30,4 +30,5 @@ val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root
         i
 if (!clickEnabled) return@setOnClickListener
 val author = authorList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        AuthorActivity::class.java                    ).putExtra("author", author as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )            }}
-}}
+}
+}

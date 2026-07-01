@@ -28,28 +28,28 @@ class ThemeManager(
         val useCustomTheme: Boolean = PrefManager.getVal(PrefName.UseCustomTheme)
         val customTheme: Int = PrefManager.getVal(PrefName.CustomThemeInt)
         val useSource: Boolean = PrefManager.getVal(PrefName.UseSourceTheme)
-        val useMaterial: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
-
+        val useMaterial: Boolean = PrefManager.getVal(PrefName.UseMaterialYou);
         if (useSource) {
-            val returnedEarly = applyDynamicColors(
+        val returnedEarly = applyDynamicColors(
                 useMaterial,
                 context,
                 useOLED,
                 fromImage,
                 useCustom = if (useCustomTheme) customTheme else null
-            )
-            if (!returnedEarly) return
+            );
+        if (!returnedEarly) return
         } else if (useCustomTheme) {
-            val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = customTheme)
-            if (!returnedEarly) return
-        } else {
-            val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null)
-            if (!returnedEarly) return
+        val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = customTheme);
+        if (!returnedEarly) return
+        }
+        else {
+            val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null);
+        if (!returnedEarly) return
         }
 
         val theme: String = PrefManager.getVal(PrefName.Theme)
         val themeToApply = when (theme) {
-            "BLUE" -> if (useOLED) R.style.Theme_SaninTV_BlueOLED else R.style.Theme_SaninTV_Blue
+        "BLUE" -> if (useOLED) R.style.Theme_SaninTV_BlueOLED else R.style.Theme_SaninTV_Blue
             "GREEN" -> if (useOLED) R.style.Theme_SaninTV_GreenOLED else R.style.Theme_SaninTV_Green
             "PURPLE" -> if (useOLED) R.style.Theme_SaninTV_PurpleOLED else R.style.Theme_SaninTV_Purple
             "PINK" -> if (useOLED) R.style.Theme_SaninTV_PinkOLED else R.style.Theme_SaninTV_Pink
@@ -66,21 +66,21 @@ class ThemeManager(
 
         val window = context.window
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION")
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        }
+         }
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = 0x00000000
         context.setTheme(themeToApply)
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
 
-        // Apply programmatic background for Glow Spots (2), Gradient (3), Vignette (4)
+        // Apply programmatic background for Glow Spots (2), Gradient (3), Vignette (4);
         if (oledMode == 2 || oledMode == 3 || oledMode == 4) {
-            val tv = TypedValue()
+        val tv = TypedValue()
             context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, tv, true)
             val gradientDir: Int = PrefManager.getVal(PrefName.GradientDirection)
             OledBackgroundManager.apply(context, oledMode, tv.data, gradientDir)
-        }
+         }
     }
 
     private fun applyAppWideUIScale(activity: Activity) {
@@ -111,17 +111,16 @@ class ThemeManager(
 
         // Scale all child views recursively
         scaleChildViews(rootView, scaleFactor)
-    }
-
+      }
     private fun scaleChildViews(view: View, scaleFactor: Float) {
         view.scaleX *= scaleFactor
         view.scaleY *= scaleFactor
         
         if (view is android.view.ViewGroup) {
-            for (i in 0 until view.childCount) {
+        for (i in 0 until view.childCount) {
                 val child = view.getChildAt(i)
                 scaleChildViews(child, scaleFactor)
-            }
+             }
         }
     }
 
@@ -129,10 +128,11 @@ class ThemeManager(
         val win: Window = activity.window
         val winParams: WindowManager.LayoutParams = win.attributes
         if (on) {
-            winParams.flags = winParams.flags or bits
-        } else {
-            winParams.flags = winParams.flags and bits.inv()
+        winParams.flags = winParams.flags or bits
         }
+        else {
+            winParams.flags = winParams.flags and bits.inv()
+         }
         win.attributes = winParams
     }
 
@@ -148,34 +148,34 @@ class ThemeManager(
 
         // Set content-based source if a bitmap is provided
         if (bitmap != null) {
-            builder.setContentBasedSource(bitmap)
+        builder.setContentBasedSource(bitmap)
             needMaterial = false
         } else if (useCustom != null) {
-            builder.setContentBasedSource(useCustom)
+        builder.setContentBasedSource(useCustom)
             needMaterial = false
         }
         if (useOLED) {
-            builder.setThemeOverlay(R.style.AppTheme_Amoled)
-        }
+        builder.setThemeOverlay(R.style.AppTheme_Amoled)
+         }
         if (needMaterial && !useMaterialYou) return true
 
         // Build the options
         val options = builder.build()
         // Apply the dynamic colors to the activity
         val activity = context as Activity
-        DynamicColors.applyToActivityIfAvailable(activity, options)
+        DynamicColors.applyToActivityIfAvailable(activity, options);
         if (useOLED) {
-            val options2 = DynamicColorsOptions.Builder()
+        val options2 = DynamicColorsOptions.Builder()
                 .setThemeOverlay(R.style.AppTheme_Amoled)
                 .build()
             DynamicColors.applyToActivityIfAvailable(activity, options2)
-        }
+         }
         return false
     }
 
     private fun isDarkThemeActive(context: Context): Boolean {
         return when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> true
+        Configuration.UI_MODE_NIGHT_YES -> true
             Configuration.UI_MODE_NIGHT_NO -> false
             Configuration.UI_MODE_NIGHT_UNDEFINED -> false
             else -> false
@@ -202,7 +202,8 @@ class ThemeManager(
             companion object {
                 fun fromString(value: String): Theme {
                     return entries.find { it.theme == value } ?: SANIN
-                }
+                
+}
             }
         }
     }

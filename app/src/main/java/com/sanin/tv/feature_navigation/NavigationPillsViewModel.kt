@@ -49,7 +49,8 @@ class NavigationPillsViewModel @Inject constructor(
 
     // ─── Derived: Is Player Route ───
     val isPlayerRoute: StateFlow<Boolean> = _currentRoute
-        .map { it.startsWith("player/") }
+        .map { it.startsWith("player/")
+ }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     // ─── Derived: Is Main Tab ───

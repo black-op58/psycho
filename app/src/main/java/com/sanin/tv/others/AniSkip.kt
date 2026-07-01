@@ -11,7 +11,8 @@ fun getResult(        malId: Int,        episodeNumber: Int,        episodeLengt
 return tryWithSuspend {
     val a = if (useProxyForTimeStamps)
         client.get(
-                    "https://corsproxy.io/?${                        URLEncoder.encode(url, "utf-8").replace("+", "%20")                    }"                )
+                    "https://corsproxy.io/?${
+        URLEncoder.encode(url, "utf-8").replace("+", "%20")                    }"                )
 else                client.get(url)            
 val res = a.parsed<AniSkipResponse>()
 if (res.found) res.results else null        }
@@ -30,11 +31,13 @@ val skipType: String,
 val skipId: String,        
 val episodeLength: Double    )    
 fun String.getType(): String {
-return when (this) {            "op" -> "Opening"            "ed" -> "Ending"            "recap" -> "Recap"            "mixed-ed" -> "Mixed Ending"            "mixed-op" -> "Mixed Opening"
+return when (this) {
+        "op" -> "Opening"            "ed" -> "Ending"            "recap" -> "Recap"            "mixed-ed" -> "Mixed Ending"            "mixed-op" -> "Mixed Opening"
 else -> this        }
 }
 
 @Serializable    
 data class AniSkipInterval(        
 val startTime: Double,        
-val endTime: Double    )}
+val endTime: Double    )
+}

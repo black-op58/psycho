@@ -41,12 +41,10 @@ class AnilistContinueAdapter(
             LayoutInflater.from(parent.context), parent, false
         )
         return VH(binding)
-    }
-
+      }
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.bind(getItem(position))
-    }
-
+      }
     inner class VH(private val b: ItemContinueWatchingBinding) :
         RecyclerView.ViewHolder(b.root) {
 
@@ -69,9 +67,10 @@ class AnilistContinueAdapter(
                                 (totalEps - progress) * epDuration
                              else null
             if (remaining != null && remaining > 0) {
-                b.cwMinutesRemaining.isVisible = true
+        b.cwMinutesRemaining.isVisible = true
                 b.cwMinutesRemaining.text = "~$remaining min left"
-            } else {
+            }
+        else {
                 b.cwMinutesRemaining.isVisible = false
             }
 
@@ -79,16 +78,18 @@ class AnilistContinueAdapter(
             val timeUntil = m.timeUntilAiring
             val nextEpNum = m.anime?.nextAiringEpisode
             if (timeUntil != null && timeUntil > 0 && nextEpNum != null) {
-                b.cwNextEp.isVisible = true
+        b.cwNextEp.isVisible = true
                 b.cwNextEp.text = "Ep $nextEpNum in ${formatCountdown(timeUntil)}"
-            } else {
+            }
+        else {
                 b.cwNextEp.isVisible = false
             }
 
             // ── Progress bar ──────────────────────────────────────────
             if (totalEps != null && totalEps > 0) {
-                b.cwProgressBar.progress = ((progress.toFloat() / totalEps) * 100).toInt()
-            } else {
+        b.cwProgressBar.progress = ((progress.toFloat() / totalEps) * 100).toInt()
+             }
+        else {
                 b.cwProgressBar.progress = 0
             }
 
@@ -99,15 +100,14 @@ class AnilistContinueAdapter(
                     .scaleY(if (hasFocus) 1.06f else 1f)
                     .setDuration(120)
                     .start()
-            }
-
+              }
             // ── Click → details (no auto-resume; hero card handles that) ──
             b.root.setOnClickListener {
                 activity.startActivity(
                     Intent(activity, MediaDetailsActivity::class.java)
                         .putExtra("media", m)
                 )
-            }
+             }
         }
     }
 

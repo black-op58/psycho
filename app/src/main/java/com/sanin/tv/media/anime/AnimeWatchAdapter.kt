@@ -65,8 +65,7 @@ class AnimeWatchAdapter(
         val bind =
             ItemMediaSourceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
-    }
-
+      }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
@@ -77,14 +76,14 @@ class AnimeWatchAdapter(
                 Intent(fragment.requireContext(), FAQActivity::class.java),
                 null
             )
-        }
+         }
         // Youtube
         if (media.anime?.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
             binding.animeSourceYT.visibility = View.VISIBLE
             binding.animeSourceYT.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))
                 fragment.requireContext().startActivity(intent)
-            }
+             }
         }
         binding.animeSourceDubbed.isChecked = media.selected!!.preferDub
         binding.animeSourceDubbedText.text =
@@ -98,17 +97,16 @@ class AnimeWatchAdapter(
             binding.animeSourceDubbedText.text =
                 if (isChecked) currActivity()!!.getString(R.string.dubbed) else currActivity()!!.getString(
                     R.string.subbed
-                )
-            if (!changing) fragment.onDubClicked(isChecked)
-        }
-
+                );
+        if (!changing) fragment.onDubClicked(isChecked)
+          }
         // Wrong Title
         binding.mediaSourceSearch.setOnClickListener {
             SourceSearchDialogFragment().show(
                 fragment.requireActivity().supportFragmentManager,
                 null
             )
-        }
+         }
         val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
 
         binding.mediaSourceNameContainer.isGone = offline
@@ -119,15 +117,15 @@ class AnimeWatchAdapter(
         // Source Selection
         var source =
             media.selected!!.sourceIndex.let { if (it >= watchSources.names.size) 0 else it }
-        setLanguageList(media.selected!!.langIndex, source)
+        setLanguageList(media.selected!!.langIndex, source);
         if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
             binding.mediaSource.setText(watchSources.names[source])
             watchSources[source].apply {
-                this.selectDub = media.selected!!.preferDub
+        this.selectDub = media.selected!!.preferDub
                 binding.mediaSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.mediaSourceTitle.text = it } }
                 binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
-            }
+             }
         }
 
         val displayNames = watchSources.names.filter { 
@@ -151,11 +149,10 @@ class AnimeWatchAdapter(
                 binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                 source = actualIndex
                 setLanguageList(0, actualIndex)
-            }
+             }
             subscribeButton(false)
             fragment.loadEpisodes(actualIndex, false)
-        }
-
+          }
         binding.mediaSourceLanguage.setOnItemClickListener { _, _, i, _ ->
             // Check if 'extension' and 'selected' properties exist and are accessible
             (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
@@ -170,17 +167,18 @@ class AnimeWatchAdapter(
                     changing = false
                     binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                     setLanguageList(i, source)
-                }
+                 }
                 subscribeButton(false)
                 fragment.loadEpisodes(media.selected!!.sourceIndex, true)
-            } ?: run { }
+            } ?: run { 
+}
         }
 
         // Settings
         binding.mediaSourceSettings.setOnClickListener {
             (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
                 fragment.openSettings(ext.extension)
-            }
+             }
         }
 
         // Icons
@@ -197,14 +195,12 @@ class AnimeWatchAdapter(
             true
         ) {
             fragment.onNotificationPressed(it, binding.mediaSource.text.toString())
-        }
-
+          }
         subscribeButton(false)
 
         binding.mediaSourceSubscribe.setOnLongClickListener {
             openSettings(fragment.requireContext(), CHANNEL_SUBSCRIPTION_CHECK)
-        }
-
+          }
         // Nested Button
         binding.mediaNestedButton.setOnClickListener {
             val dialogBinding = DialogLayoutBinding.inflate(fragment.layoutInflater)
@@ -229,23 +225,22 @@ class AnimeWatchAdapter(
                 metadataApiTop.setOnClickListener {
                     metadataApi = if (metadataApi == 0) 1 else 0
                     metadataApiText.text = if (metadataApi == 0) "Kitsu" else "AniZip"
-                    PrefManager.setVal(PrefName.EpisodeMetadataSource, metadataApi)
-                    
-                    if (metadataApi == 0) {
-                        fragment.loadKitsuEpisodesAsync()
-                    }
+                    PrefManager.setVal(PrefName.EpisodeMetadataSource, metadataApi);
+        if (metadataApi == 0) {
+        fragment.loadKitsuEpisodesAsync()
+                     }
                     refresh = true
                 }
                 
                 // Grids
                 var selected = when (style) {
-                    0 -> mediaSourceList
+        0 -> mediaSourceList
                     1 -> mediaSourceGrid
                     2 -> mediaSourceCompact
                     else -> mediaSourceList
                 }
                 when (style) {
-                    0 -> layoutText.setText(R.string.list)
+        0 -> layoutText.setText(R.string.list)
                     1 -> layoutText.setText(R.string.grid)
                     2 -> layoutText.setText(R.string.compact)
                     else -> mediaSourceList
@@ -277,13 +272,13 @@ class AnimeWatchAdapter(
                 mediaWebviewContainer.setOnClickListener {
                     if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
                         toast(R.string.webview_not_installed)
-                    }
+                     }
                     // Start CookieCatcher activity
                     setNegButton("Cancel") {
                         if (refresh) fragment.loadEpisodes(source, true)
-                    }
+                     }
                     show()
-                }
+                 }
             }
         }
         // Episode Handling
@@ -300,29 +295,30 @@ class AnimeWatchAdapter(
 
                     PrefManager.getAllCustomValsForMedia(prefix)
                         .keys
-                        .filter { it.matches(regex) }
-                        .onEach { key -> PrefManager.removeCustomVal(key) }
+                        .filter { it.matches(regex)
+ }
+                        .onEach { key -> PrefManager.removeCustomVal(key)
+ }
                     snackString("Deleted the progress of all Episodes for ${media.nameRomaji}")
-                }
+                 }
                 setNegButton(R.string.no)
                 show()
-            }
+             }
             true
         }
     }
 
     fun subscribeButton(enabled: Boolean) {
         subscribe?.enabled(enabled)
-    }
-
+      }
     // Chips
     fun updateChips(limit: Int, names: Array<String>, arr: Array<Int>, selected: Int = 0) {
         val binding = _binding
         if (binding != null) {
-            val screenWidth = fragment.screenWidth.px
+        val screenWidth = fragment.screenWidth.px
             var select: Chip? = null
             for (position in arr.indices) {
-                val last = if (position + 1 == arr.size) names.size else (limit * (position + 1))
+        val last = if (position + 1 == arr.size) names.size else (limit * (position + 1))
                 val chip =
                     ItemChipBinding.inflate(
                         LayoutInflater.from(fragment.context),
@@ -336,8 +332,7 @@ class AnimeWatchAdapter(
                         (chip.left - screenWidth / 2) + (chip.width / 2),
                         0
                     )
-                }
-
+                  }
                 val chipText = "${names[limit * (position)]} - ${names[last - 1]}"
                 chip.text = chipText
                 chip.setTextColor(
@@ -350,10 +345,10 @@ class AnimeWatchAdapter(
                 chip.setOnClickListener {
                     selected()
                     fragment.onChipClicked(position, limit * (position), last - 1)
-                }
-                binding.mediaSourceChipGroup.addView(chip)
-                if (selected == position) {
-                    selected()
+                 }
+                binding.mediaSourceChipGroup.addView(chip);
+        if (selected == position) {
+        selected()
                     select = chip
                 }
             }
@@ -364,19 +359,18 @@ class AnimeWatchAdapter(
                             (select.left - screenWidth / 2) + (select.width / 2),
                             0
                         )
-                    }
+                     }
                 }
         }
     }
 
     fun clearChips() {
         _binding?.mediaSourceChipGroup?.removeAllViews()
-    }
-
+      }
     fun handleEpisodes() {
         val binding = _binding
         if (binding != null) {
-            if (media.anime?.episodes != null) {
+        if (media.anime?.episodes != null) {
                 val episodes = media.anime.episodes!!.keys.toTypedArray()
 
                 val anilistEp = (media.userProgress ?: 0).plus(1)
@@ -384,8 +378,8 @@ class AnimeWatchAdapter(
                     "${media.id}_current_ep", ""
                 )?.toIntOrNull() ?: 1
 
-                var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
-                if (episodes.contains(continueEp)) {
+                var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString();
+        if (episodes.contains(continueEp)) {
                     binding.sourceContinue.visibility = View.VISIBLE
                     handleProgress(
                         binding.itemMediaProgressCont,
@@ -393,14 +387,14 @@ class AnimeWatchAdapter(
                         binding.itemMediaProgressEmpty,
                         media.id,
                         continueEp
-                    )
-                    if ((binding.itemMediaProgress.layoutParams as LinearLayout.LayoutParams).weight > PrefManager.getVal<Float>(
+                    );
+        if ((binding.itemMediaProgress.layoutParams as LinearLayout.LayoutParams).weight > PrefManager.getVal<Float>(
                             PrefName.WatchPercentage
                         )
                     ) {
-                        val e = episodes.indexOf(continueEp)
-                        if (e != -1 && e + 1 < episodes.size) {
-                            continueEp = episodes[e + 1]
+                        val e = episodes.indexOf(continueEp);
+        if (e != -1 && e + 1 < episodes.size) {
+        continueEp = episodes[e + 1]
                             handleProgress(
                                 binding.itemMediaProgressCont,
                                 binding.itemMediaProgress,
@@ -408,7 +402,7 @@ class AnimeWatchAdapter(
                                 media.id,
                                 continueEp
                             )
-                        }
+                         }
                     }
                     val ep = media.anime.episodes!![continueEp]!!
 
@@ -417,8 +411,8 @@ class AnimeWatchAdapter(
 
                     binding.itemMediaImage.loadImage(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
-                    )
-                    if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
+                    );
+        if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
 
                     binding.mediaSourceContinueText.text =
                         currActivity()!!.getString(
@@ -429,9 +423,9 @@ class AnimeWatchAdapter(
                         )
                     binding.sourceContinue.setOnClickListener {
                         fragment.onEpisodeClick(continueEp)
-                    }
+                     }
                     if (fragment.continueEp) {
-                        if (
+        if (
                             (binding.itemMediaProgress.layoutParams as LinearLayout.LayoutParams)
                                 .weight < PrefManager.getVal<Float>(PrefName.WatchPercentage)
                         ) {
@@ -439,10 +433,12 @@ class AnimeWatchAdapter(
                             fragment.continueEp = false
                         }
                     }
-                } else {
+                }
+        else {
                 }
                 binding.mediaSource.setOnClickListener { autoSelect = false }
-            } else {
+            }
+        else {
                 binding.sourceContinue.visibility = View.GONE
                 binding.sourceNotFound.visibility = View.GONE
                 binding.faqbutton.visibility = View.GONE
@@ -455,30 +451,31 @@ class AnimeWatchAdapter(
     private fun setLanguageList(lang: Int, source: Int) {
         val binding = _binding
         if (watchSources is AnimeSources) {
-            val parser = watchSources[source] as? DynamicAnimeParser
+        val parser = watchSources[source] as? DynamicAnimeParser
             if (parser != null) {
-                (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
+        (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
                     ext.sourceLanguage = lang
                 }
                 try {
                     binding?.mediaSourceLanguage?.setText(parser.extension.sources[lang].lang)
-                } catch (e: IndexOutOfBoundsException) {
-                    binding?.mediaSourceLanguage?.setText(
+                 }
+        catch (e: IndexOutOfBoundsException) {
+        binding?.mediaSourceLanguage?.setText(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
                     )
-                }
+                 }
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.map { LanguageMapper.getLanguageName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.getLanguageName(it.lang)
+ }
                 )
                 val items = adapter.count
 
                 binding?.mediaSourceLanguageContainer?.visibility =
                     if (items > 1) View.VISIBLE else View.GONE
                 binding?.mediaSourceLanguage?.setAdapter(adapter)
-
-            }
+              }
         }
     }
 
@@ -488,6 +485,6 @@ class AnimeWatchAdapter(
         RecyclerView.ViewHolder(binding.root) {
         init {
             displayTimer(media, binding.animeSourceContainer)
-        }
+         }
     }
 }

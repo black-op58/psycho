@@ -41,7 +41,8 @@ val model: ListViewModel by viewModels()
         model.getLists().observe(this) {
     val defaultKeys = listOf(                "Reading",                "Watching",                "Completed",                "Paused",                "Dropped",                "Planning",                "Favourites",                "Rewatching",                "Rereading",                "All"            )            
 val userKeys: Array<String> = resources.getStringArray(R.array.keys)
-if (it != null) {                binding.listProgressBar.visibility = View.GONE                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, false, this)                
+if (it != null) {
+        binding.listProgressBar.visibility = View.GONE                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, false, this)                
 val keys = it.keys.toList()                    .map { 
         k
 
@@ -54,30 +55,47 @@ val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.list
 val live = Refresh.activity.getOrPut(this.hashCode()) { 
         M
 live.observe(this) {
-if (it) {                scope.launch {                    withContext(Dispatchers.IO) {                        model.loadLists(            popup.show()        }
+if (it) {
+        scope.launch {
+        withContext(Dispatchers.IO) {
+        model.loadLists(            popup.show()
+        }
 binding.filter.setOnClickListener {
     val genres =                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()            
 val popup = PopupMenu(this, it)
         popup.menu.add("All")
             genres.forEach { genre ->
-                popup.menu.add(genre)            }
+                popup.menu.add(genre)
+            }
 popup.setOnMenuItemClickListener { menuItem ->
 val selectedGenre = menuItem.title.toString()
         model.filterLists(selectedGenre)
                 true
             }
-popup.show()}
+popup.show()
+}
 binding.random.setOnClickListener {            //get the current tab
 val currentTab =                binding.listTabLayout.getTabAt(binding.listTabLayout.selectedTabPosition)            
-val currentFragment =                supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment            currentFragment?.randomOptionClick()        }
-binding.search.setOnClickListener {            toggleSearchView(binding.searchView.isVisible)
-if (!binding.searchView.isVisible) {                model.unfilterLists()            }}
-binding.searchViewText.addTextChangedListener {            model.searchLists(binding.searchViewText.text.toString())}
+val currentFragment =                supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment            currentFragment?.randomOptionClick()
+        }
+binding.search.setOnClickListener {
+        toggleSearchView(binding.searchView.isVisible)
+if (!binding.searchView.isVisible) {
+        model.unfilterLists()            }}
+binding.searchViewText.addTextChangedListener {
+        model.searchLists(binding.searchViewText.text.toString())
+}
 }
 
 private fun toggleSearchView(isVisible: Boolean) {
-if (isVisible) {            binding.searchView.visibility = View.GONE            binding.searchViewText.text.clear()
-} else {            binding.searchView.visibility = View.VISIBLE            binding.searchViewText.requestFocus()            
-val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager            imm.showSoftInput(binding.searchViewText, InputMethodManager.SHOW_IMPLICIT)        }
-}}
-}}
+if (isVisible) {
+        binding.searchView.visibility = View.GONE            binding.searchViewText.text.clear()
+ }
+        else {
+        binding.searchView.visibility = View.VISIBLE            binding.searchViewText.requestFocus()            
+val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager            imm.showSoftInput(binding.searchViewText, InputMethodManager.SHOW_IMPLICIT)
+        }
+}
+}
+}
+}

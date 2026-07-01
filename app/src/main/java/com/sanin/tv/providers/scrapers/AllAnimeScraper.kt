@@ -31,8 +31,7 @@ object AllAnimeScraper {
         val showId = searchShow(apiUrl, title) ?: return null
         val lang   = if (isDub) "dub" else "sub"
         return episodeStream(apiUrl, showId, episode.toString(), lang)
-    }
-
+      }
     // ── Step 1: search ────────────────────────────────────────────────────────
 
     private suspend fun searchShow(apiUrl: String, title: String): String? {
@@ -40,12 +39,14 @@ object AllAnimeScraper {
             val gql = """{ 
         s
             val encoded = URLEncoder.encode(gql, "UTF-8")
-            val resp = client.get("$apiUrl?query=$encoded")
-            if (resp.statusCode != 200) return null
+            val resp = client.get("$apiUrl?query=$encoded");
+        if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<AllAnimeSearchResp>(resp.text).data?.shows?.edges?.firstOrNull()?._id
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("AllAnimeScraper.searchShow: ${e.message}")
+        }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("AllAnimeScraper.searchShow: ${e.message}")
               null
           }
     }
@@ -62,15 +63,17 @@ object AllAnimeScraper {
             val gql = """{ 
         e
             val encoded = URLEncoder.encode(gql, "UTF-8")
-            val resp = client.get("$apiUrl?query=$encoded")
-            if (resp.statusCode != 200) return null
+            val resp = client.get("$apiUrl?query=$encoded");
+        if (resp.statusCode != 200) return null
             val sources = Mapper.json.decodeFromString<AllAnimeEpisodeResp>(resp.text).data?.episode?.sourceUrls
                 ?: return null
             val url = resolveSourceUrl(sources) ?: return null
             StreamFetcher.StreamResult(url = url, quality = "auto", providerName = "AllAnime")
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("AllAnimeScraper.episodeStream: ${e.message}")
+         }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("AllAnimeScraper.episodeStream: ${e.message}")
               null
           }
     }
@@ -82,16 +85,15 @@ object AllAnimeScraper {
      * We prefer direct HLS/MP4 sources; encoded ones are decoded below.
      */
     private fun resolveSourceUrl(sources: List<AllAnimeSourceUrl>): String? {
-        val preferred = listOf("Aw-", "S-mp4", "Luf-mp4", "Kir", "Ok", "Fla")
+        val preferred = listOf("Aw-", "S-mp4", "Luf-mp4", "Kir", "Ok", "Fla");
         for (pref in preferred) {
-            val src = sources.find { 
+        val src = sources.find { 
         i
             val url = decodeUrl(src.sourceUrl ?: continue) ?: continue
             return url
         }
         return sources.mapNotNull { decodeUrl(it.sourceUrl ?: return@mapNotNull null) }.firstOrNull()
-    }
-
+      }
     /**
      * AllAnime encodes some URLs with a simple unicode-escape pattern.
      * Encoded entries start with "--"; decode \\uXXXX sequences then validate.
@@ -102,23 +104,24 @@ object AllAnimeScraper {
             buildString {
                 var i = 2
                 while (i < raw.length) {
-                    if (i + 5 < raw.length && raw[i] == '\\' && raw[i + 1] == 'u') {
+        if (i + 5 < raw.length && raw[i] == '\\' && raw[i + 1] == 'u') {
                         val hex = raw.substring(i + 2, i + 6)
                         append(hex.toIntOrNull(16)?.toChar() ?: raw[i])
                         i += 6
-                    } else {
+                    }
+        else {
                         append(raw[i])
                         i++
                     }
                 }
             }
         } else raw
-        return text.takeIf { it.startsWith("http") && (it.contains(".m3u8") || it.contains(".mp4")) }
+        return text.takeIf { it.startsWith("http") && (it.contains(".m3u8") || it.contains(".mp4"))
+ }
     }
 
     private fun esc(s: String) = s.replace("\\", "\\\\").replace("\"", "\\\"")
-}
-
+  }
 // ─── Response models ──────────────────────────────────────────────────────────
 
 @Serializable data class AllAnimeSearchResp(val data: AllAnimeSearchData? = null)

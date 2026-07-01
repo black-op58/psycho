@@ -16,6 +16,8 @@ object QrUtils {
         Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888).also { bmp ->
             for (x in 0 until size) for (y in 0 until size)
                 bmp.setPixel(x, y, if (matrix[x, y]) Color.BLACK else Color.WHITE)
-        }
-    } catch (e: Exception) { null }
+         }
+    }
+        catch (e: Exception) {
+        null }
 }

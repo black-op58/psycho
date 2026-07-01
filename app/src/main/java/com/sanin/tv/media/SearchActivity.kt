@@ -28,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
             isFocusableInTouchMode = false
             setOnKeyListener { _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    finish(); true
+        finish(); true
                 } else false
             }
             // Placeholder - will display search results
@@ -44,9 +44,9 @@ class SearchActivity : AppCompatActivity() {
                             text = getString(R.string.search_hint)
                             setTextColor(androidx.core.content.ContextCompat.getColor(this@SearchActivity, R.color.bg_white))
                             typeface = androidx.core.content.res.ResourcesCompat.getFont(this@SearchActivity, R.font.poppins)
-                        }
+                         }
                     )
-                }
+                 }
                 override fun onBindViewHolder(holder: SearchHeaderViewHolder, position: Int) {}
                 override fun getItemCount() = 1
             }

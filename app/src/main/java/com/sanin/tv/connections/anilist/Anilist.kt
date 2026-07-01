@@ -55,7 +55,8 @@ val sign = if (hours >= 0) "+" else "-"
 val formattedHours = String.format(Locale.US, "%02d", abs(hours))        
 val formattedMinutes = String.format(Locale.US, "%02d", minutes)        
 val searchString = "(GMT$sign$formattedHours:$formattedMinutes)"
-return timeZone.find { it.contains(searchString) } ?: noTimezone    }
+return timeZone.find { it.contains(searchString) } ?: noTimezone    
+}
 
 fun getApiTimezone(displayTimezone: String): String {
     val regex = """\(GMT([+-])(\d{2}):(\d{2})\)""".toRegex()        
@@ -63,29 +64,37 @@ val matchResult = regex.find(displayTimezone)
 return if (matchResult != null) {
     val (sign, hours, minutes) = matchResult.destructured
 val formattedSign = if (sign == "+") "" else "-"            "$formattedSign$hours:$minutes"
-} else {            "00:00"        }
+}
+        else {            "00:00"        }
 }
 
 private fun getSeason(next: Boolean): Pair<String, Int> {
     var newSeason = if (next) currentSeason + 1 else currentSeason - 1
 var newYear = currentYear
-if (newSeason > 3) {            newSeason = 0            newYear++
-} else if (newSeason < 0) {            newSeason = 3            newYear--        }
+if (newSeason > 3) {
+        newSeason = 0            newYear++
+} else if (newSeason < 0) {
+        newSeason = 3            newYear--        }
 return seasons[newSeason] to newYear    }
 
 val currentSeasons = listOf(        getSeason(false),        seasons[currentSeason] to currentYear,        getSeason(true)    )    
 fun loginIntent(context: Context) {
     val clientID = 14959
-try {            CustomTabsIntent.Builder().build().launchUrl(                context,                "https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token".toUri()            )        } catch (_: ActivityNotFoundException) {            openLinkInBrowser("https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token")        }
+try {
+        CustomTabsIntent.Builder().build().launchUrl(                context,                "https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token".toUri()            )
+        }
+        catch (_: ActivityNotFoundException) {
+        openLinkInBrowser("https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token")
+        }
 }
 
 fun getSavedToken(): Boolean {
-        token = PrefManager.getVal(PrefName.AnilistToken, null as String?)
+        token = PrefManager.getVal(PrefName.AnilistToken, null as String?);
         if (token.isNullOrEmpty()) return false
         // Check JWT expiry — clear a stale token so the user is sent back to login
-        val daysLeft = getTokenExpiryDays()
+        val daysLeft = getTokenExpiryDays();
         if (daysLeft != null && daysLeft <= 0) {
-            Logger.log("AniList token expired (${-daysLeft}d ago) — clearing saved session")
+        Logger.log("AniList token expired (${-daysLeft}d ago) — clearing saved session")
             token = null
             PrefManager.removeVal(PrefName.AnilistToken)
             return false
@@ -105,16 +114,19 @@ val payload = android.util.Base64.decode(                parts[1].replace('-', '
 val json = JSONObject(String(payload))
 if (!json.has("exp")) return null
 val expSeconds = json.getLong("exp")            
-val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        } catch (e: Exception) {            
+val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        }
+        catch (e: Exception) {
         L
-        }}
+        }
+        }
 suspend inline
 fun <reified T : Any> executeQuery(        query: String,        variables: String = "",        force: Boolean = false,        useToken: Boolean = true,        show: Boolean = false,        cache: Int? = null    ): T? {
 return try {
 if (show) Logger.log("Anilist Query: $query")
-if (rateLimitReset > System.currentTimeMillis() / 1000) {                toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
-throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")            }
-
+if (rateLimitReset > System.currentTimeMillis() / 1000) {
+        toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
+throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
+             }
 val data = mapOf(                "query" to query,                "variables" to variables            )            
 val headers = mutableMapOf(                "Content-Type" to "application/json; charset=utf-8",                "Accept" to "application/json"            )
 if (token != null || force) {
@@ -125,29 +137,41 @@ val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1      
 if (json.code == 429) {
     val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
 val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
-if (retry > 0) {                        rateLimitReset = passedLimitReset                    }
+if (retry > 0) {
+        rateLimitReset = passedLimitReset                    }
 toast("Rate limited. Try after $retry seconds")
-throw Exception("Rate limited after $retry seconds")                }
+throw Exception("Rate limited after $retry seconds")
+                }
 if (json.code == 403 || json.code == 400) {
     val obj = try {                        
         J
 
 val message = obj?.optJSONArray("errors")?.let { 
         e
-if (errors.length() > 0) errors.getJSONObject(0)                            .getString("message") else "Forbidden (error ${json.code})"                    } ?: "Forbidden (error ${json.code})"
-if (message.contains("disabled", ignoreCase = true)) {                        anilistDisabledSignal = true
+if (errors.length() > 0) errors.getJSONObject(0)                            .getString("message") else "Forbidden (error ${json.code})"                    } ?: "Forbidden (error ${json.code
+})"
+if (message.contains("disabled", ignoreCase = true)) {
+        anilistDisabledSignal = true
 } else if (message.contains("Invalid token")) {
 if (!show) snackString("Anilist token expired, please login again")
-} else {
-if (!show) snackString("Error fetching Anilist data: $message")                    }
-throw Exception(message)                }
-if (!json.text.startsWith("{")) {                    anilistDisabledSignal = true
-throw Exception(currContext()?.getString(R.string.anilist_down) + " (error: ${json.code})")                }
+ }
+        else {
+if (!show) snackString("Error fetching Anilist data: $message")
+                    }
+throw Exception(message)
+                }
+if (!json.text.startsWith("{")) {
+        anilistDisabledSignal = true
+throw Exception(currContext()?.getString(R.string.anilist_down) + " (error: ${json.code})")
+                }
 anilistDisabledSignal = false                json.parsed()
-} else null        } catch (e: Exception) {
-if (e is java.net.UnknownHostException ||                e is java.net.ConnectException ||                e is java.net.SocketTimeoutException ||                e.cause is java.net.UnknownHostException ||                e.cause is java.net.ConnectException ||                e.cause is java.net.SocketTimeoutException) {                anilistDisabledSignal = true            }
+} else null        }
+        catch (e: Exception) {
+        if (e is java.net.UnknownHostException ||                e is java.net.ConnectException ||                e is java.net.SocketTimeoutException ||                e.cause is java.net.UnknownHostException ||                e.cause is java.net.ConnectException ||                e.cause is java.net.SocketTimeoutException) {
+        anilistDisabledSignal = true            }
 if (show) snackString("Error fetching Anilist data: ${e.message}")
         Logger.log("Anilist Query Error: ${e.message}")            null
         }
-}}
+}
+}
 }

@@ -42,9 +42,12 @@ val screenWidth = resources.displayMetrics.run {
 binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
 binding.studioRecycler.updatePadding(bottom = 64f.px + navBarHeight)        binding.studioTitle.isSelected = true
         studio = intent.getSerialized("studio")        binding.studioTitle.text = studio?.name
-        binding.studioClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+        binding.studioClose.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+}
 model.getStudio().observe(this) {
-if (it != null) {                studio = it                loaded = true                binding.studioProgressBar.visibility = View.GONE                binding.studioRecycler.visibility = View.VISIBLE
+if (it != null) {
+        studio = it                loaded = true                binding.studioProgressBar.visibility = View.GONE                binding.studioRecycler.visibility = View.VISIBLE
 val titlePosition = arrayListOf<Int>()                
 val concatAdapter = ConcatAdapter()                
 val map = studio!!.yearMedia ?: return@observe
@@ -54,7 +57,8 @@ val gridSize = (screenWidth / 124f).toInt()
 val gridLayoutManager = GridLayoutManager(this, gridSize)                gridLayoutManager.spanSizeLookup = 
 object : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
-return when (position in titlePosition) {                            true -> gridSize
+return when (position in titlePosition) {
+        true -> gridSize
 else -> 1                        }}
 }
 for (i in keys.indices) {
@@ -63,22 +67,26 @@ val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size          
                     concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
                     concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
                     concatAdapter.addAdapter(EmptyAdapter(empty))
-                }
+                 }
 binding.studioRecycler.adapter = concatAdapter                binding.studioRecycler.layoutManager = gridLayoutManager}
 }
 
 val live = Refresh.activity.getOrPut(this.hashCode()) { 
         M
 live.observe(this) {
-if (it) {                scope.launch {
+if (it) {
+        scope.launch {
 if (studio != null)
-        withContext(Dispatchers.IO) { model.loadStudio(studio!!) }
+        withContext(Dispatchers.IO) { model.loadStudio(studio!!)
+ }
 live.postValue(false)}}}
 }
 
 override fun onDestroy() {
-if (Refresh.activity.containsKey(this.hashCode())) {            Refresh.activity.remove(this.hashCode())        }
-super.onDestroy()    }
-
+if (Refresh.activity.containsKey(this.hashCode())) {
+        Refresh.activity.remove(this.hashCode())
+        }
+super.onDestroy()
+     }
 override fun onResume() {        
         b

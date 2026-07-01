@@ -20,10 +20,10 @@ open val binding get() = _binding!!
 abstract val title: String    
 abstract val webViewClient: WebViewClient
 var callback: ((Map<String, String>) -> Unit)? = null    
-protected var privateCallback: ((Map<String, String>) -> Unit) = {        callback?.invoke(it)        _binding?.webView?.stopLoading()
+protected var privateCallback: ((Map<String, String>) -> Unit) = {
+        callback?.invoke(it)        _binding?.webView?.stopLoading()
         dismiss()
-    }
-
+      }
 val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager    //CookieManager.getInstance()    
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
         _
@@ -35,7 +35,6 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 cookies?.setAcceptThirdPartyCookies(binding.webView, true)        binding.webView.webViewClient = webViewClient
         binding.webView.loadUrl(location.url, location.headers)
         this.dismiss()
-    }
-
+      }
 override fun onDestroy() {        
         _

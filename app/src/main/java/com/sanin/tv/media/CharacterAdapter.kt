@@ -18,8 +18,8 @@ private val characterList: MutableList<Character>,
 private val clickEnabled: Boolean = true) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
     val binding =            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return CharacterViewHolder(binding)    }
-
+return CharacterViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
 val character = characterList.getOrNull(position) ?: return
@@ -31,7 +31,10 @@ class CharacterViewHolder(
 val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        
         i
 if (!clickEnabled) return@setOnClickListener
-val char = characterList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        CharacterDetailsActivity::class.java                    ).putExtra("character", char as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )            }
-itemView.setOnLongClickListener {                copyToClipboard(                    characterList[bindingAdapterPosition].name ?: ""                )
+val char = characterList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        CharacterDetailsActivity::class.java                    ).putExtra("character", char as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )
+            }
+itemView.setOnLongClickListener {
+        copyToClipboard(                    characterList[bindingAdapterPosition].name ?: ""                )
 true            }}
-}}
+}
+}

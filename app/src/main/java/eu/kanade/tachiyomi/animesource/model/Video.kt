@@ -45,9 +45,11 @@ private var videoPageUrl: String = ""    // TODO(1.6): Remove after ext lib bump
 var status: State = State.QUEUE        set(value) {            
         f
 
-enum class State {        QUEUE,        LOAD_VIDEO,        READY,        ERROR,    }
+enum class State {
+        QUEUE,        LOAD_VIDEO,        READY,        ERROR,    }
 
-companion object {        const val MPV_ARGS_TAG = "ANIYOMI_MPV_ARGS"    }}
+companion object {
+        const val MPV_ARGS_TAG = "ANIYOMI_MPV_ARGS"    }}
 
 @Serializable
 data class SerializableVideo(    
@@ -70,5 +72,7 @@ companion object {
         v
 fun String.toVideoList(): List<Video> =            Json.decodeFromString<List<SerializableVideo>>(this)                .map { 
         s
-?.let { Headers.headersOf(*it.toTypedArray()) },                        sVid.preferred,                        sVid.subtitleTracks,                        sVid.audioTracks,                        sVid.timestamps,                        sVid.mpvArgs,                        sVid.ffmpegStreamArgs,                        sVid.ffmpegVideoArgs,                        sVid.internalData,                        sVid.initialized,                    )}
-}}
+?.let { Headers.headersOf(*it.toTypedArray()) },                        sVid.preferred,                        sVid.subtitleTracks,                        sVid.audioTracks,                        sVid.timestamps,                        sVid.mpvArgs,                        sVid.ffmpegStreamArgs,                        sVid.ffmpegVideoArgs,                        sVid.internalData,                        sVid.initialized,                    )
+}
+}
+}

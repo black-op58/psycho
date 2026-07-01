@@ -36,13 +36,17 @@ override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityReviewViewBinding.inflate(layoutInflater)
         binding.userContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight        }
-binding.reviewContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin += navBarHeight}
+binding.reviewContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        bottomMargin += navBarHeight}
 setContentView(binding.root);
         review = intent.getSerializableExtra("review") as Query.Review
         binding.userName.text = review.user?.name        binding.userAvatar.loadImage(review.user?.avatar?.medium)        binding.userTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
         binding.userContainer.setOnClickListener {
-            startActivity(                Intent(this, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id)            )}
-binding.userAvatar.openImage(            binding.root.context.getString(R.string.avatar, review.user?.name),            review.user?.avatar?.medium ?: ""        )        binding.userAvatar.setOnClickListener {            startActivity(                Intent(this, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id)            )}
+            startActivity(                Intent(this, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id)            )
+}
+binding.userAvatar.openImage(            binding.root.context.getString(R.string.avatar, review.user?.name),            review.user?.avatar?.medium ?: ""        )        binding.userAvatar.setOnClickListener {
+        startActivity(                Intent(this, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id)            )
+}
 binding.profileUserBio.settings.loadWithOverviewMode = true        binding.profileUserBio.settings.useWideViewPort = true        binding.profileUserBio.setInitialScale(1)
 val styledHtml = AniMarkdown.getFullAniHTML(            review.body,            ContextCompat.getColor(this, R.color.bg_opp)        )
         binding.profileUserBio.loadDataWithBaseURL(            null,            styledHtml,            "text/html",            "utf-8",            null        )
@@ -53,39 +57,48 @@ object : WebViewClient() {
     override fun onPageFinished(view: WebView?, url: String?) {                
         s
                     ContextCompat.getColor(                        this
-@ReviewViewActivity,                        android.R.color.transparent                    )                )            }
-
+@ReviewViewActivity,                        android.R.color.transparent                    )                )
+             }
 override fun shouldOverrideUrlLoading(                view: WebView?,                request: WebResourceRequest?            ): Boolean {
 return true            }}
 userVote(review.userRating)
         enableVote()
         binding.voteCount.text = review.rating.toString()
         binding.voteText.text = getString(
-            R.string.vote_out_of_total,            review.rating.toString(),            review.ratingAmount.toString()        )    }
-
+            R.string.vote_out_of_total,            review.rating.toString(),            review.ratingAmount.toString()        )
+     }
 private fun userVote(type: String) {
     val selectedColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)        
 val unselectedColor = getThemeColor(androidx.appcompat.R.attr.colorControlNormal)
-when (type) {            "NO_VOTE" -> {                binding.upvote.setColorFilter(unselectedColor)
+when (type) {
+        "NO_VOTE" -> {
+        binding.upvote.setColorFilter(unselectedColor)
         binding.downvote.setColorFilter(unselectedColor)
-            }
-"UP_VOTE" -> {                binding.upvote.setColorFilter(selectedColor)
-        binding.downvote.setColorFilter(unselectedColor)}
-"DOWN_VOTE" -> {                binding.upvote.setColorFilter(unselectedColor)
+             }
+"UP_VOTE" -> {
+        binding.upvote.setColorFilter(selectedColor)
+        binding.downvote.setColorFilter(unselectedColor)
+}
+"DOWN_VOTE" -> {
+        binding.upvote.setColorFilter(unselectedColor)
         binding.downvote.setColorFilter(selectedColor)}}
 }
 
 private fun rateReview(rating: String) {        
         d
     val result = Anilist.mutation.rateReview(review.id, rating)
-if (result != null) {                withContext(Dispatchers.Main) {
+if (result != null) {
+        withContext(Dispatchers.Main) {
     val res = result.data.rateReview                    review.rating = res.rating                    review.ratingAmount = res.ratingAmount                    review.userRating = res.userRating                    userVote(review.userRating)                    binding.voteCount.text = review.rating.toString()
                     binding.voteText.text = getString(
                         R.string.vote_out_of_total,                        review.rating.toString(),                        review.ratingAmount.toString()                    )
         userVote(review.userRating)
         enableVote()
-                }
-} else {                withContext(Dispatchers.Main) {                    toast(                        getString(R.string.error_message, "response is null")                    )
+                 }
+}
+        else {
+        withContext(Dispatchers.Main) {
+        toast(                        getString(R.string.error_message, "response is null")                    )
         enableVote()                }}}
 }
 
@@ -96,11 +109,21 @@ private fun disableVote() {
 
 private fun enableVote() {        
         b
-if (review.userRating == "UP_VOTE") {                rateReview("NO_VOTE")
-} else {                rateReview("UP_VOTE")            }
-disableVote()}
+if (review.userRating == "UP_VOTE") {
+        rateReview("NO_VOTE")
+ }
+        else {
+        rateReview("UP_VOTE")
+            }
+disableVote()
+}
 binding.downvote.setOnClickListener {
-if (review.userRating == "DOWN_VOTE") {                rateReview("NO_VOTE")
-} else {                rateReview("DOWN_VOTE")            }
-disableVote()}
+if (review.userRating == "DOWN_VOTE") {
+        rateReview("NO_VOTE")
+ }
+        else {
+        rateReview("DOWN_VOTE")
+            }
+disableVote()
+}
 binding.upvote.isEnabled = true        binding.downvote.isEnabled = true    }}

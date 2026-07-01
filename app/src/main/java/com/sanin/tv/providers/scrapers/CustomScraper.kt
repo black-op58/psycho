@@ -29,16 +29,18 @@ object CustomScraper {
             val url = urlTemplate
                 .replace("{title}", encodedTitle)
                 .replace("{episode}", episode.toString())
-            val resp = client.get(url)
-            if (resp.statusCode != 200) return null
+            val resp = client.get(url);
+        if (resp.statusCode != 200) return null
             val obj = runCatching {
                 Mapper.json.parseToJsonElement(resp.text).jsonObject
             }.getOrNull() ?: return null
             val streamUrl = pickUrl(obj) ?: return null
             StreamFetcher.StreamResult(url = streamUrl, quality = "custom", providerName = "Custom")
-        } catch (e: CancellationException) { throw e }
-          catch (e: Exception) {
-              Logger.log("CustomScraper: ${e.message}")
+         }
+        catch (e: CancellationException) {
+        throw e }
+        catch (e: Exception) {
+        Logger.log("CustomScraper: ${e.message}")
               null
           }
     }
@@ -47,7 +49,7 @@ object CustomScraper {
 
     private fun pickUrl(obj: JsonObject): String? {
         for (key in URL_KEYS) {
-            val el = obj[key] as? JsonPrimitive ?: continue
+        val el = obj[key] as? JsonPrimitive ?: continue
             val s  = el.content
             if (s.startsWith("http")) return s
         }

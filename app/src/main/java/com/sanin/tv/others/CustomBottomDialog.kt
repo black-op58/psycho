@@ -40,11 +40,18 @@ return binding.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         b
-if (checkText != null) binding.bottomDialogCustomCheckBox.apply {            visibility = View.VISIBLE            text = checkText            isChecked = checkChecked            setOnCheckedChangeListener { _, checked ->                checkCallback?.invoke(checked)            }
+if (checkText != null) binding.bottomDialogCustomCheckBox.apply {
+        visibility = View.VISIBLE            text = checkText            isChecked = checkChecked            setOnCheckedChangeListener { _, checked ->                checkCallback?.invoke(checked)
+            }
 }
-if (negativeText != null) binding.bottomDialogCustomNegative.apply {            visibility = View.VISIBLE            text = negativeText            setOnClickListener {                negativeCallback?.invoke()            }
+if (negativeText != null) binding.bottomDialogCustomNegative.apply {
+        visibility = View.VISIBLE            text = negativeText            setOnClickListener {
+        negativeCallback?.invoke()
+            }
 }
-if (positiveText != null) binding.bottomDialogCustomPositive.apply {            visibility = View.VISIBLE            text = positiveText            setOnClickListener {                positiveCallback?.invoke()            }}
+if (positiveText != null) binding.bottomDialogCustomPositive.apply {
+        visibility = View.VISIBLE            text = positiveText            setOnClickListener {
+        positiveCallback?.invoke()            }}
 }
 
 override fun onDestroy() {        

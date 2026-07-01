@@ -37,9 +37,11 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         PrefManager.setVal(PrefName.Socks5ProxyUsername, proxyUsername)
         PrefManager.setVal(PrefName.Socks5ProxyPassword, proxyPassword)
         dismiss()
-if (proxyEnabled) activity?.restartApp()        }
+if (proxyEnabled) activity?.restartApp()
+        }
 binding.proxyAuthentication.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.ProxyAuthEnabled, isChecked)
-        toggleAuthentication(isChecked)}
+        toggleAuthentication(isChecked)
+}
 }
 
 private fun toggleAuthentication(isChecked: Boolean) {        

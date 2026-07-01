@@ -68,7 +68,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 Settings(
@@ -89,7 +89,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 Settings(
@@ -110,7 +110,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Decoding ──────────────────────────────────────────────────
@@ -122,7 +122,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                     isChecked = PrefManager.getVal(PrefName.HardwareDecoding),
                     switch = { isChecked, _ ->
                         PrefManager.setVal(PrefName.HardwareDecoding, isChecked)
-                    }
+                     }
                 ),
                 // ── Rendering ─────────────────────────────────────────────────
                 Settings(
@@ -140,7 +140,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 Settings(
@@ -158,7 +158,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Image quality ─────────────────────────────────────────────
@@ -168,7 +168,8 @@ class SettingsVideoActivity : AppCompatActivity() {
                     desc = getString(R.string.debanding_desc),
                     icon = R.drawable.ic_round_auto_awesome_24,
                     isChecked = PrefManager.getVal(PrefName.Debanding),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Debanding, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Debanding, isChecked)
+ }
                 ),
                 Settings(
                     type = 2,
@@ -176,7 +177,8 @@ class SettingsVideoActivity : AppCompatActivity() {
                     desc = getString(R.string.interpolation_desc),
                     icon = R.drawable.ic_round_animation_24,
                     isChecked = PrefManager.getVal(PrefName.Interpolation),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Interpolation, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Interpolation, isChecked)
+ }
                 ),
                 Settings(
                     type = 1,
@@ -193,7 +195,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Raw config ────────────────────────────────────────────────
@@ -206,7 +208,7 @@ class SettingsVideoActivity : AppCompatActivity() {
                         val container = LinearLayout(this@SettingsVideoActivity).apply {
                             orientation = LinearLayout.VERTICAL
                             setPadding(48, 16, 48, 16)
-                        }
+                         }
                         val editText = EditText(this@SettingsVideoActivity).apply {
                             layoutParams = ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -216,17 +218,17 @@ class SettingsVideoActivity : AppCompatActivity() {
                             maxLines = 16
                             hint = "key=value\nkey2=value2"
                             setText(PrefManager.getVal<String>(PrefName.RawConfiguration))
-                        }
+                         }
                         container.addView(editText)
                         customAlertDialog().apply {
                             setTitle(R.string.raw_configuration)
                             setCustomView(container)
                             setPosButton(R.string.ok) {
                                 PrefManager.setVal(PrefName.RawConfiguration, editText.text.toString())
-                            }
+                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 )
             )
@@ -237,10 +239,11 @@ class SettingsVideoActivity : AppCompatActivity() {
             settingsRecyclerView.isFocusableInTouchMode = false
             settingsRecyclerView.setOnKeyListener { _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    finish(); true
+        finish(); true
                 } else false
             }
-            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+ }
         }
     }
 }

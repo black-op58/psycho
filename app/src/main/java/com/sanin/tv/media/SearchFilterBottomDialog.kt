@@ -34,11 +34,12 @@ class SearchChipViewHolder(
 val binding: ItemChipBinding) :            RecyclerView.ViewHolder(binding.root)        
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchChipViewHolder {
     val binding =                ItemChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return SearchChipViewHolder(binding)        }
-
+return SearchChipViewHolder(binding)
+         }
 override fun onBindViewHolder(holder: SearchChipViewHolder, position: Int) {
     val title = list[position]            holder.setIsRecyclable(false)            holder.binding.root.apply {
-                text = title                isCheckable = true                perform.invoke(this)            }
+                text = title                isCheckable = true                perform.invoke(this)
+            }
     }
 
 override fun getItemCount(): Int = list.size    }

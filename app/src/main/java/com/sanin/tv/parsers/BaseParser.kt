@@ -19,30 +19,29 @@ abstract class BaseParser {
     open fun setUserText(text: String) {}
 
     private fun checkIfVariablesAreEmpty() {
-        if (saveName.isEmpty()) throw IllegalStateException("saveName is empty")
+        if (saveName.isEmpty()) throw IllegalStateException("saveName is empty");
         if (hostUrl.isEmpty()) throw IllegalStateException("hostUrl is empty")
-    }
-
+      }
     open suspend fun autoSearch(mediaObj: com.sanin.tv.media.Media): ShowResponse? {
-        response = loadSavedShowResponse(mediaObj.id)
+        response = loadSavedShowResponse(mediaObj.id);
         if (response != null) {
-            setUserText("Loaded : ${response?.name}")
+        setUserText("Loaded : ${response?.name}")
             return response
         }
         setUserText("Searching : ${mediaObj.mainName()}")
         Logger.log("Searching : ${mediaObj.mainName()}")
         val results = search(mediaObj.mainName())
-        results.forEach { Logger.log("Result: ${it.name}") }
-
+        results.forEach { Logger.log("Result: ${it.name}")
+  }
         val sortedResults = if (results.isNotEmpty()) {
             results.sortedByDescending {
                 FuzzySearch.ratio(it.name.lowercase(), mediaObj.mainName().lowercase())
-            }
-        } else {
-            emptyList()
+             }
         }
-        response = sortedResults.firstOrNull()
-
+        else {
+            emptyList()
+         }
+        response = sortedResults.firstOrNull();
         if (response == null || FuzzySearch.ratio(
                 response!!.name.lowercase(),
                 mediaObj.mainName().lowercase()
@@ -54,16 +53,18 @@ abstract class BaseParser {
             val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
                 romajiResults.sortedByDescending {
                     FuzzySearch.ratio(it.name.lowercase(), mediaObj.nameRomaji.lowercase())
-                }
-            } else {
-                emptyList()
+                 }
             }
+        else {
+                emptyList()
+             }
             val closestRomaji = sortedRomajiResults.firstOrNull()
             Logger.log("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
             response = if (response == null) {
-                Logger.log("No exact match found in results. Using closest match from RomajiResults.")
+        Logger.log("No exact match found in results. Using closest match from RomajiResults.")
                 closestRomaji
-            } else {
+            }
+        else {
                 val romajiRatio = FuzzySearch.ratio(
                     closestRomaji?.name?.lowercase() ?: "",
                     mediaObj.nameRomaji.lowercase()
@@ -73,11 +74,12 @@ abstract class BaseParser {
                     mediaObj.mainName().lowercase()
                 )
                 Logger.log("Fuzzy ratio for closest match in results: $mainNameRatio for ${response!!.name.lowercase()}")
-                Logger.log("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
-                if (romajiRatio > mainNameRatio) {
-                    Logger.log("RomajiResults has a closer match. Replacing response.")
+                Logger.log("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}");
+        if (romajiRatio > mainNameRatio) {
+        Logger.log("RomajiResults has a closer match. Replacing response.")
                     closestRomaji
-                } else {
+                }
+        else {
                     Logger.log("Results has a closer or equal match. Keeping existing response.")
                     response
                 }
@@ -101,24 +103,23 @@ abstract class BaseParser {
                     responseMessage = resp.message.ifEmpty { "None" }
                 }
             }.toInt()
-        } catch (e: Exception) {
-            Logger.log("Failed to ping $name")
+         }
+        catch (e: Exception) {
+        Logger.log("Failed to ping $name")
             statusCode = -1
             responseMessage = if (e.message.isNullOrEmpty()) "None" else e.message!!
             Logger.log(e)
-        }
+         }
         return Triple(statusCode, responseTime, responseMessage)
-    }
-
+      }
     open suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
         return PrefManager.getNullableCustomVal("${saveName}_$mediaId", null, ShowResponse::class.java)
-    }
-
+      }
     open fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean = false) {
         if (response != null) {
-            PrefManager.setCustomVal("${saveName}_$mediaId", response)
+        PrefManager.setCustomVal("${saveName}_$mediaId", response)
             Logger.log("Saved ${response.name} for $saveName:$mediaId (selected=$selected)")
-        }
+         }
     }
 }

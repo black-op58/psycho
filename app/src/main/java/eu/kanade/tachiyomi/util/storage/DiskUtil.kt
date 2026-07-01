@@ -14,17 +14,17 @@ object DiskUtil {
 
     fun hashKeyForDisk(key: String): String {
         return Hash.md5(key)
-    }
-
+      }
     fun getDirectorySize(f: File): Long {
         var size: Long = 0
         if (f.isDirectory) {
-            for (file in f.listFiles().orEmpty()) {
+        for (file in f.listFiles().orEmpty()) {
                 size += getDirectorySize(file)
-            }
-        } else {
-            size = f.length()
+             }
         }
+        else {
+            size = f.length()
+         }
         return size
     }
 
@@ -35,8 +35,9 @@ object DiskUtil {
         return try {
             val stat = StatFs(f.uri.path)
             stat.availableBlocksLong * stat.blockSizeLong
-        } catch (_: Exception) {
-            -1L
+        }
+        catch (_: Exception) {
+        -1L
         }
     }
 
@@ -46,7 +47,7 @@ object DiskUtil {
      * with a dot), but you can manually add it later.
      */
     fun buildValidFilename(origName: String): String {
-        val name = origName.trim('.', ' ')
+        val name = origName.trim('.', ' ');
         if (name.isEmpty()) {
             return "(invalid)"
         }
@@ -54,15 +55,15 @@ object DiskUtil {
         name.forEach { c ->
             if (isValidFatFilenameChar(c)) {
                 sb.append(c)
-            } else {
+             }
+        else {
                 sb.append('_')
-            }
+             }
         }
         // Even though vfat allows 255 UCS-2 chars, we might eventually write to
         // ext4 through a FUSE layer, so use that limit minus 15 reserved characters.
         return sb.toString().take(240)
-    }
-
+      }
     /**
      * Returns true if the given character is a valid filename character, false otherwise.
      */
@@ -71,7 +72,7 @@ object DiskUtil {
             return false
         }
         return when (c) {
-            '"', '*', '/', ':', '<', '>', '?', '\\', '|', 0x7f.toChar() -> false
+        '"', '*', '/', ':', '<', '>', '?', '\\', '|', 0x7f.toChar() -> false
             else -> true
         }
     }

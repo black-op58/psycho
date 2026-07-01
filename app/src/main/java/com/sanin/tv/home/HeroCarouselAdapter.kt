@@ -55,15 +55,14 @@ class HeroCarouselAdapter(
             val next = (vp.currentItem + 1) % mediaList.size
             vp.setCurrentItem(next, true)
             handler.postDelayed(this, AUTO_ADVANCE_INTERVAL_MS)
-        }
+         }
     }
 
     fun startAutoAdvance(vp: ViewPager2) {
         viewPager = vp
         handler.removeCallbacks(advanceRunnable)
         handler.postDelayed(advanceRunnable, AUTO_ADVANCE_INTERVAL_MS)
-    }
-
+      }
     fun stopAutoAdvance() {
         handler.removeCallbacks(advanceRunnable)
         viewPager = null
@@ -74,10 +73,10 @@ class HeroCarouselAdapter(
     val pageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrollStateChanged(state: Int) {
             if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
-                handler.removeCallbacks(advanceRunnable)
+        handler.removeCallbacks(advanceRunnable)
             } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                handler.postDelayed(advanceRunnable, AUTO_ADVANCE_INTERVAL_MS)
-            }
+        handler.postDelayed(advanceRunnable, AUTO_ADVANCE_INTERVAL_MS)
+             }
         }
     }
 
@@ -89,12 +88,10 @@ class HeroCarouselAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_hero_carousel, parent, false)
         return CarouselViewHolder(view)
-    }
-
+      }
     override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         holder.bind(mediaList[position])
-    }
-
+      }
     inner class CarouselViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val banner:   ImageView = itemView.findViewById(R.id.carouselBanner)
@@ -132,7 +129,9 @@ class HeroCarouselAdapter(
                 ?.take(200) ?: ""
 
             // Watch button
-            watchBtn.setOnClickListener { onWatchClicked(media) }
+            watchBtn.setOnClickListener { onWatchClicked(media)
+ 
+}
             watchBtn.isFocusable = true
             watchBtn.isFocusableInTouchMode = false
 
@@ -143,12 +142,13 @@ class HeroCarouselAdapter(
                 val logoUrl = TmdbApi.getLogoUrl(
                     anilistId = media.id,
                     isAnime   = media.anime != null
-                )
-                if (logoUrl != null) {
-                    logo.loadImage(logoUrl)
+                );
+        if (logoUrl != null) {
+        logo.loadImage(logoUrl)
                     logo.visibility  = View.VISIBLE
                     title.visibility = View.GONE
-                } else {
+                }
+        else {
                     logo.visibility  = View.GONE
                     title.visibility = View.VISIBLE
                 }

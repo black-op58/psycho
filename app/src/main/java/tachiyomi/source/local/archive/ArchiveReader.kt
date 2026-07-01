@@ -12,12 +12,10 @@ class ArchiveReader(pfd: ParcelFileDescriptor) : Closeable {
 private val address = Os.mmap(0, size, OsConstants.PROT_READ, OsConstants.MAP_PRIVATE, pfd.fileDescriptor, 0)    
 fun <T> useEntries(block: (Sequence<ArchiveEntry>) -> T): T = ArchiveInputStream(address, size).use {
         block(generateSequence { it.getNextEntry() })
-    }
-
+      }
 fun consume(block: (tachiyomi.source.local.archive.ArchiveInputStream) -> Unit) {
         ArchiveInputStream(address, size).use(block)
-    }
-
+      }
 fun getInputStream(entryName: String): InputStream? {
     val archive = ArchiveInputStream(address, size)
 try {
@@ -27,7 +25,9 @@ while (true) {
         return archive
     }
 }
-} catch (e: ArchiveException) {            archive.close()
+}
+        catch (e: ArchiveException) {
+        archive.close()
 throw e        }
 archive.close()
 return null    }
@@ -35,14 +35,17 @@ return null    }
 override fun close() {
     try {
         Os.munmap(address, size)
-    } catch (e: Exception) {
+     }
+        catch (e: Exception) {
         // Ignored
     }
-}}
+}
+}
 
 fun DocumentFile.archiveReader(context: Context): ArchiveReader {
     val pfd = context.contentResolver.openFileDescriptor(uri, "r") ?: error("Failed to open file descriptor: $uri")
-return pfd.use { ArchiveReader(it) }
+return pfd.use { ArchiveReader(it)
+ }
 }
 
 class ArchiveEntry(    

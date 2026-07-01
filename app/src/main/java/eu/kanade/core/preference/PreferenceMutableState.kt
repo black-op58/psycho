@@ -9,8 +9,8 @@ class PreferenceMutableState<T>(
 private val preference: Preference<T>,    scope: CoroutineScope,) : MutableState<T> {
     private val state = mutableStateOf(preference.get())    init {        
         p
-    .launchIn(scope)    }
-
+    .launchIn(scope)
+     }
 override var value: T        get() = state.value        set(value) {            
         p
 

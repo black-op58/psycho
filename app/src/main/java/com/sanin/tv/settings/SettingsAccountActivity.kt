@@ -36,8 +36,7 @@ class SettingsAccountActivity : AppCompatActivity() {
     private val restartMainActivity =
         object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() = startMainActivity(this@SettingsAccountActivity)
-        }
-
+          }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -53,8 +52,8 @@ class SettingsAccountActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
 
-            accountSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
+            accountSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+  }
             settingsAccountHelp.setOnClickListener {
                 CustomBottomDialog.newInstance().apply {
                     setTitleText(context.getString(R.string.account_help))
@@ -63,35 +62,35 @@ class SettingsAccountActivity : AppCompatActivity() {
                             val markWon = Markwon.builder(it.context)
                                 .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
                             markWon.setMarkdown(this, context.getString(R.string.full_account_help))
-                        }
+                         }
                     )
                 }.show(supportFragmentManager, "dialog")
-            }
-
+              }
             // AniList card click -> login/logout
             settingsAnilistCard.setOnClickListener {
                 if (Anilist.token == null) {
-                    Anilist.loginIntent(context)
-                } else {
+        Anilist.loginIntent(context)
+                 }
+        else {
                     Anilist.removeSavedToken()
                     restartMainActivity.isEnabled = true
                     reload()
-                }
+                 }
             }
 
             settingsAnilistLoginAction.setOnClickListener {
                 settingsAnilistCard.performClick()
-            }
-
+              }
             // MAL login action
             settingsMalLoginAction.setOnClickListener {
                 if (MAL.token == null) {
-                    MAL.loginIntent(context)
-                } else {
+        MAL.loginIntent(context)
+                 }
+        else {
                     MAL.removeSavedToken()
                     restartMainActivity.isEnabled = true
                     reload()
-                }
+                 }
             }
 
             reload()
@@ -99,13 +98,13 @@ class SettingsAccountActivity : AppCompatActivity() {
             // Avatar click -> open profile
             profileAvatar.setOnClickListener {
                 if (Anilist.token != null) {
-                    it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     val anilistLink = getString(
                         R.string.anilist_link,
                         PrefManager.getVal<String>(PrefName.AnilistUserName)
                     )
                     openLinkInBrowser(anilistLink)
-                }
+                 }
             }
         }
 
@@ -120,7 +119,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             Anilist.query.getUserData()
                             startActivity(Intent(context, AnilistSettingsActivity::class.java))
-                        }
+                         }
                     },
                     isActivity = true
                 ),
@@ -140,41 +139,41 @@ class SettingsAccountActivity : AppCompatActivity() {
         )
         binding.settingsRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
-
+      }
     private fun reload() {
         binding.apply {
             if (Anilist.token != null) {
-                // Update banner
+        // Update banner
                 if (Anilist.bg != null) {
-                    profileBannerImage.visibility = View.VISIBLE
+        profileBannerImage.visibility = View.VISIBLE
                     profileBannerScrim.visibility = View.VISIBLE
                     profileBannerImage.loadImage(Anilist.bg)
-                } else {
+                 }
+        else {
                     profileBannerImage.visibility = View.VISIBLE
                     profileBannerScrim.visibility = View.VISIBLE
                     profileBannerImage.setImageResource(R.drawable.ic_anilist)
                     profileBannerImage.setBackgroundColor(
                         androidx.core.content.ContextCompat.getColor(this@SettingsAccountActivity, R.color.nav_bg)
                     )
-                }
-
+                  }
                 // Update username
                 profileUsername.text = Anilist.username ?: getString(R.string.username)
                 profileUsername.visibility = View.VISIBLE
 
                 // Token expiry
-                val daysLeft = Anilist.getTokenExpiryDays()
-                if (daysLeft != null) {
-                    profileTokenExpiry.visibility = View.VISIBLE
+                val daysLeft = Anilist.getTokenExpiryDays();
+        if (daysLeft != null) {
+        profileTokenExpiry.visibility = View.VISIBLE
                     profileTokenExpiry.text = when {
                         daysLeft <= 0 -> getString(R.string.reconnect_now)
                         else -> getString(R.string.reconnect_in, daysLeft)
-                    }
+                     }
                     profileTokenExpiry.setOnClickListener {
                         Anilist.loginIntent(this@SettingsAccountActivity)
-                    }
-                } else {
+                     }
+                }
+        else {
                     profileTokenExpiry.visibility = View.GONE
                 }
 
@@ -191,37 +190,41 @@ class SettingsAccountActivity : AppCompatActivity() {
                 settingsAnilistUsernameDisplay.text = Anilist.username ?: ""
 
                 if (Anilist.avatar != null) {
-                    settingsAnilistAvatar.visibility = View.VISIBLE
+        settingsAnilistAvatar.visibility = View.VISIBLE
                     settingsAnilistAvatar.loadImage(Anilist.avatar)
-                } else {
+                 }
+        else {
                     settingsAnilistAvatar.visibility = View.GONE
                 }
 
                 // Token in card
-                val cardDaysLeft = Anilist.getTokenExpiryDays()
-                if (cardDaysLeft != null) {
-                    settingsAnilistTokenExpiryDisplay.visibility = View.VISIBLE
+                val cardDaysLeft = Anilist.getTokenExpiryDays();
+        if (cardDaysLeft != null) {
+        settingsAnilistTokenExpiryDisplay.visibility = View.VISIBLE
                     settingsAnilistTokenExpiryDisplay.text = when {
                         cardDaysLeft <= 0 -> getString(R.string.reconnect_now)
                         else -> getString(R.string.reconnect_in, cardDaysLeft)
-                    }
-                } else {
+                     }
+                }
+        else {
                     settingsAnilistTokenExpiryDisplay.visibility = View.GONE
                 }
 
                 // MAL section
-                settingsMalLoginStatus.text = getString(R.string.myanimelist)
-                if (MAL.token != null) {
-                    settingsMalLoginAction.text = getString(R.string.logout)
-                } else {
+                settingsMalLoginStatus.text = getString(R.string.myanimelist);
+        if (MAL.token != null) {
+        settingsMalLoginAction.text = getString(R.string.logout)
+                 }
+        else {
                     settingsMalLoginAction.text = getString(R.string.login)
-                }
+                 }
                 settingsMalLoginAction.visibility = View.VISIBLE
 
                 // Show settings
                 settingsRecyclerView.visibility = View.VISIBLE
 
-            } else {
+            }
+        else {
                 // Not logged in
                 profileUsername.visibility = View.GONE
                 profileTokenExpiry.visibility = View.GONE

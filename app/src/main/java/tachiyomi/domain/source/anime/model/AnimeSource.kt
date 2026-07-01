@@ -12,6 +12,8 @@ val isUsedLast: Boolean = false,) {
 else -> "$name (${lang.uppercase()})"        }
 
 val key: () -> String = {
-when {            isUsedLast -> "$id-lastused"
+when {
+        isUsedLast -> "$id-lastused"
 else -> "$id"        }
-}}
+}
+}

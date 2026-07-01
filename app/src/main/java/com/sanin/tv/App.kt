@@ -18,14 +18,13 @@ class App : Application() {
         context = applicationContext
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
         scheduleBackgroundTasks()
-    }
-
+      }
     private fun scheduleBackgroundTasks() {
         PrefManager.init(this)
-        NewEpisodeBadgeManager.init(this)
+        NewEpisodeBadgeManager.init(this);
         if (PrefManager.getVal<Boolean>(PrefName.NewEpisodeNotifications)) {
             EpisodeNotificationWorker.schedule(this)
-        }
+         }
     }
 
     inner class FTActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
@@ -44,7 +43,7 @@ class App : Application() {
         override fun onActivityStopped(p0: Activity) {
             // Persist current episode counts so the next session can detect new episodes.
             NewEpisodeBadgeManager.onAppBackground(p0.applicationContext)
-        }
+         }
         override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {}
         override fun onActivityDestroyed(p0: Activity) {}
     }

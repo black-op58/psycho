@@ -22,7 +22,8 @@ import java.util.concurrent.TimeUnit
  *
  *   if (PrefManager.getVal(PrefName.NewEpisodeNotifications)) {
  *       EpisodeNotificationWorker.schedule(context)
- *   } else {
+ *   }
+        else {
  *       EpisodeNotificationWorker.cancel(context)
  *   }
  */
@@ -35,12 +36,10 @@ class EpisodeNotificationWorker(
         try {
             if (!PrefManager.getVal<Boolean>(PrefName.NewEpisodeNotifications)) {
                 return@withContext Result.success()
-            }
-
-            val watchingList = Anilist.getUserWatchingList() ?: return@withContext Result.retry()
-
-            for (media in watchingList) {
-                val mediaId    = media.id
+              }
+            val watchingList = Anilist.getUserWatchingList() ?: return@withContext Result.retry();
+        for (media in watchingList) {
+        val mediaId    = media.id
                 val title      = media.name ?: media.nameRomaji ?: continue
                 val nowAired   = media.anime?.nextAiringEpisode
                     ?.let { it.episode - 1 }
@@ -48,10 +47,9 @@ class EpisodeNotificationWorker(
                     ?: continue
 
                 val seenKey     = "notif_last_ep_$mediaId"
-                val lastNotified = PrefManager.getCustomVal(seenKey, 0, Int::class.java)
-
-                if (nowAired > lastNotified) {
-                    NotificationHelper.showNewEpisodeNotification(
+                val lastNotified = PrefManager.getCustomVal(seenKey, 0, Int::class.java);
+        if (nowAired > lastNotified) {
+        NotificationHelper.showNewEpisodeNotification(
                         context = context,
                         mediaId = mediaId,
                         showTitle = title,
@@ -59,13 +57,15 @@ class EpisodeNotificationWorker(
                         coverUrl = media.cover
                     )
                     PrefManager.setCustomVal(seenKey, nowAired)
-                }
+                 
+}
             }
 
             Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
+         }
+        catch (e: Exception) {
+        Result.retry()
+         }
     }
 
     companion object {
@@ -93,12 +93,10 @@ class EpisodeNotificationWorker(
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
             )
-        }
-
+          }
         fun cancel(context: Context) {
             WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
-        }
-
+          }
         fun runNow(context: Context) {
             val request = OneTimeWorkRequestBuilder<EpisodeNotificationWorker>()
                 .setConstraints(
@@ -108,6 +106,6 @@ class EpisodeNotificationWorker(
                 )
                 .build()
             WorkManager.getInstance(context).enqueue(request)
-        }
+         }
     }
 }

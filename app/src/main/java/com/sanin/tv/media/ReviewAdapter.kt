@@ -26,30 +26,37 @@ val context = binding.root.context        binding.reviewUserName.text = review.u
         binding.reviewPostTime.text = ActivityItemBuilder.getDateTime(review.createdAt)        
 val text = "[${review.score / 10.0f}]"        binding.reviewTag.text = text        binding.root.setOnClickListener {            
         C
-binding.reviewUserName.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id),                null            )}
-binding.reviewUserAvatar.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id),                null            )}
+binding.reviewUserName.setOnClickListener {
+        ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id),                null            )
+}
+binding.reviewUserAvatar.setOnClickListener {
+        ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id),                null            )
+}
 binding.reviewUserAvatar.openImage(            context.getString(                R.string.avatar,                review.user?.name            ),            review.user?.avatar?.medium ?: ""        )
         userVote(review.userRating)
         enableVote()
         binding.reviewTotalVotes.text = review.rating.toString()
-    }
-
+      }
 override fun getLayout(): Int {
 return R.layout.item_reviews    }
 
 override fun initializeViewBinding(view: View): ItemReviewsBinding {
-return ItemReviewsBinding.bind(view)    }
-
+return ItemReviewsBinding.bind(view)
+     }
 private fun userVote(type: String) {
-when (type) {            "NO_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+when (type) {
+        "NO_VOTE" -> {
+        binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
         binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
                 binding.reviewUpVote.alpha = 0.6f
                 binding.reviewDownVote.alpha = 0.6f            }
-"UP_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)
+"UP_VOTE" -> {
+        binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)
         binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
                 binding.reviewUpVote.alpha = 1f
                 binding.reviewDownVote.alpha = 0.6f}
-"DOWN_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+"DOWN_VOTE" -> {
+        binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
         binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
                 binding.reviewDownVote.alpha = 1f
                 binding.reviewUpVote.alpha = 0.6f}}
@@ -59,12 +66,16 @@ private fun rateReview(rating: String) {
         d
 val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())        scope.launch {
     val result = Anilist.mutation.rateReview(review.id, rating)
-if (result != null) {                withContext(Dispatchers.Main) {
+if (result != null) {
+        withContext(Dispatchers.Main) {
     val res = result.data.rateReview                    review.rating = res.rating                    review.ratingAmount = res.ratingAmount                    review.userRating = res.userRating                    userVote(review.userRating)                    binding.reviewTotalVotes.text = review.rating.toString()
                     userVote(review.userRating)
                     enableVote()
-                }
-} else {                withContext(Dispatchers.Main) {                    toast(                        binding.root.context.getString(R.string.error_message, "response is null")                    )
+                 }
+}
+        else {
+        withContext(Dispatchers.Main) {
+        toast(                        binding.root.context.getString(R.string.error_message, "response is null")                    )
         enableVote()                }}}
 }
 
@@ -75,11 +86,21 @@ private fun disableVote() {
 
 private fun enableVote() {        
         b
-if (review.userRating == "UP_VOTE") {                rateReview("NO_VOTE")
-} else {                rateReview("UP_VOTE")            }
-disableVote()}
+if (review.userRating == "UP_VOTE") {
+        rateReview("NO_VOTE")
+ }
+        else {
+        rateReview("UP_VOTE")
+            }
+disableVote()
+}
 binding.reviewDownVote.setOnClickListener {
-if (review.userRating == "DOWN_VOTE") {                rateReview("NO_VOTE")
-} else {                rateReview("DOWN_VOTE")            }
-disableVote()}
+if (review.userRating == "DOWN_VOTE") {
+        rateReview("NO_VOTE")
+ }
+        else {
+        rateReview("DOWN_VOTE")
+            }
+disableVote()
+}
 binding.reviewUpVote.isEnabled = true        binding.reviewDownVote.isEnabled = true    }}

@@ -6,8 +6,8 @@ companion object {
     fun oppositeColor(color: Int): Int {
     val hsv = FloatArray(3)
         Color.colorToHSV(color, hsv)            hsv[0] = (hsv[0] + 180) % 360
-return adjustColorForContrast(Color.HSVToColor(hsv), color)        }
-
+return adjustColorForContrast(Color.HSVToColor(hsv), color)
+         }
 fun generateColorPalette(            baseColor: Int,            size: Int,            hueDelta: Float = 8f,            saturationDelta: Float = 2.02f,            valueDelta: Float = 2.02f        ): List<Int> {
     val palette = mutableListOf<Int>()            
 val hsv = FloatArray(3)
@@ -18,7 +18,7 @@ val newSaturation = (hsv[1] + saturationDelta * i).coerceIn(0f, 1f)
 val newValue = (hsv[2] + valueDelta * i).coerceIn(0f, 1f)                
 val newHsv = floatArrayOf(newHue, newSaturation, newValue)
         palette.add(Color.HSVToColor(newHsv))
-            }
+             }
 return palette        }
 
 fun getLuminance(color: Int): Double {
@@ -33,13 +33,14 @@ return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL        }
 fun getContrastRatio(color1: Int, color2: Int): Double {
     val l1 = getLuminance(color1)            
 val l2 = getLuminance(color2)
-return if (l1 > l2) (l1 + 0.05) / (l2 + 0.05) else (l2 + 0.05) / (l1 + 0.05)        }
-
+return if (l1 > l2) (l1 + 0.05) / (l2 + 0.05) else (l2 + 0.05) / (l1 + 0.05)
+         }
 fun adjustColorForContrast(originalColor: Int, backgroundColor: Int): Int {
     var adjustedColor = originalColor
 var contrastRatio = getContrastRatio(adjustedColor, backgroundColor)            
 val isBackgroundDark = getLuminance(backgroundColor) < 0.5
-while (contrastRatio < 4.5) {                // Adjust brightness by modifying the RGB values
+while (contrastRatio < 4.5) {
+        // Adjust brightness by modifying the RGB values
 val r = Color.red(adjustedColor)                
 val g = Color.green(adjustedColor)                
 val b = Color.blue(adjustedColor)                // Calculate the amount to adjust
@@ -50,7 +51,8 @@ val newB = (b + adjustment).coerceIn(0, 255);
         adjustedColor = Color.rgb(newR, newG, newB)
                 contrastRatio = getContrastRatio(adjustedColor, backgroundColor)
                 // Break the loop if the color adjustment does not change (to avoid infinite loop)
-if (newR == r && newG == g && newB == b) {                    break                }
+if (newR == r && newG == g && newB == b) {
+        break                }
 }
 return adjustedColor        }
 
@@ -59,5 +61,7 @@ fun Int.toCssColor(): String {
 return base        }
 
 fun Int.toHexColor(): String {
-return String.format("#%06X", 0xFFFFFF and this)        }
-}}
+return String.format("#%06X", 0xFFFFFF and this)
+        }
+}
+}

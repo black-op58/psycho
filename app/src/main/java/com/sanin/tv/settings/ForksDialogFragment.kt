@@ -18,7 +18,7 @@ return binding.root    }
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         s
         binding.devsTitle.setText(R.string.forks)        binding.devsRecyclerView.isVisible = true
-        binding.devsRecyclerView.adapter = DevelopersAdapter(            arrayOf(                Developer(                    "Awery",                    "https://avatars.githubusercontent.com/u/92123190?v=4",                    "MrBoomDeveloper",                    "https://github.com/MrBoomDeveloper/Awery"                ),                Developer(                    "Dartotsu",                    "https://avatars.githubusercontent.com/u/99584765?s=48&v=4",                    "aayush262",                    "https://github.com/aayush2622/Dartotsu"                )            )        )        binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())    }
-
+        binding.devsRecyclerView.adapter = DevelopersAdapter(            arrayOf(                Developer(                    "Awery",                    "https://avatars.githubusercontent.com/u/92123190?v=4",                    "MrBoomDeveloper",                    "https://github.com/MrBoomDeveloper/Awery"                ),                Developer(                    "Dartotsu",                    "https://avatars.githubusercontent.com/u/99584765?s=48&v=4",                    "aayush262",                    "https://github.com/aayush2622/Dartotsu"                )            )        )        binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+     }
 override fun onDestroy() {        
         _

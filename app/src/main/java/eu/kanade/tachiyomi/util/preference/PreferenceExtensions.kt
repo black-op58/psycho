@@ -12,7 +12,8 @@ fun <T> Preference<Set<T>>.minusAssign(item: T) {
 
 fun Preference<Boolean>.toggle(): Boolean {    
         s
-return get()}
-
+return get()
+ }
 fun <T> Preference<T>.asState(presenterScope: CoroutineScope): PreferenceMutableState<T> {
-return PreferenceMutableState(this, presenterScope)}
+return PreferenceMutableState(this, presenterScope)
+}

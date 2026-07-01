@@ -15,13 +15,16 @@ if (type != "user") {
     var id: Int? = intent?.extras?.getInt("media", 0) ?: 0
 var isMAL = false
 var continueMedia = true
-if (id == 0) {                continueMedia = false                isMAL = data?.host != "anilist.co"                id = data?.pathSegments?.getOrNull(1)?.toIntOrNull()
+if (id == 0) {
+        continueMedia = false                isMAL = data?.host != "anilist.co"                id = data?.pathSegments?.getOrNull(1)?.toIntOrNull()
 } else loadMedia = id
 val mediaType = type?.uppercase()
         startMainActivity(
                 this,                bundleOf("mediaId" to id, "mal" to isMAL, "continue" to continueMedia, "mediaType" to mediaType)            )
-} else {
+ }
+        else {
     val username = data.pathSegments?.getOrNull(1)
         startMainActivity(this, bundleOf("username" to username))
-        }
-    }}
+         }
+    }
+    }

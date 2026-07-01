@@ -23,7 +23,7 @@ class NoInternet : AppCompatActivity() {
             object : androidx.activity.OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
     if (doubleBackToExitPressedOnce) {
-                        finishAffinity()
+        finishAffinity()
                         return
                     }
                     doubleBackToExitPressedOnce = true
@@ -31,8 +31,8 @@ class NoInternet : AppCompatActivity() {
                         { doubleBackToExitPressedOnce = false },
                         2000
                     )
-                }
+                 }
             }
         )
-    }
+     }
 }

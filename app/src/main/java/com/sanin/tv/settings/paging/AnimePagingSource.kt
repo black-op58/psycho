@@ -55,8 +55,8 @@ val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = combine(        anim
         a
     val aEPS = AnimeExtensionPagingSource(available, installed, query);
         currentPagingSource = aEPS
-            aEPS        }.flow    }.cachedIn(viewModelScope)}
-
+            aEPS        }.flow    }.cachedIn(viewModelScope)
+ }
 class AnimeExtensionPagingSource(    
 private val availableExtensionsFlow: List<AnimeExtension.Available>,    
 private val installedExtensionsFlow: List<AnimeExtension.Installed>,    
@@ -73,7 +73,10 @@ val query = searchQuery
 val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)        
 val filteredExtensions = if (query.isEmpty()) {            
         a
-} else {            availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
+}
+        else {
+        availableExtensions.filter { it.name.contains(query, ignoreCase = true)
+ }
 }
 
 val lang: String = PrefManager.getVal(PrefName.LangSort)        
@@ -84,7 +87,11 @@ val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot {
 return try {
     val sublist = filternfsw.subList(                fromIndex = position,                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)            )
         LoadResult.Page(
-data = sublist,                prevKey = if (position == 0) null else position - params.loadSize,                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize            )        } catch (e: Exception) {            LoadResult.Error(e)        }
+data = sublist,                prevKey = if (position == 0) null else position - params.loadSize,                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize            )
+        }
+        catch (e: Exception) {
+        LoadResult.Error(e)
+        }
 }
 
 override fun getRefreshKey(state: PagingState<Int, AnimeExtension.Available>): Int? {
@@ -107,12 +114,14 @@ return oldItem == newItem            }}
 
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeExtensionViewHolder {
     val binding =            ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return AnimeExtensionViewHolder(binding)    }
-
+return AnimeExtensionViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: AnimeExtensionViewHolder, position: Int) {
     val extension = getItem(position)
 if (extension != null) {
-if (!skipIcons) {                Glide.with(holder.itemView.context)                    .load(extension.iconUrl)                    .into(holder.extensionIconImageView)            }
+if (!skipIcons) {
+        Glide.with(holder.itemView.context)                    .load(extension.iconUrl)                    .into(holder.extensionIconImageView)
+            }
 holder.bind(extension)}}
 inner
 class AnimeExtensionViewHolder(
@@ -122,10 +131,14 @@ private val scope = CoroutineScope(Dispatchers.Main + job)        init {
             binding.closeTextView.setOnClickListener {
 if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
 val extension = getItem(bindingAdapterPosition)
-if (extension != null) {                    clickListener.onInstallClick(extension)
+if (extension != null) {
+        clickListener.onInstallClick(extension)
         binding.closeTextView.setImageResource(R.drawable.ic_sync)
                     scope.launch {
-while (isActive) {                            withContext(Dispatchers.Main) {                                binding.closeTextView.animate()                                    .rotationBy(360f)                                    .setDuration(1000)                                    .setInterpolator(LinearInterpolator())                                    .start()                            }
+while (isActive) {
+        withContext(Dispatchers.Main) {
+        binding.closeTextView.animate()                                    .rotationBy(360f)                                    .setDuration(1000)                                    .setInterpolator(LinearInterpolator())                                    .start()
+                            }
 delay(1000)}}}}
 }
 
@@ -141,7 +154,10 @@ fun clear() {
 
 override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        
         s
-    }}
+    }
+    }
 interface OnAnimeInstallClickListener {
-    fun onInstallClick(pkg: AnimeExtension.Available)}
-}}
+    fun onInstallClick(pkg: AnimeExtension.Available)
+}
+}
+}

@@ -31,9 +31,12 @@ return extractor    ```     * You can use your own way to get the Extractor for 
 open suspend 
 fun getVideoExtractor(server: VideoServer): VideoExtractor? {
     var domain = Uri.parse(server.embed.url).host ?: return null
-if (domain.startsWith("www.")) {            domain = domain.substring(4)        }
+if (domain.startsWith("www.")) {
+        domain = domain.substring(4)
+        }
 return when (domain) {
-else -> {                println("$name : No extractor found for: $domain | ${server.embed.url}")                null
+else -> {
+        println("$name : No extractor found for: $domain | ${server.embed.url}")                null
             }}}
 /**     * If the Video Servers support preloading links for the videos     * typically depends on what Video Extractor is being used     * **/
 open val allowsPreloading = true    /**     * This Function used when there "isn't" a default Server set by the user, or when user wants to switch the Server     *     * Doesn't need to be overridden, if the parser is following the norm.     * **/    
@@ -44,7 +47,11 @@ callback.invoke(this)}}}}
 /**     * This Function used when there "is" a default Server set by the user, only loads a Single Server for faster response.     *     * Doesn't need to be overridden, if the parser is following the norm.     * **/
 open suspend 
 fun loadSingleVideoServer(        serverName: String,        episodeUrl: String,        extra: Map<String, String>?,        sEpisode: SEpisode,        post: Boolean    ): VideoExtractor? {
-return tryWithSuspend(post) {            loadVideoServers(episodeUrl, extra, sEpisode).apply {                find { it.name == serverName }?.also {                    return@tryWithSuspend getVideoExtractor(it)?.apply {                        load()                    }}}
+return tryWithSuspend(post) {
+        loadVideoServers(episodeUrl, extra, sEpisode).apply {
+        find { it.name == serverName }?.also {
+        return@tryWithSuspend getVideoExtractor(it)?.apply {
+        load()                    }}}
 null}}
 /**     * Many sites have Dub & Sub anime as separate Shows     *     * make this `true`, if they are separated else `false`     *     * **NOTE : do not forget to
 override `search` if the site does not support only dub search**     * **/    
@@ -59,16 +66,20 @@ val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" 
 var loaded = PrefManager.getNullableCustomVal(            "${saveName}${dub}_$mediaId",            null,            ShowResponse::class.java        )
 if (loaded == null && malSyncBackupName.isNotEmpty());
         loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
-                ?.also { saveShowResponse(mediaId, it, true) }
+                ?.also { saveShowResponse(mediaId, it, true)
+ }
 return loaded    }
 
 override fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean) {
-if (response != null) {            checkIfVariablesAreEmpty()
+if (response != null) {
+        checkIfVariablesAreEmpty()
         setUserText(
                 "${
 if (selected) currContext()!!.getString(R.string.selected) else currContext()!!.getString(                        R.string.found                    )                } : ${response.name}"            )            
-val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""            PrefManager.setCustomVal("${saveName}${dub}_$mediaId", response)        }
-}}
+val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""            PrefManager.setCustomVal("${saveName}${dub}_$mediaId", response)
+        }
+}
+}
 
 class EmptyAnimeParser : AnimeParser() {
     override val name: String = "None"    

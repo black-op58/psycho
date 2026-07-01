@@ -6,13 +6,16 @@ enum class NotificationType(
 val value: String) {    
         A
 fun toFormattedString(): String {
-return this.value.replace("_", " ").lowercase(Locale.ROOT)            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+return this.value.replace("_", " ").lowercase(Locale.ROOT)            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+ }
 }
 
 companion object {
     fun String.fromFormattedString(): String {
-return this.replace(" ", "_").uppercase(Locale.ROOT)        }
-}}
+return this.replace(" ", "_").uppercase(Locale.ROOT)
+        }
+}
+}
 
 @Serializable
 data class NotificationResponse(    

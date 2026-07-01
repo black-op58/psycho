@@ -34,12 +34,11 @@ class SettingsNotificationActivity : AppCompatActivity() {
             
             notificationsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
-            }
-            
+                          }
             onBackPressedDispatcher.addCallback(this@SettingsNotificationActivity,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() = finish()
-                }
+                 }
             )
             
             // Setup notification preferences list
@@ -53,7 +52,7 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.AnilistNotifications),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.AnilistNotifications, isChecked)
-                        }
+                         }
                     ),
                     Settings(
                         type = 2,
@@ -63,11 +62,11 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.EpisodeNotifications),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.EpisodeNotifications, isChecked)
-                        }
+                         }
                     ),
                 ))
                 layoutManager = LinearLayoutManager(this@SettingsNotificationActivity)
-            }
+             }
         }
     }
 }

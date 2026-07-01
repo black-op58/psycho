@@ -15,5 +15,7 @@ fun copyFrom(other: SEpisode) {
 
 companion object {
     fun create(): SEpisode {
-return SEpisodeImpl()        }
-}}
+return SEpisodeImpl()
+        }
+}
+}

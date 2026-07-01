@@ -26,16 +26,16 @@ class RecommendationsViewModel : ViewModel() {
             try {
     val userId = Anilist.userid
                 if (userId == null) {
-                    error.postValue("Please log in to AniList to see recommendations.")
+        error.postValue("Please log in to AniList to see recommendations.")
                     isLoading.postValue(false)
-                    return@launch
+        return@launch
                 }
 
-                val completedList = AnilistQueries.getWatchingMedia(userId)
-                if (completedList.isNullOrEmpty()) {
+                val completedList = AnilistQueries.getWatchingMedia(userId);
+        if (completedList.isNullOrEmpty()) {
                     error.postValue("No watch history found. Start watching some anime!")
                     isLoading.postValue(false)
-                    return@launch
+        return@launch
                 }
 
                 val groups = RecommendationEngine.buildRecommendations(completedList, forceRefresh)
@@ -50,18 +50,18 @@ class RecommendationsViewModel : ViewModel() {
                             topGenres
                         )
                     )
-                }
-
+                  }
                 recommendationGroups.postValue(rankedGroups)
                 Logger.log("RecommendationsViewModel: ${rankedGroups.size} groups loaded")
-            } catch (e: Exception) {
-                Logger.log("RecommendationsViewModel: Error — ${e.message}")
+             }
+        catch (e: Exception) {
+        Logger.log("RecommendationsViewModel: Error — ${e.message}")
                 error.postValue("Failed to load recommendations: ${e.message}")
             } finally {
                 isLoading.postValue(false)
-            }
+             }
         }
     }
 
     fun refresh() = loadRecommendations(forceRefresh = true)
-}
+  }

@@ -24,8 +24,8 @@ import java.io.FileOutputStream
 object LastScreenshotManager {
 
     private fun screenshotDir(context: Context): File =
-        File(context.filesDir, "screenshots").also { it.mkdirs() }
-
+        File(context.filesDir, "screenshots").also { it.mkdirs()
+  }
     private fun screenshotFile(context: Context, mediaId: Int): File =
         File(screenshotDir(context), "$mediaId.jpg")
 
@@ -35,9 +35,10 @@ object LastScreenshotManager {
             val file = screenshotFile(context, mediaId)
             FileOutputStream(file).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
-            }
-        } catch (_: Exception) {
-            // Silently ignore I/O errors — screenshot is non-critical
+             }
+        }
+        catch (_: Exception) {
+        // Silently ignore I/O errors — screenshot is non-critical
         }
     }
 
@@ -46,12 +47,13 @@ object LastScreenshotManager {
      * Loading is done synchronously and should be called from a background thread.
      */
     fun load(context: Context, mediaId: Int): Bitmap? {
-        val file = screenshotFile(context, mediaId)
+        val file = screenshotFile(context, mediaId);
         if (!file.exists()) return null
         return try {
             BitmapFactory.decodeFile(file.absolutePath)
-        } catch (_: Exception) {
-            null
+         }
+        catch (_: Exception) {
+        null
         }
     }
 
@@ -62,10 +64,10 @@ object LastScreenshotManager {
     /** Delete the screenshot for [mediaId]. */
     fun clear(context: Context, mediaId: Int) {
         screenshotFile(context, mediaId).delete()
-    }
-
+      }
     /** Delete all saved screenshots. */
     fun clearAll(context: Context) {
-        screenshotDir(context).listFiles()?.forEach { it.delete() }
+        screenshotDir(context).listFiles()?.forEach { it.delete()
+ }
     }
 }

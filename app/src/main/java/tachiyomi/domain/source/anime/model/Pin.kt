@@ -3,12 +3,11 @@ sealed class Pin(
 val code: Int) {    
 data object Unpinned : Pin(0b00)    
 data object Pinned : Pin(0b01)    
-data object Actual : Pin(0b10)}
-
+data object Actual : Pin(0b10)
+ }
 inline fun Pins(builder: Pins.PinsBuilder.() -> Unit = {}): Pins {
 return Pins.PinsBuilder().apply(builder).flags()
-}
-
+  }
 fun Pins(vararg pins: Pin) = Pins {
     pins.forEach { +it }
 }
@@ -20,8 +19,8 @@ val code: Int = Pin.Unpinned.code) {
     operator fun minus(pin: Pin): Pins = Pins(code xor pin.code)    
 companion object {
     val unpinned = Pins(Pin.Unpinned)        
-val pinned = Pins(Pin.Pinned, Pin.Actual)    }
-
+val pinned = Pins(Pin.Pinned, Pin.Actual)
+     }
 class PinsBuilder(var code: Int = 0) {
     operator fun Pin.unaryPlus() {
         this@PinsBuilder.code = code or this@PinsBuilder.code
@@ -31,5 +30,5 @@ operator fun Pin.unaryMinus() {
     }
 
 fun flags(): Pins = Pins(code)
-    }
+     }
 }

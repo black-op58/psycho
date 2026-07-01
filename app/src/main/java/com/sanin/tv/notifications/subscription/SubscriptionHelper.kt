@@ -3,8 +3,9 @@ package com.sanin.tv.notifications.subscription
 fun getAnimeParser(id: Int): AnimeParser {
     val sources = AnimeSources            Logger.log("getAnimeParser size: ${sources.list.size}")            
 val selected = loadSelected(id)
-if (selected.sourceIndex >= sources.list.size) {                selected.sourceIndex = 0                saveSelected(id, selected)            }
-
+if (selected.sourceIndex >= sources.list.size) {
+        selected.sourceIndex = 0                saveSelected(id, selected)
+             }
 val parser = sources[selected.sourceIndex]            parser.selectDub = selected.preferDub
 return parser        }
 suspend
@@ -16,15 +17,17 @@ val ep = withTimeoutOrNull(10 * 1000) {
                         parser.getLatestEpisode(                            show.link, show.extra,                            it, selected.latest                        )                    }}
     }
 return ep?.apply {
-return chp?.apply {                selected.latest = MediaNameAdapter.findChapterNumber(number) ?: 0f                saveSelected(subscribeMedia.id, selected)            }
+return chp?.apply {
+        selected.latest = MediaNameAdapter.findChapterNumber(number) ?: 0f                saveSelected(subscribeMedia.id, selected)
+            }
 }
 
 private suspend 
 fun forceLoadShowResponse(            subscribeMedia: SubscribeMedia,            selected: Selected,            parser: BaseParser        ): ShowResponse? {
     val tempMedia = Media(                id = subscribeMedia.id,                name = null,                nameRomaji = subscribeMedia.name,                userPreferredName = subscribeMedia.name,                isAdult = subscribeMedia.isAdult,                isFav = false,                isListPrivate = false,                userScore = 0,                userRepeat = 0,                format = null,                selected = selected            )
         parser.autoSearch(tempMedia)
-return parser.loadSavedShowResponse(subscribeMedia.id)        }
-
+return parser.loadSavedShowResponse(subscribeMedia.id)
+         }
 data class SubscribeMedia(            
 val isAnime: Boolean,            
 val isAdult: Boolean,            
@@ -46,8 +49,8 @@ fun deleteSubscription(id: Int, showSnack: Boolean = false) {
     val data = PrefManager.getNullableCustomVal(                SUBSCRIPTIONS,                null,                Map::class.java            ) as? MutableMap<Int, SubscribeMedia>                ?: mutableMapOf()
         data.remove(id)
             PrefManager.setCustomVal(SUBSCRIPTIONS, data)
-if (showSnack) toast(R.string.subscription_deleted)        }
-
+if (showSnack) toast(R.string.subscription_deleted)
+         }
 @Suppress("UNCHECKED_CAST")        
 fun saveSubscription(media: Media, subscribed: Boolean) {
     val data = PrefManager.getNullableCustomVal(                SUBSCRIPTIONS,                null,                Map::class.java            ) as? MutableMap<Int, SubscribeMedia>                ?: mutableMapOf()
@@ -59,8 +62,13 @@ if (current == null) {
     val selected = Selected().apply {                            
         s
                         }
-    saveSelected(media.id, selected)}
+    saveSelected(media.id, selected)
+}
     }
-} else {                data.remove(media.id)            }
-PrefManager.setCustomVal(SUBSCRIPTIONS, data)}
+}
+        else {
+        data.remove(media.id)
+            }
+PrefManager.setCustomVal(SUBSCRIPTIONS, data)
+}
 }

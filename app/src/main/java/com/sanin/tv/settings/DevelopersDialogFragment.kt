@@ -22,8 +22,11 @@ try {
     val contributors = emptyList()                binding.devsRecyclerView.adapter = DevelopersAdapter(contributors)
                 binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.devsRecyclerView.visibility = View.VISIBLE
-                binding.devsProgressBar.visibility = View.GONE            } catch (e: Exception) {                e.printStackTrace()                binding.devsProgressBar.visibility = View.GONE
-            }}
+                binding.devsProgressBar.visibility = View.GONE            }
+        catch (e: Exception) {
+        e.printStackTrace()                binding.devsProgressBar.visibility = View.GONE
+            }
+            }
     }
 
 override fun onDestroy() {        

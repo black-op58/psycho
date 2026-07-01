@@ -1,8 +1,9 @@
 package com.sanin.tv.widgets.statistics
 
-appWidgetIds.forEach { appWidgetId ->            context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().clear().apply()        }
-super.onDeleted(context, appWidgetIds)    }
-
+appWidgetIds.forEach { appWidgetId ->            context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().clear().apply()
+        }
+super.onDeleted(context, appWidgetIds)
+     }
 override fun onEnabled(context: Context) {        
         s
 
@@ -35,8 +36,10 @@ val gradientDrawable = ResourcesCompat.getDrawable(                context.resou
                     
 val intent = Intent(context, MainActivity::class.java)                    
 val pendingIntent = PendingIntent.getActivity(                        context, 0, intent, PendingIntent.FLAG_IMMUTABLE                    )
-        setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)                }
-appWidgetManager.updateAppWidget(appWidgetId, views)}
+        setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)
+                }
+appWidgetManager.updateAppWidget(appWidgetId, views)
+}
 }
 
 fun getPrefsName(appWidgetId: Int) = "com.sanin.tv.widgets.Statistics.${appWidgetId}"        const val PREF_BACKGROUND_COLOR = "background_color"        const val PREF_BACKGROUND_FADE = "background_fade"        const val PREF_TITLE_TEXT_COLOR = "title_text_color"        const val PREF_STATS_TEXT_COLOR = "stats_text_color"    }

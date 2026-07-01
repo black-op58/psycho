@@ -13,12 +13,14 @@ val lang: String        get() = ""    /**     * Get the updated details for a an
 @Suppress("DEPRECATION")
 suspend 
 fun getAnimeDetails(anime: SAnime): SAnime {
-return fetchAnimeDetails(anime).awaitSingle()    }
+return fetchAnimeDetails(anime).awaitSingle()
+    }
 /**     * Get all the available episodes for a anime.     *     * @since extensions-lib 1.5     * @param anime the anime to update.     * @return the episodes for the anime.     */
 @Suppress("DEPRECATION")
 suspend 
 fun getEpisodeList(anime: SAnime): List<SEpisode> {
-return fetchEpisodeList(anime).awaitSingle()    }
+return fetchEpisodeList(anime).awaitSingle()
+    }
 /**     * Get all the available seasons for an anime     *     * @since extensions-lib 16     * @param anime the anime to fetch seasons for.     * @return the anime list for the anime.     */    suspend
 fun getSeasonList(anime: SAnime): List<SAnime>    /**     * Get the list of hoster for an episode. The first hoster in the list should     * be the preferred hoster.     *     * @since extensions-lib 16     * @param episode the episode.     * @return the hosters for the episode.     */    suspend 
 fun getHosterList(episode: SEpisode): List<Hoster> = throw IllegalStateException("Not used")    /**     * Get the list of videos for a hoster.     *     * @since extensions-lib 16     * @param hoster the hoster.     * @return the videos for the hoster.     */    suspend 
@@ -27,8 +29,8 @@ the index is ignored.     *     * @since extensions-lib 1.5     * @param episode
 @Suppress("DEPRECATION")
 suspend 
 fun getVideoList(episode: SEpisode): List<Video> {
-return fetchVideoList(episode).awaitSingle()    }
-
+return fetchVideoList(episode).awaitSingle()
+     }
 @Deprecated(        "Use the non-RxJava API instead",        ReplaceWith("getAnimeDetails"),    )    
 fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> =
 throw IllegalStateException("Not used")    
@@ -37,4 +39,5 @@ fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> =
 throw IllegalStateException("Not used")    
 @Deprecated(        "Use the non-RxJava API instead",        ReplaceWith("getVideoList"),    )    
 fun fetchVideoList(episode: SEpisode): Observable<List<Video>> =
-throw IllegalStateException("Not used")}
+throw IllegalStateException("Not used")
+}

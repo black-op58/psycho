@@ -7,12 +7,17 @@ fun getLanguageName(code: String): String {
 return if (code.contains("-")) {
 try {
     val parts = code.split("-")
-        Locale(parts[0], parts[1]).displayName                } catch (ignored: Exception) {                    code                }
-} else {
+        Locale(parts[0], parts[1]).displayName                }
+        catch (ignored: Exception) {
+        code                }
+}
+        else {
 try {
 if (code == "all") {
 return codeMap[code] ?: code                    }
-Locale(code).displayName                } catch (ignored: Exception) {                    code}}
+Locale(code).displayName                }
+        catch (ignored: Exception) {
+        code}}
 }
 
 fun getLanguageCode(language: String): String {
@@ -21,4 +26,5 @@ return codeMap.filterValues { it.lowercase() == language.lowercase() }.keys.firs
 enum class Language(
 val code: String) {            
         A
-}}
+}
+}

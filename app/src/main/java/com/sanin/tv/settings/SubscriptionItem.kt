@@ -22,8 +22,10 @@ val context = binding.root.context        binding.subscriptionName.text = media.
 binding.subscriptionCover.loadImage(media.image)        binding.deleteSubscription.setOnClickListener {
             SubscriptionHelper.deleteSubscription(id, true)
         adapter.remove(this)
-            onItemRemoved(id)}
+            onItemRemoved(id)
+}
 }
 
 override fun getLayout(): Int = R.layout.item_subscription    
-override fun initializeViewBinding(view: View): ItemSubscriptionBinding =        ItemSubscriptionBinding.bind(view)}
+override fun initializeViewBinding(view: View): ItemSubscriptionBinding =        ItemSubscriptionBinding.bind(view)
+}

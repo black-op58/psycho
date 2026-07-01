@@ -30,5 +30,5 @@ data class WatchStats(
     companion object {
     private const val serialVersionUID = 1L
         val EMPTY = WatchStats()
-    }
+     }
 }

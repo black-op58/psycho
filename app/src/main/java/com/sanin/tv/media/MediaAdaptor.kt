@@ -59,7 +59,7 @@ class MediaAdaptor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
-            0 -> {
+        0 -> {
                 val b = ItemMediaCompactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 val density = parent.context.resources.displayMetrics.density
                 val isPortrait = PrefManager.getVal<Int>(PrefName.CardOrientation) == 1
@@ -70,7 +70,7 @@ class MediaAdaptor(
                     it.height = imgH
                 }
                 MediaViewHolder(b)
-            }
+             }
             1 -> MediaLargeViewHolder(
                 ItemMediaLargeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
@@ -81,30 +81,30 @@ class MediaAdaptor(
                 ItemMediaPageSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             else -> throw IllegalArgumentException()
-        }
+         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (type) {
-
-            // ── Type 0: compact landscape card ──────────────────────────────
+        // ── Type 0: compact landscape card ──────────────────────────────
             0 -> {
                 val b = (holder as MediaViewHolder).binding
                 setAnimation(activity, b.root)
-                val media = mediaList?.getOrNull(position)
-                if (media != null) {
-                    // Cover art (default) or banner art depending on user pref
+                val media = mediaList?.getOrNull(position);
+        if (media != null) {
+        // Cover art (default) or banner art depending on user pref
                     val isPortrait0 = PrefManager.getVal<Int>(PrefName.CardOrientation) == 1
                     val useBanner = PrefManager.getVal<Int>(PrefName.CardImageType) == 1
                     val imageUrl = if (useBanner) (media.banner ?: media.cover) else media.cover
                     if (!isPortrait0 && !useBanner) {
-                        // Landscape + portrait cover: blurred cover fills the frame as background,
+        // Landscape + portrait cover: blurred cover fills the frame as background,
                         // sharp cover sits centered on top — no black bars, no cropping, no stretching.
                         b.itemCompactImageBg.visibility = View.VISIBLE
                         blurImage(b.itemCompactImageBg, imageUrl)
                         b.itemCompactImage.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
-                    } else {
+                    }
+        else {
                         // Portrait card or banner image: centerCrop fills the frame cleanly.
                         b.itemCompactImageBg.visibility = View.GONE
                         b.itemCompactImage.scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
@@ -124,9 +124,9 @@ class MediaAdaptor(
                     val mediaId0 = media.id
                     b.itemCompactLogoArt.tag = mediaId0
                     activity.lifecycleScope.launch {
-                        val logo = TmdbApi.getLogoUrl(mediaId0 ?: return@launch, media.anime != null)
-                        if (b.itemCompactLogoArt.tag == mediaId0 && logo != null) {
-                            b.itemCompactLogoArt.loadImage(logo)
+                        val logo = TmdbApi.getLogoUrl(mediaId0 ?: return@launch, media.anime != null);
+        if (b.itemCompactLogoArt.tag == mediaId0 && logo != null) {
+        b.itemCompactLogoArt.loadImage(logo)
                             b.itemCompactLogoArt.visibility = View.VISIBLE
                             b.itemCompactTitle.visibility = View.GONE
                         }
@@ -149,7 +149,8 @@ class MediaAdaptor(
                         total0 != null && total0 != released0 -> " | $total0"
                         total0 == null && isReleasing0 -> " | ?"
                         else -> ""
-                    }
+                    
+}
                     b.itemCompactTotal.text = totalText0
                     b.itemCompactTotal.isVisible = totalText0.isNotEmpty()
                     // "New Episode" badge — visible when tracking + new eps since last visit (if pref enabled)
@@ -160,13 +161,14 @@ class MediaAdaptor(
                     val watched = media.userProgress ?: 0
                     val total = media.anime?.totalEpisodes ?: media.manga?.totalChapters
                     if (watched > 0 && total != null && total > 0) {
-                        b.itemCompactWatchProgress.visibility = View.VISIBLE
+        b.itemCompactWatchProgress.visibility = View.VISIBLE
                         b.itemCompactWatchProgress.progress = ((watched.toFloat() / total) * 100).toInt()
-                    } else {
+                     }
+        else {
                         b.itemCompactWatchProgress.visibility = View.GONE
                     }
                     if (media.relation != null) {
-                        b.itemCompactRelation.text = "${media.relation}  "
+        b.itemCompactRelation.text = "${media.relation}  "
                         b.itemCompactType.visibility = View.VISIBLE
                         if (media.relation!!.contains("\n")) {
                             b.itemCompactRelation.apply {
@@ -175,16 +177,16 @@ class MediaAdaptor(
                                 ellipsize = TextUtils.TruncateAt.START
                                 includeFontPadding = false
                                 setLineSpacing(0f, 0.9f)
-                            }
+                             }
                         }
                     }
 
-                    @SuppressLint("NotifyDataSetChanged")
-                    if (position == mediaList!!.size - 2 && viewPager != null) viewPager.post {
+                    @SuppressLint("NotifyDataSetChanged");
+        if (position == mediaList!!.size - 2 && viewPager != null) viewPager.post {
                         val size = mediaList.size
                         mediaList.addAll(mediaList)
                         notifyItemRangeInserted(size - 1, mediaList.size)
-                    }
+                     }
                 }
             }
 
@@ -194,9 +196,9 @@ class MediaAdaptor(
             1 -> {
                 val b = (holder as MediaLargeViewHolder).binding
                 setAnimation(activity, b.root)
-                val media = mediaList?.getOrNull(position)
-                if (media != null) {
-                    // Respect CardImageType pref on large card too
+                val media = mediaList?.getOrNull(position);
+        if (media != null) {
+        // Respect CardImageType pref on large card too
                     val useBanner1 = PrefManager.getVal<Int>(PrefName.CardImageType) == 1
                     val imageUrl1 = if (useBanner1) (media.banner ?: media.cover) else media.cover
                     // Large card is portrait (108×160dp): cover fills it perfectly; banner (16:9) needs fitCenter.
@@ -221,9 +223,9 @@ class MediaAdaptor(
                     val mediaId1 = media.id
                     b.itemCompactLogoArt.tag = mediaId1
                     activity.lifecycleScope.launch {
-                        val logo = TmdbApi.getLogoUrl(mediaId1 ?: return@launch, media.anime != null)
-                        if (b.itemCompactLogoArt.tag == mediaId1 && logo != null) {
-                            b.itemCompactLogoArt.loadImage(logo)
+                        val logo = TmdbApi.getLogoUrl(mediaId1 ?: return@launch, media.anime != null);
+        if (b.itemCompactLogoArt.tag == mediaId1 && logo != null) {
+        b.itemCompactLogoArt.loadImage(logo)
                             b.itemCompactLogoArt.visibility = View.VISIBLE
                             b.itemCompactTitle.visibility = View.GONE
                         }
@@ -245,15 +247,16 @@ class MediaAdaptor(
                         totalEps1 != null && totalEps1 != released1 -> " | $totalEps1"
                         totalEps1 == null && isReleasing1 -> " | ?"
                         else -> ""
-                    }
+                    
+}
                     b.itemCompactTotal.text = totalText1
                     b.itemCompactTotal.isVisible = totalText1.isNotEmpty()
                     // "New Episode" badge — visible when tracking + new eps since last visit (if pref enabled)
                     b.itemCompactNewEpisodeBadge.isVisible =
                         PrefManager.getVal<Boolean>(PrefName.ShowNewEpisodeBadge) &&
-                        NewEpisodeBadgeManager.shouldShowBadge(media)
-                    if (media.relation != null) {
-                        b.itemCompactRelation.text = "${media.relation}  "
+                        NewEpisodeBadgeManager.shouldShowBadge(media);
+        if (media.relation != null) {
+        b.itemCompactRelation.text = "${media.relation}  "
                         b.itemCompactType.visibility = View.VISIBLE
                     }
                 }
@@ -262,11 +265,11 @@ class MediaAdaptor(
             // ── Type 3: page small (trending/discover ViewPager) ─────────────
             3 -> {
                 val b = (holder as MediaPageSmallViewHolder).binding
-                val media = mediaList?.get(position)
-                if (media != null) {
-                    val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-                    b.itemCompactImage.loadImage(media.cover)
-                    if (bannerAnimations)
+                val media = mediaList?.get(position);
+        if (media != null) {
+        val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+                    b.itemCompactImage.loadImage(media.cover);
+        if (bannerAnimations)
                         b.itemCompactBanner.setTransitionGenerator(
                             RandomTransitionGenerator(
                                 (10000 + 15000 * ((PrefManager.getVal(PrefName.AnimationSpeed) as Float))).toLong(),
@@ -285,9 +288,9 @@ class MediaAdaptor(
                     val mediaId3 = media.id
                     b.itemCompactLogoArt.tag = mediaId3
                     activity.lifecycleScope.launch {
-                        val logo = TmdbApi.getLogoUrl(mediaId3 ?: return@launch, media.anime != null)
-                        if (b.itemCompactLogoArt.tag == mediaId3 && logo != null) {
-                            b.itemCompactLogoArt.loadImage(logo)
+                        val logo = TmdbApi.getLogoUrl(mediaId3 ?: return@launch, media.anime != null);
+        if (b.itemCompactLogoArt.tag == mediaId3 && logo != null) {
+        b.itemCompactLogoArt.loadImage(logo)
                             b.itemCompactLogoArt.visibility = View.VISIBLE
                             b.itemCompactTitle.visibility = View.GONE
                         }
@@ -303,13 +306,14 @@ class MediaAdaptor(
                             var genres = ""
                             forEach { genres += "$it • " }
                             mediaList.random()
-                        } else {
+                         }
+        else {
                             null
                         }
                         media.let {
                             val index = mediaList?.indexOf(it) ?: -1
                             clicked(index, null)
-                        }
+                         }
                     }
                 }
             }
@@ -326,8 +330,9 @@ class MediaAdaptor(
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
-            }
-            itemView.setOnLongClickListener { longClicked(bindingAdapterPosition) }
+             }
+            itemView.setOnLongClickListener { longClicked(bindingAdapterPosition)
+ }
         }
     }
 
@@ -340,8 +345,9 @@ class MediaAdaptor(
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
-            }
-            itemView.setOnLongClickListener { longClicked(bindingAdapterPosition) }
+             }
+            itemView.setOnLongClickListener { longClicked(bindingAdapterPosition)
+ }
         }
     }
 
@@ -355,9 +361,10 @@ class MediaAdaptor(
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
-            }
+             }
             itemView.setOnTouchListener { _, _ -> true }
-            binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition) }
+            binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition)
+ }
         }
     }
 
@@ -371,39 +378,42 @@ class MediaAdaptor(
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
-            }
+             }
             binding.itemCompactTitleContainer.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
-            }
+             }
             itemView.setOnTouchListener { _, _ -> true }
-            binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition) }
+            binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition)
+ }
         }
     }
 
     fun clicked(position: Int, itemCompactImage: ImageView?, bitmap: Bitmap? = null) {
         if ((mediaList?.size ?: 0) > position && position != -1) {
-            val media = mediaList?.get(position)
-            if (bitmap != null) MediaSingleton.bitmap = bitmap
+            val media = mediaList?.get(position);
+        if (bitmap != null) MediaSingleton.bitmap = bitmap
             // Dismiss the "New Episode" badge as soon as the user taps into the show.
-            media?.id?.let { NewEpisodeBadgeManager.markAsSeen(it, activity.applicationContext) }
+            media?.id?.let { NewEpisodeBadgeManager.markAsSeen(it, activity.applicationContext)
+ }
             ContextCompat.startActivity(
                 activity,
                 Intent(activity, MediaDetailsActivity::class.java).putExtra("media", media as Serializable),
                 if (itemCompactImage != null) {
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+        ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
                         itemCompactImage,
                         ViewCompat.getTransitionName(itemCompactImage)!!
                     ).toBundle()
-                } else {
+                 }
+        else {
                     null
                 }
             )
-        }
+         }
     }
 
     fun longClicked(position: Int): Boolean {
@@ -422,7 +432,7 @@ class MediaAdaptor(
     fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
         val drawable = imageView.drawable ?: return null
         if (drawable is BitmapDrawable) {
-            return drawable.bitmap
+        return drawable.bitmap
         }
         val bitmap = Bitmap.createBitmap(
             drawable.intrinsicWidth,
@@ -442,12 +452,13 @@ class MediaAdaptor(
         val newWidth: Int
         val newHeight: Int
         if (width > height) {
-            newWidth = maxDimension
+        newWidth = maxDimension
             newHeight = (height * (maxDimension.toFloat() / width)).toInt()
-        } else {
+         }
+        else {
             newHeight = maxDimension
             newWidth = (width * (maxDimension.toFloat() / height)).toInt()
-        }
+         }
         return Bitmap.createScaledBitmap(source, newWidth, newHeight, true)
-    }
+     }
 }

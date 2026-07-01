@@ -28,7 +28,7 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
                     putInt(ARG_MEDIA_ID, mediaId)
                     putFloat(ARG_EPISODE, episodeNumber)
                     putLong(ARG_TIMESTAMP, currentPositionMs)
-                }
+                 }
             }
         }
     }
@@ -52,7 +52,7 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
         val layout = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, 32, 48, 32)
-        }
+         }
         scroll.addView(layout)
 
         val title = TextView(ctx).apply {
@@ -72,7 +72,8 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
         val editText = EditText(ctx).apply {
             hint = "Write your note here…"
             minLines = 3
-            existing?.let { setText(it.text) }
+            existing?.let { setText(it.text)
+ }
         }
         layout.addView(editText)
 
@@ -90,35 +91,35 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
             text = "All notes for this media:"
             textSize = 14f
             setPadding(0, 24, 0, 4)
-        }
+         }
         layout.addView(allNotesLabel)
 
-        val allNotes = EpisodeNotesManager.getAllNotes(mediaId)
+        val allNotes = EpisodeNotesManager.getAllNotes(mediaId);
         if (allNotes.isEmpty()) {
             layout.addView(TextView(ctx).apply { text = "No notes yet." })
-        } else {
+         }
+        else {
             allNotes.forEach { note ->
                 layout.addView(TextView(ctx).apply {
                     text = "Ep ${note.episodeNumber} @ ${EpisodeNotesManager.formatTimestamp(note.timestampMs)}: ${note.text}"
                     textSize = 12f
                     setPadding(0, 4, 0, 4)
                 })
-            }
+             }
         }
 
         saveBtn.setOnClickListener {
-    val text = editText.text.toString().trim()
-            if (text.isNotEmpty()) {
+    val text = editText.text.toString().trim();
+        if (text.isNotEmpty()) {
                 EpisodeNotesManager.saveNote(mediaId, episodeNumber, currentTimestampMs, text)
                 dismiss()
-            }
+             }
         }
 
         deleteBtn.setOnClickListener {
             EpisodeNotesManager.deleteNote(mediaId, episodeNumber)
             dismiss()
-        }
-
+          }
         return scroll
     }
 }

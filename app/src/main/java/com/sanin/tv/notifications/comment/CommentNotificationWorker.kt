@@ -8,12 +8,18 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
     override suspend 
 fun doWork(): Result {        
         L
-if (System.currentTimeMillis() - lastCheck < 60000) {            Logger.log("CommentNotificationWorker: doWork skipped")
-return Result.success()        }
+if (System.currentTimeMillis() - lastCheck < 60000) {
+        Logger.log("CommentNotificationWorker: doWork skipped")
+return Result.success()
+        }
 lastCheck = System.currentTimeMillis()
-return if (CommentNotificationTask().execute(applicationContext)) {            Result.success()
-} else {            Logger.log("CommentNotificationWorker: doWork failed")
-        Result.retry()        }
+return if (CommentNotificationTask().execute(applicationContext)) {
+        Result.success()
+ }
+        else {
+        Logger.log("CommentNotificationWorker: doWork failed")
+        Result.retry()
+        }
 }
 
 enum class NotificationType(

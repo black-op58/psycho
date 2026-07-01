@@ -22,9 +22,12 @@ import kotlinx.coroutines.withContext
 class AnilistNotificationTask : Task {
     override suspend 
 fun execute(context: Context): Boolean {
-try {            withContext(Dispatchers.IO) {                PrefManager.init(context) //make sure prefs are initialized
+try {
+        withContext(Dispatchers.IO) {
+        PrefManager.init(context) //make sure prefs are initialized
 val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
-if (userId.isNotEmpty()) {                    Anilist.getSavedToken()                    
+if (userId.isNotEmpty()) {
+        Anilist.getSavedToken()                    
 val res = Anilist.query.getNotifications(                        userId.toInt(),                        resetNotification = false                    )                    
 val unreadNotificationCount = res?.data?.user?.unreadNotificationCount ?: 0
 if (unreadNotificationCount > 0) {
@@ -42,20 +45,29 @@ var mediaCount = 0                                                newNotificatio
 if (!filteredTypes.contains(it.notificationType)) {
     val content = ActivityItemBuilder.getContent(it)                                
 val notification = createNotification(context, content, it.id)
-if (ActivityCompat.checkSelfPermission(                                        context,                                        Manifest.permission.POST_NOTIFICATIONS                                    ) == PackageManager.PERMISSION_GRANTED                                ) {                                    NotificationManagerCompat.from(context)                                        .notify(                                            Notifications.CHANNEL_ANILIST,                                            System.currentTimeMillis().toInt(),                                            notification                                        )                                }
+if (ActivityCompat.checkSelfPermission(                                        context,                                        Manifest.permission.POST_NOTIFICATIONS                                    ) == PackageManager.PERMISSION_GRANTED                                ) {
+        NotificationManagerCompat.from(context)                                        .notify(                                            Notifications.CHANNEL_ANILIST,                                            System.currentTimeMillis().toInt(),                                            notification                                        )
+                                }
 // Track counts per section
-if (it.notificationType in mediaSectionTypes) {                                    mediaCount++
-} else {                                    // User section displays all notifications that are not in the media section.                                    userCount++                                }}}
+if (it.notificationType in mediaSectionTypes) {
+        mediaCount++
+}
+        else {                                    // User section displays all notifications that are not in the media section.                                    userCount++                                }}}
 // Update per-section counts
 if (userCount > 0) {
     val currentUserCount = PrefManager.getVal<Int>(PrefName.UnreadUserNotifications)
-        PrefManager.setVal(PrefName.UnreadUserNotifications, currentUserCount + userCount)                        }
+        PrefManager.setVal(PrefName.UnreadUserNotifications, currentUserCount + userCount)
+                        }
 if (mediaCount > 0) {
     val currentMediaCount = PrefManager.getVal<Int>(PrefName.UnreadMediaNotifications)
-        PrefManager.setVal(PrefName.UnreadMediaNotifications, currentMediaCount + mediaCount)                        }
-if (newNotifications?.isNotEmpty() == true) {                            PrefManager.setVal(                                PrefName.LastAnilistNotificationId,                                newNotifications.last().id                            )                        }}}
+        PrefManager.setVal(PrefName.UnreadMediaNotifications, currentMediaCount + mediaCount)
+                        }
+if (newNotifications?.isNotEmpty() == true) {
+        PrefManager.setVal(                                PrefName.LastAnilistNotificationId,                                newNotifications.last().id                            )                        }}}
 }
-return true        } catch (e: Exception) {            Logger.log("AnilistNotificationTask: ${e.message}")
+return true        }
+        catch (e: Exception) {
+        Logger.log("AnilistNotificationTask: ${e.message}")
         Logger.log(e)
 return false        }
 }
@@ -64,9 +76,10 @@ private fun createNotification(        context: Context,        content: String,
     val title = "New Anilist Notification"        
 val intent = Intent(context, MainActivity::class.java).apply {            
         f
-if (notificationId != null) {                Logger.log("notificationId: $notificationId")
+if (notificationId != null) {
+        Logger.log("notificationId: $notificationId")
         putExtra("activityId", notificationId)
-            }
+             }
 }
 
 val pendingIntent = PendingIntent.getActivity(            context,            notificationId ?: 0,            intent,            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT        )

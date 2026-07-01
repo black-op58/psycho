@@ -103,24 +103,26 @@ class HomeFragment : Fragment() {
         Logger.log("HomeFragment")
 
         fun load() {
-            Logger.log("Loading HomeFragment")
-            if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
-                val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
-                if (rescueMode && MAL.token != null) {
-                    binding.homeUserName.text = MAL.username ?: Anilist.username
+            Logger.log("Loading HomeFragment");
+        if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
+                val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode);
+        if (rescueMode && MAL.token != null) {
+        binding.homeUserName.text = MAL.username ?: Anilist.username
                     binding.homeUserAvatar.loadImage(MAL.avatar ?: Anilist.avatar)
-                } else {
+                 }
+        else {
                     binding.homeUserName.text = Anilist.username
                     binding.homeUserAvatar.loadImage(Anilist.avatar)
-                }
+                 }
                 if (!rescueMode) {
-                    binding.homeUserEpisodesWatched.text = Anilist.episodesWatched.toString()
+        binding.homeUserEpisodesWatched.text = Anilist.episodesWatched.toString()
                     binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                     binding.homeNotificationCount.isVisible =
                         Anilist.unreadNotificationCount > 0
                         && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
                     binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
-                } else {
+                 }
+        else {
                     binding.homeUserEpisodesWatched.text = MAL.episodesWatched?.toString() ?: "—"
                     binding.homeUserChaptersRead.text = MAL.chaptersRead?.toString() ?: "—"
                     binding.homeNotificationCount.isVisible = false
@@ -131,7 +133,7 @@ class HomeFragment : Fragment() {
 
                 // Show/hide banner areas based on selected mode
                 applyBannerMode(bannerMode, bannerAnimations, bannerUrl)
-            }
+             }
         }
 
         // ── Search / avatar ───────────────────────────────────────────────────
@@ -140,27 +142,30 @@ class HomeFragment : Fragment() {
                 (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
                 "search"
             )
-        }
+         }
         binding.homeUserAvatarContainer.setOnLongClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (!PrefManager.getVal<Boolean>(PrefName.RescueMode)) {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        if (!PrefManager.getVal<Boolean>(PrefName.RescueMode)) {
                 ContextCompat.startActivity(
                     requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                         .putExtra("userId", Anilist.userid), null
                 )
-            } else {
+             }
+        else {
                 val malUsername = MAL.username
                 if (!malUsername.isNullOrBlank()) {
                     try {
                         CustomTabsIntent.Builder().build().launchUrl(
                             requireContext(), Uri.parse("https://myanimelist.net/profile/$malUsername")
                         )
-                    } catch (e: Exception) {
-                        openLinkInBrowser("https://myanimelist.net/profile/$malUsername")
-                    }
-                } else {
-                    snackString(getString(R.string.rescue_mode_active))
+                     }
+        catch (e: Exception) {
+        openLinkInBrowser("https://myanimelist.net/profile/$malUsername")
+                     }
                 }
+        else {
+                    snackString(getString(R.string.rescue_mode_active))
+                 }
             }
             false
         }
@@ -178,20 +183,19 @@ class HomeFragment : Fragment() {
 
         var height = statusBarHeight
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout
+        val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout
             if (displayCutout != null && displayCutout.boundingRects.size > 0) {
-                height = max(
+        height = max(
                     statusBarHeight,
                     min(displayCutout.boundingRects[0].width(), displayCutout.boundingRects[0].height())
                 )
-            }
+             }
         }
         binding.homeRefresh.setSlingshotDistance(height + 128)
         binding.homeRefresh.setProgressViewEndTarget(false, height + 128)
         binding.homeRefresh.setOnRefreshListener {
             Refresh.activity[1]!!.postValue(true)
-        }
-
+          }
         // ── Hero "Continue Watching" card ─────────────────────────────────────
         val heroAdapter = ContinueWatchingHeroAdapter(
             context = requireContext(),
@@ -202,7 +206,7 @@ class HomeFragment : Fragment() {
                         .putExtra("media", media)
                         .putExtra("autoResume", true)
                 )
-            }
+             }
         )
         binding.homeHeroContinueRecycler.apply {
             adapter = heroAdapter
@@ -217,8 +221,8 @@ class HomeFragment : Fragment() {
 
             // Seed navigating banner with last-watched on first load
             if (hero != null && navBannerCurrentMediaId == -1) {
-                updateNavigatingBanner(hero)
-            }
+        updateNavigatingBanner(hero)
+             }
         }
 
         // ── Enhanced "Continue Watching" row ──────────────────────────────────
@@ -238,8 +242,8 @@ class HomeFragment : Fragment() {
             anilistContinueAdapter.submitList(list ?: emptyList())
             list?.let { rvDataMap[binding.homeWatchingRecyclerView] = it }
         }
-        binding.homeWatchingBrowseButton.setOnClickListener { (activity as? MainActivity)?.navigateTo("anime") }
-
+        binding.homeWatchingBrowseButton.setOnClickListener { (activity as? MainActivity)?.navigateTo("anime")
+  }
         initRecyclerView(
             model.getAnimeFav(),
             binding.homeFavAnimeContainer,
@@ -267,8 +271,8 @@ class HomeFragment : Fragment() {
         model.getAnimePlanned().observe(viewLifecycleOwner) { list ->
             list?.let { rvDataMap[binding.homePlannedAnimeRecyclerView] = it }
         }
-        binding.homePlannedAnimeBrowseButton.setOnClickListener { (activity as? MainActivity)?.navigateTo("anime") }
-
+        binding.homePlannedAnimeBrowseButton.setOnClickListener { (activity as? MainActivity)?.navigateTo("anime")
+  }
         initRecyclerView(
             model.getMissingSequels(),
             binding.homeMissingSequelsContainer,
@@ -304,12 +308,12 @@ class HomeFragment : Fragment() {
         model.getUserStatus().observe(viewLifecycleOwner) {
             binding.homeUserStatusRecyclerView.visibility = View.GONE
             if (it != null) {
-                if (it.isNotEmpty()) {
+        if (it.isNotEmpty()) {
                     PrefManager.getLiveVal(PrefName.RefreshStatus, false).apply {
                         asLiveBool()
                         observe(viewLifecycleOwner) { _ ->
                             binding.homeUserStatusRecyclerView.adapter = UserStatusAdapter(it)
-                        }
+                         }
                     }
                     binding.homeUserStatusRecyclerView.layoutManager = LinearLayoutManager(
                         requireContext(), LinearLayoutManager.HORIZONTAL, false
@@ -317,7 +321,8 @@ class HomeFragment : Fragment() {
                     binding.homeUserStatusRecyclerView.visibility = View.VISIBLE
                     binding.homeUserStatusRecyclerView.layoutAnimation =
                         LayoutAnimationController(setSlideIn(), 0.25f)
-                } else {
+                 }
+        else {
                     binding.homeUserStatusContainer.visibility = View.GONE
                 }
                 binding.homeUserStatusProgressBar.visibility = View.GONE
@@ -328,7 +333,7 @@ class HomeFragment : Fragment() {
         binding.homeHiddenItemsContainer.visibility = View.GONE
         model.getHidden().observe(viewLifecycleOwner) {
             if (it != null) {
-                if (it.isNotEmpty()) {
+        if (it.isNotEmpty()) {
                     binding.homeHiddenItemsRecyclerView.adapter =
                         MediaAdaptor(0, it, requireActivity())
                     binding.homeHiddenItemsRecyclerView.layoutManager = LinearLayoutManager(
@@ -347,17 +352,19 @@ class HomeFragment : Fragment() {
                             Intent(requireActivity(), MediaListViewActivity::class.java)
                                 .putExtra("title", getString(R.string.hidden)), null
                         )
-                    }
+                     }
                     binding.homeHiddenItemsTitle.setOnLongClickListener {
                         binding.homeHiddenItemsContainer.visibility = View.GONE
                         true
                     }
-                } else {
+                }
+        else {
                     binding.homeContinueWatch.setOnLongClickListener {
                         snackString(getString(R.string.no_hidden_items)); true
                     }
                 }
-            } else {
+            }
+        else {
                 binding.homeContinueWatch.setOnLongClickListener {
                     snackString(getString(R.string.no_hidden_items)); true
                 }
@@ -374,8 +381,8 @@ class HomeFragment : Fragment() {
         // Wired directly here — no manual plumbing required in adapters.
         view.viewTreeObserver.addOnGlobalFocusChangeListener { _, newFocus ->
             if (_binding == null || newFocus == null) return@addOnGlobalFocusChangeListener
-            val bannerMode: Int = PrefManager.getVal(PrefName.HomeBannerMode)
-            if (bannerMode != 2) return@addOnGlobalFocusChangeListener  // NAVIGATING = 2
+            val bannerMode: Int = PrefManager.getVal(PrefName.HomeBannerMode);
+        if (bannerMode != 2) return@addOnGlobalFocusChangeListener  // NAVIGATING = 2
 
             // Walk up the view tree to find the ancestor RecyclerView and the
             // direct child of it (the card item) that received focus.
@@ -384,9 +391,9 @@ class HomeFragment : Fragment() {
             var itemView: View = newFocus
 
             while (currentView.parent != null) {
-                val parent = currentView.parent
+        val parent = currentView.parent
                 if (parent is RecyclerView) {
-                    parentRv = parent
+        parentRv = parent
                     itemView = currentView
                     break
                 }
@@ -394,11 +401,11 @@ class HomeFragment : Fragment() {
             }
 
             if (parentRv != null) {
-                val pos = parentRv.getChildAdapterPosition(itemView)
-                val media = rvDataMap[parentRv]?.getOrNull(pos)
-                if (media != null && media.id != navBannerCurrentMediaId) {
-                    updateNavigatingBanner(media)
-                }
+        val pos = parentRv.getChildAdapterPosition(itemView)
+                val media = rvDataMap[parentRv]?.getOrNull(pos);
+        if (media != null && media.id != navBannerCurrentMediaId) {
+        updateNavigatingBanner(media)
+                 }
             }
         }
 
@@ -408,24 +415,30 @@ class HomeFragment : Fragment() {
         M
         live.observe(viewLifecycleOwner) {
             if (it && !running) {
-                running = true
+        running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
                         if (Anilist.token != null) {
-                            if (MAL.token != null && MAL.episodesWatched == null) {
-                                tryWithSuspend { MAL.query.getUserData() }
+        if (MAL.token != null && MAL.episodesWatched == null) {
+                                tryWithSuspend { MAL.query.getUserData()
+ }
                             }
-                            withContext(Dispatchers.Main) { load() }
-                        } else {
+                            withContext(Dispatchers.Main) { load()
+ }
+                        }
+        else {
                             Anilist.userid =
                                 PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
-                                    ?.toIntOrNull()
-                            if (Anilist.userid == null) {
-                                withContext(Dispatchers.Main) {
-                                    getUserId(requireContext()) { load() }
+                                    ?.toIntOrNull();
+        if (Anilist.userid == null) {
+        withContext(Dispatchers.Main) {
+                                    getUserId(requireContext()) { load()
+ }
                                 }
-                            } else {
-                                getUserId(requireContext()) { load() }
+                            }
+        else {
+                                getUserId(requireContext()) { load()
+ }
                             }
                         }
                         model.loaded = true
@@ -434,7 +447,7 @@ class HomeFragment : Fragment() {
                     if (Anilist.anilistDisabledSignal && !PrefManager.getVal<Boolean>(PrefName.RescueMode)) {
                         withContext(Dispatchers.Main) {
                             if (isAdded && _binding != null) {
-                                requireContext().customAlertDialog().apply {
+        requireContext().customAlertDialog().apply {
                                     setTitle(R.string.rescue_mode_prompt_title)
                                     setMessage(R.string.rescue_mode_prompt_message)
                                     setPosButton(R.string.rescue_mode_enable) {
@@ -446,18 +459,18 @@ class HomeFragment : Fragment() {
                                         activity?.overridePendingTransition(0, 0)
                                         activity?.finish()
                                         activity?.overridePendingTransition(0, 0)
-                                    }
+                                     }
                                     setNegButton(R.string.no)
                                     show()
-                                }
+                                 }
                             }
                         }
                     }
 
                     var empty = true
                     val homeLayoutShow: List<Boolean> = PrefManager.getVal(PrefName.HomeLayout)
-                    var homeLayoutOrder: List<Int> = PrefManager.getVal(PrefName.HomeLayoutOrder)
-                    if (homeLayoutOrder.isEmpty()) homeLayoutOrder = (0..7).toList()
+                    var homeLayoutOrder: List<Int> = PrefManager.getVal(PrefName.HomeLayoutOrder);
+        if (homeLayoutOrder.isEmpty()) homeLayoutOrder = (0..7).toList()
 
                     val containers = listOf(
                         binding.homeContinueWatchingContainer,
@@ -474,16 +487,17 @@ class HomeFragment : Fragment() {
                         containers.indices.forEach { i ->
                             if (homeLayoutShow.getOrElse(i) { true }) {
                                 empty = false
-                            } else {
+                            }
+        else {
                                 containers[i].visibility = View.GONE
                             }
                         }
                         var insertIndex =
                             binding.homeContainer.indexOfChild(binding.homeHiddenItemsContainer) + 1
                         homeLayoutOrder.forEach { i ->
-                            val container = containers.getOrNull(i)
-                            if (container != null) {
-                                binding.homeContainer.removeView(container)
+                            val container = containers.getOrNull(i);
+        if (container != null) {
+        binding.homeContainer.removeView(container)
                                 binding.homeContainer.addView(container, insertIndex)
                                 insertIndex++
                             }
@@ -498,13 +512,13 @@ class HomeFragment : Fragment() {
                     val loadPopular   = async(Dispatchers.IO) { 
         m
                     if (!rescueMode) {
-                        val initUserStatus = async(Dispatchers.IO) { 
+        val initUserStatus = async(Dispatchers.IO) { 
         m
                         awaitAll(initHomePage, initUserStatus, setListImages, loadPopular)
-                    } else {
+                     }
+        else {
                         awaitAll(initHomePage, setListImages, loadPopular)
-                    }
-
+                      }
                     withContext(Dispatchers.Main) {
                         model.empty.postValue(empty)
                         binding.homeHiddenItemsContainer.visibility = View.GONE
@@ -537,17 +551,18 @@ class HomeFragment : Fragment() {
         b.homeNavigatingBannerContainer.visibility = View.GONE
 
         when (mode) {
-            0 -> { // CAROUSEL — visibility toggled by initHeroCarousel / popular data arriving
+        0 -> { // CAROUSEL — visibility toggled by initHeroCarousel / popular data arriving
                 b.homeHeroCarouselContainer.visibility = View.VISIBLE
             }
             1 -> { // PROFILE
                 if (bannerAnimations) {
-                    b.homeUserBg.visibility = View.VISIBLE
+        b.homeUserBg.visibility = View.VISIBLE
                     blurImage(b.homeUserBg, bannerUrl)
-                } else {
+                 }
+        else {
                     b.homeUserBgNoKen.visibility = View.VISIBLE
                     blurImage(b.homeUserBgNoKen, bannerUrl)
-                }
+                 }
             }
             2 -> { // NAVIGATING
                 b.homeNavigatingBannerContainer.visibility = View.VISIBLE
@@ -609,18 +624,20 @@ class HomeFragment : Fragment() {
             getString(R.string.continue_watching_short)
         else
             getString(R.string.watch_now)
-        b.navBannerWatchBtn.setOnClickListener { openMediaDetail(media) }
-
+        b.navBannerWatchBtn.setOnClickListener { openMediaDetail(media)
+  
+}
         // ── TMDB logo art (async, replaces text title when available) ─────────
         lifecycleScope.launch(Dispatchers.IO) {
             val logoUrl = TmdbApi.getLogoUrl(media.id, media.anime != null)
             withContext(Dispatchers.Main) {
                 if (_binding == null || navBannerCurrentMediaId != media.id) return@withContext
                 if (logoUrl != null) {
-                    binding.navBannerLogo.loadImage(logoUrl)
+        binding.navBannerLogo.loadImage(logoUrl)
                     binding.navBannerLogo.visibility  = View.VISIBLE
                     binding.navBannerTitle.visibility = View.GONE
-                } else {
+                }
+        else {
                     binding.navBannerLogo.visibility  = View.GONE
                     binding.navBannerTitle.visibility = View.VISIBLE
                 }
@@ -636,7 +653,8 @@ class HomeFragment : Fragment() {
         heroCarouselAdapter = HeroCarouselAdapter(
             activity       = requireActivity(),
             mediaList      = popularAllTime.take(15),
-            onWatchClicked = { media -> openMediaDetail(media) }
+            onWatchClicked = { media -> openMediaDetail(media)
+ }
         )
         binding.homeHeroViewPager.apply {
             adapter            = heroCarouselAdapter
@@ -646,7 +664,7 @@ class HomeFragment : Fragment() {
             getChildAt(0)?.setOnKeyListener { _, keyCode, event ->
                 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false;
                 when (keyCode) {
-                    KeyEvent.KEYCODE_DPAD_RIGHT -> { val next = (currentItem + 1).coerceAtMost(heroCarouselAdapter!!.itemCount - 1); setCurrentItem(next, true); true }
+        KeyEvent.KEYCODE_DPAD_RIGHT -> { val next = (currentItem + 1).coerceAtMost(heroCarouselAdapter!!.itemCount - 1); setCurrentItem(next, true); true }
                     KeyEvent.KEYCODE_DPAD_LEFT -> { val prev = (currentItem - 1).coerceAtLeast(0); setCurrentItem(prev, true); true }
                     else -> false
                 }
@@ -654,8 +672,7 @@ class HomeFragment : Fragment() {
         }
         heroCarouselAdapter!!.startAutoAdvance(binding.homeHeroViewPager)
         binding.homeHeroDotIndicator?.setViewPager2(binding.homeHeroViewPager)
-    }
-
+      }
     private fun openMediaDetail(media: Media) {
         ContextCompat.startActivity(
             requireContext(),
@@ -663,8 +680,7 @@ class HomeFragment : Fragment() {
                 .putExtra("media", media),
             null
         )
-    }
-
+      }
     // ── initRecyclerView helper ───────────────────────────────────────────────
 
     private fun initRecyclerView(
@@ -684,7 +700,7 @@ class HomeFragment : Fragment() {
         mode.observe(viewLifecycleOwner) {
             recyclerView.visibility = View.GONE
             if (it != null) {
-                if (it.isNotEmpty()) {
+        if (it.isNotEmpty()) {
                     recyclerView.adapter = MediaAdaptor(0, it, requireActivity())
                     recyclerView.layoutManager = LinearLayoutManager(
                         requireContext(), LinearLayoutManager.HORIZONTAL, false
@@ -698,11 +714,12 @@ class HomeFragment : Fragment() {
                                 .putExtra("title", string),
                             null
                         )
-                    }
+                     }
                     recyclerView.visibility = View.VISIBLE
                     recyclerView.layoutAnimation =
                         LayoutAnimationController(setSlideIn(), 0.25f)
-                } else {
+                 }
+        else {
                     empty.visibility = View.VISIBLE
                 }
                 more.visibility = View.VISIBLE
@@ -715,14 +732,14 @@ class HomeFragment : Fragment() {
     }
 
     override fun onResume() {
-        if (!model.loaded) Refresh.activity[1]!!.postValue(true)
+        if (!model.loaded) Refresh.activity[1]!!.postValue(true);
         if (_binding != null) {
-            val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
+        val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
             binding.homeNotificationCount.isVisible = !rescueMode
                 && Anilist.unreadNotificationCount > 0
                 && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
-        }
+         }
         super.onResume()
-    }
+     }
 }

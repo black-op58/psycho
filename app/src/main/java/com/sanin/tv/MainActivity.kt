@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity() {
             NavigationPills(
                 currentRoute = currentRoute,
                 onNavigate   = { route -> navigateTo(route) },
-                onBack       = { onBackPressedDispatcher.onBackPressed() }
+                onBack       = { onBackPressedDispatcher.onBackPressed()
+ }
             )
-        }
-
+          }
         // Mount the right side rail overlay — covers the whole screen above everything
         findViewById<ComposeView>(R.id.sideRailCompose).setContent {
             val sideRailVisible by navViewModel.sideRailVisible.collectAsState()
@@ -53,14 +53,14 @@ class MainActivity : AppCompatActivity() {
                 visible    = sideRailVisible,
                 avatarUrl  = avatarUrl,
                 username   = username,
-                onDismiss  = { navViewModel.hideSideRail() }
+                onDismiss  = { navViewModel.hideSideRail()
+ }
             )
-        }
-
+          }
         // Load the default tab on first launch only
         if (savedInstanceState == null) {
-            navigateTo("home")
-        }
+        navigateTo("home")
+         }
     }
 
     override fun onResume() {
@@ -68,8 +68,7 @@ class MainActivity : AppCompatActivity() {
         // Keep the notification badge and user avatar/name up to date
         navViewModel.updateNotificationCount(Anilist.unreadNotificationCount)
         navViewModel.updateUserInfo(Anilist.avatar, Anilist.username)
-    }
-
+      }
     /**
      * Navigate to one of the four main tabs.
      * Updates the NavPills highlight and swaps the fragment in [R.id.fragmentContainer].
@@ -78,16 +77,15 @@ class MainActivity : AppCompatActivity() {
         navViewModel.setRoute(route)
 
         val fragment: Fragment = when (route) {
-            "home"    -> HomeFragment()
+        "home"    -> HomeFragment()
             "anime"   -> AnimeFragment()
             "discovery"  -> SearchFragment()
             "library" -> LibraryFragment()
             else      -> HomeFragment()
-        }
-
+          }
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragmentContainer, fragment, route)
-        }
+         }
     }
 }

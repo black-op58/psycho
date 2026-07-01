@@ -8,14 +8,22 @@ class SubscriptionNotificationWorker(appContext: Context, workerParams: WorkerPa
     override suspend 
 fun doWork(): Result {        
         L
-if (SubscriptionAppLockHelper.isAppLocked()) {            Logger.log("SubscriptionNotificationWorker: doWork skipped (calculator lock enabled)")
-return Result.success()        }
-if (System.currentTimeMillis() - lastCheck < 60000) {            Logger.log("SubscriptionNotificationWorker: doWork skipped")
-return Result.success()        }
+if (SubscriptionAppLockHelper.isAppLocked()) {
+        Logger.log("SubscriptionNotificationWorker: doWork skipped (calculator lock enabled)")
+return Result.success()
+        }
+if (System.currentTimeMillis() - lastCheck < 60000) {
+        Logger.log("SubscriptionNotificationWorker: doWork skipped")
+return Result.success()
+        }
 lastCheck = System.currentTimeMillis()
-return if (SubscriptionNotificationTask().execute(applicationContext)) {            Result.success()
-} else {            Logger.log("SubscriptionNotificationWorker: doWork failed")
-        Result.retry()        }
+return if (SubscriptionNotificationTask().execute(applicationContext)) {
+        Result.success()
+ }
+        else {
+        Logger.log("SubscriptionNotificationWorker: doWork failed")
+        Result.retry()
+        }
 }
 
 companion object {

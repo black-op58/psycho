@@ -26,8 +26,8 @@ class SelectorDialogFragment : DialogFragment() {
             setOnItemClickListener { _, _, position, _ ->
                 onSelected?.invoke(position)
                 dismiss()
-            }
+             }
         }
         return view ?: super.onCreateView(inflater, container, savedInstanceState)
-    }
+     }
 }

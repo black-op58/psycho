@@ -15,8 +15,8 @@ val binding: ItemDeveloperBinding) :        RecyclerView.ViewHolder(binding.root
 }
 
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeveloperViewHolder {
-return DeveloperViewHolder(            ItemDeveloperBinding.inflate(                LayoutInflater.from(parent.context),                parent,                false            )        )    }
-
+return DeveloperViewHolder(            ItemDeveloperBinding.inflate(                LayoutInflater.from(parent.context),                parent,                false            )        )
+     }
 override fun onBindViewHolder(holder: DeveloperViewHolder, position: Int) {
     val b = holder.binding        setAnimation(b.root.context, b.root)        
 val dev = developers[position]        b.devName.text = dev.name        b.devProfile.loadImage(dev.pfp)        b.devRole.text = dev.role    }

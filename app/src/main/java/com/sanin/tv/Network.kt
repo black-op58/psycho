@@ -38,8 +38,8 @@ lateinit var defaultHeaders: Map<String, String>
 lateinit var okHttpClient: OkHttpClient
 lateinit var client: Requests
 fun initializeNetwork() {
-    val networkHelper = Injekt.get<NetworkHelper>()    defaultHeaders = mapOf(        "User-Agent" to                defaultUserAgentProvider()                    .format(Build.VERSION.RELEASE, Build.MODEL)    )    okHttpClient = networkHelper.client    client = Requests(        networkHelper.client,        defaultHeaders,        defaultCacheTime = 6,        defaultCacheTimeUnit = TimeUnit.HOURS,        responseParser = Mapper    )}
-
+    val networkHelper = Injekt.get<NetworkHelper>()    defaultHeaders = mapOf(        "User-Agent" to                defaultUserAgentProvider()                    .format(Build.VERSION.RELEASE, Build.MODEL)    )    okHttpClient = networkHelper.client    client = Requests(        networkHelper.client,        defaultHeaders,        defaultCacheTime = 6,        defaultCacheTimeUnit = TimeUnit.HOURS,        responseParser = Mapper    )
+ }
 object Mapper : ResponseParser {    
 @OptIn(ExperimentalSerializationApi::class)    
 val json = Json {        
@@ -47,14 +47,17 @@ val json = Json {
 
 @OptIn(InternalSerializationApi::class)    
 override fun <T : Any> parse(text: String, kClass: KClass<T>): T {
-return json.decodeFromString(kClass.serializer(), text)    }
-
+return json.decodeFromString(kClass.serializer(), text)
+     }
 override fun <T : Any> parseSafe(text: String, kClass: KClass<T>): T? {
-return tryWith {            parse(text, kClass)        }
+return tryWith {
+        parse(text, kClass)
+        }
 }
 
 override fun writeValueAsString(obj: Any): String {
-return json.encodeToString(obj)    }
+return json.encodeToString(obj)
+    }
 inline
 fun <reified T> parse(text: String): T {
 return json.decodeFromString(text)    }}/** * Performs parallel processing of collection items without blocking threads. * Each operation runs in its own coroutine on the specified dispatcher. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of results in the same order as the original collection */suspend 
@@ -72,22 +75,35 @@ val stackTrace: String = sw.toString()
 if (post) {
 if (snackbar)
         snackString(e.localizedMessage, null, stackTrace)
-else            toast(e.localizedMessage)    }
-e.printStackTrace()    Logger.log(e)}
-
+else            toast(e.localizedMessage)
+    }
+e.printStackTrace()    Logger.log(e)
+ }
 fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T): T? {
-return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null
-    }}
+return try {
+        call.invoke()
+    }
+        catch (e: Throwable) {
+        logError(e, post, snackbar)        null
+    }
+    }
 suspend fun <T> tryWithSuspend(    post: Boolean = false,    snackbar: Boolean = true,    call: suspend () -> T): T? {
-return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null
-    } catch (e: CancellationException) {        null    }}/** * A url, which can also have headers * **/
+return try {
+        call.invoke()
+    }
+        catch (e: Throwable) {
+        logError(e, post, snackbar)        null
+    }
+        catch (e: CancellationException) {
+        null    }}/** * A url, which can also have headers * **/
 data class FileUrl(    
 var url: String,    
 var headers: Map<String, String> = mapOf()) : Serializable {    
-companion object {        operator 
+companion object {
+        operator 
 fun get(url: String?, headers: Map<String, String> = mapOf()): FileUrl? {
-return FileUrl(url ?: return null, headers)        }
-
+return FileUrl(url ?: return null, headers)
+         }
 private const val serialVersionUID = 1L    }}//Credits to leg
 data class Lazier<T>(    
 val factory: () -> T,    
@@ -97,7 +113,8 @@ val lClass: KFunction<T>? = null) {
         f
 
 fun <T> lazyList(vararg objects: Pair<String, () -> T>): List<Lazier<T>> {
-return objects.map {        Lazier(it.second, it.first)    }}
+return objects.map {
+        Lazier(it.second, it.first)    }}
 
 fun <T> T.printIt(pre: String = ""): T {    
         p
@@ -115,10 +132,11 @@ val latch = CountDownLatch(1)    webViewDialog.callback = {
 val fragmentManager =        (currContext() as FragmentActivity?)?.supportFragmentManager ?: return null    webViewDialog.show(fragmentManager, "web-view")    delay(0)    latch.await(2, TimeUnit.MINUTES)
 return map}
 suspend fun webViewInterface(type: String, url: FileUrl): Map<String, String>? {
-    val webViewDialog: WebViewBottomDialog = when (type) {        
+    val webViewDialog: WebViewBottomDialog = when (type) {
         "
 else -> return null    }
-return webViewInterface(webViewDialog)}
+return webViewInterface(webViewDialog)
+}
 suspend fun webViewInterface(type: String, url: String): Map<String, String>? {
 return webViewInterface(type, FileUrl(url))
-}
+  }

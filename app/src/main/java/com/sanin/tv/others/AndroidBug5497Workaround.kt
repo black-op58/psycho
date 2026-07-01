@@ -11,7 +11,8 @@ private var usableHeightPrevious = 0
 private val frameLayoutParams: FrameLayout.LayoutParams    init {
     val content: FrameLayout = activity.findViewById(android.R.id.content);
         mChildOfContent = content.getChildAt(0)
-        mChildOfContent.viewTreeObserver.addOnGlobalLayoutListener { possiblyResizeChildOfContent() }
+        mChildOfContent.viewTreeObserver.addOnGlobalLayoutListener { possiblyResizeChildOfContent()
+ }
     frameLayoutParams = mChildOfContent.layoutParams as FrameLayout.LayoutParams    }
 
 private fun possiblyResizeChildOfContent() {
@@ -19,8 +20,10 @@ private fun possiblyResizeChildOfContent() {
 if (usableHeightNow != usableHeightPrevious) {
     val usableHeightSansKeyboard = mChildOfContent.rootView.height
 val heightDifference = usableHeightSansKeyboard - usableHeightNow
-if (heightDifference > usableHeightSansKeyboard / 4) {                // keyboard probably just became visible                callback.invoke(true)                frameLayoutParams.height = usableHeightSansKeyboard - heightDifference
-} else {                // keyboard probably just became hidden                callback.invoke(false)                frameLayoutParams.height = usableHeightSansKeyboard
+if (heightDifference > usableHeightSansKeyboard / 4) {
+        // keyboard probably just became visible                callback.invoke(true)                frameLayoutParams.height = usableHeightSansKeyboard - heightDifference
+}
+        else {                // keyboard probably just became hidden                callback.invoke(false)                frameLayoutParams.height = usableHeightSansKeyboard
             }
 mChildOfContent.requestLayout();
         usableHeightPrevious = usableHeightNow}
@@ -34,4 +37,5 @@ return r.bottom    }
 companion object {        /**         * Called on an Activity after the content view has been set.         */        
 fun assistActivity(activity: Activity, callback: (Boolean) -> Unit) {            
         A
-}}
+}
+}

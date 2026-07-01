@@ -69,18 +69,15 @@ object StreakManager {
         PrefManager.init(context)
         ensureNotBroken(context)
         return PrefManager.getCustomVal(KEY_CURRENT, 0, Int::class.java)
-    }
-
+      }
     fun getLongestStreak(context: Context): Int {
         PrefManager.init(context)
         return PrefManager.getCustomVal(KEY_LONGEST, 0, Int::class.java)
-    }
-
+      }
     fun getTotalWatchDays(context: Context): Int {
         PrefManager.init(context)
         return PrefManager.getCustomVal(KEY_TOTAL_DAYS, 0, Int::class.java)
-    }
-
+      }
     /**
      * Returns a milestone message if [newStreak] hits a notable number,
      * or null if no milestone was just reached.
@@ -102,13 +99,13 @@ object StreakManager {
     /** Resets streak to 0 if more than one day has passed since last watch. */
     private fun ensureNotBroken(context: Context) {
         val last    = PrefManager.getCustomVal(KEY_LAST_DATE, "", String::class.java)
-        val current = PrefManager.getCustomVal(KEY_CURRENT, 0, Int::class.java)
+        val current = PrefManager.getCustomVal(KEY_CURRENT, 0, Int::class.java);
         if (current > 0 && last.isNotBlank() && last != todayStr() && last != yesterday()) {
             PrefManager.setCustomVal(KEY_CURRENT, 0)
             Logger.log("StreakManager: streak broken (last=$last)")
-        }
+         }
     }
 
     private fun todayStr(): String     = dateFmt.format(Date())
     private fun yesterday(): String    = dateFmt.format(Date(System.currentTimeMillis() - 86_400_000L))
-}
+  }

@@ -62,8 +62,9 @@ class LocalAnimeSource(
             ?: return@withIOContext AnimesPage(emptyList(), false)
 
         val lastModifiedLimit = if (filters === LATEST_FILTERS) {
-            System.currentTimeMillis() - LATEST_THRESHOLD
-        } else {
+        System.currentTimeMillis() - LATEST_THRESHOLD
+        }
+        else {
             0L
         }
         
@@ -71,36 +72,44 @@ class LocalAnimeSource(
         val localAnimeDir = localDir.findFile("anime") ?: localDir
 
         var animeDirs = localAnimeDir.listFiles()
-            .filter { it.isDirectory && !it.name.orEmpty().startsWith('.') }
+            .filter { it.isDirectory && !it.name.orEmpty().startsWith('.')
+ }
             .distinctBy { it.name }
             .filter {
                 if (lastModifiedLimit == 0L && query.isBlank()) {
                     true
                 } else if (lastModifiedLimit == 0L) {
-                    it.name.orEmpty().contains(query, ignoreCase = true)
-                } else {
+        it.name.orEmpty().contains(query, ignoreCase = true)
+                 }
+        else {
                     it.lastModified() >= lastModifiedLimit
                 }
             }
 
         filters.forEach { filter ->
             when (filter) {
-                is AnimeOrderBy.Popular -> {
+        is AnimeOrderBy.Popular -> {
                     animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedWith(
-                            compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() }
+        animeDirs.sortedWith(
+                            compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty()
+ }
                         )
-                    } else {
+                     }
+        else {
                         animeDirs.sortedWith(
-                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() }
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty()
+ }
                         )
-                    }
+                     }
                 }
                 is AnimeOrderBy.Latest -> {
                     animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedBy { it.lastModified() }
-                    } else {
-                        animeDirs.sortedByDescending { it.lastModified() }
+        animeDirs.sortedBy { it.lastModified()
+ }
+                    }
+        else {
+                        animeDirs.sortedByDescending { it.lastModified()
+ }
                     }
                 }
                 else -> { /* Do nothing */ }
@@ -113,22 +122,22 @@ class LocalAnimeSource(
                 title = animeDir.name.orEmpty()
                 url = animeDir.name.orEmpty()
 
-                val coverFile = findCoverFile(animeDir)
-                if (coverFile != null) {
-                    thumbnail_url = coverFile.uri.toString()
-                } else {
+                val coverFile = findCoverFile(animeDir);
+        if (coverFile != null) {
+        thumbnail_url = coverFile.uri.toString()
+                 }
+        else {
                     val firstVideo = animeDir.listFiles().firstOrNull { 
         !
                     if (firstVideo != null) {
-                        thumbnail_url = firstVideo.uri.toString()
-                    }
+        thumbnail_url = firstVideo.uri.toString()
+                     }
                 }
             }
         }
 
         AnimesPage(animes, false)
-    }
-
+      }
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getPopularAnime"))
     override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
 
@@ -143,22 +152,23 @@ class LocalAnimeSource(
     ): Observable<AnimesPage> {
         return runBlocking {
             Observable.just(getSearchAnime(page, query, filters))
-        }
+         }
     }
 
     // Anime details related
     override suspend fun getAnimeDetails(anime: SAnime): SAnime = withIOContext {
         val animeDir = getAnimeDir(anime.url, context) ?: return@withIOContext anime
 
-        val coverFile = findCoverFile(animeDir)
+        val coverFile = findCoverFile(animeDir);
         if (coverFile != null) {
-            anime.thumbnail_url = coverFile.uri.toString()
-        } else {
+        anime.thumbnail_url = coverFile.uri.toString()
+         }
+        else {
             val firstVideo = animeDir.listFiles().firstOrNull { 
         !
             if (firstVideo != null) {
-                anime.thumbnail_url = firstVideo.uri.toString()
-            }
+        anime.thumbnail_url = firstVideo.uri.toString()
+             }
         }
 
         // details.json
@@ -172,11 +182,13 @@ class LocalAnimeSource(
                 details.author?.let { anime.author = it }
                 details.artist?.let { anime.artist = it }
                 details.description?.let { anime.description = it }
-                details.genre?.let { anime.genre = it.joinToString() }
+                details.genre?.let { anime.genre = it.joinToString()
+ }
                 details.status?.let { anime.status = it }
-            } catch (e: Exception) {
-                Logger.log("Error parsing details.json for ${anime.url}: ${e.message}")
             }
+        catch (e: Exception) {
+        Logger.log("Error parsing details.json for ${anime.url}: ${e.message}")
+             }
         }
 
         return@withIOContext anime
@@ -193,14 +205,16 @@ class LocalAnimeSource(
                 val text = inputStream?.bufferedReader()?.readText() ?: return@let null
                 inputStream.close()
                 json.decodeFromString<List<EpisodeDetails>>(text)
-            }
-        } catch (e: Exception) {
-            Logger.log("Error parsing episodes.json for ${anime.url}: ${e.message}")
+             }
+        }
+        catch (e: Exception) {
+        Logger.log("Error parsing episodes.json for ${anime.url}: ${e.message}")
             null
         }
 
         val episodes = animeDir.listFiles()
-            .filter { !it.name.orEmpty().startsWith('.') && isSupportedVideo(it) }
+            .filter { !it.name.orEmpty().startsWith('.') && isSupportedVideo(it)
+ }
             .map { episodeFile ->
                 SEpisode.create().apply {
                     url = "${anime.url}/${episodeFile.name.orEmpty()}"
@@ -218,15 +232,16 @@ class LocalAnimeSource(
                             it.episode_number.equalsTo(episode_number)
                         }?.also { data ->
                             data.name?.also { name = it }
-                            data.date_upload?.also { date_upload = parseDate(it) }
+                            data.date_upload?.also { date_upload = parseDate(it)
+ }
                             scanlator = data.scanlator
                         }
                     }
                 }
             }
             .sortedWith { e1, e2 ->
-                val e = e2.episode_number.compareTo(e1.episode_number)
-                if (e == 0) e2.name.compareTo(e1.name, ignoreCase = true) else e
+                val e = e2.episode_number.compareTo(e1.episode_number);
+        if (e == 0) e2.name.compareTo(e1.name, ignoreCase = true) else e
             }
 
         episodes
@@ -243,7 +258,7 @@ class LocalAnimeSource(
         throw UnsupportedOperationException("Unused")
 
     fun getVideoUri(episode: SEpisode): Uri? {
-        val parts = episode.url.split("/", limit = 2)
+        val parts = episode.url.split("/", limit = 2);
         if (parts.size < 2) return null
         val animeDir = getAnimeDir(parts[0], context) ?: return null
         val videoFile = animeDir.findFile(parts[1])
@@ -259,15 +274,17 @@ class LocalAnimeSource(
 
     private fun isSupportedVideo(file: DocumentFile): Boolean {
         val name = file.name.orEmpty().lowercase()
-        return SUPPORTED_VIDEO_EXTENSIONS.any { name.endsWith(".$it") }
+        return SUPPORTED_VIDEO_EXTENSIONS.any { name.endsWith(".$it")
+ }
     }
 
     private fun parseDate(isoDate: String): Long {
         return try {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
                 .parse(isoDate)?.time ?: 0L
-        } catch (e: Exception) {
-            0L
+        }
+        catch (e: Exception) {
+        0L
         }
     }
 
@@ -287,18 +304,18 @@ class LocalAnimeSource(
 
         fun getBaseDirectory(context: Context): DocumentFile? {
             val uriString = com.sanin.tv.settings.saving.PrefManager
-                .getVal<String>(com.sanin.tv.settings.saving.PrefName.LocalDir)
-            if (uriString.isBlank()) return null
+                .getVal<String>(com.sanin.tv.settings.saving.PrefName.LocalDir);
+        if (uriString.isBlank()) return null
             val uri = Uri.parse(uriString)
             return DocumentFile.fromTreeUri(context, uri)
-        }
-
+          }
         private fun getAnimeDir(animeUrl: String, context: Context): DocumentFile? {
             val baseDir = getBaseDirectory(context) ?: return null
             val localDir = baseDir.findFile("local") ?: baseDir
             val localAnimeDir = localDir.findFile("anime") ?: localDir
             return localAnimeDir.findFile(animeUrl)?.takeIf { it.isDirectory }
-                ?: baseDir.findFile(animeUrl)?.takeIf { it.isDirectory }
+                ?: baseDir.findFile(animeUrl)?.takeIf { it.isDirectory 
+}
         }
     }
 }

@@ -23,8 +23,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
         ThemeManager(this).applyTheme()
         initActivity(this)
-if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {            this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg_inv)            binding.root.fitsSystemWindows = true
-} else {            binding.root.fitsSystemWindows = false            requestWindowFeature(Window.FEATURE_NO_TITLE)
+if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
+        this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg_inv)            binding.root.fitsSystemWindows = true
+}
+        else {
+        binding.root.fitsSystemWindows = false            requestWindowFeature(Window.FEATURE_NO_TITLE)
         hideSystemBarsExtendView()
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight            }}
@@ -41,7 +44,7 @@ val screenWidth = resources.displayMetrics.run {
 val mediaList =            passedMedia ?: intent.getSerialized("media") as? ArrayList<Media> ?: ArrayList()
 if (passedMedia != null) passedMedia = null
 val view = PrefManager.getCustomVal("mediaView", 0)        
-var mediaView: View = when (view) {            
+var mediaView: View = when (view) {
         1
 else -> binding.mediaGrid        }
 mediaView.alpha = 1f
@@ -49,13 +52,17 @@ fun changeView(mode: Int, current: View) {
         m
             binding.mediaRecyclerView.layoutManager = GridLayoutManager(
                 this,
-if (mode == 1) 1 else (screenWidth / 120f).toInt()            )        }
-binding.mediaList.setOnClickListener {            changeView(1, binding.mediaList)}
-binding.mediaGrid.setOnClickListener {            changeView(0, binding.mediaGrid)        }
-
+if (mode == 1) 1 else (screenWidth / 120f).toInt()            )
+        }
+binding.mediaList.setOnClickListener {
+        changeView(1, binding.mediaList)
+}
+binding.mediaGrid.setOnClickListener {
+        changeView(0, binding.mediaGrid)
+         }
 val text = "${intent.getStringExtra("title")} (${mediaList.count()})"        binding.listTitle.text = text        binding.mediaRecyclerView.adapter = MediaAdaptor(view, mediaList, this)        binding.mediaRecyclerView.layoutManager = GridLayoutManager(
             this,
-if (view == 1) 1 else (screenWidth / 120f).toInt()        )    }
-
+if (view == 1) 1 else (screenWidth / 120f).toInt()        )
+     }
 companion object {
     var passedMedia: ArrayList<Media>? = null    }}

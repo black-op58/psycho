@@ -59,31 +59,46 @@ binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMar
 binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
 binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true
         binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()}
+            onBackPressedDispatcher.onBackPressed()
+}
 binding.authorCharactersRecycler.isVisible = false        binding.AuthorCharactersText.isVisible = false        binding.authorCharacterDesc.isVisible = false        character = intent.getSerialized("character") ?: return        binding.characterTitle.text = character.name        banner.loadImage(character.banner)
         binding.characterCoverImage.loadImage(character.image)
         binding.characterFav.setImageResource(
-if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {            ImageViewDialog.newInstance(                this,                character.name,                character.image            )        }
-
+if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {
+        ImageViewDialog.newInstance(                this,                character.name,                character.image            )
+         }
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        
-val link = if (rescueMode) {            
+val link = if (rescueMode) {
         "
-} else {            "https://anilist.co/character/${character.id}"        }
+}
+        else {            "https://anilist.co/character/${character.id}"        }
 binding.characterShare.setOnClickListener {
     val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)
         startActivity(Intent.createChooser(i, character.name))
+         }
+    binding.characterShare.setOnLongClickListener {
+        openLinkInBrowser(link)            true
         }
-    binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true
-        }
-if (!rescueMode) {            lifecycleScope.launch {                withContext(Dispatchers.IO) {                    character.isFav =                        Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)                }
-withContext(Dispatchers.Main) {                    binding.characterFav.setImageResource(
+if (!rescueMode) {
+        lifecycleScope.launch {
+        withContext(Dispatchers.IO) {
+        character.isFav =                        Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
+                }
+withContext(Dispatchers.Main) {
+        binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                    )                }}
-binding.characterFav.setOnClickListener {                lifecycleScope.launch {
-if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)) {                        character.isFav = !character.isFav                        binding.characterFav.setImageResource(
+binding.characterFav.setOnClickListener {
+        lifecycleScope.launch {
+if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)) {
+        character.isFav = !character.isFav                        binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                        )
-} else {                        snackString("Failed to toggle favorite")                    }}
+ }
+        else {
+        snackString("Failed to toggle favorite")                    }}
 }
-} else {            binding.characterFav.visibility = View.GONE        }
+}
+        else {
+        binding.characterFav.visibility = View.GONE        }
 model.getCharacter().observe(this) {
 if (it != null && !loaded) {
     val preservedFavState = character.isFav                character = it                character.isFav = preservedFavState                loaded = true                binding.characterProgress.visibility = View.GONE                binding.characterRecyclerView.visibility = View.VISIBLE
@@ -94,14 +109,17 @@ val gridSize = (screenWidth / 124f).toInt()
 val gridLayoutManager = GridLayoutManager(this, gridSize)                gridLayoutManager.spanSizeLookup = 
 object : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
-return when (position) {                            0 -> gridSize
+return when (position) {
+        0 -> gridSize
 else -> 1                        }}}
 binding.characterRecyclerView.adapter = concatAdaptor                binding.characterRecyclerView.layoutManager = gridLayoutManager}
 }
 
 val live = Refresh.activity.getOrPut(this.hashCode()) { 
         M
-live.observe(this) {            scope.launch(Dispatchers.IO) {                model.loadCharacter(character)}}
+live.observe(this) {
+        scope.launch(Dispatchers.IO) {
+        model.loadCharacter(character)}}
 }
 
 override fun onResume() {        
@@ -114,8 +132,13 @@ val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        bindi
         binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
 if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
-if (percentage >= percent && !isCollapsed) {            isCollapsed = true
-if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg)        }
-if (percentage <= percent && isCollapsed) {            isCollapsed = false
-if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.transparent)        }
-}}
+if (percentage >= percent && !isCollapsed) {
+        isCollapsed = true
+if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg)
+        }
+if (percentage <= percent && isCollapsed) {
+        isCollapsed = false
+if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.transparent)
+        }
+}
+}

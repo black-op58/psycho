@@ -26,7 +26,7 @@ class SyncConflictResolverActivity : AppCompatActivity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, statusBarHeight(), 48, 64)
-        }
+         }
         scroll.addView(root)
         setContentView(scroll)
 
@@ -56,59 +56,56 @@ class SyncConflictResolverActivity : AppCompatActivity() {
 
                 conflicts.forEach { conflict ->
                     root.addView(buildConflictCard(conflict))
-                }
-
+                  }
                 if (conflicts.isEmpty()) {
                     root.addView(TextView(this@SyncConflictResolverActivity).apply {
                         text = "Both AniList and MAL show identical progress for all shared titles."
                         textSize = 13f
                         setPadding(0, 16, 0, 0)
                     })
-                } else {
+                 }
+        else {
     val resolveAllBtn = Button(this@SyncConflictResolverActivity).apply {
                         text = "Resolve All (Use Higher Progress)"
                         setOnClickListener {
                             resolveAll(conflicts, SyncResolution.USE_HIGHER, root)
-                        }
+                         }
                     }
                     root.addView(resolveAllBtn)
-                }
-            } catch (e: Exception) {
-                progress.visibility = View.GONE
+                 }
+            }
+        catch (e: Exception) {
+        progress.visibility = View.GONE
                 subtitle.text = "Error loading conflicts: ${e.message}"
                 snackString("Failed to load conflicts: ${e.message}")
-            }
+             }
         }
     }
 
     private suspend fun loadConflicts(): List<SyncConflict> {
     return emptyList()
-    }
-
+      }
     private fun buildConflictCard(conflict: SyncConflict): View {
     val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, 24, 0, 0)
-        }
-
+          }
         card.addView(TextView(this).apply {
             text = conflict.mediaName
             textSize = 16f
-        })
-
+        });
         if (conflict.hasProgressConflict) {
-            card.addView(TextView(this).apply {
+        card.addView(TextView(this).apply {
                 text = "Progress: AniList=${conflict.anilistProgress}, MAL=${conflict.malProgress}"
                 textSize = 13f
             })
-        }
+         }
         if (conflict.hasStatusConflict) {
-            card.addView(TextView(this).apply {
+        card.addView(TextView(this).apply {
                 text = "Status: AniList=${conflict.anilistStatus}, MAL=${conflict.malStatus}"
                 textSize = 13f
             })
-        }
-
+          }
         val btnRow = LinearLayout(this).apply { 
         o
         card.addView(btnRow)
@@ -124,14 +121,13 @@ class SyncConflictResolverActivity : AppCompatActivity() {
                     lifecycleScope.launch {
     val ok = withContext(Dispatchers.IO) {
                             SyncConflictResolver.resolveConflict(conflict, res)
-                        }
+                         }
                         statusLabel.text = if (ok) "✓ Resolved using $label" else "✗ Failed"
                         if (ok) toast("Resolved: ${conflict.mediaName}")
-                    }
+                     }
                 }
             })
-        }
-
+          }
         addBtn("AniList", SyncResolution.USE_ANILIST)
         addBtn("MAL", SyncResolution.USE_MAL)
         addBtn("Higher", SyncResolution.USE_HIGHER)
@@ -149,7 +145,7 @@ class SyncConflictResolverActivity : AppCompatActivity() {
                 }
             }
             snackString("Resolved $resolved / ${conflicts.size} conflicts")
-        }
+         }
     }
 
     private fun statusBarHeight(): Int {

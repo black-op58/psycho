@@ -6,4 +6,5 @@ class ListViewPagerAdapter(
 private val size: Int,    
 private val calendar: Boolean,    fragment: FragmentActivity) :    FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = size    
-override fun createFragment(position: Int): Fragment =        ListFragment.newInstance(position, calendar)}
+override fun createFragment(position: Int): Fragment =        ListFragment.newInstance(position, calendar)
+}

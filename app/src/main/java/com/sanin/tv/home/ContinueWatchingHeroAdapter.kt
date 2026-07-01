@@ -44,8 +44,7 @@ class ContinueWatchingHeroAdapter(
     fun submitMedia(newMedia: Media?) {
         media = newMedia
         notifyDataSetChanged()
-    }
-
+      }
     override fun getItemCount(): Int = if (media != null) 1 else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder {
@@ -53,10 +52,10 @@ class ContinueWatchingHeroAdapter(
             LayoutInflater.from(parent.context), parent, false
         )
         return HeroViewHolder(binding)
-    }
-
+      }
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
-        media?.let { holder.bind(it) }
+        media?.let { holder.bind(it)
+ }
     }
 
     inner class HeroViewHolder(
@@ -76,17 +75,18 @@ class ContinueWatchingHeroAdapter(
             b.heroCover.loadImage(m.cover)
 
             // Screenshot overlay
-            val showScreenshot = PrefManager.getVal<Boolean>(PrefName.ContinueWatchingShowScreenshot)
-            if (showScreenshot && LastScreenshotManager.exists(context, m.id)) {
+            val showScreenshot = PrefManager.getVal<Boolean>(PrefName.ContinueWatchingShowScreenshot);
+        if (showScreenshot && LastScreenshotManager.exists(context, m.id)) {
                 b.heroScreenshot.isVisible = true
                 scope.launch {
                     val bmp: Bitmap? = withContext(Dispatchers.IO) {
                         LastScreenshotManager.load(context, m.id)
-                    }
+                     }
                     if (bmp != null) b.heroScreenshot.setImageBitmap(bmp)
                     else b.heroScreenshot.isVisible = false
                 }
-            } else {
+            }
+        else {
                 b.heroScreenshot.isVisible = false
             }
 
@@ -99,12 +99,12 @@ class ContinueWatchingHeroAdapter(
             b.heroTitle.text = m.userPreferredName
 
             logoJob = scope.launch {
-                val logoUrl = TmdbApi.getLogoUrl(m.id, m.anime != null)
-                if (!logoUrl.isNullOrBlank()) {
+                val logoUrl = TmdbApi.getLogoUrl(m.id, m.anime != null);
+        if (!logoUrl.isNullOrBlank()) {
                     b.heroLogo.loadImage(logoUrl)
                     b.heroLogo.animate().alpha(1f).setDuration(400).start()
                     b.heroTitle.animate().alpha(0f).setDuration(200).start()
-                }
+                 }
             }
 
             // ── Text ─────────────────────────────────────────────────────
@@ -119,9 +119,10 @@ class ContinueWatchingHeroAdapter(
                                 (totalEps - progress) * epDuration
                              else null
             if (remaining != null && remaining > 0) {
-                b.heroMinutesRemaining.isVisible = true
+        b.heroMinutesRemaining.isVisible = true
                 b.heroMinutesRemaining.text = "~$remaining min remaining"
-            } else {
+            }
+        else {
                 b.heroMinutesRemaining.isVisible = false
             }
 
@@ -129,16 +130,18 @@ class ContinueWatchingHeroAdapter(
             val timeUntilAiring = m.timeUntilAiring
             val nextEpNum       = m.anime?.nextAiringEpisode
             if (timeUntilAiring != null && timeUntilAiring > 0 && nextEpNum != null) {
-                b.heroNextEp.isVisible = true
+        b.heroNextEp.isVisible = true
                 b.heroNextEp.text = "Ep $nextEpNum in ${formatCountdown(timeUntilAiring)}"
-            } else {
+            }
+        else {
                 b.heroNextEp.isVisible = false
             }
 
             // ── Progress bar ──────────────────────────────────────────────
             if (totalEps != null && totalEps > 0) {
-                b.heroProgressBar.progress = ((progress.toFloat() / totalEps) * 100).toInt()
-            } else {
+        b.heroProgressBar.progress = ((progress.toFloat() / totalEps) * 100).toInt()
+             }
+        else {
                 b.heroProgressBar.progress = 0
             }
 
@@ -148,14 +151,15 @@ class ContinueWatchingHeroAdapter(
             b.heroSourceMemory.isVisible = hasMemory
 
             // ── D-pad / click ─────────────────────────────────────────────
-            b.root.setOnClickListener { onResume(m) }
+            b.root.setOnClickListener { onResume(m)
+ }
             b.root.setOnFocusChangeListener { v, hasFocus ->
                 v.animate()
                     .scaleX(if (hasFocus) 1.03f else 1f)
                     .scaleY(if (hasFocus) 1.03f else 1f)
                     .setDuration(150)
                     .start()
-            }
+             }
         }
     }
 

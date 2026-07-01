@@ -63,19 +63,27 @@ class AnilistMutations {
             }
         """.trimIndent()
         val variables = """{
-            ${timezone?.let { "\"timezone\":\"$it\"" } ?: ""}
-            ${titleLanguage?.let { "\"titleLanguage\":\"$it\"" } ?: ""}
-            ${staffNameLanguage?.let { "\"staffNameLanguage\":\"$it\"" } ?: ""}
-            ${activityMergeTime?.let { "\"activityMergeTime\":$it" } ?: ""}
-            ${airingNotifications?.let { "\"airingNotifications\":$it" } ?: ""}
-            ${displayAdultContent?.let { "\"displayAdultContent\":$it" } ?: ""}
-            ${restrictMessagesToFollowing?.let { "\"restrictMessagesToFollowing\":$it" } ?: ""}
-            ${scoreFormat?.let { "\"scoreFormat\":\"$it\"" } ?: ""}
-            ${rowOrder?.let { "\"rowOrder\":\"$it\"" } ?: ""}
+            ${timezone?.let { "\"timezone\":\"$it\"" } ?: ""
+}
+            ${titleLanguage?.let { "\"titleLanguage\":\"$it\"" } ?: ""
+}
+            ${staffNameLanguage?.let { "\"staffNameLanguage\":\"$it\"" } ?: ""
+}
+            ${activityMergeTime?.let { "\"activityMergeTime\":$it" } ?: ""
+}
+            ${airingNotifications?.let { "\"airingNotifications\":$it" } ?: ""
+}
+            ${displayAdultContent?.let { "\"displayAdultContent\":$it" } ?: ""
+}
+            ${restrictMessagesToFollowing?.let { "\"restrictMessagesToFollowing\":$it" } ?: ""
+}
+            ${scoreFormat?.let { "\"scoreFormat\":\"$it\"" } ?: ""
+}
+            ${rowOrder?.let { "\"rowOrder\":\"$it\"" } ?: ""
+}
         }""".trimIndent().replace("\n", "").replace("    ", "").replace(",}", "}")
         executeQuery<JsonObject>(query, variables)
-    }
-
+      }
     suspend fun editList(
         mediaId: Int,
         progress: Int? = null,
@@ -128,23 +136,22 @@ class AnilistMutations {
             }
         """.trimIndent()
         val variables = buildString {
-            append("""{"mediaID":$mediaId""")
-            if (private != null)       append(""","private":$private""")
-            if (progress != null)      append(""","progress":$progress""")
-            if (progressVolumes != null) append(""","progressVolumes":$progressVolumes""")
-            if (scoreRaw != null)      append(""","scoreRaw":$scoreRaw""")
-            if (repeat != null)
-        append(""","repeat":$repeat""")
-            if (notes != null)
-        append(""","notes":"${notes.replace("\n", "\\n")}"""")
-            if (status != null)
-        append(""","status":"$status"""")
-            if (customLists != null)   append(""","customLists":[${customLists.joinToString { "\"$it\"" }}]""")
+            append("""{"mediaID":$mediaId""");
+        if (private != null)       append(""","private":$private""");
+        if (progress != null)      append(""","progress":$progress""");
+        if (progressVolumes != null) append(""","progressVolumes":$progressVolumes""");
+        if (scoreRaw != null)      append(""","scoreRaw":$scoreRaw""");
+        if (repeat != null)
+        append(""","repeat":$repeat""");
+        if (notes != null)
+        append(""","notes":"${notes.replace("\n", "\\n")}"""");
+        if (status != null)
+        append(""","status":"$status"""");
+        if (customLists != null)   append(""","customLists":[${customLists.joinToString { "\"$it\"" }}]""")
             append("}")
-        }
+         }
         executeQuery<JsonObject>(query, variables, show = true)
-    }
-
+      }
     suspend fun deleteList(listId: Int) {
         val query = """
             mutation(${"$"}id: Int) {
@@ -155,8 +162,7 @@ class AnilistMutations {
         """.trimIndent()
         val variables = """{"id":$listId}"""
         executeQuery<JsonObject>(query, variables)
-    }
-
+      }
     suspend fun rateReview(reviewId: Int, rating: String): Query.RateReviewResponse? {
         val query = """
             mutation {
@@ -169,24 +175,21 @@ class AnilistMutations {
             }
         """.trimIndent()
         return executeQuery<Query.RateReviewResponse>(query)
-    }
-
+      }
     suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
         return executeQuery<Query.ToggleFollow>("""
             mutation {
                 ToggleFollow(userId: $id) { id isFollowing isFollower }
             }
         """.trimIndent())
-    }
-
+      }
     suspend fun toggleLike(id: Int, type: String): ToggleLike? {
         return executeQuery<ToggleLike>("""
             mutation Like {
                 ToggleLikeV2(id: $id, type: $type) { __typename }
             }
         """.trimIndent())
-    }
-
+      }
     suspend fun toggleActivitySubscription(activityId: Int, subscribe: Boolean): Boolean {
         val result = executeQuery<JsonObject>("""
             mutation {
@@ -197,8 +200,7 @@ class AnilistMutations {
         """.trimIndent())
         val errors = result?.get("errors") as? JsonArray
         return result != null && errors.isNullOrEmpty()
-    }
-
+      }
     suspend fun postActivity(text: String, edit: Int? = null): String {
         val encodedText = text.stringSanitizer()
         val idPart = if (edit != null) "id: $edit," else ""
@@ -210,8 +212,7 @@ class AnilistMutations {
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
-    }
-
+      }
     suspend fun postMessage(
         userId: Int,
         text: String,
@@ -232,8 +233,7 @@ class AnilistMutations {
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
-    }
-
+      }
     suspend fun postReply(activityId: Int, text: String, edit: Int? = null): String {
         val encodedText = text.stringSanitizer()
         val idPart = if (edit != null) "id: $edit," else ""
@@ -245,8 +245,7 @@ class AnilistMutations {
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
-    }
-
+      }
     suspend fun postReview(summary: String, body: String, mediaId: Int, score: Int): String {
         val encodedSummary = summary.stringSanitizer()
         val encodedBody = body.stringSanitizer()
@@ -263,8 +262,7 @@ class AnilistMutations {
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
-    }
-
+      }
     suspend fun deleteActivityReply(activityId: Int): Boolean {
         val query = """
             mutation { DeleteActivityReply(id: $activityId) { deleted } }
@@ -285,15 +283,16 @@ class AnilistMutations {
         val sb = StringBuilder()
         var i = 0
         while (i < this.length) {
-            val codePoint = this.codePointAt(i)
-            if (codePoint > 0xFFFF) {
-                sb.append("&#").append(codePoint).append(";")
+        val codePoint = this.codePointAt(i);
+        if (codePoint > 0xFFFF) {
+        sb.append("&#").append(codePoint).append(";")
                 i += 2
-            } else {
+            }
+        else {
                 sb.append(this[i])
                 i++
             }
         }
         return Gson().toJson(sb.toString())
-    }
+     }
 }

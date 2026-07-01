@@ -21,7 +21,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
             pos = it.getInt("list");
         calendar = it.getBoolean("calendar")
-        }
+         }
 }
 
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
@@ -42,28 +42,36 @@ if (grid!!) (screenWidth / 120f).toInt() else 1                    )            
 if (calendar) {
     val model: OtherDetailsViewModel by activityViewModels()
         model.getCalendar().observe(viewLifecycleOwner) {
-if (it != null) {                    list = it.values.toList().getOrNull(pos!!)
+if (it != null) {
+        list = it.values.toList().getOrNull(pos!!)
         update()
-                }}
+                 }
+                }
 grid = true
-} else {
+}
+        else {
     val model: ListViewModel by activityViewModels()
         model.getLists().observe(viewLifecycleOwner) {
-if (it != null) {                    list = it.values.toList().getOrNull(pos!!)
+if (it != null) {
+        list = it.values.toList().getOrNull(pos!!)
         update()
-                }}
-model.grid.observe(viewLifecycleOwner) {                grid = it                update()}}
+                 }
+                }
+model.grid.observe(viewLifecycleOwner) {
+        grid = it                update()}}
 }
 
 fun randomOptionClick() {
-    val adapter = binding.listRecyclerView.adapter as MediaAdaptor        adapter.randomOptionClick()    }
-
+    val adapter = binding.listRecyclerView.adapter as MediaAdaptor        adapter.randomOptionClick()
+     }
 companion object {
     fun newInstance(pos: Int, calendar: Boolean = false): ListFragment =            ListFragment().apply {                
         a
-                }}
+                }
+                }
     }
 
 override fun onDestroyView() {        
         s
-    }}
+    }
+    }

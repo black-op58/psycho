@@ -13,21 +13,25 @@ private val maxVolume: Int        get() = audioManager.getStreamMaxVolume(AudioM
 private var oldVolume: Int = 0
 fun setVolume(percentage: Int) {        
         o
-val volume = (maxVolume * percentage) / 100        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)    }
-
+val volume = (maxVolume * percentage) / 100        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)
+     }
 fun playAudio(audio: Int) {        
         m
         mediaPlayer?.setOnCompletionListener {
             setVolume(oldVolume)
         audioManager.abandonAudioFocus(null)
             it.release()
-        }
-mediaPlayer?.setOnPreparedListener {            it.start()}
+         }
+mediaPlayer?.setOnPreparedListener {
+        it.start()
+}
 }
 
 fun stopAudio() {        
         m
-if (it.isPlaying) {                it.stop()            }
+if (it.isPlaying) {
+        it.stop()
+            }
 it.release();
         mediaPlayer = null}
 }
@@ -38,5 +42,6 @@ companion object {
         audioHelper.routeAudioToSpeaker()
             audioHelper.setVolume(90)
             audioHelper.playAudio(audio)
-        }
-    }}
+         }
+    }
+    }

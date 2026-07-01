@@ -16,14 +16,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(binding.root)
         
 val chartOptions = chartOptions
-if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)
+if (chartOptions != null) {
+        chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)
         binding.chartView.aa_drawChartWithChartOptions(chartOptions)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-} else {            toast("No chart data")
+}
+        else {
+        toast("No chart data")
         finish()
-        }
+         }
 }
 
 companion object {
     var chartOptions: AAOptions? = null  // I cba to pass this through an intent    }}
-}}
+}
+}

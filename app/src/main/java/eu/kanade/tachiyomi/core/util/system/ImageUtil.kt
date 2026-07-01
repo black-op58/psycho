@@ -23,26 +23,28 @@ val height = imageBitmap.height
 val width = imageBitmap.width
 val singlePage = Rect(0, 0, width / 2, height)        
 val half = createBitmap(width / 2, height)        
-val part = when (side) {            
+val part = when (side) {
         S
-half.applyCanvas {            drawBitmap(imageBitmap, part, singlePage, null)        }
-
+half.applyCanvas {
+        drawBitmap(imageBitmap, part, singlePage, null)
+         }
 val output = ByteArrayOutputStream()
         half.compress(Bitmap.CompressFormat.JPEG, 100, output)
-return ByteArrayInputStream(output.toByteArray())    }
-
+return ByteArrayInputStream(output.toByteArray())
+     }
 fun rotateImage(imageStream: InputStream, degrees: Float): InputStream {
     val imageBytes = imageStream.readBytes()        
 val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)        
 val rotated = rotateBitMap(imageBitmap, degrees)        
 val output = ByteArrayOutputStream()
         rotated.compress(Bitmap.CompressFormat.JPEG, 100, output)
-return ByteArrayInputStream(output.toByteArray())    }
-
+return ByteArrayInputStream(output.toByteArray())
+     }
 private fun rotateBitMap(bitmap: Bitmap, degrees: Float): Bitmap {
     val matrix = Matrix().apply { 
         p
-return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)    }
+return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
 /**     * Split the image into left and right parts, then merge them into a new image.     */
 fun splitAndMerge(imageStream: InputStream, upperSide: Side): InputStream {
     val imageBytes = imageStream.readBytes()        
@@ -51,24 +53,24 @@ val height = imageBitmap.height
 val width = imageBitmap.width
 val result = createBitmap(width / 2, height * 2)        result.applyCanvas {
             // right -> upper
-val rightPart = when (upperSide) {                
+val rightPart = when (upperSide) {
         S
 
 val upperPart = Rect(0, 0, width / 2, height)
         drawBitmap(imageBitmap, rightPart, upperPart, null)
             // left -> bottom
-val leftPart = when (upperSide) {                
+val leftPart = when (upperSide) {
         S
 
 val bottomPart = Rect(0, height, width / 2, height * 2)
         drawBitmap(imageBitmap, leftPart, bottomPart, null)
-        }
-
+          }
 val output = ByteArrayOutputStream()
         result.compress(Bitmap.CompressFormat.JPEG, 100, output)
-return ByteArrayInputStream(output.toByteArray())    }
-
-enum class Side {        RIGHT,        LEFT,    }}
+return ByteArrayInputStream(output.toByteArray())
+     }
+enum class Side {
+        RIGHT,        LEFT,    }}
 
 val getDisplayMaxHeightInPx: Int    get() = Resources.getSystem().displayMetrics.let { 
         m

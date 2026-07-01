@@ -14,27 +14,30 @@ import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
 val Context.notificationManager: NotificationManager    get() = getSystemService()!!
 fun Context.notify(    id: Int,    channelId: String,    block: (NotificationCompat.Builder.() -> Unit)? = null) {
-    val notification = notificationBuilder(channelId, block).build()    this.notify(id, notification)}
-
+    val notification = notificationBuilder(channelId, block).build()    this.notify(id, notification)
+ }
 fun Context.notify(id: Int, notification: Notification) {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.checkSelfPermission(            this,            Manifest.permission.POST_NOTIFICATIONS        ) != PermissionChecker.PERMISSION_GRANTED    ) {
 return    }
-NotificationManagerCompat.from(this).notify(id, notification)}
-
+NotificationManagerCompat.from(this).notify(id, notification)
+ }
 fun Context.notify(notificationWithIdAndTags: List<NotificationWithIdAndTag>) {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.checkSelfPermission(            this,            Manifest.permission.POST_NOTIFICATIONS        ) != PermissionChecker.PERMISSION_GRANTED    ) {
 return    }
-NotificationManagerCompat.from(this).notify(notificationWithIdAndTags)}
-
+NotificationManagerCompat.from(this).notify(notificationWithIdAndTags)
+ }
 fun Context.cancelNotification(id: Int) {    
         N
 fun Context.notificationBuilder(    channelId: String,    block: (NotificationCompat.Builder.() -> Unit)? = null): NotificationCompat.Builder {
     val builder = NotificationCompat.Builder(this, channelId)        .setColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark))
-if (block != null) {        builder.block()    }
+if (block != null) {
+        builder.block()
+    }
 return builder}/** * Helper method to build a notification channel group. * * @param channelId the channel id. * @param block the function that will execute inside the builder. * @return a notification channel group to be displayed or updated. */
 fun buildNotificationChannelGroup(    channelId: String,    block: (NotificationChannelGroupCompat.Builder.() -> Unit),): NotificationChannelGroupCompat {
     val builder = NotificationChannelGroupCompat.Builder(channelId)    builder.block()
 return builder.build()}/** * Helper method to build a notification channel. * * @param channelId the channel id. * @param channelImportance the channel importance. * @param block the function that will execute inside the builder. * @return a notification channel to be displayed or updated. */
 fun buildNotificationChannel(    channelId: String,    channelImportance: Int,    block: (NotificationChannelCompat.Builder.() -> Unit),): NotificationChannelCompat {
     val builder = NotificationChannelCompat.Builder(channelId, channelImportance)    builder.block()
-return builder.build()}
+return builder.build()
+}

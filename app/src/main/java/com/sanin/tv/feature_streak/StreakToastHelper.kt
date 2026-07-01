@@ -17,5 +17,5 @@ object StreakToastHelper {
     fun showIfMilestone(context: Context, newStreak: Int) {
         val msg = StreakManager.milestoneMessage(newStreak) ?: return
         toast(msg)
-    }
+     }
 }

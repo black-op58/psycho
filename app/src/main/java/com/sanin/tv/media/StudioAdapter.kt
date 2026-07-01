@@ -18,8 +18,8 @@ class StudioAdapter(
 private val studioList: MutableList<Studio>) : RecyclerView.Adapter<StudioAdapter.StudioViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudioViewHolder {
     val binding =            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-return StudioViewHolder(binding)    }
-
+return StudioViewHolder(binding)
+     }
 override fun onBindViewHolder(holder: StudioViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
 val studio = studioList.getOrNull(position) ?: return        binding.itemCompactRelation.isVisible = false        binding.itemCompactImage.loadImage(studio.imageUrl)        binding.itemCompactTitle.text = studio.name
@@ -29,7 +29,10 @@ override fun getItemCount(): Int = studioList.size    inner
 class StudioViewHolder(
 val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        
         i
-    val studio = studioList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        StudioActivity::class.java                    ).putExtra("studio", studio as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )            }
-    itemView.setOnLongClickListener {                copyToClipboard(                    studioList[bindingAdapterPosition].name                )
+    val studio = studioList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        StudioActivity::class.java                    ).putExtra("studio", studio as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )
+            }
+    itemView.setOnLongClickListener {
+        copyToClipboard(                    studioList[bindingAdapterPosition].name                )
 true            }}
-}}
+}
+}

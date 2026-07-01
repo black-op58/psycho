@@ -57,16 +57,14 @@ object SimpleColorPicker {
         val container = LinearLayout(activity).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(padding, padding, padding, padding)
-        }
-
+          }
         if (title != null) {
-            container.addView(TextView(activity).apply {
+        container.addView(TextView(activity).apply {
                 text = title
                 textSize = 18f
                 setPadding(0, 0, 0, (12 * density).toInt())
             })
-        }
-
+          }
         val cols = 5
         val buttonSize = (54 * density).toInt()
         val margin = (6 * density).toInt()
@@ -77,32 +75,31 @@ object SimpleColorPicker {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-        }
-        container.addView(row)
-
+         }
+        container.addView(row);
         for ((i, color) in presetColors.withIndex()) {
             val btn = MaterialButton(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(buttonSize, buttonSize).apply {
                     setMargins(margin, margin, margin, margin)
-                }
+                 }
                 setBackgroundColor(color)
                 val drawable = GradientDrawable().apply {
                     shape = GradientDrawable.OVAL
                     setColor(color)
                     setStroke(2, if (color == Color.WHITE) Color.LTGRAY else Color.TRANSPARENT)
-                }
+                 }
                 background = drawable
                 setOnClickListener {
                     val result = Bundle().apply { 
         p
                     if (activity is OnDialogResultListener) {
-                        activity.onDialogResult(dialogTag, BUTTON_POSITIVE, result)
-                    }
+        activity.onDialogResult(dialogTag, BUTTON_POSITIVE, result)
+                     }
                     (it.context as? Activity)?.let { act ->
                         (it.rootView.parent as? View)?.let { parent ->
                             val dialog = parent.parent as? Dialog ?: parent as? Dialog
                             dialog?.dismiss()
-                        }
+                         }
                     }
                     try {
                         (activity as? Activity)?.let {
@@ -110,29 +107,28 @@ object SimpleColorPicker {
                             it.currentFocus?.let { focus ->
                                 val dialog = focus.rootView.parent?.parent
                                 if (dialog is Dialog) dialog.dismiss()
-                            }
+                             }
                         }
-                    } catch (_: Exception) {}
+                    }
+        catch (_: Exception) {}
                 }
                 if (i > 0 && i % cols == 0) {
-                    row = LinearLayout(activity).apply {
+        row = LinearLayout(activity).apply {
                         orientation = LinearLayout.HORIZONTAL
                         layoutParams = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         )
-                    }
+                     }
                     container.addView(row)
-                }
+                 }
             }
             row.addView(btn)
-        }
-
+          }
         builder.setView(container)
         builder.setNegativeButton(android.R.string.cancel, null)
         return builder.show()
-    }
-
+      }
     fun showColorWheelDialog(
         activity: Activity,
         title: CharSequence?,
@@ -142,5 +138,5 @@ object SimpleColorPicker {
         @androidx.annotation.StyleRes themeResId: Int = 0,
     ): Dialog {
         return showColorDialog(activity, title, PRESET_COLORS, originalColor, dialogTag, themeResId)
-    }
+     }
 }

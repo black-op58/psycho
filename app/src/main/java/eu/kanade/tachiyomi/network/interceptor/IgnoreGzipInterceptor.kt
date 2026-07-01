@@ -10,6 +10,7 @@ class IgnoreGzipInterceptor : Interceptor {
     var request = chain.request()
 if (request.header("Accept-Encoding") == "gzip") {
     request = request.newBuilder().removeHeader("Accept-Encoding").build()
-}
+ }
 return chain.proceed(request)
-}}
+ }
+}

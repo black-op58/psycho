@@ -8,7 +8,8 @@ class ActivityItemBuilder {
 companion object {
     fun getContent(notification: Notification): String {
     val notificationType: NotificationType =                NotificationType.valueOf(notification.notificationType)
-return when (notificationType) {                NotificationType.ACTIVITY_MESSAGE -> {                    "${notification.user?.name} sent you a message"                }
+return when (notificationType) {
+        NotificationType.ACTIVITY_MESSAGE -> {                    "${notification.user?.name} sent you a message"                }
 NotificationType.ACTIVITY_REPLY -> {                    "${notification.user?.name} replied to your activity"}
 NotificationType.FOLLOWING -> {                    "${notification.user?.name} followed you"}
 NotificationType.ACTIVITY_MENTION -> {                    "${notification.user?.name} mentioned you in their activity"}
@@ -25,10 +26,14 @@ NotificationType.RELATED_MEDIA_ADDITION -> {                    "${notification.
 NotificationType.MEDIA_DATA_CHANGE -> {                    "${notification.media?.title?.english ?: notification.media?.title?.romaji} has had a data change: ${notification.reason}"}
 NotificationType.MEDIA_MERGE -> {                    "${notification.deletedMediaTitles?.joinToString(", ")} have been merged into ${notification.media?.title?.english ?: notification.media?.title?.romaji}"}
 NotificationType.MEDIA_DELETION -> {                    "${notification.deletedMediaTitle} has been deleted from the site"}
-NotificationType.COMMENT_REPLY -> {                    notification.context ?: "You should not see this"}
-NotificationType.COMMENT_WARNING -> {                    notification.context ?: "You should not see this"}
-NotificationType.SANINTV_UPDATE -> {                    notification.context ?: "You should not see this"}
-NotificationType.SUBSCRIPTION -> {                    notification.context ?: "You should not see this"}}
+NotificationType.COMMENT_REPLY -> {
+        notification.context ?: "You should not see this"}
+NotificationType.COMMENT_WARNING -> {
+        notification.context ?: "You should not see this"}
+NotificationType.SANINTV_UPDATE -> {
+        notification.context ?: "You should not see this"}
+NotificationType.SUBSCRIPTION -> {
+        notification.context ?: "You should not see this"}}
 }
 
 fun getDateTime(timestamp: Int): String {
@@ -43,8 +48,10 @@ val daysDifference = difference / (1000 * 60 * 60 * 24)) {
         0
     val hoursDifference = difference / (1000 * 60 * 60)                    
 val minutesDifference = (difference / (1000 * 60)) % 60
-when {                        hoursDifference > 0 -> "$hoursDifference hour${if (hoursDifference > 1) "s" else ""} ago"                        minutesDifference > 0 -> "$minutesDifference minute${if (minutesDifference > 1) "s" else ""} ago"
+when {
+        hoursDifference > 0 -> "$hoursDifference hour${if (hoursDifference > 1) "s" else ""} ago"                        minutesDifference > 0 -> "$minutesDifference minute${if (minutesDifference > 1) "s" else ""} ago"
 else -> "Just now"                    }}
 1L -> "1 day ago"                in 2..6 -> "$daysDifference days ago"
 else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)            }}
-}}
+}
+}

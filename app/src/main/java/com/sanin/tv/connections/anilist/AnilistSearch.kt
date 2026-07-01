@@ -7,7 +7,7 @@ object AnilistSearch {
 
         companion object {
             fun toAnilistString(type: SearchType): String = when (type) {
-                ANIME     -> "ANIME"
+        ANIME     -> "ANIME"
                 MANGA     -> "MANGA"
                 CHARACTER -> "CHARACTER"
                 STAFF     -> "STAFF"
@@ -17,5 +17,5 @@ object AnilistSearch {
         }
 
         fun toAnilistString(): String = toAnilistString(this)
-    }
+     }
 }

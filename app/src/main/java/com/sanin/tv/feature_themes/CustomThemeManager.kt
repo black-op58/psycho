@@ -23,19 +23,16 @@ object CustomThemeManager {
         i
         if (existing >= 0) current[existing] = theme else current.add(theme)
         PrefManager.setCustomVal(KEY_THEMES, current)
-    }
-
+      }
     fun deleteTheme(themeId: String) {
     val current = getAllThemes().toMutableList()
         current.removeAll { it.id == themeId }
-        PrefManager.setCustomVal(KEY_THEMES, current)
+        PrefManager.setCustomVal(KEY_THEMES, current);
         if (getActiveThemeId() == themeId) clearActiveTheme()
-    }
-
+      }
     fun setActiveTheme(themeId: String) {
         PrefManager.setVal(KEY_ACTIVE_THEME, themeId)
-    }
-
+      }
     fun getActiveThemeId(): String? =
         PrefManager.getNullableCustomVal(KEY_ACTIVE_THEME, null, String::class.java)
 
@@ -46,12 +43,12 @@ object CustomThemeManager {
 
     fun clearActiveTheme() {
         PrefManager.removeVal(KEY_ACTIVE_THEME)
-    }
-
+      }
     /** Parse a hex color string safely, returning the default if invalid. */
     fun parseColor(hex: String, default: Int = Color.WHITE): Int = try {
         Color.parseColor(hex)
-    } catch (e: IllegalArgumentException) {
+     }
+        catch (e: IllegalArgumentException) {
         default
     }
 
@@ -71,8 +68,9 @@ object CustomThemeManager {
             val accent = Regex(""""accent":"([^"]+)"""").find(json)?.groupValues?.get(1) ?: "#FFBB86FC"
             CustomTheme(name = name, primaryColor = primary, secondaryColor = secondary,
                 backgroundColor = background, surfaceColor = surface, accentColor = accent)
-        } catch (e: Exception) {
-            null
+         }
+        catch (e: Exception) {
+        null
         }
     }
 }

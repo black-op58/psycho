@@ -17,7 +17,8 @@ val animes = document.select(popularAnimeSelector()).map {
 
 val hasNextPage = popularAnimeNextPageSelector()?.let { 
         s
-return AnimesPage(animes, hasNextPage)    }
+return AnimesPage(animes, hasNextPage)
+    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.     */
 protected abstract 
 fun popularAnimeSelector(): String    /**     * Returns an anime from the given [element]. Most sites only show the title and the url, it's     * totally fine to fill only those two values.     *     * @param element an element obtained from [popularAnimeSelector].     */    
@@ -32,7 +33,8 @@ val animes = document.select(searchAnimeSelector()).map {
 
 val hasNextPage = searchAnimeNextPageSelector()?.let { 
         s
-return AnimesPage(animes, hasNextPage)    }
+return AnimesPage(animes, hasNextPage)
+    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.     */
 protected abstract 
 fun searchAnimeSelector(): String    /**     * Returns an anime from the given [element]. Most sites only show the title and the url, it's     * totally fine to fill only those two values.     *     * @param element an element obtained from [searchAnimeSelector].     */    
@@ -47,7 +49,8 @@ val animes = document.select(latestUpdatesSelector()).map {
 
 val hasNextPage = latestUpdatesNextPageSelector()?.let { 
         s
-return AnimesPage(animes, hasNextPage)    }
+return AnimesPage(animes, hasNextPage)
+    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.     */
 protected abstract 
 fun latestUpdatesSelector(): String    /**     * Returns an anime from the given [element]. Most sites only show the title and the url, it's     * totally fine to fill only those two values.     *     * @param element an element obtained from [latestUpdatesSelector].     */    
@@ -56,7 +59,8 @@ fun latestUpdatesFromElement(element: Element): SAnime    /**     * Returns the 
 protected abstract 
 fun latestUpdatesNextPageSelector(): String?    /**     * Parses the response from the site and returns the details of an anime.     *     * @param response the response from the site.     */    
 override fun animeDetailsParse(response: Response): SAnime {
-return animeDetailsParse(response.asJsoup())    }
+return animeDetailsParse(response.asJsoup())
+    }
 /**     * Returns the details of the anime from the given [document].     *     * @param document the parsed document.     */
 protected abstract 
 fun animeDetailsParse(document: Document): SAnime    /**     * Parses the response from the site and returns a list of episodes.     *     * @param response the response from the site.     */    
@@ -78,7 +82,8 @@ protected abstract
 fun seasonFromElement(element: Element): SAnime    /**     * Parses the response from the site and returns the hoster list.     *     * @since extensions-lib 16     * @param response the response from the site.     * @return the list of hosters.     */    
 override fun hosterListParse(response: Response): List<Hoster> {
     val document = response.asJsoup()
-return document.select(hosterListSelector()).map(::hosterFromElement)    }
+return document.select(hosterListSelector()).map(::hosterFromElement)
+    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each hoster.     *     * @since extensions-lib 16     */
 protected abstract 
 fun hosterListSelector(): String    /**     * Returns a hoster from the given element.     *     * @since extensions-lib 16     * @param element an element obtained from [hosterListSelector].     */    
@@ -93,7 +98,8 @@ fun videoListSelector(): String    /**     * Returns a video from the given elem
 protected abstract 
 fun videoFromElement(element: Element): Video    /**     * Parse the response from the site and returns the absolute url to the source video.     *     * @param response the response from the site.     */    
 override fun videoUrlParse(response: Response): String {
-return videoUrlParse(response.asJsoup())    }
+return videoUrlParse(response.asJsoup())
+    }
 /**     * Returns the absolute url to the source image from the document.     *     * @param document the parsed document.     */
 protected abstract 
 fun videoUrlParse(document: Document): String}

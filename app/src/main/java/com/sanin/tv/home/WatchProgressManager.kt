@@ -40,26 +40,24 @@ object WatchProgressManager {
     fun record(entry: WatchEntry) {
     val list = getHistory().toMutableList()
         list.removeAll { it.mediaId == entry.mediaId }
-        list.add(0, entry)
+        list.add(0, entry);
         while (list.size > MAX_ENTRIES) list.removeAt(list.size - 1)
         PrefManager.setCustomVal(KEY_HISTORY, ArrayList(list))
-    }
-
+      }
     /** Returns up to 5 most-recently watched entries, newest first. */
     @Suppress("UNCHECKED_CAST")
     fun getHistory(): List<WatchEntry> = try {
         (PrefManager.getNullableCustomVal(KEY_HISTORY, null, ArrayList::class.java)
                 as? ArrayList<WatchEntry>) ?: emptyList()
-    } catch (_: Exception) {
+     }
+        catch (_: Exception) {
         emptyList()
-    }
-
+      }
     /** Persist the last-used extension (source) index globally. */
     fun saveLastExtensionIndex(index: Int) {
         PrefManager.setCustomVal(KEY_LAST_EXT, index)
-    }
-
+      }
     /** Returns the last-used extension index, or 0 if never set. */
     fun getLastExtensionIndex(): Int =
         PrefManager.getCustomVal(KEY_LAST_EXT, 0)
-}
+  }

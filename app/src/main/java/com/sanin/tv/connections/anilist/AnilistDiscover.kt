@@ -38,7 +38,8 @@ suspend fun AnilistQueries.searchAnime(
     }"""
 
     val response = Anilist.executeQuery<com.sanin.tv.connections.anilist.api.Query.Page>(gql, force = true)
-    response?.data?.page?.media?.map { com.sanin.tv.media.Media(it) }
+    response?.data?.page?.media?.map { com.sanin.tv.media.Media(it)
+ }
 }
 
 suspend fun AnilistQueries.discoverAnime(
@@ -75,5 +76,6 @@ suspend fun AnilistQueries.discoverAnime(
     }"""
 
     val response = Anilist.executeQuery<Query.Page>(query, force = true)
-    response?.data?.page?.media?.map { Media(it) }
+    response?.data?.page?.media?.map { Media(it)
+ }
 }

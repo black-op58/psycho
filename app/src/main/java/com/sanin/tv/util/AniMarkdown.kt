@@ -34,7 +34,9 @@ private fun String.convertYoutubeToHtml(): String {
 return regex.replace(this) { matchResult ->                
 val url = matchResult.groupValues[1]                
 val id = getYoutubeId(url)
-if (id.isNotEmpty()) {                    """<div>                    <a href="https://www.youtube.com/watch?v=$id"><img src="https://i3.ytimg.com/vi/$id/maxresdefault.jpg" alt="$url"></a>                    <align center>                    <a href="https://www.youtube.com/watch?v=$id">Youtube Link</a>                    </align>                    </div>""".trimIndent()                } else {                    """<a href="$url">Youtube Video</a>"""                }
+if (id.isNotEmpty()) {                    """<div>                    <a href="https://www.youtube.com/watch?v=$id"><img src="https://i3.ytimg.com/vi/$id/maxresdefault.jpg" alt="$url"></a>                    <align center>                    <a href="https://www.youtube.com/watch?v=$id">Youtube Link</a>                    </align>                    </div>""".trimIndent()
+                }
+        else {                    """<a href="$url">Youtube Video</a>"""                }
         }
     }
 
@@ -45,11 +47,11 @@ return this.replace("&nbsp
 ", "<")                .replace("&gt
 ", ">")                .replace("&quot
 ", "\"")                .replace("&apos
-", "'")                .replace("<pre>", "")                .replace("`", "")                .replace("~", "")                .replace(">\n<", "><")                .replace("\n", "<br>")        }
-
+", "'")                .replace("<pre>", "")                .replace("`", "")                .replace("~", "")                .replace(">\n<", "><")                .replace("\n", "<br>")
+         }
 private fun String.underlineToHtml(): String {
-return this.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")                .replace("(?s)__(.*?)__".toRegex(), "<br><strong>$1</strong><br>")                .replace("(?s)\\s+_([^_]+)_\\s+".toRegex(), "<em>$1</em>")        }
-
+return this.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")                .replace("(?s)__(.*?)__".toRegex(), "<br><strong>$1</strong><br>")                .replace("(?s)\\s+_([^_]+)_\\s+".toRegex(), "<em>$1</em>")
+         }
 private fun String.convertCenterToHtml(): String {
     val regex = """~~~(.*?)~~~""".toRegex()
 return regex.replace(this) { matchResult ->                
@@ -57,8 +59,8 @@ val centerText = matchResult.groupValues[1]                """<align center>$cen
         }
 
 fun getBasicAniHTML(html: String): String {
-return html                .convertNestedImageToHtml()                .convertImageToHtml()                .convertLinkToHtml()                .convertYoutubeToHtml()                .convertCenterToHtml()                .replaceLeftovers()                .underlineToHtml()        }
-
+return html                .convertNestedImageToHtml()                .convertImageToHtml()                .convertLinkToHtml()                .convertYoutubeToHtml()                .convertCenterToHtml()                .replaceLeftovers()                .underlineToHtml()
+         }
 fun getFullAniHTML(html: String, textColor: Int): String {
     val basicHtml = getBasicAniHTML(html)            
 val returnHtml = """            <html><head>    <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">        <style>            body {                
@@ -67,11 +69,16 @@ margin: 0
 padding: 0
 max-width: 100%
 overflow-x: hidden
-/* Prevent horizontal scrolling */            }            img {                max-width: 100%
+/* Prevent horizontal scrolling */            }            img {
+        max-width: 100%
 height: auto
-/* Maintain aspect ratio */            }            video {                max-width: 100%
+/* Maintain aspect ratio */            }            video {
+        max-width: 100%
 height: auto
-/* Maintain aspect ratio */            }            a {                color: ${textColor.toCssColor()}
+/* Maintain aspect ratio */            }            a {
+        color: ${textColor.toCssColor()
+}
 }            /* Add responsive design elements for other content as needed */        </style></head><body>$basicHtml</body></html>    """.trimIndent()
 return returnHtml        }
-        }}
+        }
+        }

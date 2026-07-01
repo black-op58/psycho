@@ -126,10 +126,10 @@ fun NavigationPills(
                     isActive   = currentRoute == tab,
                     isExpanded = isExpanded,
                     focusEffect = settings.focusEffect,
-                    onClick    = { if (tab == "back") onBack() else onNavigate(tab) }
+                    onClick    = { if (tab == "back") onBack() else onNavigate(tab)
+ }
                 )
-            }
-
+              }
             Spacer(modifier = Modifier.width(6.dp))
 
             // ── Notification bell with badge count ────────────────────────
@@ -148,9 +148,9 @@ fun NavigationPills(
                     contentDescription = "Notifications",
                     tint = Color.White.copy(alpha = 0.8f),
                     modifier = Modifier.size(21.dp)
-                )
-                if (notificationCount > 0) {
-                    Box(
+                );
+        if (notificationCount > 0) {
+        Box(
                         modifier = Modifier
                             .size(14.dp)
                             .align(Alignment.TopEnd)
@@ -163,7 +163,7 @@ fun NavigationPills(
                             fontSize = 7.sp,
                             lineHeight = 7.sp
                         )
-                    }
+                     }
                 }
             }
 
@@ -172,9 +172,10 @@ fun NavigationPills(
             // ── Avatar button: tapping opens the right side rail ──────────
             AvatarButton(
                 avatarUrl = avatarUrl,
-                onClick   = { viewModel.showSideRail() }
+                onClick   = { viewModel.showSideRail()
+ }
             )
-        }
+         }
     }
 }
 
@@ -228,7 +229,7 @@ fun NavigationPill(
         contentAlignment = Alignment.Center
     ) {
         if (isExpanded) {
-            Row(
+        Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
@@ -245,14 +246,15 @@ fun NavigationPill(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-            }
-        } else {
+             }
+        }
+        else {
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = label,
                 tint = if (isActive) Color(0xFF87CEEB) else Color.White.copy(alpha = 0.7f),
                 modifier = Modifier.size(20.dp)
             )
-        }
+         }
     }
 }

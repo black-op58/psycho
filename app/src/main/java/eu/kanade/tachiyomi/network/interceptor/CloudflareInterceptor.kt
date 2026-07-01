@@ -24,17 +24,22 @@ if (response.request.url.host.contains("anilist.co")) return false
 return response.code in ERROR_CODES && response.header("Server") in SERVER_CHECK    }
 
 override fun intercept(        chain: Interceptor.Chain,        request: Request,        response: Response    ): Response {
-try {            response.close()
+try {
+        response.close()
         cookieManager.remove(request.url, COOKIE_NAMES, 0)
             
 val oldCookie = cookieManager.get(request.url)                .firstOrNull { 
         i
 resolveWithWebView(request, oldCookie)
-return chain.proceed(request)        }
+return chain.proceed(request)
+        }
 // Because OkHttp's enqueue only handles IOExceptions, wrap the exception so that        // we don't crash the entire app
 catch (e: CloudflareBypassException) {
-throw IOException("Failed to bypass Cloudflare")        } catch (e: Exception) {
-throw IOException(e)        }
+        throw IOException("Failed to bypass Cloudflare")
+        }
+        catch (e: Exception) {
+        throw IOException(e)
+        }
 }
 
 @SuppressLint("SetJavaScriptEnabled")    
@@ -54,24 +59,38 @@ object : WebViewClientCompat() {
 return cookieManager.get(origRequestUrl.toHttpUrl())                            .firstOrNull { it.name == "cf_clearance" }
 .let { it != null && it != oldCookie}
 }
-if (isCloudFlareBypassed()) {                        cloudflareBypassed = true                        latch.countDown()                    }
-if (url == origRequestUrl && !challengeFound) {                        // The first request didn't return the challenge, abort.                        latch.countDown()                    }
+if (isCloudFlareBypassed()) {
+        cloudflareBypassed = true                        latch.countDown()
+                    }
+if (url == origRequestUrl && !challengeFound) {
+        // The first request didn't return the challenge, abort.                        latch.countDown()
+                    }
 }
 
 override fun onReceivedErrorCompat(                    view: WebView,                    errorCode: Int,                    description: String?,                    failingUrl: String,                    isMainFrame: Boolean,                ) {
 if (isMainFrame) {
-if (errorCode in ERROR_CODES) {                            // Found the Cloudflare challenge page.                            challengeFound = true
-} else {                            // Unlock thread, the challenge wasn't found.                            latch.countDown()                        }}}}
-webview?.loadUrl(origRequestUrl, headers)}
+if (errorCode in ERROR_CODES) {
+        // Found the Cloudflare challenge page.                            challengeFound = true
+}
+        else {                            // Unlock thread, the challenge wasn't found.                            latch.countDown()                        }}}}
+webview?.loadUrl(origRequestUrl, headers)
+}
 latch.awaitFor30Seconds()        executor.execute {
-if (!cloudflareBypassed) {                isWebViewOutdated = webview?.isOutdated() == true            }
-webview?.run {                stopLoading()
+if (!cloudflareBypassed) {
+        isWebViewOutdated = webview?.isOutdated() == true            }
+webview?.run {
+        stopLoading()
         destroy()}}
 // Throw exception if we failed to bypass Cloudflare
-if (!cloudflareBypassed) {            // Prompt user to update WebView if it seems too outdated
-if (isWebViewOutdated) {                context.toast(                    "Please update the webview app for better compatibility",                    Toast.LENGTH_LONG                )            }
-throw CloudflareBypassException()        }
-}}
+if (!cloudflareBypassed) {
+        // Prompt user to update WebView if it seems too outdated
+if (isWebViewOutdated) {
+        context.toast(                    "Please update the webview app for better compatibility",                    Toast.LENGTH_LONG                )
+            }
+throw CloudflareBypassException()
+        }
+}
+}
 
 private val ERROR_CODES = listOf(403, 503)
 private val SERVER_CHECK = arrayOf("cloudflare-nginx", "cloudflare")

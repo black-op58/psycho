@@ -66,20 +66,35 @@ val localSubs = model.getLocalSubtitles(episodeId)
                 // Online subtitle section: populated instantly
 val cached = model.getFetchedSubtitles(episodeId)
 if (cached != null) {
-if (cached.isNotEmpty()) {                        allSubtitles.addAll(cached)                    }
-} else {
+if (cached.isNotEmpty()) {
+        allSubtitles.addAll(cached)
+                    }
+}
+        else {
     val onlineSubsEnabled = PrefManager.getVal<Boolean>(PrefName.OnlineSubtitlesEnabled)
-if (onlineSubsEnabled) {                        allSubtitles.add(SearchOnlineSubtitles("+ Online Subtitle"))                    }}
+if (onlineSubsEnabled) {
+        allSubtitles.add(SearchOnlineSubtitles("+ Online Subtitle"))                    }}
 allSubtitles.addAll(currentExtractor.subtitles)
-if (_binding != null) {                     binding.subtitlesRecycler.adapter = SubtitleAdapter(allSubtitles)                }
+if (_binding != null) {
+        binding.subtitlesRecycler.adapter = SubtitleAdapter(allSubtitles)
+                }
 // Fetch IMDB and Mapping in background so it's ready when users click "Online"                launch(kotlinx.coroutines.Dispatchers.IO) {
 if (media.idIMDB == null) {
-try {                            media.idIMDB = IdMappers.getImdbId(media.id)                        } catch (e: Exception) { e.printStackTrace() }
+try {
+        media.idIMDB = IdMappers.getImdbId(media.id)
+                        }
+        catch (e: Exception) {
+        e.printStackTrace()
+ }
 }
 if (currentSeasonEpisode == null) {
-try {                            currentSeasonEpisode = EpisodeMapper.mapEpisode(media, episodeNum, episode)                            // Update labels visually once loaded                            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-if (_binding != null) binding.subtitlesRecycler.adapter?.notifyDataSetChanged()                            }
-} catch (e: Exception) {                            e.printStackTrace()}}}}}
+try {
+        currentSeasonEpisode = EpisodeMapper.mapEpisode(media, episodeNum, episode)                            // Update labels visually once loaded                            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+if (_binding != null) binding.subtitlesRecycler.adapter?.notifyDataSetChanged()
+                            }
+}
+        catch (e: Exception) {
+        e.printStackTrace()}}}}}
 }
 
 private fun fetchOnlineSubtitles(adapter: SubtitleAdapter, item: SearchOnlineSubtitles, position: Int) {        
@@ -104,12 +119,21 @@ if (_binding == null) return@withContext
 val validAdapter = binding.subtitlesRecycler.adapter as? SubtitleAdapter ?: return@withContext                        // Verify item is still at position (basic check, improved by verifying content)
 if (position < validAdapter.subtitles.size && validAdapter.subtitles[position] == item) {
     val list = validAdapter.subtitles as MutableList<Any>                            list.removeAt(position) // Remove "Search..." button
-if (onlineSubs.isNotEmpty()) {                                model.saveFetchedSubtitles("${media.id}-${episodeNum}", onlineSubs)
+if (onlineSubs.isNotEmpty()) {
+        model.saveFetchedSubtitles("${media.id}-${episodeNum}", onlineSubs)
         list.addAll(onlineSubs)
-} else {                                     toast("No subtitles found")                                }
-validAdapter.notifyDataSetChanged()}
-} catch (e: Exception) {                        e.printStackTrace()}}
-} catch (e: Exception) {                e.printStackTrace()
+ }
+        else {
+        toast("No subtitles found")
+                                }
+validAdapter.notifyDataSetChanged()
+}
+}
+        catch (e: Exception) {
+        e.printStackTrace()}}
+}
+        catch (e: Exception) {
+        e.printStackTrace()
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                         toast("Error fetching subtitles")
 if (_binding != null) adapter.notifyDataSetChanged()                }}}}
@@ -124,77 +148,111 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamViewHol
 override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
     val binding = holder.binding            // Create alpha background color for highlighted item
 val highlightColor = ColorUtils.setAlphaComponent(                PrefManager.getVal<Int>(PrefName.PrimaryColor),                60            )            // Handle "None" option at position 0
-if (position == 0) {                binding.subtitleTitle.setText(R.string.none)
+if (position == 0) {
+        binding.subtitleTitle.setText(R.string.none)
         model.getMedia().observe(viewLifecycleOwner) { media ->
                     
 val mediaID: Int = media.id
 val selSubs = PrefManager.getNullableCustomVal(                        "subLang_${mediaID}",                        null,                        String::class.java                    )
-if (episode.selectedSubtitle != null && selSubs != "None") {                        binding.root.setCardBackgroundColor(TRANSPARENT)
-} else {                        binding.root.setCardBackgroundColor(highlightColor)                    }}
-binding.root.setOnClickListener {                    episode.selectedSubtitle = null                    model.setEpisode(episode, "Subtitle")
+if (episode.selectedSubtitle != null && selSubs != "None") {
+        binding.root.setCardBackgroundColor(TRANSPARENT)
+ }
+        else {
+        binding.root.setCardBackgroundColor(highlightColor)                    }}
+binding.root.setOnClickListener {
+        episode.selectedSubtitle = null                    model.setEpisode(episode, "Subtitle")
         model.getMedia().observe(viewLifecycleOwner) { media ->
-val mediaID: Int = media.id                        PrefManager.setCustomVal("subLang_${mediaID}", "None")                    }
-dismiss()                }
+val mediaID: Int = media.id                        PrefManager.setCustomVal("subLang_${mediaID}", "None")
+                    }
+dismiss()
+                }
 return            }
 
 val adjustedPosition = position - 1
 val item = subtitles[adjustedPosition]            // Handle separator
-if (item is String) {                binding.subtitleTitle.text = item                binding.root.isClickable = false                binding.root.setCardBackgroundColor(TRANSPARENT)
+if (item is String) {
+        binding.subtitleTitle.text = item                binding.root.isClickable = false                binding.root.setCardBackgroundColor(TRANSPARENT)
 return            }
 // --- ADD LOCAL SUBTITLE ---
-if (item is AddLocalSubtitle) {                binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {
+if (item is AddLocalSubtitle) {
+        binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {
                     (requireActivity() as? ExoplayerView)?.requestLocalSubtitle()
         dismiss()
-                }
+                 }
 return            }
 // --- SEARCH ONLINE SUBTITLES ---
-if (item is SearchOnlineSubtitles) {                binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {
+if (item is SearchOnlineSubtitles) {
+        binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {
                     // Prevent double clicks
 if (item.text == "Searching...") return@setOnClickListener                    fetchOnlineSubtitles(this
-@SubtitleAdapter, item, adjustedPosition)                }
+@SubtitleAdapter, item, adjustedPosition)
+                }
 return            }
 // --- LOCAL SUBTITLES ---
-if (item is Subtitle) {                binding.subtitleTitle.text = when (item.language) {                    "ja-JP" -> "[ja-JP] Japanese"                    "en-US" -> "[en-US] English"                    "de-DE" -> "[de-DE] German"                    "es-ES" -> "[es-ES] Spanish"                    "es-419" -> "[es-419] Spanish"                    "fr-FR" -> "[fr-FR] French"                    "it-IT" -> "[it-IT] Italian"                    "pt-BR" -> "[pt-BR] Portuguese (Brazil)"                    "pt-PT" -> "[pt-PT] Portuguese (Portugal)"                    "ru-RU" -> "[ru-RU] Russian"                    "zh-CN" -> "[zh-CN] Chinese (Simplified)"                    "tr-TR" -> "[tr-TR] Turkish"                    "ar-ME" -> "[ar-ME] Arabic"                    "ar-SA" -> "[ar-SA] Arabic (Saudi Arabia)"                    "uk-UK" -> "[uk-UK] Ukrainian"                    "he-IL" -> "[he-IL] Hebrew"                    "pl-PL" -> "[pl-PL] Polish"                    "ro-RO" -> "[ro-RO] Romanian"                    "sv-SE" -> "[sv-SE] Swedish"
+if (item is Subtitle) {
+        binding.subtitleTitle.text = when (item.language) {
+        "ja-JP" -> "[ja-JP] Japanese"                    "en-US" -> "[en-US] English"                    "de-DE" -> "[de-DE] German"                    "es-ES" -> "[es-ES] Spanish"                    "es-419" -> "[es-419] Spanish"                    "fr-FR" -> "[fr-FR] French"                    "it-IT" -> "[it-IT] Italian"                    "pt-BR" -> "[pt-BR] Portuguese (Brazil)"                    "pt-PT" -> "[pt-PT] Portuguese (Portugal)"                    "ru-RU" -> "[ru-RU] Russian"                    "zh-CN" -> "[zh-CN] Chinese (Simplified)"                    "tr-TR" -> "[tr-TR] Turkish"                    "ar-ME" -> "[ar-ME] Arabic"                    "ar-SA" -> "[ar-SA] Arabic (Saudi Arabia)"                    "uk-UK" -> "[uk-UK] Ukrainian"                    "he-IL" -> "[he-IL] Hebrew"                    "pl-PL" -> "[pl-PL] Polish"                    "ro-RO" -> "[ro-RO] Romanian"                    "sv-SE" -> "[sv-SE] Swedish"
 else -> if (item.language matches Regex("([a-z]{2})-([A-Z]{2}|\\d{3})")) "[${item.language}]" else item.language                }
 model.getMedia().observe(viewLifecycleOwner) { media ->
 val mediaID: Int = media.id
 val selSubs: String? =                        PrefManager.getNullableCustomVal(                            "subLang_${mediaID}",                            null,                            String::class.java                        )                    // Highlight ONLY if the saved preference matches this local subtitle's language
-if (selSubs != item.language) {                        binding.root.setCardBackgroundColor(TRANSPARENT)
-} else {                         binding.root.setCardBackgroundColor(highlightColor)                    }}
+if (selSubs != item.language) {
+        binding.root.setCardBackgroundColor(TRANSPARENT)
+ }
+        else {
+        binding.root.setCardBackgroundColor(highlightColor)                    }}
 binding.root.setOnClickListener {                    // Check if this is a custom local subtitle we cached
-if (item.language.startsWith("[Local]")) {                        // DO NOT call model.setEpisode() here — that triggers a full player                        // rebuild (releasePlayer + initPlayer) which wipes the local sub config                        // and makes reApplyLocalSubtitle fail. Just update prefs and re-apply.                        model.getMedia().value?.let { media ->                            PrefManager.setCustomVal("subLang_${media.id}", item.language)                        }
-
+if (item.language.startsWith("[Local]")) {                        // DO NOT call model.setEpisode() here — that triggers a full player                        // rebuild (releasePlayer + initPlayer) which wipes the local sub config                        // and makes reApplyLocalSubtitle fail. Just update prefs and re-apply.                        model.getMedia().value?.let { media ->                            PrefManager.setCustomVal("subLang_${media.id}", item.language)
+                         }
 val activity = requireActivity()
 if (activity is ExoplayerView) {
-try {                                activity.reApplyLocalSubtitle(item.file.url)                            } catch (e: Exception) {                                e.printStackTrace()                            }
+try {
+        activity.reApplyLocalSubtitle(item.file.url)
+                            }
+        catch (e: Exception) {
+        e.printStackTrace()
+                            }
 }
-} else {                        // Standard built-in local subtitle                        episode.selectedSubtitle = adjustedPosition                        model.setEpisode(episode, "Subtitle")
+}
+        else {                        // Standard built-in local subtitle                        episode.selectedSubtitle = adjustedPosition                        model.setEpisode(episode, "Subtitle")
         model.getMedia().observe(viewLifecycleOwner) { media ->
                             
 val mediaID: Int = media.id                            PrefManager.setCustomVal(                                "subLang_${mediaID}",                                item.language                            )                        }}
-dismiss()                }
+dismiss()
+                }
 return            }
 
 val seInfo = currentSeasonEpisode?.let { 
         "
-if (item is WyzieSub) {                // Formatting: [ASS] S2.E5.English
+if (item is WyzieSub) {
+        // Formatting: [ASS] S2.E5.English
 val format = item.format.uppercase()                
 val label = "[$format] ${if(seInfo.isNotEmpty()) "$seInfo." else ""}${item.displayLabel}"                binding.subtitleTitle.text = label                model.getMedia().observe(viewLifecycleOwner) { 
         m
 val selSubs: String? = PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)                    // Use URL as unique ID for Wyzie
-if (selSubs != "Online:${item.url}") {                        binding.root.setCardBackgroundColor(TRANSPARENT)
-} else {                        binding.root.setCardBackgroundColor(highlightColor)                    }}
+if (selSubs != "Online:${item.url}") {
+        binding.root.setCardBackgroundColor(TRANSPARENT)
+ }
+        else {
+        binding.root.setCardBackgroundColor(highlightColor)                    }}
 binding.root.setOnClickListener {
 try {
     val activity = requireActivity()
-if (activity is ExoplayerView) {                            episode.selectedSubtitle = -1                            model.setEpisode(episode, "Subtitle")
+if (activity is ExoplayerView) {
+        episode.selectedSubtitle = -1                            model.setEpisode(episode, "Subtitle")
         model.getMedia().observe(viewLifecycleOwner) { media ->
-                                PrefManager.setCustomVal("subLang_${media.id}", "Online:${item.url}")                            }
+                                PrefManager.setCustomVal("subLang_${media.id}", "Online:${item.url}")
+                            }
 // Convert WyzieSub to StremioSub for compatibility
 val stremioSub = StremioSub(                                id = item.url, // Use URL as ID                                url = item.url,                                lang = item.language                            )
-        activity.applyOnlineSubtitle(stremioSub)                        }
-} catch (e: Exception) {                        e.printStackTrace()}
-dismiss()                }
+        activity.applyOnlineSubtitle(stremioSub)
+                        }
+}
+        catch (e: Exception) {
+        e.printStackTrace()
+}
+dismiss()
+                }
 return            }
 // --- ONLINE SUBTITLES (STREMIO) ---
 if (item is StremioSub) {
@@ -202,16 +260,26 @@ if (item is StremioSub) {
 val label = "[ONLINE] ${if(seInfo.isNotEmpty()) "$seInfo." else ""}$langName"                binding.subtitleTitle.text = label                // Check if this online subtitle is currently selected using UNIQUE ID                model.getMedia().observe(viewLifecycleOwner) { 
         m
 val selSubs: String? = PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)                    // Use subtitle ID to uniquely identify selection
-if (selSubs != "Online:${item.id}") {                        binding.root.setCardBackgroundColor(TRANSPARENT)
-} else {                        binding.root.setCardBackgroundColor(highlightColor)                    }}
+if (selSubs != "Online:${item.id}") {
+        binding.root.setCardBackgroundColor(TRANSPARENT)
+ }
+        else {
+        binding.root.setCardBackgroundColor(highlightColor)                    }}
 binding.root.setOnClickListener {                    // Logger.log("SubtitleDialogFragment: Online subtitle clicked - ${item.lang}")
 try {
     val activity = requireActivity()                        // Logger.log("SubtitleDialogFragment: Activity = ${activity::class.simpleName}")
-if (activity is ExoplayerView) {                            // Logger.log("SubtitleDialogFragment: Activity IS ExoplayerView, calling applyOnlineSubtitle")                            // 1. Reset the Local Subtitle Selection Index                            episode.selectedSubtitle = -1                            model.setEpisode(episode, "Subtitle")                            // 2. Save the "Online" label WITH unique ID to Preferences                            model.getMedia().observe(viewLifecycleOwner) { media ->                                PrefManager.setCustomVal("subLang_${media.id}", "Online:${item.id}")                            }
+if (activity is ExoplayerView) {
+        // Logger.log("SubtitleDialogFragment: Activity IS ExoplayerView, calling applyOnlineSubtitle")                            // 1. Reset the Local Subtitle Selection Index                            episode.selectedSubtitle = -1                            model.setEpisode(episode, "Subtitle")                            // 2. Save the "Online" label WITH unique ID to Preferences                            model.getMedia().observe(viewLifecycleOwner) { media ->                                PrefManager.setCustomVal("subLang_${media.id}", "Online:${item.id}")
+                            }
 // 3. Apply the subtitle                            activity.applyOnlineSubtitle(item)                            // Logger.log("SubtitleDialogFragment: applyOnlineSubtitle called successfully")
-} else {                            // Logger.log("SubtitleDialogFragment: Activity is NOT ExoplayerView! Type = ${activity::class.qualifiedName}")                        }
-} catch (e: Exception) {                        // Logger.log("SubtitleDialogFragment: Exception in online subtitle click: ${e.message}")
-        e.printStackTrace()}
+ }
+        else {                            // Logger.log("SubtitleDialogFragment: Activity is NOT ExoplayerView! Type = ${activity::class.qualifiedName}")
+                        }
+}
+        catch (e: Exception) {
+        // Logger.log("SubtitleDialogFragment: Exception in online subtitle click: ${e.message}")
+        e.printStackTrace()
+}
 dismiss()}}
 }
 

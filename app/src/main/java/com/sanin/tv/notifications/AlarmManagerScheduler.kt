@@ -14,7 +14,8 @@ import java.util.concurrent.TimeUnit
 class AlarmManagerScheduler(
 private val context: Context) : TaskScheduler {
     override fun scheduleRepeatingTask(taskType: TaskType, interval: Long) {
-if (TimeUnit.MINUTES.toMillis(interval) < TimeUnit.MINUTES.toMillis(15)) {            cancelTask(taskType)
+if (TimeUnit.MINUTES.toMillis(interval) < TimeUnit.MINUTES.toMillis(15)) {
+        cancelTask(taskType)
 return        }
 
 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -28,11 +29,18 @@ else -> return        }
 val pendingIntent = PendingIntent.getBroadcast(            context,            taskType.ordinal,            intent,            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE        )        
 val triggerAtMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(interval)
 try {
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {                alarmManager.setExactAndAllowWhileIdle(                    AlarmManager.RTC_WAKEUP,                    triggerAtMillis,                    pendingIntent                )
-} else {                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)            }
-} catch (e: SecurityException) {            PrefManager.setVal(PrefName.UseAlarmManager, false)
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        alarmManager.setExactAndAllowWhileIdle(                    AlarmManager.RTC_WAKEUP,                    triggerAtMillis,                    pendingIntent                )
+ }
+        else {
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            }
+}
+        catch (e: SecurityException) {
+        PrefManager.setVal(PrefName.UseAlarmManager, false)
         TaskScheduler.create(context, true).cancelAllTasks()
-        TaskScheduler.create(context, false).scheduleAllTasks(context)}
+        TaskScheduler.create(context, false).scheduleAllTasks(context)
+}
 }
 
 override fun cancelTask(taskType: TaskType) {

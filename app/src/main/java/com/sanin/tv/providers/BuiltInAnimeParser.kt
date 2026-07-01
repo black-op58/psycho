@@ -55,10 +55,11 @@ class BuiltInAnimeParser : AnimeParser() {
             link = title,
             coverUrl = FileUrl(mediaObj.cover ?: ""),
             extra = extra,
-            sAnime = SAnime.create().apply { this.title = title }
+            sAnime = SAnime.create().apply {
+        this.title = title 
+}
         )
-    }
-
+      }
     // ──────────────────────────────────────────────────────────────────────
     // Episode list — return numbered stubs 1..lastEp.  The heavy lifting
     // (stream resolution) happens in loadVideoServers().
@@ -85,7 +86,7 @@ class BuiltInAnimeParser : AnimeParser() {
                     "malId" to malId
                 )
             )
-        }
+         }
     }
 
     // ──────────────────────────────────────────────────────────────────────
@@ -114,8 +115,7 @@ class BuiltInAnimeParser : AnimeParser() {
                 extraData = mapOf("providerName" to result.providerName)
             )
         )
-    }
-
+      }
     // ──────────────────────────────────────────────────────────────────────
     // Video extractor — since we already have the direct stream URL from
     // StreamFetcher, we use a thin extractor that just returns it.
@@ -154,5 +154,5 @@ class BuiltInVideoExtractor(private val videoServer: VideoServer) : VideoExtract
         )
 
         return VideoContainer(listOf(video))
-    }
+     }
 }

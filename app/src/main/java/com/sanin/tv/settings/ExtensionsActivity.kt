@@ -43,11 +43,11 @@ class ExtensionsActivity : AppCompatActivity() {
             val type = intent.getSerializableExtra("type") as? MediaType
                 ?: MediaType.ANIME
             val repos = when (type) {
-                MediaType.NOVEL -> {
+        MediaType.NOVEL -> {
                     PrefManager.getVal(PrefName.NovelExtensionRepos)
-                }
+                 }
                 else -> emptyList<String>()
-            }
+             }
             AddRepositoryBottomSheet.newInstance(
                 type,
                 repos.toList(),
@@ -55,11 +55,11 @@ class ExtensionsActivity : AppCompatActivity() {
                 AddRepositoryBottomSheet::removeRepo
 
             ).show(supportFragmentManager, "add_repo")
-        }
+         }
     }
 }
 
 interface SearchQueryHandler {
     fun updateContentBasedOnQuery(query: String?)
     fun notifyDataChanged()
-}
+  }

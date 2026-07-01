@@ -43,21 +43,30 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile        binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)        binding.statisticList.adapter = adapter
         binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)        binding.statisticList.isNestedScrollingEnabled = true
         binding.statisticList.layoutManager =            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)        binding.statisticProgressBar.visibility = View.VISIBLE
-        binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE        binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
-binding.sourceType.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                MediaType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")}
+        binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE        binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin = statusBarHeight        }
+binding.sourceType.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                MediaType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")
+}
 )        )
-        binding.sourceFilter.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                StatType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")}
+        binding.sourceFilter.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                StatType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")
+}
 )        )        binding.compare.setOnCheckedChangeListener { _, isChecked ->
-if (isChecked) {                activity.lifecycleScope.launch {
-if (Anilist.userid != null) {                        withContext(Dispatchers.Main) {                            binding.statisticProgressBar.visibility = View.VISIBLE                            binding.statisticList.visibility = View.GONE                        }
+if (isChecked) {
+        activity.lifecycleScope.launch {
+if (Anilist.userid != null) {
+        withContext(Dispatchers.Main) {
+        binding.statisticProgressBar.visibility = View.VISIBLE                            binding.statisticList.visibility = View.GONE                        }
 
 val userStats =                            Anilist.query.getUserStatistics(Anilist.userid!!)?.data?.user
-if (userStats != null) {                            stats.add(userStats)
+if (userStats != null) {
+        stats.add(userStats)
         withContext(Dispatchers.Main) {
                                 loadStats(type == MediaType.ANIME)                                binding.statisticProgressBar.visibility = View.GONE
                                 binding.statisticList.visibility = View.VISIBLE                            }}}
 }
-} else {                stats.removeAll(                    stats.filter { it?.id == Anilist.userid }.toSet()                )
+}
+        else {
+        stats.removeAll(                    stats.filter { it?.id == Anilist.userid }.toSet()                )
         loadStats(type == MediaType.ANIME)            }}
 binding.filterContainer.visibility = View.GONE    }
 
@@ -67,16 +76,23 @@ override fun onPause() {
 
 override fun onResume() {        
         s
-if (this::binding.isInitialized) {            binding.statisticList.visibility = View.VISIBLE            binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)
+if (this::binding.isInitialized) {
+        binding.statisticList.visibility = View.VISIBLE            binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)
         binding.root.requestLayout()
-if (!loadedFirstTime) {                activity.lifecycleScope.launch {                    stats.clear()
+if (!loadedFirstTime) {
+        activity.lifecycleScope.launch {
+        stats.clear()
         stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
                     withContext(Dispatchers.Main) {
-                        binding.filterContainer.visibility = View.VISIBLE                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->                            type = MediaType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)                        }
-binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->                            statType = StatType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)}
+                        binding.filterContainer.visibility = View.VISIBLE                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->                            type = MediaType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)
+                        }
+binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->                            statType = StatType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)
+}
 loadStats(type == MediaType.ANIME)                        binding.statisticProgressBar.visibility = View.GONE}}
 loadedFirstTime = true
-} else {                loadStats(type == MediaType.ANIME)            }}
+}
+        else {
+        loadStats(type == MediaType.ANIME)            }}
 }
 
 private fun standardizeChartPackets(        packets: MutableList<ChartPacket>    ): MutableList<ChartPacket> {
@@ -94,11 +110,13 @@ val standardizedValues = referenceNames.map {
 
 @Suppress("UNCHECKED_CAST")            
 val staffChart = ChartBuilder.buildChart(                activity,                ChartType.TwoDimensional,                AAChartType.Line,                statType,                type,                chartPackets,                xAxisName = "Staff",                polar = false,                passedCategories = chartPackets[0].names as List<String>,                scrollPos = 0.0f            )
-        adapter.add(ChartItem("Staff", staffChart, activity))        }
+        adapter.add(ChartItem("Staff", staffChart, activity))
+        }
 }
 
 private fun convertScore(score: Int, type: String?): Int {
-return when (type) {            "POINT_100" -> score            "POINT_10_DECIMAL" -> score            "POINT_10" -> score * 10            "POINT_5" -> score * 20            "POINT_3" -> score * 33
+return when (type) {
+        "POINT_100" -> score            "POINT_10_DECIMAL" -> score            "POINT_10" -> score * 10            "POINT_5" -> score * 20            "POINT_3" -> score * 33
 else -> score        }
 }
 
@@ -106,5 +124,7 @@ companion object {
     fun newInstance(user: Query.UserProfile): StatsFragment {
     val args = Bundle().apply {                
         p
-return StatsFragment().apply {                arguments = args            }}
-}}
+return StatsFragment().apply {
+        arguments = args            }}
+}
+}

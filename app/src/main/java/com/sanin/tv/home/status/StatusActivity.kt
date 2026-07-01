@@ -40,15 +40,18 @@ val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
 if (activity.getOrNull(position) != null) {
     val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity)            
 val startIndex = if (startFrom > 0) startFrom else 0            binding.stories.setStoriesList(                activityList = activity[position].activity,                startIndex = startIndex + 1            )
-} else {            Logger.log("index out of bounds for position $position of size ${activity.size}")
+ }
+        else {
+        Logger.log("index out of bounds for position $position of size ${activity.size}")
         finish()
-        }
+         }
 }
 
 private fun findFirstNonMatch(watchedActivity: Set<Int>, activity: List<Activity>): Int {
 for (activityItem in activity) {
 if (activityItem.id !in watchedActivity) {
-return activity.indexOf(activityItem)            }
+return activity.indexOf(activityItem)
+            }
 }
 return -1    }
 
@@ -60,12 +63,15 @@ override fun onResume() {
         s
 if (hasWindowFocus())
         binding.stories.resume()
-    }
-
+      }
 override fun onWindowFocusChanged(hasFocus: Boolean) {        
         s
-if (hasFocus) {            binding.stories.resume()
-} else {            binding.stories.pause()        }
+if (hasFocus) {
+        binding.stories.resume()
+ }
+        else {
+        binding.stories.pause()
+        }
 }
 
 override fun onStoriesEnd() {        
@@ -77,7 +83,10 @@ val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity)
 val startIndex = if (startFrom > 0) startFrom else 0            binding.stories.startAnimation(slideOutLeft)
         binding.stories.setStoriesList(activity[position].activity, startIndex + 1)
             binding.stories.startAnimation(slideInRight)
-} else {            finish()        }
+ }
+        else {
+        finish()
+        }
 }
 
 override fun onStoriesStart() {        
@@ -89,7 +98,10 @@ val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity)
 val startIndex = if (startFrom > 0) startFrom else 0            binding.stories.startAnimation(slideOutRight)
         binding.stories.setStoriesList(activity[position].activity, startIndex + 1)
             binding.stories.startAnimation(slideInLeft)
-} else {            finish()        }
+ }
+        else {
+        finish()
+        }
 }
 
 companion object {

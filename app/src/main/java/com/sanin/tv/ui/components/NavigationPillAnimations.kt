@@ -25,8 +25,8 @@ fun Modifier.glowFocusEffect(isFocused: Boolean): Modifier {
 val scale by animateFloatAsState(        targetValue = if (isFocused) 1.05f else 1.0f,        animationSpec = FocusSpringSpec, label = "glowScale"    )
 return this.graphicsLayer { scaleX = scale
 scaleY = scale }
-.then(if (isFocused) Modifier.border(2.dp, IcyBlueBorder, RoundedCornerShape(50)) else Modifier)}
-
+.then(if (isFocused) Modifier.border(2.dp, IcyBlueBorder, RoundedCornerShape(50)) else Modifier)
+ }
 @Composable
 fun Modifier.scaleFocusEffect(isFocused: Boolean): Modifier {
     val scale by animateFloatAsState(        targetValue = if (isFocused) 1.08f else 1.0f,        animationSpec = FocusSpringSpec, label = "scaleAnim"    )
@@ -39,11 +39,14 @@ fun Modifier.pulseFocusEffect(isFocused: Boolean): Modifier {
         m
     LaunchedEffect(isFocused) {
 if (isFocused) {
-while (true) {                pulseScale = 1.12f
+while (true) {
+        pulseScale = 1.12f
 delay(400);
         pulseScale = 1.08f
-delay(400)            }
-} else { pulseScale = 1.0f }
+delay(400)
+            }
+}
+        else { pulseScale = 1.0f }
 }
 
 val scale by animateFloatAsState(targetValue = pulseScale, animationSpec = SpringSpec, label = "pulse")
@@ -59,8 +62,10 @@ if (isFocused) {
 while (true) { target = 1.08f
 delay(800)
 target = 1.0f
-delay(800) }
-} else { target = 1.0f }
+delay(800)
+ }
+}
+        else { target = 1.0f }
 }
 
 val scale by animateFloatAsState(targetValue = target, animationSpec = BreatheSpec, label = "breathe")
@@ -68,6 +73,6 @@ return this.graphicsLayer { scaleX = scale
 scaleY = scale }}
 
 @Composable
-fun Modifier.navigationPillFocusEffect(isFocused: Boolean, effect: String): Modifier = when (effect) {    
+fun Modifier.navigationPillFocusEffect(isFocused: Boolean, effect: String): Modifier = when (effect) {
         "
 else      -> this}

@@ -11,8 +11,8 @@ import kotlinx.coroutines.runBlocking
 class SubscriptionNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {        
         L
-            SubscriptionNotificationTask().execute(context)        }
-
+            SubscriptionNotificationTask().execute(context)
+         }
 val subscriptionInter
 val =            SubscriptionNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.SubscriptionNotificationInterval)]        AlarmManagerScheduler(context).scheduleRepeatingTask(            TaskScheduler.TaskType.SUBSCRIPTION_NOTIFICATION,            subscriptionInter
 val        )    }}

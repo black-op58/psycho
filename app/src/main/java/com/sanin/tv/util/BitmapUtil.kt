@@ -10,8 +10,15 @@ try {
     val url = URL(imageUrl);
         urlConnection = url.openConnection() as HttpURLConnection
                 urlConnection.requestMethod = "GET"                urlConnection.connect()
-if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {                    inputStream = urlConnection.inputStream                    bitmap = BitmapFactory.decodeStream(inputStream)                    bitmap?.let { bitmapCache.put(cacheName, it) }}
-} catch (e: Exception) {                e.printStackTrace()            } finally {                inputStream?.close()                urlConnection?.disconnect()}
+if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
+        inputStream = urlConnection.inputStream                    bitmap = BitmapFactory.decodeStream(inputStream)                    bitmap?.let { bitmapCache.put(cacheName, it) }}
 }
-return bitmap?.let { roundCorners(it) }
-}}
+        catch (e: Exception) {
+        e.printStackTrace()            } finally {
+        inputStream?.close()                urlConnection?.disconnect()
+}
+}
+return bitmap?.let { roundCorners(it)
+ }
+}
+}

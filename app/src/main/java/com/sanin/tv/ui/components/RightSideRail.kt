@@ -45,8 +45,10 @@ fun RightSideRail(
                 .background(Color.Black.copy(alpha = 0.55f))
                 .clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) { onDismiss() }
+                    interactionSource = remember { MutableInteractionSource()
+ }
+                ) { onDismiss()
+ }
         ) {
             AnimatedVisibility(
                 visible = visible,
@@ -64,7 +66,8 @@ fun RightSideRail(
                         )
                         .clickable(
                             indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
+                            interactionSource = remember { MutableInteractionSource()
+ }
                         ) {}
                         .padding(top = 64.dp, bottom = 32.dp, start = 16.dp, end = 16.dp)
                 ) {
@@ -83,8 +86,7 @@ fun RightSideRail(
                             fontWeight = FontWeight.SemiBold,
                             maxLines = 1
                         )
-                    }
-
+                      }
                     Spacer(modifier = Modifier.height(4.dp))
                     HorizontalDivider(color = Color.White.copy(alpha = 0.12f))
                     Spacer(modifier = Modifier.height(12.dp))
@@ -98,8 +100,7 @@ fun RightSideRail(
                             Intent(context, NotificationActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
-                    }
-
+                      }
                     SideRailItem(
                         iconRes = R.drawable.ic_round_person_24,
                         label = "Profile"
@@ -111,8 +112,7 @@ fun RightSideRail(
                                 .putExtra("userId", userId)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
-                    }
-
+                      }
                     SideRailItem(
                         iconRes = R.drawable.ic_round_extension_24,
                         label = "Extensions"
@@ -122,8 +122,7 @@ fun RightSideRail(
                             Intent(context, SettingsExtensionsActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
-                    }
-
+                      }
                     SideRailItem(
                         iconRes = R.drawable.ic_round_manage_accounts_24,
                         label = "Settings"
@@ -133,7 +132,7 @@ fun RightSideRail(
                             Intent(context, SettingsActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
-                    }
+                     }
                 }
             }
         }
@@ -149,7 +148,8 @@ private fun SideRailItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
+            .clickable { onClick()
+ }
             .padding(vertical = 14.dp, horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp)
@@ -166,5 +166,5 @@ private fun SideRailItem(
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium
         )
-    }
+     }
 }

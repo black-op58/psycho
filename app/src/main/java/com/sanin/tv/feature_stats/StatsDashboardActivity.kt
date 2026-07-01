@@ -29,7 +29,7 @@ class StatsDashboardActivity : AppCompatActivity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, statusBarHeight(), 48, 64)
-        }
+         }
         scroll.addView(root)
         setContentView(scroll)
 
@@ -39,25 +39,24 @@ class StatsDashboardActivity : AppCompatActivity() {
         root.addView(loader)
 
         lifecycleScope.launch {
-    val cached = StatsCalculator.loadCached()
-            if (cached != null) {
-                loader.visibility = View.GONE
+    val cached = StatsCalculator.loadCached();
+        if (cached != null) {
+        loader.visibility = View.GONE
                 renderStats(root, cached)
-            }
-
+              }
             try {
     val userId = Anilist.userid
                 if (userId == null) {
-                    loader.visibility = View.GONE
+        loader.visibility = View.GONE
                     root.addView(bodyText("Please log in to AniList to see your stats."))
-                    return@launch
+        return@launch
                 }
 
                 val allMedia = withContext(Dispatchers.IO) {
                     buildList {
                         addAll(AnilistQueries.getWatchingMedia(userId) ?: emptyList())
                         addAll(AnilistQueries.getCompletedMedia(userId) ?: emptyList())
-                    }
+                     }
                 }
 
                 val stats = withContext(Dispatchers.IO) { 
@@ -65,14 +64,16 @@ class StatsDashboardActivity : AppCompatActivity() {
                 loader.visibility = View.GONE
 
                 if (cached == null) {
-                    renderStats(root, stats)
-                } else {
+        renderStats(root, stats)
+                 }
+        else {
                     root.addView(bodyText("✓ Stats refreshed"))
-                }
-            } catch (e: Exception) {
-                loader.visibility = View.GONE
-                snackString("Could not refresh stats: ${e.message}")
+                 }
             }
+        catch (e: Exception) {
+        loader.visibility = View.GONE
+                snackString("Could not refresh stats: ${e.message}")
+             }
         }
     }
 
@@ -98,32 +99,27 @@ class StatsDashboardActivity : AppCompatActivity() {
         stats.topGenres.forEachIndexed { i, genre ->
             val count = stats.genreBreakdown[genre] ?: 0
             root.addView(statRow("#${i + 1} $genre", "$count titles"))
-        }
-
+          }
         root.addView(sectionHeader("📅 Episodes by Year"))
         stats.yearBreakdown.entries
             .sortedByDescending { it.key }
             .take(6)
             .forEach { (year, eps) ->
                 root.addView(statRow(year.toString(), "$eps episodes"))
-            }
-
+              }
         val computedDate = java.text.SimpleDateFormat("MMM d, yyyy HH:mm", Locale.US)
             .format(java.util.Date(stats.computedAt))
         root.addView(bodyText("Last updated: $computedDate").apply {
             textSize = 11f
             setPadding(0, 24, 0, 0)
         })
-    }
-
+      }
     private fun headerText(text: String) = TextView(this).apply {
         this.text = text; textSize = 22f; setPadding(0, 0, 0, 16)
-    }
-
+      }
     private fun sectionHeader(text: String) = TextView(this).apply {
         this.text = text; textSize = 17f; setPadding(0, 32, 0, 8)
-    }
-
+      }
     private fun statRow(label: String, value: String): View {
     val row = LinearLayout(this).apply { 
         o

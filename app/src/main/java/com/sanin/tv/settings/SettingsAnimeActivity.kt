@@ -31,7 +31,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
         ActivityResultContracts.OpenDocumentTree()
     ) { uri ->
         if (uri != null) {
-            contentResolver.takePersistableUriPermission(
+        contentResolver.takePersistableUriPermission(
                 uri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             )
@@ -40,7 +40,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
             cacheStorageDesc?.text = uri.lastPathSegment
                 ?: getString(R.string.cache_storage_custom)
             snackString(getString(R.string.cache_storage_changed_folder))
-        }
+         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,21 +49,20 @@ class SettingsAnimeActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.apply {
             settingsAnimeLayout.updatePadding(top = statusBarHeight, bottom = navBarHeight)
-            animeSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
+            animeSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+  }
             settingsEpList.setOnClickListener {
                 setEpViewAlpha(settingsEpList, settingsEpGrid, settingsEpCompact)
                 snackString(getString(R.string.ep_list_view))
-            }
+             }
             settingsEpGrid.setOnClickListener {
                 setEpViewAlpha(settingsEpGrid, settingsEpList, settingsEpCompact)
                 snackString(getString(R.string.ep_grid_view))
-            }
+             }
             settingsEpCompact.setOnClickListener {
                 setEpViewAlpha(settingsEpCompact, settingsEpList, settingsEpGrid)
                 snackString(getString(R.string.ep_compact_view))
-            }
-
+              }
             val settingsList = arrayListOf(
 
                 // ─── Logo Art section header ──────────────────────────────
@@ -96,10 +95,10 @@ class SettingsAnimeActivity : AppCompatActivity() {
                                 TmdbApi.clearCache()
                                 b.settingsDesc.text = getString(R.string.clear_tmdb_cache_desc)
                                 snackString(getString(R.string.clear_tmdb_cache_done))
-                            }
+                             }
                             setNegButton(R.string.no)
                             show()
-                        }
+                         }
                     }
                 ),
 
@@ -123,28 +122,29 @@ class SettingsAnimeActivity : AppCompatActivity() {
                         val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri)
                         val options = if (uriStr.isBlank()) {
                             arrayOf(getString(R.string.cache_storage_choose_folder))
-                        } else {
+                         }
+        else {
                             arrayOf(
                                 getString(R.string.cache_storage_choose_folder),
                                 getString(R.string.cache_storage_reset_internal)
                             )
-                        }
+                         }
                         customAlertDialog().apply {
                             setTitle(R.string.cache_storage)
                             singleChoiceItems(items = options) { idx ->
                                 when (idx) {
-                                    0 -> folderPickerLauncher.launch(null)
+        0 -> folderPickerLauncher.launch(null)
                                     1 -> {
                                         TmdbApi.resetStorageToInternal()
                                         PrefManager.setVal(PrefName.CacheStorageUri, "")
                                         cacheStorageDesc?.text = getString(R.string.cache_storage_desc)
                                         snackString(getString(R.string.cache_storage_reset_done))
-                                    }
+                                     }
                                 }
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
 
@@ -157,7 +157,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     isActivity = true,
                     onClick    = { _ ->
                         startActivity(Intent(this@SettingsAnimeActivity, ProviderSourcesActivity::class.java))
-                    }
+                     }
                 ),
 
                 // ─── Continue Watching section header ─────────────────────
@@ -198,7 +198,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
 
@@ -211,7 +211,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     isChecked = PrefManager.getVal(PrefName.ContinueWatchingShowScreenshot),
                     switch    = { isChecked, _ ->
                         PrefManager.setVal(PrefName.ContinueWatchingShowScreenshot, isChecked)
-                    }
+                     }
                 ),
 
                 // Clear source memory
@@ -227,10 +227,10 @@ class SettingsAnimeActivity : AppCompatActivity() {
                             setPosButton(R.string.yes) {
                                 SourceMemoryManager.clearAll()
                                 snackString(getString(R.string.clear_source_memory_done))
-                            }
+                             }
                             setNegButton(R.string.no)
                             show()
-                        }
+                         }
                     }
                 ),
 
@@ -241,7 +241,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.prefer_dub_desc),
                     icon  = R.drawable.ic_round_audiotrack_24,
                     isChecked = PrefManager.getVal(PrefName.PreferDub),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.PreferDub, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.PreferDub, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -249,7 +250,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.smart_source_persistence_desc),
                     icon  = R.drawable.ic_round_dns_24,
                     isChecked = PrefManager.getVal(PrefName.SmartSourcePersistence),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.SmartSourcePersistence, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.SmartSourcePersistence, isChecked)
+ }
                 ),
 
                 // ─── Sync / AniList ───────────────────────────────────────────
@@ -259,7 +261,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.auto_sync_anilist_desc),
                     icon  = R.drawable.ic_round_sync_24,
                     isChecked = PrefManager.getVal(PrefName.AutoSyncAniList),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.AutoSyncAniList, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.AutoSyncAniList, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -267,7 +270,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.update_progress_automatically_desc),
                     icon  = R.drawable.ic_round_sync_24,
                     isChecked = PrefManager.getVal(PrefName.UpdateProgressAutomatically),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.UpdateProgressAutomatically, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.UpdateProgressAutomatically, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -275,7 +279,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.update_progress_chapters_desc),
                     icon  = R.drawable.ic_round_menu_book_24,
                     isChecked = PrefManager.getVal(PrefName.UpdateProgressForChapters),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.UpdateProgressForChapters, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.UpdateProgressForChapters, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -283,7 +288,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.update_progress_hentai_desc),
                     icon  = R.drawable.ic_round_nsfw_24,
                     isChecked = PrefManager.getVal(PrefName.UpdateProgressForHentai),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.UpdateProgressForHentai, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.UpdateProgressForHentai, isChecked)
+ }
                 ),
 
                 // ─── Home Layout Visibility ───────────────────────────────────
@@ -293,7 +299,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.show_continue_watching_desc),
                     icon  = R.drawable.ic_round_play_circle_24,
                     isChecked = PrefManager.getVal(PrefName.ShowContinueWatching),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowContinueWatching, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowContinueWatching, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -301,7 +308,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.show_planned_desc),
                     icon  = R.drawable.ic_round_star_24,
                     isChecked = PrefManager.getVal(PrefName.ShowPlanned),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowPlanned, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowPlanned, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -309,7 +317,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.show_recommendations_desc),
                     icon  = R.drawable.ic_round_auto_awesome_24,
                     isChecked = PrefManager.getVal(PrefName.ShowRecommendations),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowRecommendations, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowRecommendations, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -317,7 +326,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.show_trending_desc),
                     icon  = R.drawable.ic_round_sync_24,
                     isChecked = PrefManager.getVal(PrefName.ShowTrending),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowTrending, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowTrending, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -325,7 +335,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.show_popular_desc),
                     icon  = R.drawable.ic_round_favorite_24,
                     isChecked = PrefManager.getVal(PrefName.ShowPopular),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowPopular, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowPopular, isChecked)
+ }
                 ),
                 Settings(
                     type  = 2,
@@ -333,7 +344,8 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     desc  = getString(R.string.show_recent_desc),
                     icon  = R.drawable.ic_round_calendar_today_24,
                     isChecked = PrefManager.getVal(PrefName.ShowRecent),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowRecent, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowRecent, isChecked)
+ }
                 )
             )
 
@@ -345,7 +357,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                 setOnKeyListener { _, keyCode, event ->
                     if (event.action == KeyEvent.ACTION_DOWN &&
                         keyCode == KeyEvent.KEYCODE_BACK) {
-                        finish(); true
+        finish(); true
                     } else false
                 }
             }

@@ -30,18 +30,28 @@ val                )
 val                )
         scheduler.scheduleRepeatingTask(                    TaskType.SUBSCRIPTION_NOTIFICATION,                    subscriptionInter
 val                )            }}
-}}
+}
+}
 
 class AlarmPermissionStateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-if (intent?.action == AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED) {            PrefManager.init(context)            
+if (intent?.action == AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED) {
+        PrefManager.init(context)            
 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-val canScheduleExactAlarms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {                
+val canScheduleExactAlarms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         a
-} else {                true            }
-if (canScheduleExactAlarms) {                TaskScheduler.create(context, false).cancelAllTasks()
+}
+        else {
+        true            }
+if (canScheduleExactAlarms) {
+        TaskScheduler.create(context, false).cancelAllTasks()
         TaskScheduler.create(context, true).scheduleAllTasks(context)
-} else {                TaskScheduler.create(context, true).cancelAllTasks()
-        TaskScheduler.create(context, false).scheduleAllTasks(context)            }
-PrefManager.setVal(PrefName.UseAlarmManager, canScheduleExactAlarms)}
-}}
+ }
+        else {
+        TaskScheduler.create(context, true).cancelAllTasks()
+        TaskScheduler.create(context, false).scheduleAllTasks(context)
+            }
+PrefManager.setVal(PrefName.UseAlarmManager, canScheduleExactAlarms)
+}
+}
+}

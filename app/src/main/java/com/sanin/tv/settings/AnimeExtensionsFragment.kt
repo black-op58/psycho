@@ -33,7 +33,10 @@ private val adapter by lazy {
 private val animeExtensionManager: AnimeExtensionManager = Injekt.get()    
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
         _
-        binding.allExtensionsRecyclerView.adapter = adapter        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =            true        lifecycleScope.launch {            viewModel.pagerFlow.collectLatest { it ->                binding.allExtensionsRecyclerView.post {                    lifecycleScope.launch {                        adapter.submitData(it)                    }}}}
+        binding.allExtensionsRecyclerView.adapter = adapter        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =            true        lifecycleScope.launch {
+        viewModel.pagerFlow.collectLatest { it ->                binding.allExtensionsRecyclerView.post {
+        lifecycleScope.launch {
+        adapter.submitData(it)                    }}}}
 viewModel.invalidatePager() // Force a refresh of the pager
 return binding.root    }
 
@@ -49,10 +52,12 @@ if (isAdded) {
     val notificationManager =                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 val installerSteps = InstallerSteps(notificationManager, context)            // Start the installation process            animeExtensionManager.installExtension(pkg)                .observeOn(AndroidSchedulers.mainThread())                .subscribe(                    { 
         i
-)}
+)
+}
 }
 
 override fun onDestroyView() {        
         s
 _binding = null    }}
-}}
+}
+}

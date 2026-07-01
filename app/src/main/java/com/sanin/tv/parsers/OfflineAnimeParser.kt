@@ -13,16 +13,19 @@ if (it.isDirectory) {
         episodes.add(episode)                }}}
     episodes.addAll(loadEpisodesCompat(animeLink, extra, sAnime))        //filter those with the same name
 return episodes.distinctBy { it.number }
-.sortedBy { MediaNameAdapter.findEpisodeNumber(it.number)}
+.sortedBy { MediaNameAdapter.findEpisodeNumber(it.number)
+}
 }
 
 override suspend 
 fun loadVideoServers(        episodeLink: String,        extra: Map<String, String>?,        sEpisode: SEpisode    ): List<VideoServer> {
-return listOf(            VideoServer(                episodeLink,                offline = true,                extraData = extra            )        )    }
-
+return listOf(            VideoServer(                episodeLink,                offline = true,                extraData = extra            )        )
+     }
 override suspend 
 fun search(query: String): List<ShowResponse> {
     private fun determineSubtitleType(url: String): SubtitleType {
-return when {            url.lowercase(Locale.ROOT).endsWith("ass") -> SubtitleType.ASS            url.lowercase(Locale.ROOT).endsWith("vtt") -> SubtitleType.VTT
+return when {
+        url.lowercase(Locale.ROOT).endsWith("ass") -> SubtitleType.ASS            url.lowercase(Locale.ROOT).endsWith("vtt") -> SubtitleType.VTT
 else -> SubtitleType.SRT        }
-}}
+}
+}

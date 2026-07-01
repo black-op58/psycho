@@ -26,14 +26,16 @@ override fun onCreate(savedInstanceState: Bundle?) {
         binding.notificationTitle.text = getString(R.string.activities)
         binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight        }
-navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight        }
+navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        bottomMargin = navBarHeight        }
 
 val tabs = listOf(            Pair(R.drawable.ic_round_person_24, "Following"),            Pair(R.drawable.ic_globe_24, "Global"),        )        tabs.forEach { 
         (
-binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
+binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+  }
 val getOne = intent.getIntExtra("activityId", -1)
-if (getOne != -1) {            navBar.visibility = View.GONE        }
+if (getOne != -1) {
+        navBar.visibility = View.GONE        }
 binding.notificationViewPager.isUserInputEnabled = false        binding.notificationViewPager.adapter =            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
         binding.notificationViewPager.setOffscreenPageLimit(4)
         binding.notificationViewPager.setCurrentItem(selected, false)
@@ -42,8 +44,8 @@ binding.notificationViewPager.isUserInputEnabled = false        binding.notifica
 object : AnimatedBottomBar.OnTabSelectListener {
     override fun onTabSelected(                lastIndex: Int,                lastTab: AnimatedBottomBar.Tab?,                newIndex: Int,                newTab: AnimatedBottomBar.Tab            ) {                
         s
-    })    }
-
+    })
+     }
 override fun onResume() {        
         s
     }
@@ -52,7 +54,9 @@ private class ViewPagerAdapter(        fragmentManager: FragmentManager,        
 private val activityId: Int    ) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int = if (activityId != -1) 1 else 2        
 override fun createFragment(position: Int): Fragment {
-return when (position) {                0 -> ActivityFragment.newInstance(
+return when (position) {
+        0 -> ActivityFragment.newInstance(
 if (activityId != -1) ActivityType.ONE else ActivityType.USER,                    activityId = activityId                )
 else -> ActivityFragment.newInstance(ActivityType.GLOBAL)            }}
-}}
+}
+}

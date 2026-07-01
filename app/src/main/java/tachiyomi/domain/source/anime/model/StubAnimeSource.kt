@@ -20,8 +20,8 @@ fun getSeasonList(anime: SAnime): List<SAnime> =
 throw AnimeSourceNotInstalledException()    
 override suspend 
 fun getHosterList(episode: SEpisode): List<Hoster> {
-throw  AnimeSourceNotInstalledException()    }
-
+throw  AnimeSourceNotInstalledException()
+     }
 override suspend 
 fun getVideoList(hoster: Hoster): List<Video> =
 throw AnimeSourceNotInstalledException()    
@@ -29,7 +29,9 @@ override fun toString(): String =
 if (!isInvalid) "$name " else id.toString()    
 companion object {
     fun from(source: AnimeSource): StubAnimeSource {
-return StubAnimeSource(id = source.id, name = source.name)        }
-}}
+return StubAnimeSource(id = source.id, name = source.name)
+        }
+}
+}
 
 class AnimeSourceNotInstalledException : Exception()

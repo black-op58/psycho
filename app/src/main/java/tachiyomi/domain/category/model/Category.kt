@@ -7,4 +7,5 @@ val order: Long,
 val flags: Long,    
 val hidden: Boolean,) : Serializable {
     val isSystemCategory: Boolean = id == UNCATEGORIZED_ID    
-companion object {        const val UNCATEGORIZED_ID = 0L    }}
+companion object {
+        const val UNCATEGORIZED_ID = 0L    }}

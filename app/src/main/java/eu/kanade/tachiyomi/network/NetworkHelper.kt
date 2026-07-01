@@ -24,8 +24,9 @@ import java.util.prefs.Preferences
 import okhttp3.Credentials
 import okhttp3.Response
 import okhttp3.Route
-class NetworkHelper(    context: Context) {   init {     setupSocks5Proxy()   }
-
+class NetworkHelper(    context: Context) {
+        init {     setupSocks5Proxy()
+    }
 private fun setupSocks5Proxy() {
     val proxyEnabled = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
 if (proxyEnabled) {
@@ -40,10 +41,14 @@ val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
 object : Authenticator() {
     override fun getPasswordAuthentication(): PasswordAuthentication {
 return PasswordAuthentication(proxyUsername, proxyPassword.toCharArray())                    }}
-)            }
-} else {            System.clearProperty("socksProxyHost")
+)
+            }
+}
+        else {
+        System.clearProperty("socksProxyHost")
         System.clearProperty("socksProxyPort")
-        Authenticator.setDefault(null)        }
+        Authenticator.setDefault(null)
+        }
 }
 
 val cookieJar = AndroidCookieJar()    

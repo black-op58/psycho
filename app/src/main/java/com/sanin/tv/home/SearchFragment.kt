@@ -59,7 +59,7 @@ class SearchFragment : Fragment() {
         if (currentQuery.isNotBlank()) {
             binding.searchEditText.setText(currentQuery)
             binding.searchEditText.setSelection(currentQuery.length)
-        }
+         }
     }
 
     private fun setupSearchBar() {
@@ -69,14 +69,14 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 searchViewModel.onQueryChanged(s?.toString() ?: "")
                 updateHistoryVisibility()
-            }
+             }
         })
 
         binding.searchEditText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 event?.keyCode == KeyEvent.KEYCODE_ENTER
             ) {
-                searchViewModel.onSearchSubmit(v.text.toString())
+        searchViewModel.onSearchSubmit(v.text.toString())
                 true
             } else false
         }
@@ -84,7 +84,7 @@ class SearchFragment : Fragment() {
         binding.searchClearButton.setOnClickListener {
             binding.searchEditText.text?.clear()
             searchViewModel.onQueryChanged("")
-        }
+         }
     }
 
     private fun setupGenreChips() {
@@ -100,7 +100,7 @@ class SearchFragment : Fragment() {
                 }
             }
             binding.genreChipGroup.addView(chip)
-        }
+         }
     }
 
     private fun setupFilterButton() {
@@ -109,25 +109,23 @@ class SearchFragment : Fragment() {
             sheet.onFiltersApplied = { filter ->
                 searchViewModel.applyFilter(filter)
                 updateFilterBadge(filter)
-            }
+             }
             sheet.show(childFragmentManager, "filter")
-        }
+         }
     }
 
     private fun updateFilterBadge(filter: AdvancedSearchFilter) {
         val count = filter.activeFilterCount()
         binding.filterBadge.isVisible = count > 0
         binding.filterBadge.text = count.toString()
-    }
-
+      }
     private fun setupResultsGrid() {
         binding.resultsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-    }
-
+      }
     private fun setupHistoryList() {
         binding.historyClearButton.setOnClickListener {
             searchViewModel.clearHistory()
-        }
+         }
     }
 
     private fun updateHistoryVisibility() {
@@ -159,14 +157,14 @@ class SearchFragment : Fragment() {
             searchViewModel.history.collect { history ->
                 updateHistoryList(history)
                 updateHistoryVisibility()
-            }
+             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.filter.collect { filter ->
                 updateFilterBadge(filter)
                 syncGenreChips(filter.genre)
-            }
+             }
         }
     }
 
@@ -179,18 +177,18 @@ class SearchFragment : Fragment() {
                 setOnClickListener {
                     binding.searchEditText.setText(entry)
                     searchViewModel.onSearchSubmit(entry)
-                }
+                 }
                 setOnCloseIconClickListener {
                     searchViewModel.removeFromHistory(entry)
-                }
+                 }
             }
             binding.historyContainer.addView(chip)
-        }
+         }
     }
 
     private fun syncGenreChips(activeGenre: String?) {
         for (i in 0 until binding.genreChipGroup.childCount) {
-            val chip = binding.genreChipGroup.getChildAt(i) as? Chip ?: continue
+        val chip = binding.genreChipGroup.getChildAt(i) as? Chip ?: continue
             chip.isChecked = chip.text == activeGenre
         }
     }

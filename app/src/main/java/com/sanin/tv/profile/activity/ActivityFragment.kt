@@ -40,18 +40,25 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         s
             type = it.getSerializableCompat<ActivityType>("type") as ActivityType            userId = it.getInt("userId");
         activityId = it.getInt("activityId")
-        }
+         }
 binding.titleBar.visibility =
 if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.titleText.text =
-if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)                // Set up filter icon visibility        binding.filterButton.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.filterButton.setOnClickListener {            showFilterBottomSheet()        }
-binding.titleImage.setOnClickListener { handleTitleImageClick()}
+if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)                // Set up filter icon visibility        binding.filterButton.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.filterButton.setOnClickListener {
+        showFilterBottomSheet()
+        }
+binding.titleImage.setOnClickListener { handleTitleImageClick()
+}
 binding.listRecyclerView.adapter = adapter        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)        binding.listProgressBar.isVisible = true
-        binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight}
+        binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        bottomMargin = navBarHeight}
 binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {
             getList()
-if (adapter.itemCount == 0) {                binding.emptyTextView.isVisible = true            }
+if (adapter.itemCount == 0) {
+        binding.emptyTextView.isVisible = true            }
 binding.listProgressBar.isVisible = false}
-binding.feedSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()
+binding.feedSwipeRefresh.setOnRefreshListener {
+        lifecycleScope.launch {
+        adapter.clear()
         allActivities.clear()
                 page = 1
                 hasMoreActivities = true                getList()                binding.feedSwipeRefresh.isRefreshing = false}}
@@ -59,37 +66,44 @@ binding.listRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                
         s
-if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.feedRefresh.isVisible = true                        getList()                        binding.feedRefresh.isVisible = false
+if (shouldLoadMore()) {
+        lifecycleScope.launch {
+        binding.feedRefresh.isVisible = true                        getList()                        binding.feedRefresh.isVisible = false
                     }}}
-})    }
-
+})
+     }
 private fun showFilterBottomSheet() {        
         A
                 page = 1
                 hasMoreActivities = true                getList()                binding.listProgressBar.isVisible = false
             }
-}.show(childFragmentManager, "ActivityFilterBottomSheet")    }
-
+}.show(childFragmentManager, "ActivityFilterBottomSheet")
+     }
 private fun shouldLoadMore(): Boolean {
     val layoutManager =            (binding.listRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()        
 val adapter = binding.listRecyclerView.adapter
-return hasMoreActivities &&                !binding.listRecyclerView.canScrollVertically(1) &&                !binding.feedRefresh.isVisible && adapter?.itemCount != 0 &&                layoutManager == (adapter!!.itemCount - 1)    }
-
+return hasMoreActivities &&                !binding.listRecyclerView.canScrollVertically(1) &&                !binding.feedRefresh.isVisible && adapter?.itemCount != 0 &&                layoutManager == (adapter!!.itemCount - 1)
+     }
 private fun onActivityClick(id: Int, type: String) {
-    val intent = when (type) {            
+    val intent = when (type) {
         "
 else -> return        }
-ContextCompat.startActivity(requireContext(), intent, null)    }
-
+ContextCompat.startActivity(requireContext(), intent, null)
+     }
 override fun onResume() {        
         s
-if (this::binding.isInitialized) {            binding.root.requestLayout()        }
+if (this::binding.isInitialized) {
+        binding.root.requestLayout()
+        }
 }
 
 companion object {        
 enum class ActivityType { GLOBAL, USER, OTHER_USER, ONE }
 
 fun newInstance(            type: ActivityType,            userId: Int? = null,            activityId: Int? = null        ): ActivityFragment {
-return ActivityFragment().apply {                arguments = Bundle().apply {                    putSerializable("type", type)                    userId?.let { putInt("userId", it) }
+return ActivityFragment().apply {
+        arguments = Bundle().apply {
+        putSerializable("type", type)                    userId?.let { putInt("userId", it)
+ }
 activityId?.let { putInt("activityId", it)}}}}
 }

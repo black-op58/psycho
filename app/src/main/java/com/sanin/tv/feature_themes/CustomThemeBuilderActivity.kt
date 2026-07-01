@@ -31,7 +31,7 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, statusBarHeight(), 48, 64)
-        }
+         }
         scroll.addView(root)
         setContentView(scroll)
 
@@ -42,7 +42,8 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
 
         val nameField = EditText(this).apply {
             hint = "Theme name"
-            editingTheme?.let { setText(it.name) }
+            editingTheme?.let { setText(it.name)
+ }
         }
         root.addView(nameField)
 
@@ -61,27 +62,26 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
             val field = EditText(this).apply {
                 hint = "#AARRGGBB"
                 setText(default)
-            }
+             }
             colorFields[label] = field
             root.addView(field)
 
             val preview = View(this).apply {
                 layoutParams = LinearLayout.LayoutParams(48.dp(), 48.dp())
                 setBackgroundColor(CustomThemeManager.parseColor(default))
-            }
+             }
             root.addView(preview)
             field.addTextChangedListener(object : android.text.TextWatcher {
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: android.text.Editable?) {
-    val hex = s.toString().trim()
-                    if (hex.length == 7 || hex.length == 9) {
-                        preview.setBackgroundColor(CustomThemeManager.parseColor(hex))
-                    }
+    val hex = s.toString().trim();
+        if (hex.length == 7 || hex.length == 9) {
+        preview.setBackgroundColor(CustomThemeManager.parseColor(hex))
+                     }
                 }
             })
-        }
-
+          }
         val saveBtn = Button(this).apply {
             text = "Save Theme"
             layoutParams = LinearLayout.LayoutParams(
@@ -95,10 +95,9 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
             text = "Export Theme"
             isEnabled = editingTheme != null
         }
-        root.addView(exportBtn)
-
+        root.addView(exportBtn);
         if (editingTheme == null) {
-            root.addView(TextView(this).apply {
+        root.addView(TextView(this).apply {
                 text = "─── Presets ───"
                 textSize = 14f
                 setPadding(0, 32, 0, 8)
@@ -113,10 +112,10 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
                         colorFields["background"]?.setText(preset.backgroundColor)
                         colorFields["surface"]?.setText(preset.surfaceColor)
                         colorFields["accent"]?.setText(preset.accentColor)
-                    }
+                     }
                 }
                 root.addView(btn)
-            }
+             }
         }
 
         saveBtn.setOnClickListener {
@@ -136,8 +135,7 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
             CustomThemeManager.saveTheme(theme)
             snackString("Theme \"${theme.name}\" saved!")
             finish()
-        }
-
+          }
         exportBtn.setOnClickListener {
             editingTheme?.let { t ->
                 val json = CustomThemeManager.exportTheme(t)
@@ -145,7 +143,7 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
     val cm = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
                     cm.setPrimaryClip(android.content.ClipData.newPlainText("theme", json))
                     snackString("Theme JSON copied to clipboard!")
-                }
+                 }
             }
         }
     }
@@ -156,4 +154,4 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
     }
 
     private fun Int.dp() = (this * resources.displayMetrics.density).toInt()
-}
+  }

@@ -54,8 +54,9 @@ object ProviderRepository {
         val json = prefs?.getString(KEY_PROVIDERS, null) ?: return defaults
         return try {
             Mapper.json.decodeFromString(json)
-        } catch (e: Exception) {
-            Logger.log("ProviderRepository: load failed — ${e.message}")
+         }
+        catch (e: Exception) {
+        Logger.log("ProviderRepository: load failed — ${e.message}")
             defaults
         }
     }
@@ -65,10 +66,11 @@ object ProviderRepository {
             prefs?.edit()
                 ?.putString(KEY_PROVIDERS, Mapper.json.encodeToString(providers))
                 ?.apply()
-        } catch (e: Exception) {
-            Logger.log("ProviderRepository: save failed — ${e.message}")
-        }
+         }
+        catch (e: Exception) {
+        Logger.log("ProviderRepository: save failed — ${e.message}")
+         }
     }
 
     fun reset() = save(defaults)
-}
+  }

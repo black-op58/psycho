@@ -85,14 +85,16 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.animation_speed),
                     desc = getString(R.string.animation_speed_desc),
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { showAnimationSpeedDialog() }
+                    onClick = { showAnimationSpeedDialog()
+ }
                 ),
                 Settings(
                     type = 1,
                     name = getString(R.string.home_layout),
                     desc = getString(R.string.home_layout_desc),
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { showHomeLayoutDialog() }
+                    onClick = { showHomeLayoutDialog()
+ }
                 ),
                 // ── Home Banner Mode ──────────────────────────────────────────
                 Settings(
@@ -100,7 +102,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.home_banner_mode),
                     desc = getString(R.string.home_banner_mode_desc),
                     icon = R.drawable.ic_round_featured_play_list_24,
-                    onClick = { showHomeBannerModeDialog() }
+                    onClick = { showHomeBannerModeDialog()
+ }
                 ),
                 // ── Card Image (Cover vs Banner) ──────────────────────────────
                 Settings(
@@ -125,7 +128,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Card Orientation ──────────────────────────────────────────
@@ -151,7 +154,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Card Roundness ────────────────────────────────────────────
@@ -168,7 +171,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             getString(R.string.card_round_pill)
                         )
                         val cur = PrefManager.getVal<Int>(PrefName.CardRoundness)
-                        labels.getOrElse(dpVals.indexOf(cur)) { getString(R.string.card_round_medium) }
+                        labels.getOrElse(dpVals.indexOf(cur)) { getString(R.string.card_round_medium)
+ }
                     },
                     icon = R.drawable.ic_round_art_track_24,
                     onClick = { b ->
@@ -190,7 +194,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Card Styles ───────────────────────────────────────────────
@@ -226,7 +230,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 Settings(
@@ -253,7 +257,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 Settings(
@@ -280,7 +284,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Animations & Motion ───────────────────────────────────────
@@ -290,7 +294,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = getString(R.string.trending_scroller_desc),
                     icon = R.drawable.ic_round_sync_24,
                     isChecked = PrefManager.getVal(PrefName.TrendingScroller),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.TrendingScroller, isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.TrendingScroller, isChecked)
+ }
                 ),
                 Settings(
                     type = 1,
@@ -300,7 +305,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     onClick = { b ->
                         val opts = (1..50 step 5).map { 
         "
-                            .also { if (!it.contains("${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")) it.add(0, "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px") }
+                            .also { if (!it.contains("${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")) it.add(0, "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")
+ }
                             .toTypedArray()
                         val steps = (listOf(PrefManager.getVal<Int>(PrefName.BlurRadius)) + (1..50 step 5).toList()).distinct().sorted()
                         val cur = PrefManager.getVal<Int>(PrefName.BlurRadius)
@@ -314,7 +320,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 Settings(
@@ -334,7 +340,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
                 // ── Notification & Status Bar ─────────────────────────────────
@@ -344,7 +350,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = getString(R.string.hide_notification_dot_desc),
                     icon = R.drawable.ic_round_notifications_none_24,
                     isChecked = !PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowNotificationRedDot, !isChecked) }
+                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowNotificationRedDot, !isChecked)
+ }
                 ),
                 // ── Card Indicators ───────────────────────────────────────────
                 Settings(
@@ -390,7 +397,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             }
                             setNegButton(R.string.cancel)
                             show()
-                        }
+                         }
                     }
                 ),
             )
@@ -401,11 +408,12 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             settingsRecyclerView.isFocusableInTouchMode = false
             settingsRecyclerView.setOnKeyListener { _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    finish()
+        finish()
                     true
                 } else false
             }
-            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+ }
         }
     }
 
@@ -420,7 +428,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         slider.setOnKeyListener { _, keyCode, event ->
             if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+        KeyEvent.KEYCODE_DPAD_RIGHT -> {
                     val step = slider.stepSize.takeIf { 
         i
                     slider.value = (slider.value + step).coerceAtMost(slider.valueTo)
@@ -438,10 +446,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         customAlertDialog().apply {
             setTitle(R.string.animation_speed)
             setCustomView(speedView)
-            setPosButton(R.string.ok) { PrefManager.setVal(PrefName.AnimationSpeed, slider.value) }
+            setPosButton(R.string.ok) { PrefManager.setVal(PrefName.AnimationSpeed, slider.value)
+ }
             setNegButton(R.string.cancel)
             show()
-        }
+         }
     }
 
     // ── Home layout dialog ────────────────────────────────────────────────────
@@ -465,10 +474,10 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                 val adapter = rv.adapter as HomeLayoutAdapter
                 PrefManager.setVal(PrefName.HomeLayout, adapter.showList)
                 PrefManager.setVal(PrefName.HomeLayoutOrder, adapter.orderList)
-            }
+             }
             setNegButton(R.string.cancel)
             show()
-        }
+         }
     }
 
     // ── Home Banner Mode dialog ───────────────────────────────────────────────
@@ -498,10 +507,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                 selectedItemIndex = current,
                 dismissOnSelect   = false
             ) { idx -> selected = idx }
-            setPosButton(R.string.ok) { PrefManager.setVal(PrefName.HomeBannerMode, selected) }
+            setPosButton(R.string.ok) { PrefManager.setVal(PrefName.HomeBannerMode, selected)
+ }
             setNegButton(R.string.cancel)
             show()
-        }
+         }
     }
 
     // ── HomeLayoutAdapter ─────────────────────────────────────────────────────
@@ -529,8 +539,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeLayoutViewHolder {
             val b = ItemHomeLayoutBinding.inflate(layoutInflater, parent, false)
             return HomeLayoutViewHolder(b)
-        }
-
+          }
         override fun getItemCount() = sectionNames.size
 
         override fun onBindViewHolder(holder: HomeLayoutViewHolder, position: Int) {

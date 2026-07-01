@@ -50,7 +50,10 @@ suspend fun AnilistQueries.loadPopularAllTime(): List<Media>? = tryWithSuspend {
 
     val response = executeQuery<Query.Page>(query, force = true)?.data?.page
     response?.medias?.mapNotNull { raw ->
-        try { Media(raw) } catch (_: Exception) { null }
+        try { Media(raw)
+ }
+        catch (_: Exception) {
+        null }
     }
 }
 
@@ -64,8 +67,7 @@ suspend fun AnilistQueries.getUserStatus(): ArrayList<User>? = tryWithSuspend {
     // Full implementation hooks into AniList's Page > activities query.
     // Stub: return empty so the status row is hidden until the real feed is wired.
     arrayListOf()
-}
-
+  }
 /**
  * Ensures every Media item in the user's home lists has a banner / cover image.
  * Runs as a background pass after [initHomePage] so that the UI doesn't block.

@@ -4,7 +4,8 @@ import com.sanin.tv.media.anime.Episode
 import com.sanin.tv.tryWithSuspend
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-object Jikan {    const val apiUrl = "https://api.jikan.moe/v4/"    suspend inline 
+object Jikan {
+    const val apiUrl = "https://api.jikan.moe/v4/"    suspend inline 
 fun <reified T : Any> query(endpoint: String): T? {
 return tryWithSuspend { client.get("$apiUrl$endpoint").parsed() }}
 suspend
@@ -17,7 +18,8 @@ if (page > 0) kotlinx.coroutines.delay(1000)            page++
             
 val res = query<EpisodeResponse>("anime/$malId/episodes?page=$page")            res?.data?.forEach {
     val ep = it.malID.toString()                eps[ep] = Episode(
-                    ep, title = it.title,                    //Personal revenge with 34566 :prayge:                    filler = if (malId != 34566) it.filler else true,                    date = it.aired?.substringBefore("T")                )            }
+                    ep, title = it.title,                    //Personal revenge with 34566 :prayge:                    filler = if (malId != 34566) it.filler else true,                    date = it.aired?.substringBefore("T")                )
+            }
     hasNextPage = res?.pagination?.hasNextPage == true        }
 return eps    }
 

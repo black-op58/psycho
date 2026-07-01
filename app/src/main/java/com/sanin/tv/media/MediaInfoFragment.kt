@@ -50,8 +50,7 @@ class MediaInfoFragment : Fragment() {
             .translationY(0f)
             .setDuration(duration)
             .start()
-    }
-
+      }
     fun View.fadeOut(duration: Long = 200) {
         if (visibility != View.VISIBLE) return
         animate()
@@ -64,7 +63,7 @@ class MediaInfoFragment : Fragment() {
                 translationY = 0f
             }
             .start()
-    }
+     }
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
@@ -83,11 +82,10 @@ class MediaInfoFragment : Fragment() {
 
         model.scrolledToTop.observe(viewLifecycleOwner) {
             if (it) binding.mediaInfoScroll.scrollTo(0, 0)
-        }
-
+          }
         model.getMedia().observe(viewLifecycleOwner) { media ->
             if (media != null) {
-                loaded = true
+        loaded = true
 
                 binding.mediaInfoProgressBar.visibility = View.GONE
                 binding.mediaInfoContainer.visibility = View.VISIBLE
@@ -113,9 +111,9 @@ class MediaInfoFragment : Fragment() {
                 binding.mediaInfoStart.text = media.startDate?.toString() ?: "??"
                 binding.mediaInfoEnd.text = media.endDate?.toString() ?: "??"
                 binding.mediaInfoPopularity.text = media.popularity.toString()
-                binding.mediaInfoFavorites.text = media.favourites.toString()
-                if (media.anime != null) {
-                    val episodeDuration = media.anime.episodeDuration
+                binding.mediaInfoFavorites.text = media.favourites.toString();
+        if (media.anime != null) {
+        val episodeDuration = media.anime.episodeDuration
 
                     binding.mediaInfoDuration.text = when {
                         episodeDuration != null -> {
@@ -124,15 +122,15 @@ class MediaInfoFragment : Fragment() {
 
                             val formattedDuration = buildString {
                                 if (hours > 0) {
-                                    append("$hours hour")
-                                    if (hours > 1) append("s")
-                                }
-
+        append("$hours hour");
+        if (hours > 1) append("s")
+                                  
+}
                                 if (minutes > 0) {
-                                    if (hours > 0) append(", ")
-                                    append("$minutes min")
-                                    if (minutes > 1) append("s")
-                                }
+        if (hours > 0) append(", ")
+                                    append("$minutes min");
+        if (minutes > 1) append("s")
+                                 }
                             }
 
                             formattedDuration
@@ -147,7 +145,7 @@ class MediaInfoFragment : Fragment() {
                     binding.mediaInfoSeason.text = seasonInfo
 
                     if (media.anime.mainStudio != null) {
-                        binding.mediaInfoStudioContainer.visibility = View.VISIBLE
+        binding.mediaInfoStudioContainer.visibility = View.VISIBLE
                         binding.mediaInfoStudio.text = media.anime.mainStudio!!.name
                         binding.mediaInfoStudioContainer.setOnClickListener {
                             ContextCompat.startActivity(
@@ -158,10 +156,10 @@ class MediaInfoFragment : Fragment() {
                                 ),
                                 null
                             )
-                        }
+                         }
                     }
-                    // Show producers as a chip group (same style as External Links)
-                    if (!media.anime.producers.isNullOrEmpty()) {
+                    // Show producers as a chip group (same style as External Links);
+        if (!media.anime.producers.isNullOrEmpty()) {
                         val validProducers = media.anime.producers!!.filter { 
         i
                         if (validProducers.isNotEmpty()) {
@@ -190,12 +188,12 @@ class MediaInfoFragment : Fragment() {
                                         ),
                                         null
                                     )
-                                }
+                                 }
                                 bind.itemChipGroup.addView(chip)
-                            }
+                             }
                         }
                         )
-                    }
+                     }
                     ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
@@ -211,10 +209,10 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
-                    }
+                     }
                 }
                 if (media.trailer != null && !offline) {
-                    @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION")
                     class MyChrome : WebChromeClient() {
                         private var mCustomView: View? = null
                         private var mCustomViewCallback: CustomViewCallback? = null
@@ -236,7 +234,7 @@ class MediaInfoFragment : Fragment() {
                             paramCustomViewCallback: CustomViewCallback
                         ) {
                             if (mCustomView != null) {
-                                onHideCustomView()
+        onHideCustomView()
                                 return
                             }
                             mCustomView = paramView
@@ -266,7 +264,7 @@ class MediaInfoFragment : Fragment() {
                         settings.loadWithOverviewMode = true
                         settings.mediaPlaybackRequiresUserGesture = false
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                         }
                         settings.userAgentString = null
                         isSoundEffectsEnabled = true
@@ -315,7 +313,7 @@ class MediaInfoFragment : Fragment() {
                                 context.let {
                                      (it as? android.app.Activity)?.runOnUiThread {
                                          loadDataWithBaseURL("https://www.youtube-nocookie.com", trailerHtml, "text/html", "utf-8", null)
-                                     }
+                                      }
                                 }
                             }
                         }, "Android")
@@ -391,11 +389,10 @@ class MediaInfoFragment : Fragment() {
                             </html>
                         """.trimIndent()
                         loadDataWithBaseURL("https://www.youtube-nocookie.com", placeholderHtml, "text/html", "utf-8", null)
-                    }
+                     }
                     bind.root.tag = "dynamic_view"
                     parent.addView(bind.root)
-                }
-
+                  }
                 if (media.anime != null && (media.anime.op.isNotEmpty() || media.anime.ed.isNotEmpty()) && !offline) {
                     val markWon = Markwon.builder(requireContext())
                         .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
@@ -421,20 +418,20 @@ class MediaInfoFragment : Fragment() {
                         arr.forEach {
                             op += "\n"
                             op += makeLink(it)
-                        }
+                         }
                         op = op.removePrefix("\n")
                         textView.setOnClickListener {
                             if (textView.maxLines == 4) {
-                                ObjectAnimator.ofInt(textView, "maxLines", 100)
+        ObjectAnimator.ofInt(textView, "maxLines", 100)
                                     .setDuration(950).start()
-                            } else {
+                             }
+        else {
                                 ObjectAnimator.ofInt(textView, "maxLines", 4)
                                     .setDuration(400).start()
-                            }
+                             }
                         }
                         markWon.setMarkdown(textView, op)
-                    }
-
+                      }
                     if (media.anime.op.isNotEmpty()) {
                         val bind = ItemTitleTextBinding.inflate(
                             LayoutInflater.from(context),
@@ -445,9 +442,7 @@ class MediaInfoFragment : Fragment() {
                         makeText(bind.itemText, media.anime.op)
                         bind.root.tag = "dynamic_view"
                         parent.addView(bind.root)
-                    }
-
-
+                       }
                     if (media.anime.ed.isNotEmpty()) {
                         val bind = ItemTitleTextBinding.inflate(
                             LayoutInflater.from(context),
@@ -458,7 +453,7 @@ class MediaInfoFragment : Fragment() {
                         makeText(bind.itemText, media.anime.ed)
                         bind.root.tag = "dynamic_view"
                         parent.addView(bind.root)
-                    }
+                     }
                 }
 
                 if (media.genres.isNotEmpty()) {
@@ -472,35 +467,34 @@ class MediaInfoFragment : Fragment() {
                     
                     bind.mediaInfoGenresRecyclerView.adapter = adapter
                     bind.mediaInfoGenresRecyclerView.layoutManager =
-                        GridLayoutManager(requireActivity(), (screenWidth / 156f).toInt())
-
-                    if (!offline) {
-                        genreModel.doneListener = {
+                        GridLayoutManager(requireActivity(), (screenWidth / 156f).toInt());
+        if (!offline) {
+        genreModel.doneListener = {
                             MainScope().launch {
                                 bind.mediaInfoGenresProgressBar.visibility = View.GONE
                             }
                         }
                         if (genreModel.genres != null) {
-                            adapter.genres = genreModel.genres!!
-                            adapter.pos = ArrayList(genreModel.genres!!.keys)
-                            if (genreModel.done) genreModel.doneListener?.invoke()
-                        }
+        adapter.genres = genreModel.genres!!
+                            adapter.pos = ArrayList(genreModel.genres!!.keys);
+        if (genreModel.done) genreModel.doneListener?.invoke()
+                         }
                         lifecycleScope.launch(Dispatchers.IO) {
                             genreModel.loadGenres(media.genres) {
                                 MainScope().launch {
                                     adapter.addGenre(it)
-                                }
+                                 }
                             }
                         }
-                    } else {
+                    }
+        else {
                         bind.mediaInfoGenresProgressBar.visibility = View.GONE
                         media.genres.forEach { genre ->
                              adapter.addGenre(Pair(genre, ""))
-                        }
+                         }
                     }
                     parent.addView(bind.root)
-                }
-
+                  }
                 if (media.tags.isNotEmpty() && !offline) {
                     val bind = ItemTitleChipgroupBinding.inflate(
                         LayoutInflater.from(context),
@@ -508,9 +502,9 @@ class MediaInfoFragment : Fragment() {
                         false
                     )
                     bind.root.tag = "dynamic_view"
-                    bind.itemTitle.setText(R.string.tags)
-                    for (position in media.tags.indices) {
-                        val chip = ItemChipBinding.inflate(
+                    bind.itemTitle.setText(R.string.tags);
+        for (position in media.tags.indices) {
+        val chip = ItemChipBinding.inflate(
                             LayoutInflater.from(context),
                             bind.itemChipGroup,
                             false
@@ -526,32 +520,31 @@ class MediaInfoFragment : Fragment() {
                                     .putExtra("search", true)
                                     .also {
                                         if (media.isAdult) {
-                                            if (!Anilist.adult) Toast.makeText(
+        if (!Anilist.adult) Toast.makeText(
                                                 chip.context,
                                                 currActivity()?.getString(R.string.content_18),
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             it.putExtra("hentai", true)
-                                        }
+                                         }
                                     },
                                 null
                             )
-                        }
+                         }
                         chip.setOnLongClickListener { copyToClipboard(media.tags[position]);true }
                         bind.itemChipGroup.addView(chip)
-                    }
+                     }
                     parent.addView(bind.root)
-                }
-
+                  }
                 if (!media.externalLinks.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleChipgroupBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
                         false
                     )
-                    bind.itemTitle.setText(R.string.external_links)
-                    for (link in media.externalLinks!!) {
-                        val url = link.url ?: continue
+                    bind.itemTitle.setText(R.string.external_links);
+        for (link in media.externalLinks!!) {
+        val url = link.url ?: continue
                         val chip = ItemChipBinding.inflate(
                             LayoutInflater.from(context),
                             bind.itemChipGroup,
@@ -560,24 +553,23 @@ class MediaInfoFragment : Fragment() {
                         chip.text = link.site
                         chip.setSafeOnClickListener {
                             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                        }
+                         }
                         chip.setOnLongClickListener { copyToClipboard(url); true }
                         bind.itemChipGroup.addView(chip)
-                    }
+                     }
                     bind.root.tag = "dynamic_view"
                     parent.addView(bind.root)
-                }
-
+                  }
                 if ((!media.relations.isNullOrEmpty() || media.sequel != null || media.prequel != null) && !offline) {
                     if (media.sequel != null || media.prequel != null) {
-                        ItemQuelsBinding.inflate(
+        ItemQuelsBinding.inflate(
                             LayoutInflater.from(context),
                             parent,
                             false
                         ).apply {
 
                             if (media.sequel != null) {
-                                mediaInfoSequel.visibility = View.VISIBLE
+        mediaInfoSequel.visibility = View.VISIBLE
                                 mediaInfoSequelImage.loadImage(
                                     media.sequel!!.banner ?: media.sequel!!.cover
                                 )
@@ -592,10 +584,10 @@ class MediaInfoFragment : Fragment() {
                                             media.sequel as Serializable
                                         ), null
                                     )
-                                }
+                                 }
                             }
                             if (media.prequel != null) {
-                                mediaInfoPrequel.visibility = View.VISIBLE
+        mediaInfoPrequel.visibility = View.VISIBLE
                                 mediaInfoPrequelImage.loadImage(
                                     media.prequel!!.banner ?: media.prequel!!.cover
                                 )
@@ -610,11 +602,11 @@ class MediaInfoFragment : Fragment() {
                                             media.prequel as Serializable
                                         ), null
                                     )
-                                }
+                                 }
                             }
                             root.tag = "dynamic_view"
                             parent.addView(root)
-                        }
+                         }
                     }
 
                     if (!media.review.isNullOrEmpty()) {
@@ -624,7 +616,8 @@ class MediaInfoFragment : Fragment() {
                             false
                         ).apply {
                             val adapter = GroupieAdapter()
-                            media.review!!.forEach { adapter.add(ReviewAdapter(it)) }
+                            media.review!!.forEach { adapter.add(ReviewAdapter(it))
+ }
                             itemTitle.setText(R.string.reviews)
                             itemRecycler.adapter = adapter
                             itemRecycler.layoutManager = LinearLayoutManager(requireContext())
@@ -634,10 +627,10 @@ class MediaInfoFragment : Fragment() {
                                     Intent(requireContext(), ReviewActivity::class.java)
                                         .putExtra("mediaId", media.id)
                                 )
-                            }
+                             }
                             root.tag = "dynamic_view"
                             parent.addView(root)
-                        }
+                         }
                     }
 
                     ItemTitleRecyclerBinding.inflate(
@@ -655,7 +648,7 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
-                    }
+                     }
                 }
                 if (!media.characters.isNullOrEmpty() && !offline) {
                     ItemTitleRecyclerBinding.inflate(
@@ -673,7 +666,7 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
-                    }
+                     }
                 }
                 if (!media.staff.isNullOrEmpty() && !offline) {
                     ItemTitleRecyclerBinding.inflate(
@@ -691,7 +684,7 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
-                    }
+                     }
                 }
                 if (!media.recommendations.isNullOrEmpty() && !offline) {
                     ItemTitleRecyclerBinding.inflate(
@@ -709,13 +702,13 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
-                    }
+                     }
                 }
             }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val cornerTop = ObjectAnimator.ofFloat(binding.root, "radius", 0f, 32f).setDuration(200)
+        val cornerTop = ObjectAnimator.ofFloat(binding.root, "radius", 0f, 32f).setDuration(200)
             val cornerNotTop =
                 ObjectAnimator.ofFloat(binding.root, "radius", 32f, 0f).setDuration(200)
             var cornered = true
@@ -723,28 +716,27 @@ class MediaInfoFragment : Fragment() {
             binding.mediaInfoScroll.setOnScrollChangeListener { v, _, _, _, _ ->
                 if (!v.canScrollVertically(-1)) {
                     if (!cornered) {
-                        cornered = true
+        cornered = true
                         cornerTop.start()
-                    }
-                } else {
+                     }
+                }
+        else {
                     if (cornered) {
-                        cornered = false
+        cornered = false
                         cornerNotTop.start()
-                    }
+                     }
                 }
             }
         }
 
         super.onViewCreated(view, null)
-    }
-
+      }
     override fun onResume() {
         binding.mediaInfoProgressBar.isGone = loaded
         super.onResume()
-    }
-
+      }
     override fun onDestroy() {
         timer?.cancel()
         super.onDestroy()
-    }
+     }
 }

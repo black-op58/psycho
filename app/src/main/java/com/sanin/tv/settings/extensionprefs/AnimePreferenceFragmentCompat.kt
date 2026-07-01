@@ -44,12 +44,14 @@ val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
         source.setupPreferenceScreen(sourceScreen)
         sourceScreen.forEach { pref ->
             pref.isIconSpaceReserved = false
-if (pref is DialogPreference) {                pref.dialogTitle = pref.title            }
+if (pref is DialogPreference) {
+        pref.dialogTitle = pref.title            }
 if (pref is EditTextPreference) {
     val setListener = pref.getOnBindEditTextListener()                pref.setOnBindEditTextListener {
                     setListener?.onBindEditText(it)
         it.setIncognito(lifecycleScope)
-                }}
+                 }
+                }
     }
 return sourceScreen    }
 
@@ -70,8 +72,7 @@ val currContext: Context) : PreferenceFragmentCompat() {
         }
     //set background color
 val color =            requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor)        view?.setBackgroundColor(color)
-    }
-
+      }
 fun populateAnimePreferenceScreen(): PreferenceScreen {
     val dataStore = SharedPreferencesDataStore(sharedPreferences)        preferenceManager.preferenceDataStore = dataStore
 val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())

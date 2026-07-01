@@ -23,14 +23,14 @@ override fun key(): String {
 return key    }
 
 override fun get(): T {
-return read(preferences, key, defaultValue)    }
-
+return read(preferences, key, defaultValue)
+     }
 override fun set(value: T) {        
         p
 
 override fun isSet(): Boolean {
-return preferences.contains(key)    }
-
+return preferences.contains(key)
+     }
 override fun delete() {        
         p
 }
@@ -40,16 +40,21 @@ return defaultValue    }
 
 override fun changes(): Flow<T> {
 return keyFlow            .filter { it == key || it == null }
-.onStart { emit("ignition")}
-.map { get()}
-.conflate()    }
-
+.onStart { emit("ignition")
+}
+.map { get()
+}
+.conflate()
+     }
 override fun stateIn(scope: CoroutineScope): StateFlow<T> {
-return changes().stateIn(scope, SharingStarted.Eagerly, get())    }
-
+return changes().stateIn(scope, SharingStarted.Eagerly, get())
+     }
 class StringPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<String?>,        key: String,        defaultValue: String,    ) : AndroidPreference<String>(preferences, keyFlow, key, defaultValue) {
     override fun read(            preferences: SharedPreferences,            key: String,            defaultValue: String        ): String {
-return try {                preferences.getString(key, defaultValue) ?: defaultValue            } catch (e: ClassCastException) {                defaultValue            }
+return try {
+        preferences.getString(key, defaultValue) ?: defaultValue            }
+        catch (e: ClassCastException) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: String): Editor.() -> Unit = {            
@@ -58,7 +63,11 @@ override fun write(key: String, value: String): Editor.() -> Unit = {
 
 class LongPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<String?>,        key: String,        defaultValue: Long,    ) : AndroidPreference<Long>(preferences, keyFlow, key, defaultValue) {
     override fun read(preferences: SharedPreferences, key: String, defaultValue: Long): Long {
-return try {                preferences.getLong(key, defaultValue)            } catch (e: ClassCastException) {                defaultValue            }
+return try {
+        preferences.getLong(key, defaultValue)
+            }
+        catch (e: ClassCastException) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: Long): Editor.() -> Unit = {            
@@ -67,7 +76,11 @@ override fun write(key: String, value: Long): Editor.() -> Unit = {
 
 class IntPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<String?>,        key: String,        defaultValue: Int,    ) : AndroidPreference<Int>(preferences, keyFlow, key, defaultValue) {
     override fun read(preferences: SharedPreferences, key: String, defaultValue: Int): Int {
-return try {                preferences.getInt(key, defaultValue)            } catch (e: ClassCastException) {                defaultValue            }
+return try {
+        preferences.getInt(key, defaultValue)
+            }
+        catch (e: ClassCastException) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: Int): Editor.() -> Unit = {            
@@ -76,7 +89,11 @@ override fun write(key: String, value: Int): Editor.() -> Unit = {
 
 class FloatPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<String?>,        key: String,        defaultValue: Float,    ) : AndroidPreference<Float>(preferences, keyFlow, key, defaultValue) {
     override fun read(preferences: SharedPreferences, key: String, defaultValue: Float): Float {
-return try {                preferences.getFloat(key, defaultValue)            } catch (e: ClassCastException) {                defaultValue            }
+return try {
+        preferences.getFloat(key, defaultValue)
+            }
+        catch (e: ClassCastException) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: Float): Editor.() -> Unit = {            
@@ -85,7 +102,11 @@ override fun write(key: String, value: Float): Editor.() -> Unit = {
 
 class BooleanPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<String?>,        key: String,        defaultValue: Boolean,    ) : AndroidPreference<Boolean>(preferences, keyFlow, key, defaultValue) {
     override fun read(            preferences: SharedPreferences,            key: String,            defaultValue: Boolean        ): Boolean {
-return try {                preferences.getBoolean(key, defaultValue)            } catch (e: ClassCastException) {                defaultValue            }
+return try {
+        preferences.getBoolean(key, defaultValue)
+            }
+        catch (e: ClassCastException) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: Boolean): Editor.() -> Unit = {            
@@ -94,7 +115,10 @@ override fun write(key: String, value: Boolean): Editor.() -> Unit = {
 
 class StringSetPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<String?>,        key: String,        defaultValue: Set<String>,    ) : AndroidPreference<Set<String>>(preferences, keyFlow, key, defaultValue) {
     override fun read(            preferences: SharedPreferences,            key: String,            defaultValue: Set<String>        ): Set<String> {
-return try {                preferences.getStringSet(key, defaultValue) ?: defaultValue            } catch (e: ClassCastException) {                defaultValue            }
+return try {
+        preferences.getStringSet(key, defaultValue) ?: defaultValue            }
+        catch (e: ClassCastException) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: Set<String>): Editor.() -> Unit = {            
@@ -105,9 +129,13 @@ class Object<T>(        preferences: SharedPreferences,        keyFlow: Flow<Str
 val serializer: (T) -> String,        
 val deserializer: (String) -> T,    ) : AndroidPreference<T>(preferences, keyFlow, key, defaultValue) {
     override fun read(preferences: SharedPreferences, key: String, defaultValue: T): T {
-return try {                preferences.getString(key, null)?.let(deserializer) ?: defaultValue            } catch (e: Exception) {                defaultValue            }
+return try {
+        preferences.getString(key, null)?.let(deserializer) ?: defaultValue            }
+        catch (e: Exception) {
+        defaultValue            }
 }
 
 override fun write(key: String, value: T): Editor.() -> Unit = {            
         p
-}}
+}
+}

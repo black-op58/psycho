@@ -28,13 +28,11 @@ class SubscriptionsBottomDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-    }
-
+      }
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
+      }
     companion object {
         fun newInstance(subscriptions: Map<Int, SubscriptionHelper.Companion.SubscribeMedia>): SubscriptionsBottomDialog {
             val dialog = SubscriptionsBottomDialog()

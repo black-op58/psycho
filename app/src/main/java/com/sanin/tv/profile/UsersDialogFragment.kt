@@ -20,7 +20,6 @@ return binding.root    }
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         s
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-    }
-
+      }
 override fun onDestroy() {        
         _

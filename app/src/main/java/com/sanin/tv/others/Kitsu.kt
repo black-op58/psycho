@@ -11,12 +11,14 @@ import java.net.URLEncoder
 object Kitsu {    suspend 
 fun getKitsuEpisodesDetails(media: Media): Map<String, Episode>? {        
         L
-return try {            tryWithSuspend {                // 1. Try GraphQL Method (Primary Priority)                
+return try {
+        tryWithSuspend {                // 1. Try GraphQL Method (Primary Priority)                
 var returnedEpisodes: Map<String, Episode>? = null
 try {
     val query =                        """                        query {                          
         l
-                                    original {                                      url                                    }
+                                    original {
+        url                                    }
         }
     }
         }
@@ -27,13 +29,19 @@ try {
 val headers = mapOf(                        "Content-Type" to "application/json",                        "Accept" to "application/json",                    )                                        
 val graphqlRes = client.post(                        "https://kitsu.io/api/graphql",                        headers,
 data = mapOf("query" to query)                    ).parsed<KitsuGraphQLResponse>()
-if (graphqlRes.data?.lookupMapping != null) {                        Logger.log("Kitsu : Used GraphQL Method (1st Priority)")                        
+if (graphqlRes.data?.lookupMapping != null) {
+        Logger.log("Kitsu : Used GraphQL Method (1st Priority)")                        
 val mapping = graphqlRes.data.lookupMapping                        media.idKitsu = mapping.id
 val nodes = mapping.episodes?.nodes
-if (!nodes.isNullOrEmpty()) {                            returnedEpisodes = nodes.mapNotNull { ep ->                                
+if (!nodes.isNullOrEmpty()) {
+        returnedEpisodes = nodes.mapNotNull { ep ->                                
 val num = ep?.number?.toString() ?: return@mapNotNull null                                num to Episode(                                    number = num,                                    title = ep.titles?.canonical,                                    desc = ep.description?.en ?: ep.description?.enUs,                                    thumb = FileUrl[ep.thumbnail?.original?.url]                                )                            }.toMap()                        }}
-} catch (e: Exception) {                    Logger.log("Kitsu GraphQL failed: ${e.message}")                }
-if (!returnedEpisodes.isNullOrEmpty()) {                    return@tryWithSuspend returnedEpisodes                }
+}
+        catch (e: Exception) {
+        Logger.log("Kitsu GraphQL failed: ${e.message}")
+                }
+if (!returnedEpisodes.isNullOrEmpty()) {
+        return@tryWithSuspend returnedEpisodes                }
 // 2. Fallback to REST API Method (Secondary Priority)                // Search for Anime by Title
 val title = URLEncoder.encode(media.mainName(), "utf-8")                
 val searchUrl = "https://kitsu.io/api/edge/anime?filter[text]=$title&page[limit]=1"                
@@ -50,11 +58,16 @@ val pageEpisodes = episodesRes.data?.associate {
 val num = ep.attributes?.number?.toString() ?: return@associate null to null
 val epNum = if (num.endsWith(".0")) num.substringBefore(".") else num                        epNum to Episode(                            number = epNum,                            title = ep.attributes.canonicalTitle,                            desc = (ep.attributes.synopsis ?: ep.attributes.description)?.replace(                                Regex("\\(Source:.*\\)"),                                ""                            )?.trim(),                            thumb = FileUrl[ep.attributes.thumbnail?.original],                            extra = mapOf(                                "season" to ep.attributes.seasonNumber.toString(),                                "airDate" to ep.attributes.airdate.toString(),                                "length" to ep.attributes.length.toString()                            )                        )                    }?.filterKeys { 
         i
-if (pageEpisodes != null) {                        allEpisodes.putAll(pageEpisodes)                    }
-if (episodesRes.links?.next == null || pageEpisodes.isNullOrEmpty()) {                        break                    }
+if (pageEpisodes != null) {
+        allEpisodes.putAll(pageEpisodes)
+                    }
+if (episodesRes.links?.next == null || pageEpisodes.isNullOrEmpty()) {
+        break                    }
 offset += limit}
 allEpisodes}
-} catch (e: Exception) {            null}
+}
+        catch (e: Exception) {
+        null}
 }
 
 @Serializable    
@@ -127,4 +140,5 @@ val count: Int? = null    )
 data class Links(        
 val first: String? = null,        
 val next: String? = null,        
-val last: String? = null    )}
+val last: String? = null    )
+}

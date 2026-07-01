@@ -37,7 +37,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     /** Called on every keystroke — debounces at 400 ms. */
     fun onQueryChanged(text: String) {
         _query.value = text
-        debounceJob?.cancel()
+        debounceJob?.cancel();
         if (text.isBlank()) {
             _results.value = emptyList()
             return
@@ -45,23 +45,25 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         debounceJob = viewModelScope.launch {
             delay(400)
             search(text)
-        }
+         }
     }
 
     /** Called on IME submit — fires immediately and saves to history. */
     fun onSearchSubmit(text: String) {
         _query.value = text
-        debounceJob?.cancel()
+        debounceJob?.cancel();
         if (text.isBlank()) return
         addToHistory(text)
-        viewModelScope.launch { search(text) }
+        viewModelScope.launch { search(text)
+ }
     }
 
     fun applyFilter(newFilter: AdvancedSearchFilter) {
         _filter.value = newFilter
         val q = _query.value
         if (q.isNotBlank()) {
-            viewModelScope.launch { search(q) }
+            viewModelScope.launch { search(q)
+ }
         }
     }
 
@@ -71,15 +73,13 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
     fun clearHistory() {
         _history.value = emptyList()
-    }
-
+      }
     private fun addToHistory(entry: String) {
         val current = _history.value.toMutableList()
         current.remove(entry)
         current.add(0, entry)
         _history.value = current.take(20)
-    }
-
+      }
     private suspend fun search(queryText: String) {
         _isLoading.value = true
         try {
@@ -89,8 +89,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
                 page   = 1
             )
             _results.value = mediaList ?: emptyList()
-        } catch (e: Exception) {
-            Logger.log(e)
+         }
+        catch (e: Exception) {
+        Logger.log(e)
             _results.value = emptyList()
         } finally {
             _isLoading.value = false

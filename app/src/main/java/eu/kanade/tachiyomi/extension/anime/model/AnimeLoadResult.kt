@@ -4,4 +4,5 @@ sealed class AnimeLoadResult {
 val extension: AnimeExtension.Installed) : AnimeLoadResult()    
 class Untrusted(
 val extension: AnimeExtension.Untrusted) : AnimeLoadResult()    
-data object Error : AnimeLoadResult()}
+data object Error : AnimeLoadResult()
+}

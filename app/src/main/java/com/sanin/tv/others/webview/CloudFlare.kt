@@ -15,8 +15,9 @@ if (cookie?.contains(cfTag) == true) {
     val clearance = cookie.substringAfter("$cfTag=").substringBefore("
 ")
         privateCallback.invoke(mapOf(cfTag to clearance))
-            }
-super.onPageStarted(view, url, favicon)}
+             }
+super.onPageStarted(view, url, favicon)
+}
 }
 
 companion object {

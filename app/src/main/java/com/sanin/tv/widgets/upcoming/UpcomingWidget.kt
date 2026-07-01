@@ -20,25 +20,29 @@ class UpcomingWidget : AppWidgetProvider() {
         s
 if (intent.action == ACTION_REFRESH) {
     val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()                    .putLong(LAST_UPDATE, 0)                    .putString(PREF_SERIALIZED_MEDIA, "")                    .apply()                
+if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()                    .putLong(LAST_UPDATE, 0)                    .putString(PREF_SERIALIZED_MEDIA, "")                    .apply()                
 val appWidgetManager = AppWidgetManager.getInstance(context)                
 val views = updateAppWidget(context, appWidgetId)
         appWidgetManager.updateAppWidget(appWidgetId, views)
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
-            }}
+             }
+            }
 }
 
 override fun onUpdate(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetIds: IntArray    ) {        
         a
 val rv = updateAppWidget(context, appWidgetId)
         appWidgetManager.updateAppWidget(appWidgetId, rv)
-        }
-super.onUpdate(context, appWidgetManager, appWidgetIds)    }
-
+         }
+super.onUpdate(context, appWidgetManager, appWidgetIds)
+     }
 override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-for (appWidgetId in appWidgetIds) {            context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply()        }
-super.onDeleted(context, appWidgetIds)    }
-
+for (appWidgetId in appWidgetIds) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply()
+        }
+super.onDeleted(context, appWidgetIds)
+     }
 override fun onEnabled(context: Context) {        
         s
 
@@ -50,7 +54,7 @@ override fun onAppWidgetOptionsChanged(        context: Context?,        appWidg
 if (context != null && appWidgetManager != null) {
     val views = updateAppWidget(context, appWidgetId)
         appWidgetManager.updateAppWidget(appWidgetId, views)
-        }
+         }
     }
 
 companion object {
@@ -62,8 +66,8 @@ val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)
 val countdownTextColor = prefs.getInt(PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)            
 val intent = Intent(context, UpcomingRemoteViewsService::class.java).apply {                
         p
-data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))            }
-
+data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+             }
 val intentTemplate = Intent(context, MainActivity::class.java).apply {                
         f
 
@@ -84,10 +88,16 @@ fun buildViews(): RemoteViews = RemoteViews(context.packageName, R.layout.upcomi
                 setPendingIntentTemplate(
                     R.id.widgetListView,                    PendingIntent.getActivity(                        context,                        0,                        intentTemplate,                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE                    )                )
         setOnClickPendingIntent(
-                    R.id.logoView,                    PendingIntent.getActivity(                        context,                        1,                        Intent(context, UpcomingWidgetConfigure::class.java).apply {                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)                        },                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE                    )                )            }
-return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {                RemoteViews(                    mapOf(                        SizeF(0f, 0f) to buildViews(),                        SizeF(200f, 100f) to buildViews()                    )                )
-} else {                buildViews()            }}
+                    R.id.logoView,                    PendingIntent.getActivity(                        context,                        1,                        Intent(context, UpcomingWidgetConfigure::class.java).apply {
+        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)                        },                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE                    )                )
+            }
+return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        RemoteViews(                    mapOf(                        SizeF(0f, 0f) to buildViews(),                        SizeF(200f, 100f) to buildViews()                    )                )
+ }
+        else {
+        buildViews()            }}
 const val PREFS_NAME = "com.sanin.tv.widgets.UpcomingWidget"        const val PREF_BACKGROUND_COLOR = "background_color"        const val PREF_BACKGROUND_FADE = "background_fade"        const val PREF_TITLE_TEXT_COLOR = "title_text_color"        const val PREF_COUNTDOWN_TEXT_COLOR = "countdown_text_color"        const val PREF_SERIALIZED_MEDIA = "serialized_media"        const val LAST_UPDATE = "last_update"        const val ACTION_REFRESH = "com.sanin.tv.widgets.upcoming.ACTION_REFRESH"    }}
 
 internal fun updateAppWidget(    context: Context,    appWidgetManager: AppWidgetManager,    appWidgetId: Int) {
-    val views = UpcomingWidget.updateAppWidget(context, appWidgetId)    appWidgetManager.updateAppWidget(appWidgetId, views)    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)}
+    val views = UpcomingWidget.updateAppWidget(context, appWidgetId)    appWidgetManager.updateAppWidget(appWidgetId, views)    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
+}

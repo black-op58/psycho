@@ -59,13 +59,11 @@ class DiscoverViewModel : ViewModel() {
 fun selectGenre(genre: String?) {
         _selectedGenre.value = genre
         fetch()
-    }
-
+      }
     fun selectSeason(season: DiscoverSeason) {
         _selectedSeason.value = season
         fetch()
-    }
-
+      }
     fun fetch() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch(Dispatchers.IO) {
@@ -79,8 +77,9 @@ val mediaList = Anilist.query.discoverAnime(
                     seasonYear = season.year
                 )
                 _results.value = mediaList ?: emptyList()
-            } catch (e: Exception) {
-                Logger.log(e)
+             }
+        catch (e: Exception) {
+        Logger.log(e)
             } finally {
                 _isLoading.value = false
             }
@@ -97,7 +96,7 @@ data class DiscoverSeason(
 ) {
     companion object {
     private fun seasonFor(month: Int): String = when (month) {
-            in 1..3  -> "WINTER"
+        in 1..3  -> "WINTER"
             in 4..6  -> "SPRING"
             in 7..9  -> "SUMMER"
             else     -> "FALL"
@@ -113,8 +112,7 @@ val year = cal.get(Calendar.YEAR)
                 apiValue = season,
                 year = year
             )
-        }
-
+          }
         fun seasons(): List<DiscoverSeason> {
     val cal = Calendar.getInstance()
             val curMonth = cal.get(Calendar.MONTH) + 1
@@ -137,7 +135,7 @@ if (idx == 3) yr--
         }
 
         private val SEASON_ORDER = listOf("WINTER", "SPRING", "SUMMER", "FALL")
-    }
+     }
 }
 
 // ─── DiscoverFragment ─────────────────────────────────────────────────────────
@@ -150,8 +148,7 @@ class DiscoverFragment : Fragment() {
 
     private val mediaAdaptor by lazy {
         MediaAdaptor(0, mutableListOf(), requireActivity())
-    }
-
+      }
     // Anime-only genres from AniList
     private val animeGenres = listOf(
         "All", "Action", "Adventure", "Comedy", "Drama", "Ecchi",
@@ -180,8 +177,7 @@ class DiscoverFragment : Fragment() {
         binding.seasonChipGroup.isFocusable = true
 
         discoverViewModel.fetch()
-    }
-
+      }
     private fun setupGenreChips() {
         animeGenres.forEach { genre ->
             val chip = Chip(requireContext()).apply {
@@ -192,10 +188,10 @@ class DiscoverFragment : Fragment() {
                     binding.genreChipGroup.clearCheck()
                     isChecked = true
                     discoverViewModel.selectGenre(if (genre == "All") null else genre)
-                }
+                 }
             }
             binding.genreChipGroup.addView(chip)
-        }
+         }
     }
 
     private fun setupSeasonChips() {
@@ -210,10 +206,10 @@ class DiscoverFragment : Fragment() {
                     binding.seasonChipGroup.clearCheck()
                     isChecked = true
                     discoverViewModel.selectSeason(season)
-                }
+                 }
             }
             binding.seasonChipGroup.addView(chip)
-        }
+         }
     }
 
     private fun setupResultsGrid() {
@@ -226,7 +222,7 @@ class DiscoverFragment : Fragment() {
             setOnKeyListener { _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_BACK) {
-                    requireActivity().onBackPressedDispatcher.onBackPressed()
+        requireActivity().onBackPressedDispatcher.onBackPressed()
                     true
                 } else false
             }
@@ -250,11 +246,12 @@ class DiscoverFragment : Fragment() {
                         MediaAdaptor(0, list, requireActivity()),
                         false
                     )
-                }
+                 }
                 if (media.isEmpty() && discoverViewModel.isLoading.value == false) {
                     binding.discoverEmptyText.isVisible = true
                     binding.discoverEmptyText.text = getString(R.string.no_media_found)
-                } else {
+                 }
+        else {
                     binding.discoverEmptyText.isVisible = false
                 }
             }
