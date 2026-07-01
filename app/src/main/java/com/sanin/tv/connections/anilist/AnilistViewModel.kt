@@ -1,11 +1,17 @@
 package com.sanin.tv.connections.anilist
 
-isFav = false,                        isAdult = false,                        status = node.status,                        anime = Anime(                            totalEpisodes = node.numEpisodes,                            season = null,                            seasonYear = null,                        ),                    )                }
-missingSequels.postValue(ArrayList(sequelMedia))
-} else {                missingSequels.postValue(arrayListOf())            }
-} ?: missingSequels.postValue(arrayListOf())}
-suspend
-fun loadMain(context: FragmentActivity) {        Anilist.getSavedToken()        MAL.getSavedToken()
+// TODO: Reconstruct missing function - temporary stub
+private fun loadProcessedData(data: List<Any>?) {
+    if (data != null) {
+        val processed = data.map { node ->
+            node
+        }
+        missingSequels.postValue(ArrayList(processed))
+    } else {
+        missingSequels.postValue(arrayListOf())
+    }
+}
+suspend fun loadMain(context: FragmentActivity) {        Anilist.getSavedToken()        MAL.getSavedToken()
 if (!BuildConfig.FLAVOR.contains("fdroid")) {
 if (PrefManager.getVal(PrefName.CheckUpdate))                context.lifecycleScope.launch(Dispatchers.IO) {                    AppUpdater.check(context, false)                }
 }
