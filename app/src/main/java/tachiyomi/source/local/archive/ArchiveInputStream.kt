@@ -11,16 +11,25 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
 private var isClosed = false    
 private val archive = Archive.readNew()
     init {
-try {            Archive.setCharset(archive, Charsets.UTF_8.name().toByteArray())            Archive.readSupportFilterAll(archive)            Archive.readSupportFormatAll(archive)            Archive.readOpenMemoryUnsafe(archive, buffer, size)        } catch (e: ArchiveException) {            close()
+        try {
+            Archive.setCharset(archive, Charsets.UTF_8.name().toByteArray())
+            Archive.readSupportFilterAll(archive)
+            Archive.readSupportFormatAll(archive)
+            Archive.readOpenMemoryUnsafe(archive, buffer, size)
+        } catch (e: ArchiveException) {
+            close()
 throw e        }
 }
 
 private val oneByteBuffer = ByteBuffer.allocateDirect(1)    
-override fun read(): Int {        read(oneByteBuffer)
-return if (oneByteBuffer.hasRemaining()) oneByteBuffer.get().toUByte().toInt() else -1    }
+override fun read(): Int {
+        read(oneByteBuffer)
+        return if (oneByteBuffer.hasRemaining()) oneByteBuffer.get().toUByte().toInt() else -1
+    }
 
 override fun read(b: ByteArray, off: Int, len: Int): Int {
-    val buffer = ByteBuffer.wrap(b, off, len)        read(buffer)
+    val buffer = ByteBuffer.wrap(b, off, len)
+        read(buffer)
 return if (buffer.hasRemaining()) buffer.remaining() else -1
     }
 
@@ -33,8 +42,9 @@ private fun read(buffer: ByteBuffer) {
 override fun close() {
         synchronized(lock) {
 if (isClosed) return
-            isClosed = true        }
-Archive.readFree(archive)
+            isClosed = true
+        }
+        Archive.readFree(archive)
     }
 
 fun getNextEntry() = Archive.readNextHeader(archive).takeUnless { it == 0L }?.let { entry ->
