@@ -29,12 +29,12 @@ import com.sanin.tv.themes.ThemeManager
 import com.sanin.tv.toast
 import com.sanin.tv.util.customAlertDialog
 import com.google.android.material.slider.Slider.OnChangeListener
-import eltos.simpledialogfragment.SimpleDialog
-import eltos.simpledialogfragment.color.SimpleColorWheelDialog
+import com.sanin.tv.util.SimpleColorPicker
+
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-class PlayerSettingsActivity :    AppCompatActivity(),    SimpleDialog.OnDialogResultListener {    
+class PlayerSettingsActivity :    AppCompatActivity(),    SimpleColorPicker.OnDialogResultListener {    
 interface ColorPickerCallback {
     fun onColorSelected(color: Int)    }
 
@@ -111,11 +111,11 @@ object : Xpandable.OnChangeListener {
 
 override fun onRetract() {}            },        )        updateSubPreview()    }
 
-private fun showColorPicker(        originalColor: Int,        title: String,        callback: ColorPickerCallback,    ) {        colorPickerCallback = callback        SimpleColorWheelDialog()            .title(title)            .color(originalColor)            .alpha(true)            .neg()            .theme(R.style.MyPopup)            .show(this, "colorPicker")    }
+private fun showColorPicker(        originalColor: Int,        title: String,        callback: ColorPickerCallback,    ) {        colorPickerCallback = callback        SimpleColorPicker.showColorWheelDialog(this, title, originalColor, true, "colorPicker", R.style.MyPopup)    }
 
 override fun onResult(        dialogTag: String,        which: Int,        extras: Bundle,    ): Boolean {
-if (dialogTag == "colorPicker" && which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
-    val color = extras.getInt(SimpleColorWheelDialog.COLOR)            colorPickerCallback?.onColorSelected(color)
+if (dialogTag == "colorPicker" && which == SimpleColorPicker.OnDialogResultListener.BUTTON_POSITIVE) {
+    val color = extras.getInt(SimpleColorPicker.COLOR)            colorPickerCallback?.onColorSelected(color)
 return true        }
 return false    }
 

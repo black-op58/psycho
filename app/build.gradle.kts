@@ -187,5 +187,4 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
 
     // SimpleDialog (color picker in PlayerSettingsActivity)
-    implementation("com.github.eltos:SimpleDialogFragments:3.7")
 }
