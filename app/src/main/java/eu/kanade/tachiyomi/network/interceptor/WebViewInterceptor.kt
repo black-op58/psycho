@@ -22,7 +22,8 @@ private val context: Context,
 private val defaultUserAgentProvider: () -> String,) : Interceptor {    /**     * When this is called, it initializes the WebView if it wasn't already. We use this to avoid     * blocking the main thread too much. If used too often we could consider moving it to the     * Application class.     */    
 private val initWebView by lazy {        // Crashes on some devices. We skip this in some cases since the only impact is slower        // WebView init in those rare cases.        // See https://bugs.chromium.org/p/chromium/issues/detail?id=1279562
 if (DeviceUtil.isMiui || Build.VERSION.SDK_INT == Build.VERSION_CODES.S && DeviceUtil.isSamsung) {            return@lazy        }
-try {            WebSettings.getDefaultUserAgent(context)        } catch (_: Exception) {            // Avoid some crashes like when Chrome/WebView is being updated.        }    }
+try {            WebSettings.getDefaultUserAgent(context)        } catch (_: Exception) {            // Avoid some crashes like when Chrome/WebView is being updated.        }
+}
 
 abstract fun shouldIntercept(response: Response): Boolean    
 abstract fun intercept(chain: Interceptor.Chain, request: Request, response: Response): Response    
@@ -33,16 +34,21 @@ val response = chain.proceed(request)
 if (!shouldIntercept(response)) {
 return response        }
 if (!WebViewUtil.supportsWebView(context)) {            launchUI {                context.toast("Webview is required for sanintv", Toast.LENGTH_LONG)            }
-return response        }        initWebView
+return response        }
+initWebView
 return intercept(chain, request, response)    }
 
 fun parseHeaders(headers: Headers): Map<String, String> {
-return headers            // Keeping unsafe header makes webview throw [net::ERR_INVALID_ARGUMENT]            .filter { (name, value) ->                isRequestHeaderSafe(name, value)            }            .groupBy(keySelector = { (name, _) -> name }) { (_, value) -> value }            .mapValues { it.value.getOrNull(0).orEmpty() }    }
+return headers            // Keeping unsafe header makes webview throw [net::ERR_INVALID_ARGUMENT]            .filter { (name, value) ->                isRequestHeaderSafe(name, value)            }
+.groupBy(keySelector = { (name, _) -> name }) { (_, value) -> value}
+.mapValues { it.value.getOrNull(0).orEmpty()}
+}
 
 fun CountDownLatch.awaitFor30Seconds() {        await(30, TimeUnit.SECONDS)    }
 
 fun createWebView(request: Request): WebView {
-return WebView(context).apply {            setDefaultSettings()            // Avoid sending empty User-Agent, Chromium WebView will reset to default if empty            settings.userAgentString = request.header("User-Agent") ?: defaultUserAgentProvider()        }    }}// Based on [IsRequestHeaderSafe] in https://source.chromium.org/chromium/chromium/src/+/main:services/network/public/cpp/header_util.cc
+return WebView(context).apply {            setDefaultSettings()            // Avoid sending empty User-Agent, Chromium WebView will reset to default if empty            settings.userAgentString = request.header("User-Agent") ?: defaultUserAgentProvider()        }
+}}// Based on [IsRequestHeaderSafe] in https://source.chromium.org/chromium/chromium/src/+/main:services/network/public/cpp/header_util.cc
 private fun isRequestHeaderSafe(_name: String, _value: String): Boolean {
     val name = _name.lowercase(Locale.ENGLISH)    
 val value = _value.lowercase(Locale.ENGLISH)

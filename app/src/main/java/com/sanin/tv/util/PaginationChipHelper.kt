@@ -19,6 +19,9 @@ val chip = ItemChipBinding.inflate(                LayoutInflater.from(context),
 fun selectedChip() {                chip.isChecked = true                scrollView.smoothScrollTo(                    (chip.left - screenWidth / 2) + (chip.width / 2),                    0                )            }
 
 val startChapterString = MediaNameAdapter.findChapterNumber(names[limit * position])?.let { "Ch.%.1f".format(it) } ?: names[limit * position]            
-val endChapterString = MediaNameAdapter.findChapterNumber(names[last - 1])?.let { "Ch.%.1f".format(it) } ?: names[last - 1]            chip.text = "$startChapterString - $endChapterString"            chip.setTextColor(                ContextCompat.getColorStateList(                    context,                    R.color.chip_text_color                )            )            chip.setOnClickListener {                selectedChip()                onChipClicked(position, limit * position, last - 1)            }            chipGroup.addView(chip)
-if (selected == position) {                selectedChip()                select = chip            }        }
-if (select != null) {            scrollView.post {                scrollView.scrollTo(                    (select!!.left - screenWidth / 2) + (select!!.width / 2),                    0                )            }        }    }}
+val endChapterString = MediaNameAdapter.findChapterNumber(names[last - 1])?.let { "Ch.%.1f".format(it) } ?: names[last - 1]            chip.text = "$startChapterString - $endChapterString"            chip.setTextColor(                ContextCompat.getColorStateList(                    context,                    R.color.chip_text_color                )            )            chip.setOnClickListener {                selectedChip()                onChipClicked(position, limit * position, last - 1)            }
+chipGroup.addView(chip)
+if (selected == position) {                selectedChip()                select = chip            }
+}
+if (select != null) {            scrollView.post {                scrollView.scrollTo(                    (select!!.left - screenWidth / 2) + (select!!.width / 2),                    0                )            }}
+}}

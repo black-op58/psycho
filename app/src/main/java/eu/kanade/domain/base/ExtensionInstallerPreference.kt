@@ -13,17 +13,20 @@ private val context: Context,    preferenceStore: PreferenceStore) : Preference<
 override fun key() = "extension_installer"    
 val entries        get() = ExtensionInstaller.entries.toTypedArray().run {
 if (context.hasMiuiPackageInstaller) {                filter { it != ExtensionInstaller.PACKAGEINSTALLER }
-} else {                toList()            }        }
+} else {                toList()            }
+}
 
 override fun defaultValue() = if (context.hasMiuiPackageInstaller) {        ExtensionInstaller.LEGACY
 } else {        ExtensionInstaller.PACKAGEINSTALLER    }
 
 private fun check(value: ExtensionInstaller): ExtensionInstaller {
 when (value) {            ExtensionInstaller.PACKAGEINSTALLER -> {
-if (context.hasMiuiPackageInstaller) return ExtensionInstaller.LEGACY            }            ExtensionInstaller.SHIZUKU -> {
+if (context.hasMiuiPackageInstaller) return ExtensionInstaller.LEGACY            }
+ExtensionInstaller.SHIZUKU -> {
 if (!context.isShizukuInstalled) return defaultValue()
 }
-else -> {}        }
+else -> {}
+}
 return value    }
 
 override fun get(): ExtensionInstaller {

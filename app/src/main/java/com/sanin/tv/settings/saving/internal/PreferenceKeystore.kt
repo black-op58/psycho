@@ -32,4 +32,5 @@ return salt        }
 private fun deriveKeyFromPassword(password: CharArray, salt: ByteArray): SecretKey {
     val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")            
 val spec = PBEKeySpec(password, salt, 10000, 256)
-return factory.generateSecret(spec)        }    }}
+return factory.generateSecret(spec)        }
+}}

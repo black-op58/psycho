@@ -6,7 +6,8 @@ interface DataSaver {
 companion object {
     val NoOp = 
 object : DataSaver {
-    override fun compress(imageUrl: String): String = imageUrl        }    }}
+    override fun compress(imageUrl: String): String = imageUrl        }
+    }}
 
 fun createDataSaver(): DataSaver {
     val dataSaverMode: Int = PrefManager.getVal<Int>(PrefName.DataSaverMode)
@@ -28,7 +29,8 @@ when {                imageUrl.contains(".jpeg", true) || imageUrl.contains(".jp
 if (ignoreJpg) imageUrl else getUrl(imageUrl)                imageUrl.contains(".gif", true) ->
 if (ignoreGif) imageUrl else getUrl(imageUrl)
 else -> getUrl(imageUrl)            }
-} else {            imageUrl        }    }
+} else {            imageUrl        }
+}
 
 private fun getUrl(imageUrl: String): String {
 return "$dataSavedServer/?jpg=$format&l=$quality&bw=$colorBW&url=$imageUrl"    }}
@@ -42,7 +44,8 @@ override fun compress(imageUrl: String): String {
 return when {            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) ->
 if (ignoreJpg) imageUrl else getUrl(imageUrl)            imageUrl.contains(".gif", true) ->
 if (ignoreGif) imageUrl else getUrl(imageUrl)
-else -> getUrl(imageUrl)        }    }
+else -> getUrl(imageUrl)        }
+}
 
 private fun getUrl(imageUrl: String): String {
 return "https://wsrv.nl/?url=$imageUrl" +
@@ -51,5 +54,6 @@ if (!format) {                    // Preserve output image extension for animate
 } else {                    // Do not preserve output Extension if User asked to convert into Jpeg                    "&output=jpg&q=$quality&n=-1"                }
 } else {
 if (format) {                    "&output=jpg&q=$quality"
-} else {                    "&output=webp&q=$quality"                }            }    }}
+} else {                    "&output=webp&q=$quality"                }}
+}}
 }

@@ -17,5 +17,6 @@ object : Subscriber<T>() {
 override fun onNext(t: T) {                    cont.resume(t)                }
 
 override fun onCompleted() {
-if (cont.isActive) {                        cont.resumeWithException(                            IllegalStateException(                                "Should have invoked onNext",                            ),                        )                    }                }
+if (cont.isActive) {                        cont.resumeWithException(                            IllegalStateException(                                "Should have invoked onNext",                            ),                        )                    }
+}
 }}))

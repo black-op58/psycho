@@ -14,9 +14,12 @@ import java.net.URLEncoder
  * Gogoanime and Zoro (Aniwatch).
  *
  * Consumet exposes:
- *  GET /{provider}/{title}                   — search
- *  GET /{provider}/info/{id}                 — episode list
- *  GET /{provider}/watch/{episodeId}         — stream URLs
+ *  GET /{provider}/{title}
+ — search
+ *  GET /{provider}/info/{id}
+ — episode list
+ *  GET /{provider}/watch/{episodeId}
+ — stream URLs
  *
  * The base URL is user-configurable so self-hosted Consumet instances work.
  */

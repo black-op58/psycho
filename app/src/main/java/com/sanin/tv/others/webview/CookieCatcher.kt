@@ -21,7 +21,10 @@ val url = intent.getStringExtra("url") ?: getString(R.string.cursed_yt)
 val headers = intent            .getSerializableExtraCompat<HashMap<String, String>>("headers")            ?: hashMapOf()
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val process = Application.getProcessName()
-if (packageName != process) WebView.setDataDirectorySuffix(process)        }        setContentView(R.layout.activity_cookie_catcher)        
+if (packageName != process) WebView.setDataDirectorySuffix(process)        }
+setContentView(R.layout.activity_cookie_catcher)
 val webView = findViewById<WebView>(R.id.cookieCatcherWebView)        
-val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager        cookies?.setAcceptThirdPartyCookies(webView, true)        webView.apply {            settings.javaScriptEnabled = true            settings.databaseEnabled = true            settings.domStorageEnabled = true        }        WebView.setWebContentsDebuggingEnabled(true)        webView.webViewClient = 
-object : WebViewClient() {        }        webView.loadUrl(url, headers)    }}
+val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager        cookies?.setAcceptThirdPartyCookies(webView, true)        webView.apply {            settings.javaScriptEnabled = true            settings.databaseEnabled = true            settings.domStorageEnabled = true        }
+WebView.setWebContentsDebuggingEnabled(true)        webView.webViewClient =
+object : WebViewClient() {        }
+webView.loadUrl(url, headers)    }}

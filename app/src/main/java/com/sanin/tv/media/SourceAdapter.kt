@@ -24,6 +24,8 @@ override fun getItemCount(): Int = sources.size
 abstract suspend 
 fun onItemClick(source: ShowResponse)    inner 
 class SourceViewHolder(
-val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {                dialogFragment.dismiss()                scope.launch(Dispatchers.IO) { onItemClick(sources[bindingAdapterPosition]) }            }
+val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {                dialogFragment.dismiss()                scope.launch(Dispatchers.IO) { onItemClick(sources[bindingAdapterPosition]) }
+}
 
-var a = true            itemView.setOnLongClickListener {                a = !a                binding.itemCompactTitle.isSingleLine = a                true            }        }    }}
+var a = true            itemView.setOnLongClickListener {                a = !a                binding.itemCompactTitle.isSingleLine = a                true            }}
+}}

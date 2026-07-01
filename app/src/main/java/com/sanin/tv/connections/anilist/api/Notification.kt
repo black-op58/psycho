@@ -5,11 +5,13 @@ import java.util.Locale
 enum class NotificationType(
 val value: String) {    ACTIVITY_MESSAGE("ACTIVITY_MESSAGE"),    ACTIVITY_REPLY("ACTIVITY_REPLY"),    FOLLOWING("FOLLOWING"),    ACTIVITY_MENTION("ACTIVITY_MENTION"),    THREAD_COMMENT_MENTION("THREAD_COMMENT_MENTION"),    THREAD_SUBSCRIBED("THREAD_SUBSCRIBED"),    THREAD_COMMENT_REPLY("THREAD_COMMENT_REPLY"),    AIRING("AIRING"),    ACTIVITY_LIKE("ACTIVITY_LIKE"),    ACTIVITY_REPLY_LIKE("ACTIVITY_REPLY_LIKE"),    THREAD_LIKE("THREAD_LIKE"),    THREAD_COMMENT_LIKE("THREAD_COMMENT_LIKE"),    ACTIVITY_REPLY_SUBSCRIBED("ACTIVITY_REPLY_SUBSCRIBED"),    RELATED_MEDIA_ADDITION("RELATED_MEDIA_ADDITION"),    MEDIA_DATA_CHANGE("MEDIA_DATA_CHANGE"),    MEDIA_MERGE("MEDIA_MERGE"),    MEDIA_DELETION("MEDIA_DELETION"),    //custom    COMMENT_REPLY("COMMENT_REPLY"),    COMMENT_WARNING("COMMENT_WARNING"),    SANINTV_UPDATE("SANINTV_UPDATE"),    SUBSCRIPTION("SUBSCRIPTION");    
 fun toFormattedString(): String {
-return this.value.replace("_", " ").lowercase(Locale.ROOT)            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }    }
+return this.value.replace("_", " ").lowercase(Locale.ROOT)            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+}
 
 companion object {
     fun String.fromFormattedString(): String {
-return this.replace(" ", "_").uppercase(Locale.ROOT)        }    }}
+return this.replace(" ", "_").uppercase(Locale.ROOT)        }
+}}
 
 @Serializable
 data class NotificationResponse(    

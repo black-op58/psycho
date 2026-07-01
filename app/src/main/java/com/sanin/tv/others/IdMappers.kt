@@ -21,13 +21,16 @@ val response = client.get("$MAPPER_API_URL?anilist_id=$anilistId")              
 val data = Mapper.json.decodeFromString<AnimeId>(response.text)                // 4. Save to cache
 if (data.anilistId != null) {                    cache[data.anilistId] = data                }
 data            } catch (e: CancellationException) {
-throw e            } catch (e: Exception) {                // If 404 or no internet, return null safely                e.printStackTrace()                null            }        }    }    // --- Helper Functions ---    suspend 
+throw e            } catch (e: Exception) {                // If 404 or no internet, return null safely                e.printStackTrace()                null            }}}
+// --- Helper Functions ---    suspend
 fun getSimklId(anilistId: Int): Int? {
-return getIds(anilistId)?.simklId    }    suspend 
+return getIds(anilistId)?.simklId    }
+suspend
 fun getImdbId(anilistId: Int): String? {        // First try the main mapper
 val mainId = getIds(anilistId)?.imdbId
 if (mainId != null) return mainId        // Fallback to ani.zip
-return getAniZipId(anilistId)    }    suspend 
+return getAniZipId(anilistId)    }
+suspend
 fun getMalId(anilistId: Int): Int? {
 return getIds(anilistId)?.malId    }
 
@@ -43,7 +46,8 @@ val jsonElement = Mapper.json.parseToJsonElement(payload)
 if (jsonElement !is JsonObject) {                    Logger.log("AniZip : unexpected mapping payload type for anilist_id=$anilistId")                    return@withContext null                }
 
 val data = Mapper.json.decodeFromJsonElement<AniZipResponse>(jsonElement)                // Accessing the first mapping's imdb_id, if available                data.mappings.values.firstOrNull()?.imdbId            } catch (e: CancellationException) {
-throw e            } catch (e: Exception) {                e.printStackTrace()                null            }        }    }}
+throw e            } catch (e: Exception) {                e.printStackTrace()                null            }}
+}}
 
 @Serializable
 data class AnimeId(    

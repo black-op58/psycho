@@ -9,4 +9,6 @@ fun reset(timerTask: TimerTask, delay: Long) {
 if (!resetLock.getAndSet(true)) {            timer.cancel()            timer.purge()            timer = Timer()            timer.schedule(
 object : TimerTask() {
     override fun run() {
-if (!resetLock.getAndSet(true)) {                        timerTask.run()                        timer.cancel()                        timer.purge()                        resetLock.set(false)                    }                }            }, delay)            resetLock.set(false)        }    }}
+if (!resetLock.getAndSet(true)) {                        timerTask.run()                        timer.cancel()                        timer.purge()                        resetLock.set(false)                    }}
+}, delay)            resetLock.set(false)}
+}}

@@ -2,12 +2,14 @@ package com.sanin.tv.connections.mal
 
 suspend fun getAnimeSuggestions(limit: Int = 15): MalRankingResponse? {
     val headers = authHeader ?: return null
-return tryWithSuspend {            executeRequest {                client.get(                    "$apiUrl/anime/suggestions?limit=$limit&fields=$rankingFields",                    headers                )            }.parsed<MalRankingResponse>()        }    }
+return tryWithSuspend {            executeRequest {                client.get(                    "$apiUrl/anime/suggestions?limit=$limit&fields=$rankingFields",                    headers                )            }.parsed<MalRankingResponse>()        }
+}
 
 private val sequelListFields = "list_status,num_episodes,main_picture,mean,media_type,status,related_anime${recRelFields}"    suspend 
 fun getCompletedAnimeWithRelations(limit: Int = 100): MalListResponse? {
     val headers = authHeader ?: return null
-return tryWithSuspend {            executeRequest {                client.get(                    "$apiUrl/users/@me/animelist?fields=$sequelListFields&status=completed&sort=list_updated_at&limit=$limit&nsfw=1",                    headers                )            }.parsed<MalListResponse>()        }    }    suspend 
+return tryWithSuspend {            executeRequest {                client.get(                    "$apiUrl/users/@me/animelist?fields=$sequelListFields&status=completed&sort=list_updated_at&limit=$limit&nsfw=1",                    headers                )            }.parsed<MalListResponse>()        }}
+suspend
 fun getAllUserAnimeIds(): Set<Int> {
     val allIds = mutableSetOf<Int>()        
 var offset = 0

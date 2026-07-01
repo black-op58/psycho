@@ -12,10 +12,12 @@ val name: String
 val lang: String        get() = ""    /**     * Get the updated details for a anime.     *     * @since extensions-lib 1.5     * @param anime the anime to update.     * @return the updated anime.     */    
 @Suppress("DEPRECATION")    suspend 
 fun getAnimeDetails(anime: SAnime): SAnime {
-return fetchAnimeDetails(anime).awaitSingle()    }    /**     * Get all the available episodes for a anime.     *     * @since extensions-lib 1.5     * @param anime the anime to update.     * @return the episodes for the anime.     */    
+return fetchAnimeDetails(anime).awaitSingle()    }
+/**     * Get all the available episodes for a anime.     *     * @since extensions-lib 1.5     * @param anime the anime to update.     * @return the episodes for the anime.     */
 @Suppress("DEPRECATION")    suspend 
 fun getEpisodeList(anime: SAnime): List<SEpisode> {
-return fetchEpisodeList(anime).awaitSingle()    }    /**     * Get all the available seasons for an anime     *     * @since extensions-lib 16     * @param anime the anime to fetch seasons for.     * @return the anime list for the anime.     */    suspend 
+return fetchEpisodeList(anime).awaitSingle()    }
+/**     * Get all the available seasons for an anime     *     * @since extensions-lib 16     * @param anime the anime to fetch seasons for.     * @return the anime list for the anime.     */    suspend
 fun getSeasonList(anime: SAnime): List<SAnime>    /**     * Get the list of hoster for an episode. The first hoster in the list should     * be the preferred hoster.     *     * @since extensions-lib 16     * @param episode the episode.     * @return the hosters for the episode.     */    suspend 
 fun getHosterList(episode: SEpisode): List<Hoster> = throw IllegalStateException("Not used")    /**     * Get the list of videos for a hoster.     *     * @since extensions-lib 16     * @param hoster the hoster.     * @return the videos for the hoster.     */    suspend 
 fun getVideoList(hoster: Hoster): List<Video> = throw IllegalStateException("Not used")    /**     * Get the list of videos a episode has. Pages should be returned     * in the expected order

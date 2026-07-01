@@ -27,6 +27,7 @@ override fun onCreateView(        inflater: LayoutInflater,        container: Vi
 return binding.root    }
 
 @SuppressLint("SetJavaScriptEnabled")    
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.webViewTitle.text = title        binding.webView.settings.apply {            javaScriptEnabled = true            userAgentString = defaultHeaders["User-Agent"]        }        cookies?.setAcceptThirdPartyCookies(binding.webView, true)        binding.webView.webViewClient = webViewClient        binding.webView.loadUrl(location.url, location.headers)        this.dismiss()    }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.webViewTitle.text = title        binding.webView.settings.apply {            javaScriptEnabled = true            userAgentString = defaultHeaders["User-Agent"]        }
+cookies?.setAcceptThirdPartyCookies(binding.webView, true)        binding.webView.webViewClient = webViewClient        binding.webView.loadUrl(location.url, location.headers)        this.dismiss()    }
 
 override fun onDestroy() {        _binding = null        super.onDestroy()    }}

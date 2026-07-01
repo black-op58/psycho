@@ -20,12 +20,15 @@ try {
 while (true) {
     val entry = archive.getNextEntry() ?: break
 if (entry.name == entryName) {
-return archive                }            }        } catch (e: ArchiveException) {            archive.close()
-throw e        }        archive.close()
+return archive                }}
+} catch (e: ArchiveException) {            archive.close()
+throw e        }
+archive.close()
 return null    }
 
 override fun close() {
-try {            Os.munmap(address, size)        } catch (e: Exception) {            // Ignored        }    }}
+try {            Os.munmap(address, size)        } catch (e: Exception) {            // Ignored        }
+}}
 
 fun DocumentFile.archiveReader(context: Context): ArchiveReader {
     val pfd = context.contentResolver.openFileDescriptor(uri, "r")        ?: error("Failed to 

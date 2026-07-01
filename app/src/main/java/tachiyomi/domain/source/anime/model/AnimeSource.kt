@@ -12,4 +12,5 @@ else -> "$name (${lang.uppercase()})"        }
 
 val key: () -> String = {
 when {            isUsedLast -> "$id-lastused"
-else -> "$id"        }    }}
+else -> "$id"        }
+}}

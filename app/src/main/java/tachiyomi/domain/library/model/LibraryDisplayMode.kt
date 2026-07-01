@@ -12,7 +12,8 @@ object Serializer {
 return Companion.deserialize(serialized)        }
 
 fun serialize(value: LibraryDisplayMode): String {
-return value.serialize()        }    }
+return value.serialize()        }
+}
 
 companion object {
     val values by lazy { setOf(CompactGrid, ComfortableGrid, List, CoverOnlyGrid) }
@@ -20,13 +21,16 @@ companion object {
 val default = CompactGrid
 fun valueOf(flag: Long?): LibraryDisplayMode {
 if (flag == null) return default
-return values                .find { mode -> mode.flag == flag and mode.mask }                ?: default        }
+return values                .find { mode -> mode.flag == flag and mode.mask }
+?: default        }
 
 fun deserialize(serialized: String): LibraryDisplayMode {
 return when (serialized) {                "COMFORTABLE_GRID" -> ComfortableGrid                "COMPACT_GRID" -> CompactGrid                "COVER_ONLY_GRID" -> CoverOnlyGrid                "LIST" -> List
-else -> default            }        }    }
+else -> default            }}
+}
 
 fun serialize(): String {
-return when (this) {            ComfortableGrid -> "COMFORTABLE_GRID"            CompactGrid -> "COMPACT_GRID"            CoverOnlyGrid -> "COVER_ONLY_GRID"            List -> "LIST"        }    }}
+return when (this) {            ComfortableGrid -> "COMFORTABLE_GRID"            CompactGrid -> "COMPACT_GRID"            CoverOnlyGrid -> "COVER_ONLY_GRID"            List -> "LIST"        }
+}}
 
 val Category?.display: LibraryDisplayMode    get() = LibraryDisplayMode.valueOf(this?.flags)

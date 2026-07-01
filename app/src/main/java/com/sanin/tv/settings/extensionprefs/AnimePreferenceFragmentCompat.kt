@@ -22,7 +22,8 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {        preferenceScreen = try {            populateAnimePreferenceScreen()        } catch (e: Exception) {            snackString(e.message ?: "Unknown error")            preferenceManager.createPreferenceScreen(requireContext())        }    }
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {        preferenceScreen = try {            populateAnimePreferenceScreen()        } catch (e: Exception) {            snackString(e.message ?: "Unknown error")            preferenceManager.createPreferenceScreen(requireContext())        }
+    }
 
 override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(requireActivity()).applyTheme()    }
 
@@ -37,7 +38,8 @@ val dataStore = SharedPreferencesDataStore(sharedPreferences)        preferenceM
 val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())        source.setupPreferenceScreen(sourceScreen)        sourceScreen.forEach { pref ->            pref.isIconSpaceReserved = false
 if (pref is DialogPreference) {                pref.dialogTitle = pref.title            }
 if (pref is EditTextPreference) {
-    val setListener = pref.getOnBindEditTextListener()                pref.setOnBindEditTextListener {                    setListener?.onBindEditText(it)                    it.setIncognito(lifecycleScope)                }            }        }
+    val setListener = pref.getOnBindEditTextListener()                pref.setOnBindEditTextListener {                    setListener?.onBindEditText(it)                    it.setIncognito(lifecycleScope)                }}
+    }
 return sourceScreen    }
 
 fun getInstance(        sourceId: Long,        onCloseAction: (() -> Unit)? = null    ): AnimeSourcePreferencesFragment {
@@ -51,7 +53,8 @@ class InitialAnimeSourcePreferencesFragment(
 val sharedPreferences: SharedPreferences,    
 val source: ConfigurableAnimeSource,    
 val currContext: Context) : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {        preferenceScreen = try {            populateAnimePreferenceScreen()        } catch (e: Exception) {            snackString(e.message ?: "Unknown error")            preferenceManager.createPreferenceScreen(requireContext())        }        //set background color
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {        preferenceScreen = try {            populateAnimePreferenceScreen()        } catch (e: Exception) {            snackString(e.message ?: "Unknown error")            preferenceManager.createPreferenceScreen(requireContext())        }
+    //set background color
 val color =            requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor)        view?.setBackgroundColor(color)    }
 
 fun populateAnimePreferenceScreen(): PreferenceScreen {

@@ -16,7 +16,8 @@ private const val GROUP_COMMENTS = "group_comments"    const val CHANNEL_COMMENT
     const val GROUP_ANILIST = "group_anilist"    const val CHANNEL_ANILIST = "anilist_channel"    const val ID_ANILIST = -901    
 /**     * Notification channel and ids used subscription checks.     */
     const val GROUP_SUBSCRIPTION_CHECK = "group_subscription_check"    const val CHANNEL_SUBSCRIPTION_CHECK = "subscription_check_channel"    const val CHANNEL_SUBSCRIPTION_CHECK_PROGRESS = "subscription_check_progress_channel"    const val ID_SUBSCRIPTION_CHECK = -1001    const val ID_SUBSCRIPTION_CHECK_PROGRESS = -1002                    setName("Incognito Mode")
-}                buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
+}
+buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
     setName("Comments")                    setGroup(GROUP_COMMENTS)
 },                buildNotificationChannel(CHANNEL_COMMENT_WARING, IMPORTANCE_HIGH) {
     setName("Comment Warnings")                    setGroup(GROUP_COMMENTS)

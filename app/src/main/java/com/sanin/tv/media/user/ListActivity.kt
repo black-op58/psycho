@@ -34,7 +34,8 @@ private var selectedTabIdx = 0
 override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)            
 override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
-override fun onTabReselected(tab: TabLayout.Tab?) {}        })        
+override fun onTabReselected(tab: TabLayout.Tab?) {}
+})
 val model: ListViewModel by viewModels()        model.getLists().observe(this) {
     val defaultKeys = listOf(                "Reading",                "Watching",                "Completed",                "Paused",                "Dropped",                "Planning",                "Favourites",                "Rewatching",                "Rereading",                "All"            )            
 val userKeys: Array<String> = resources.getStringArray(R.array.keys)
@@ -42,19 +43,29 @@ if (it != null) {                binding.listProgressBar.visibility = View.GONE 
 val keys = it.keys.toList()                    .map { key -> userKeys.getOrNull(defaultKeys.indexOf(key)) ?: key }
 
 val values = it.values.toList()                
-val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { tab, position ->                    tab.text = "${keys[position]} (${values[position].size})"                }.attach()                binding.listViewPager.setCurrentItem(savedTab, false)            }        }
+val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { tab, position ->                    tab.text = "${keys[position]} (${values[position].size})"                }.attach()                binding.listViewPager.setCurrentItem(savedTab, false)            }
+}
 
-val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }        live.observe(this) {
-if (it) {                scope.launch {                    withContext(Dispatchers.IO) {                        model.loadLists(            popup.show()        }        binding.filter.setOnClickListener {
+val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
+live.observe(this) {
+if (it) {                scope.launch {                    withContext(Dispatchers.IO) {                        model.loadLists(            popup.show()        }
+binding.filter.setOnClickListener {
     val genres =                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()            
-val popup = PopupMenu(this, it)            popup.menu.add("All")            genres.forEach { genre ->                popup.menu.add(genre)            }            popup.setOnMenuItemClickListener { menuItem ->                
-val selectedGenre = menuItem.title.toString()                model.filterLists(selectedGenre)                true            }            popup.show()        }        binding.random.setOnClickListener {            //get the current tab
+val popup = PopupMenu(this, it)            popup.menu.add("All")            genres.forEach { genre ->                popup.menu.add(genre)            }
+popup.setOnMenuItemClickListener { menuItem ->
+val selectedGenre = menuItem.title.toString()                model.filterLists(selectedGenre)                true            }
+popup.show()}
+binding.random.setOnClickListener {            //get the current tab
 val currentTab =                binding.listTabLayout.getTabAt(binding.listTabLayout.selectedTabPosition)            
-val currentFragment =                supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment            currentFragment?.randomOptionClick()        }        binding.search.setOnClickListener {            toggleSearchView(binding.searchView.isVisible)
-if (!binding.searchView.isVisible) {                model.unfilterLists()            }        }        binding.searchViewText.addTextChangedListener {            model.searchLists(binding.searchViewText.text.toString())        }    }
+val currentFragment =                supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment            currentFragment?.randomOptionClick()        }
+binding.search.setOnClickListener {            toggleSearchView(binding.searchView.isVisible)
+if (!binding.searchView.isVisible) {                model.unfilterLists()            }}
+binding.searchViewText.addTextChangedListener {            model.searchLists(binding.searchViewText.text.toString())}
+}
 
 private fun toggleSearchView(isVisible: Boolean) {
 if (isVisible) {            binding.searchView.visibility = View.GONE            binding.searchViewText.text.clear()
 } else {            binding.searchView.visibility = View.VISIBLE            binding.searchViewText.requestFocus()            
-val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager            imm.showSoftInput(binding.searchViewText, InputMethodManager.SHOW_IMPLICIT)        }    }}
+val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager            imm.showSoftInput(binding.searchViewText, InputMethodManager.SHOW_IMPLICIT)        }
+}}
 }}

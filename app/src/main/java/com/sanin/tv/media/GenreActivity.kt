@@ -29,11 +29,15 @@ val screenWidth = resources.displayMetrics.run { widthPixels / density }
 
 val type = intent.getStringExtra("type")
 if (type != null) {
-    val adapter = GenreAdapter(type, true)            model.doneListener = {                MainScope().launch {                    binding.mediaInfoGenresProgressBar.visibility = View.GONE                }            }
+    val adapter = GenreAdapter(type, true)            model.doneListener = {                MainScope().launch {                    binding.mediaInfoGenresProgressBar.visibility = View.GONE                }
+    }
 if (model.genres != null) {                adapter.genres = model.genres!!                adapter.pos = ArrayList(model.genres!!.keys)
-if (model.done)                    model.doneListener?.invoke()            }            binding.mediaInfoGenresRecyclerView.adapter = adapter            binding.mediaInfoGenresRecyclerView.layoutManager =                GridLayoutManager(this, (screenWidth / 156f).toInt())            lifecycleScope.launch(Dispatchers.IO) {                model.loadGenres(                    Anilist.genres ?: loadLocalGenres() ?: arrayListOf()                ) {                    MainScope().launch {                        adapter.addGenre(it)                    }                }            }        }    }
+if (model.done)                    model.doneListener?.invoke()            }
+binding.mediaInfoGenresRecyclerView.adapter = adapter            binding.mediaInfoGenresRecyclerView.layoutManager =                GridLayoutManager(this, (screenWidth / 156f).toInt())            lifecycleScope.launch(Dispatchers.IO) {                model.loadGenres(                    Anilist.genres ?: loadLocalGenres() ?: arrayListOf()                ) {                    MainScope().launch {                        adapter.addGenre(it)}}}}
+}
 
 private fun loadLocalGenres(): ArrayList<String>? {
     val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList)            .toMutableList()
 return if (genres.isEmpty()) {            null
-} else {            //sort alphabetically            genres.sort().let { genres as ArrayList<String> }        }    }}
+} else {            //sort alphabetically            genres.sort().let { genres as ArrayList<String> }}
+}}

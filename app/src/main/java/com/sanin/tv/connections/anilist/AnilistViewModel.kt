@@ -1,10 +1,14 @@
 package com.sanin.tv.connections.anilist
 
-isFav = false,                        isAdult = false,                        status = node.status,                        anime = Anime(                            totalEpisodes = node.numEpisodes,                            season = null,                            seasonYear = null,                        ),                    )                }                missingSequels.postValue(ArrayList(sequelMedia))
-} else {                missingSequels.postValue(arrayListOf())            }        } ?: missingSequels.postValue(arrayListOf())    }    suspend 
+isFav = false,                        isAdult = false,                        status = node.status,                        anime = Anime(                            totalEpisodes = node.numEpisodes,                            season = null,                            seasonYear = null,                        ),                    )                }
+missingSequels.postValue(ArrayList(sequelMedia))
+} else {                missingSequels.postValue(arrayListOf())            }
+} ?: missingSequels.postValue(arrayListOf())}
+suspend
 fun loadMain(context: FragmentActivity) {        Anilist.getSavedToken()        MAL.getSavedToken()
 if (!BuildConfig.FLAVOR.contains("fdroid")) {
-if (PrefManager.getVal(PrefName.CheckUpdate))                context.lifecycleScope.launch(Dispatchers.IO) {                    AppUpdater.check(context, false)                }        }
+if (PrefManager.getVal(PrefName.CheckUpdate))                context.lifecycleScope.launch(Dispatchers.IO) {                    AppUpdater.check(context, false)                }
+}
 
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
 if (rescueMode) {
@@ -24,7 +28,9 @@ return        }
 val list = Anilist.query.loadAnimeList()        updated.postValue(list["recentUpdates"])        popularMovies.postValue(list["trendingMovies"])        topRatedAnime.postValue(list["topRated"])        mostFavAnime.postValue(list["mostFav"])    }
 
 private suspend 
-fun loadAllFromMAL() {        tryWithSuspend {            MAL.query.getAnimeRanking("airing", 15)?.data?.let { entries ->                updated.postValue(entries.map { Media(it.node, true) }.toMutableList())            }        }        tryWithSuspend {            MAL.query.getAnimeRanking("bypopularity", 15)?.data?.let { entries ->                popularMovies.postValue(entries.map { Media(it.node, true) }.toMutableList())            }        }        tryWithSuspend {                r.source,                r.format,                r.countryOfOrigin,                r.isAdult,                r.onList,                r.excludedGenres,                r.excludedTags,                r.startYear,                r.seasonYear,                r.season,            )        )    }
+fun loadAllFromMAL() {        tryWithSuspend {            MAL.query.getAnimeRanking("airing", 15)?.data?.let { entries ->                updated.postValue(entries.map { Media(it.node, true) }.toMutableList())            }}
+tryWithSuspend {            MAL.query.getAnimeRanking("bypopularity", 15)?.data?.let { entries ->                popularMovies.postValue(entries.map { Media(it.node, true) }.toMutableList())}}
+tryWithSuspend {                r.source,                r.format,                r.countryOfOrigin,                r.isAdult,                r.onList,                r.excludedGenres,                r.excludedTags,                r.startYear,                r.seasonYear,                r.season,            )        )    }
 
 private suspend 
 fun loadCharacterSearch(r: CharacterSearchResults) {
@@ -34,7 +40,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchCharacters(search, r.page)                characterResult.postValue(CharacterSearchResults(                    search = search, page = r.page,                    results = res?.data?.map { Character(it.malId, it.name, it.images?.jpg?.imageUrl, null, "", false) }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                characterResult.postValue(CharacterSearchResults(                    search = search, page = r.page,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        characterResult.postValue(Anilist.query.searchCharacters(r.page, r.search))    }
+return        }
+characterResult.postValue(Anilist.query.searchCharacters(r.page, r.search))    }
 
 private suspend 
 fun loadStudiosSearch(r: StudioSearchResults) {
@@ -44,7 +51,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchStudios(search, r.page)                studioResult.postValue(StudioSearchResults(                    search = search, page = r.page,                    results = res?.data?.map { Studio(it.malId.toString(), it.name ?: "", false, it.favorites ?: 0, it.images?.jpg?.imageUrl) }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                studioResult.postValue(StudioSearchResults(                    search = search, page = r.page,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        studioResult.postValue(Anilist.query.searchStudios(r.page, r.search))    }
+return        }
+studioResult.postValue(Anilist.query.searchStudios(r.page, r.search))    }
 
 private suspend 
 fun loadStaffSearch(r: StaffSearchResults) {
@@ -54,7 +62,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchStaff(search, r.page)                staffResult.postValue(StaffSearchResults(                    search = search, page = r.page,                    results = res?.data?.map { Author(it.malId, it.name ?: "", it.images?.jpg?.imageUrl, "STAFF") }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                staffResult.postValue(StaffSearchResults(                    search = search, page = r.page,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        staffResult.postValue(Anilist.query.searchStaff(r.page, r.search))    }
+return        }
+staffResult.postValue(Anilist.query.searchStaff(r.page, r.search))    }
 
 private suspend 
 fun loadUserSearch(r: UserSearchResults) {
@@ -65,8 +74,10 @@ if (!search.isNullOrBlank()) {
 val resultsList = res?.data?.map {                    User(                        id = it.username.hashCode().and(0x7FFFFFFF),                        name = it.username ?: "",                        pfp = it.images?.jpg?.imageUrl,                        banner = "https://myanimelist.net/profile/${it.username ?: ""}"                    )                }?.toMutableList() ?: mutableListOf()
 if (resultsList.isEmpty()) {
     val exactProfile = MAL.jikan.getUserProfile(search)
-if (exactProfile != null) {                        resultsList.add(                            User(                                id = exactProfile.username.hashCode().and(0x7FFFFFFF),                                name = exactProfile.username ?: "",                                pfp = exactProfile.images?.jpg?.imageUrl,                                banner = "https://myanimelist.net/profile/${exactProfile.username ?: ""}"                            )                        )                    }                }                userResult.postValue(UserSearchResults(                    search = search, page = r.page,                    results = resultsList,                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
-} else {                userResult.postValue(UserSearchResults(                    search = search, page = r.page,                    results = mutableListOf(),                    hasNextPage = false                ))            }                r.type,                r.page + 1,                r.perPage,                r.search,                r.sort,                r.genres,                r.tags,                r.status,                r.source,                r.format,                r.countryOfOrigin,                r.isAdult,                r.onList,                r.excludedGenres,                r.excludedTags,                r.startYear,                r.seasonYear,                r.season            )        )    }
+if (exactProfile != null) {                        resultsList.add(                            User(                                id = exactProfile.username.hashCode().and(0x7FFFFFFF),                                name = exactProfile.username ?: "",                                pfp = exactProfile.images?.jpg?.imageUrl,                                banner = "https://myanimelist.net/profile/${exactProfile.username ?: ""}"                            )                        )                    }}
+userResult.postValue(UserSearchResults(                    search = search, page = r.page,                    results = resultsList,                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
+} else {                userResult.postValue(UserSearchResults(                    search = search, page = r.page,                    results = mutableListOf(),                    hasNextPage = false                ))            }
+r.type,                r.page + 1,                r.perPage,                r.search,                r.sort,                r.genres,                r.tags,                r.status,                r.source,                r.format,                r.countryOfOrigin,                r.isAdult,                r.onList,                r.excludedGenres,                r.excludedTags,                r.startYear,                r.seasonYear,                r.season            )        )    }
 
 private suspend 
 fun loadNextCharacterPage(r: CharacterSearchResults) {
@@ -76,7 +87,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchCharacters(search, r.page + 1)                characterResult.postValue(CharacterSearchResults(                    search = search, page = r.page + 1,                    results = res?.data?.map { Character(it.malId, it.name, it.images?.jpg?.imageUrl, null, "", false) }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                characterResult.postValue(CharacterSearchResults(                    search = search, page = r.page + 1,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        characterResult.postValue(Anilist.query.searchCharacters(r.page + 1, r.search))    }
+return        }
+characterResult.postValue(Anilist.query.searchCharacters(r.page + 1, r.search))    }
 
 private suspend 
 fun loadNextStudiosPage(r: StudioSearchResults) {
@@ -86,7 +98,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchStudios(search, r.page + 1)                studioResult.postValue(StudioSearchResults(                    search = search, page = r.page + 1,                    results = res?.data?.map { Studio(it.malId.toString(), it.name ?: "", false, it.favorites ?: 0, it.images?.jpg?.imageUrl) }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                studioResult.postValue(StudioSearchResults(                    search = search, page = r.page + 1,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        studioResult.postValue(Anilist.query.searchStudios(r.page + 1, r.search))    }
+return        }
+studioResult.postValue(Anilist.query.searchStudios(r.page + 1, r.search))    }
 
 private suspend 
 fun loadNextStaffPage(r: StaffSearchResults) {
@@ -96,7 +109,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchStaff(search, r.page + 1)                staffResult.postValue(StaffSearchResults(                    search = search, page = r.page + 1,                    results = res?.data?.map { Author(it.malId, it.name ?: "", it.images?.jpg?.imageUrl, "STAFF") }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                staffResult.postValue(StaffSearchResults(                    search = search, page = r.page + 1,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        staffResult.postValue(Anilist.query.searchStaff(r.page + 1, r.search))    }
+return        }
+staffResult.postValue(Anilist.query.searchStaff(r.page + 1, r.search))    }
 
 private suspend 
 fun loadNextUserPage(r: UserSearchResults) {
@@ -106,7 +120,8 @@ if (!search.isNullOrBlank()) {
 
     val res = MAL.jikan.searchUsers(search, r.page + 1)                userResult.postValue(UserSearchResults(                    search = search, page = r.page + 1,                    results = res?.data?.map { User(it.username.hashCode().and(0x7FFFFFFF), it.username ?: "", it.images?.jpg?.imageUrl, "https://myanimelist.net/profile/${it.username ?: ""}") }?.toMutableList() ?: mutableListOf(),                    hasNextPage = res?.pagination?.hasNextPage ?: false                ))
 } else {                userResult.postValue(UserSearchResults(                    search = search, page = r.page + 1,                    results = mutableListOf(),                    hasNextPage = false                ))            }
-return        }        userResult.postValue(Anilist.query.searchUsers(r.page + 1, r.search))    }}
+return        }
+userResult.postValue(Anilist.query.searchUsers(r.page + 1, r.search))    }}
 
 class GenresViewModel : ViewModel() {
     var genres: MutableMap<String, String>? = null
@@ -116,7 +131,8 @@ fun loadGenres(genre: ArrayList<String>, listener: (Pair<String, String>) -> Uni
 if (genres == null) {            genres = mutableMapOf(
 if (PrefManager.getVal<Boolean>(PrefName.RescueMode)) {                loadGenresFromJikan(genre, listener
 } else {                Anilist.query.getGenres(genre) {                    genres!![it.first] = it.second                    listener.invoke(it
-if (genres!!.size == genre.size) {                        done = true                        doneListener?.invoke()                    }                }            }        }    }
+if (genres!!.size == genre.size) {                        done = true                        doneListener?.invoke()                    }}}}
+}
 
 private suspend 
 fun loadGenresFromJikan(genre: ArrayList<String>, listener: (Pair<String, String>) -> Unit) {

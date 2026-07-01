@@ -33,9 +33,12 @@ val window = dialog?.window        window?.statusBarColor = Color.TRANSPARENT
 return binding.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.bottomSheerCustomTitle.text = title        viewList.forEach {            binding.bottomDialogCustomContainer.addView(it)        }
-if (checkText != null) binding.bottomDialogCustomCheckBox.apply {            visibility = View.VISIBLE            text = checkText            isChecked = checkChecked            setOnCheckedChangeListener { _, checked ->                checkCallback?.invoke(checked)            }        }
-if (negativeText != null) binding.bottomDialogCustomNegative.apply {            visibility = View.VISIBLE            text = negativeText            setOnClickListener {                negativeCallback?.invoke()            }        }
-if (positiveText != null) binding.bottomDialogCustomPositive.apply {            visibility = View.VISIBLE            text = positiveText            setOnClickListener {                positiveCallback?.invoke()            }        }    }
+if (checkText != null) binding.bottomDialogCustomCheckBox.apply {            visibility = View.VISIBLE            text = checkText            isChecked = checkChecked            setOnCheckedChangeListener { _, checked ->                checkCallback?.invoke(checked)            }
+}
+if (negativeText != null) binding.bottomDialogCustomNegative.apply {            visibility = View.VISIBLE            text = negativeText            setOnClickListener {                negativeCallback?.invoke()            }
+}
+if (positiveText != null) binding.bottomDialogCustomPositive.apply {            visibility = View.VISIBLE            text = positiveText            setOnClickListener {                positiveCallback?.invoke()            }}
+}
 
 override fun onDestroy() {        _binding = null        super.onDestroy()    }
 

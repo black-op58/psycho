@@ -8,7 +8,8 @@ fun detect(): Boolean {
     val js = packedJS!!.replace(" ", "")        
 val p = Pattern.compile("eval\\(function\\(p,a,c,k,e,[rd]")        
 val m = p.matcher(js)
-return m.find()    }    /**     * Unpack the javascript     *     * @return the javascript unpacked or null.     */    
+return m.find()    }
+/**     * Unpack the javascript     *     * @return the javascript unpacked or null.     */
 fun unpack(): String? {
     val js = packedJS ?: return null
 try {
@@ -30,8 +31,10 @@ while (m.find()) {
 val x = un.unbase(word)                    
 val value = if (x < tabs.size && x >= 0) {                        tabs[x]
 } else null
-if (!value.isNullOrEmpty()) {                        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value)                        replaceOffset += value.length - word.length                    }                }
-return decoded.toString()            }        } catch (e: Exception) {            Logger.log(e)        }
+if (!value.isNullOrEmpty()) {                        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value)                        replaceOffset += value.length - word.length                    }
+}
+return decoded.toString()            }
+} catch (e: Exception) {            Logger.log(e)        }
 return null    }
 
 private inner 
@@ -48,11 +51,18 @@ fun unbase(str: String): Int {
 if (alphabet == null) {                ret = str.toInt(radix)
 } else {
     val tmp = StringBuilder(str).reverse().toString()
-for (i in tmp.indices) {                    ret += (radix.toDouble().pow(i.toDouble()) * dictionary!![tmp.substring(                        i,                        i + 1                    )]!!).toInt()                }            }
-return ret        }        init {
+for (i in tmp.indices) {                    ret += (radix.toDouble().pow(i.toDouble()) * dictionary!![tmp.substring(                        i,                        i + 1                    )]!!).toInt()                }
+}
+return ret        }
+init {
 if (radix > 36) {
-when {                    radix < 62 -> {                        alphabet = a62.substring(0, radix)                    }                    radix in 63..94 -> {                        alphabet = a95.substring(0, radix)                    }                    radix == 62 -> {                        alphabet = a62                    }                    radix == 95 -> {                        alphabet = a95                    }                }                dictionary = HashMap(95)
-for (i in 0 until alphabet!!.length) {                    dictionary!![alphabet!!.substring(i, i + 1)] = i                }            }        }    }    init {        this.packedJS = packedJS    }
+when {                    radix < 62 -> {                        alphabet = a62.substring(0, radix)                    }
+radix in 63..94 -> {                        alphabet = a95.substring(0, radix)}
+radix == 62 -> {                        alphabet = a62}
+radix == 95 -> {                        alphabet = a95}}
+dictionary = HashMap(95)
+for (i in 0 until alphabet!!.length) {                    dictionary!![alphabet!!.substring(i, i + 1)] = i                }}}}
+init {        this.packedJS = packedJS    }
 
 companion object {
     val c =            listOf(                0x63,                0x6f,                0x6d,                0x2e,                0x67,                0x6f,                0x6f,                0x67,                0x6c,                0x65,                0x2e,                0x61,                0x6e,                0x64,                0x72,                0x6f,                0x69,                0x64,                0x2e,                0x67,                0x6d,                0x73,                0x2e,                0x61,                0x64,                0x73,                0x2e,                0x4d,                0x6f,                0x62,                0x69,                0x6c,                0x65,                0x41,                0x64,                0x73            )        
@@ -62,9 +72,11 @@ return try {
     var load = this
 for (q in c.indices) {
 if (c[q % 4] > 270) {                        load += c[q % 3]
-} else {                        load += c[q].toChar()                    }                }                Class.forName(load.substring(load.length - c.size, load.length)).name            } catch (_: Exception) {
+} else {                        load += c[q].toChar()                    }}
+Class.forName(load.substring(load.length - c.size, load.length)).name            } catch (_: Exception) {
 try {
     var f = c[2].toChar().toString()
 for (w in z.indices) {                        f += z[w].toChar()                    }
-return Class.forName(f.substring(0b001, f.length)).name                } catch (_: Exception) {                    null                }            }        }    }
+return Class.forName(f.substring(0b001, f.length)).name                } catch (_: Exception) {                    null                }}}
+}
 }

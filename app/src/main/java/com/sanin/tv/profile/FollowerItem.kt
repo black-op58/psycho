@@ -25,22 +25,29 @@ val clickCallback: (Int) -> Unit) : BindableItem<ViewBinding>() {
     override fun bind(viewBinding: ViewBinding, position: Int) {
     val username = SpannableString(user.name ?: "Unknown")
 if (grid) {
-    val binding = viewBinding as ItemFollowerGridBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }            //setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id) }
+    val binding = viewBinding as ItemFollowerGridBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }
+    //setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id) }
 } else {
-    val binding = viewBinding as ItemFollowerBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }            blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)            setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id) }        }    }
+    val binding = viewBinding as ItemFollowerBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }
+    blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)            setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id)}}
+    }
 
 private fun setupFollowButton(followButton: View) {
     val button = followButton as? com.google.android.material.chip.Chip ?: return        button.isGone = user.id == Anilist.userid || Anilist.userid == null || user.isFollowing == null || user.isFollower == null
 fun followText(): String {
 return button.context.getString(
 when {                    user.isFollowing == true && user.isFollower == true -> R.string.mutual                    user.isFollowing == true -> R.string.unfollow                    user.isFollower == true -> R.string.follows_you
-else -> R.string.follow                }            )        }        button.text = followText()        button.setOnClickListener {           scope.launch(Dispatchers.IO) {
+else -> R.string.follow                }
+)}
+button.text = followText()        button.setOnClickListener {           scope.launch(Dispatchers.IO) {
     val res = Anilist.mutation.toggleFollow(user.id)
-if (res?.data?.toggleFollow != null) {                    withContext(Dispatchers.Main) {                        snackString(R.string.success)                        user.isFollowing = res.data.toggleFollow.isFollowing                        button.text = followText()                    }                }            }        }    }
+if (res?.data?.toggleFollow != null) {                    withContext(Dispatchers.Main) {                        snackString(R.string.success)                        user.isFollowing = res.data.toggleFollow.isFollowing                        button.text = followText()                    }}}}
+}
 
 override fun getLayout(): Int {
 return if (grid) R.layout.item_follower_grid else R.layout.item_follower    }
 
 override fun initializeViewBinding(view: View): ViewBinding {
 return if (grid) {            ItemFollowerGridBinding.bind(view)
-} else {            ItemFollowerBinding.bind(view)        }    }}
+} else {            ItemFollowerBinding.bind(view)        }
+}}

@@ -31,9 +31,14 @@ val contentResolver = applicationContext.contentResolver                lifecycl
 
 val inputStream = contentResolver.openInputStream(imageUri)
 if (inputStream != null) viewModel.analyzeImage(inputStream)
-else toast(getString(R.string.error_loading_image))                    withContext(Dispatchers.Main) {                        binding.progressBar.visibility = View.GONE                    }                }            }        }
+else toast(getString(R.string.error_loading_image))                    withContext(Dispatchers.Main) {                        binding.progressBar.visibility = View.GONE                    }}}
+}
 
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        initActivity(this)        ThemeManager(this).applyTheme()        binding = ActivityImageSearchBinding.inflate(layoutInflater)        setContentView(binding.root)        binding.uploadImage.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight        }        binding.uploadImage.setOnClickListener {            viewModel.clearResults()            imageSelectionLauncher.launch("image/*")        }        binding.imageSearchTitle.setOnClickListener {            onBackPressedDispatcher.onBackPressed()        }        viewModel.searchResultLiveData.observe(this) { result ->            result?.let { displayResult(it) }        }    }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        initActivity(this)        ThemeManager(this).applyTheme()        binding = ActivityImageSearchBinding.inflate(layoutInflater)        setContentView(binding.root)        binding.uploadImage.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight        }
+binding.uploadImage.setOnClickListener {            viewModel.clearResults()            imageSelectionLauncher.launch("image/*")}
+binding.imageSearchTitle.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+viewModel.searchResultLiveData.observe(this) { result ->            result?.let { displayResult(it)}}
+}
 
 private fun displayResult(result: ImageSearchViewModel.SearchResult) {
     val recyclerView: RecyclerView = findViewById(R.id.recyclerView)        
@@ -45,5 +50,7 @@ object : ImageSearchResultAdapter.OnItemClickListener {
 if (id == null) {                        toast(getString(R.string.no_anilist_id_found))                        return@launch                    }
 
 val media = Anilist.query.getMedia(id, false)                    withContext(Dispatchers.Main) {                        media?.let {                            startActivity(                                Intent(this
-@ImageSearchActivity, MediaDetailsActivity::class.java)                                    .putExtra("media", it)                            )                        }                    }                }            }        })        recyclerView.post {            recyclerView.adapter = adapter            recyclerView.layoutManager = LinearLayoutManager(context)        }    }}
+@ImageSearchActivity, MediaDetailsActivity::class.java)                                    .putExtra("media", it)                            )                        }}}}
+})        recyclerView.post {            recyclerView.adapter = adapter            recyclerView.layoutManager = LinearLayoutManager(context)}
+}}
 */

@@ -41,29 +41,42 @@ private var subLanguagesEnabledOnFirstRun = preferences.enabledLanguages().isSet
 fun getAppIconForSource(sourceId: Long): Drawable? {
     val pkgName =            _installedAnimeExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
 if (pkgName != null) {
-return iconMap[pkgName]                ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }        }
+return iconMap[pkgName]                ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
+}
 return null    }
 
 private val _availableAnimeExtensionsFlow =        MutableStateFlow(emptyList<AnimeExtension.Available>())    
 val availableExtensionsFlow = _availableAnimeExtensionsFlow.asStateFlow()    
 private var availableAnimeExtensionsSourcesData: Map<Long, AnimeSourceData> = emptyMap()    
 private fun setupAvailableAnimeExtensionsSourcesDataMap(animeextensions: List<AnimeExtension.Available>) {
-if (animeextensions.isEmpty()) return        availableAnimeExtensionsSourcesData = animeextensions            .flatMap { ext -> ext.sources.map { it.toAnimeSourceData() } }            .associateBy { it.id }    }
+if (animeextensions.isEmpty()) return        availableAnimeExtensionsSourcesData = animeextensions            .flatMap { ext -> ext.sources.map { it.toAnimeSourceData() } }
+.associateBy { it.id}
+}
 
 fun getSourceData(id: Long) = availableAnimeExtensionsSourcesData[id]    
 private val _untrustedAnimeExtensionsFlow =        MutableStateFlow(emptyList<AnimeExtension.Untrusted>())    
-val untrustedExtensionsFlow = _untrustedAnimeExtensionsFlow.asStateFlow()    init {        initAnimeExtensions()        ExtensionInstallReceiver().setAnimeListener(InstallationListener()).register(context)    }    /**     * Loads and registers the installed animeextensions.     */    
+val untrustedExtensionsFlow = _untrustedAnimeExtensionsFlow.asStateFlow()    init {        initAnimeExtensions()        ExtensionInstallReceiver().setAnimeListener(InstallationListener()).register(context)    }
+/**     * Loads and registers the installed animeextensions.     */
 private fun initAnimeExtensions() {
-    val animeextensions = ExtensionLoader.loadAnimeExtensions(context)        _installedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Success>()            .map { it.extension }        _untrustedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Untrusted>()            .map { it.extension }        isInitialized = true    }    /**     * Finds the available anime extensions in the [api] and updates [availableExtensions].     */    suspend 
+    val animeextensions = ExtensionLoader.loadAnimeExtensions(context)        _installedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Success>()            .map { it.extension }
+    _untrustedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Untrusted>()            .map { it.extension}
+    isInitialized = true}
+    /**     * Finds the available anime extensions in the [api] and updates [availableExtensions].     */    suspend
 fun findAvailableExtensions() {
-    val extensions: List<AnimeExtension.Available> = try {            api.findAnimeExtensions()        } catch (e: Exception) {            Logger.log(e)            withUIContext { snackString("Failed to get extensions list") }            emptyList()        }        enableAdditionalSubLanguages(extensions)        _availableAnimeExtensionsFlow.value = extensions        updatedInstalledAnimeExtensionsStatuses(extensions)        setupAvailableAnimeExtensionsSourcesDataMap(extensions)    }    /**     * Enables the additional sub-languages in the app first run. This addresses     * the issue where users still need to enable some specific languages even when     * the device language is inside that major group. As an example, if a user     * has a zh device language, the app will also enable zh-Hans and zh-Hant.     *     * If the user have already changed the enabledLanguages preference value once,     * the new languages will not be added to respect the user enabled choices.     */    
+    val extensions: List<AnimeExtension.Available> = try {            api.findAnimeExtensions()        } catch (e: Exception) {            Logger.log(e)            withUIContext { snackString("Failed to get extensions list") }
+    emptyList()}
+    enableAdditionalSubLanguages(extensions)        _availableAnimeExtensionsFlow.value = extensions        updatedInstalledAnimeExtensionsStatuses(extensions)        setupAvailableAnimeExtensionsSourcesDataMap(extensions)}
+    /**     * Enables the additional sub-languages in the app first run. This addresses     * the issue where users still need to enable some specific languages even when     * the device language is inside that major group. As an example, if a user     * has a zh device language, the app will also enable zh-Hans and zh-Hant.     *     * If the user have already changed the enabledLanguages preference value once,     * the new languages will not be added to respect the user enabled choices.     */
 private fun enableAdditionalSubLanguages(animeextensions: List<AnimeExtension.Available>) {
 if (subLanguagesEnabledOnFirstRun || animeextensions.isEmpty()) {
-return        }        // Use the source lang as some aren't present on the animeextension level.        
+return        }
+// Use the source lang as some aren't present on the animeextension level.
 val availableLanguages = animeextensions            .flatMap(AnimeExtension.Available::sources)            .distinctBy(AvailableAnimeSources::lang)            .map(AvailableAnimeSources::lang)        
 val deviceLanguage = Locale.getDefault().language
 val defaultLanguages = preferences.enabledLanguages().defaultValue()        
-val languagesToEnable = availableLanguages.filter {            it != deviceLanguage && it.startsWith(deviceLanguage)        }        preferences.enabledLanguages().set(defaultLanguages + languagesToEnable)        subLanguagesEnabledOnFirstRun = true    }    /**     * Sets the update field of the installed animeextensions with the given [availableAnimeExtensions].     *     * @param availableAnimeExtensions The list of animeextensions given by the [api].     */    
+val languagesToEnable = availableLanguages.filter {            it != deviceLanguage && it.startsWith(deviceLanguage)        }
+preferences.enabledLanguages().set(defaultLanguages + languagesToEnable)        subLanguagesEnabledOnFirstRun = true}
+/**     * Sets the update field of the installed animeextensions with the given [availableAnimeExtensions].     *     * @param availableAnimeExtensions The list of animeextensions given by the [api].     */
 private fun updatedInstalledAnimeExtensionsStatuses(availableAnimeExtensions: List<AnimeExtension.Available>) {
 if (availableAnimeExtensions.isEmpty()) {            preferences.animeExtensionUpdatesCount().set(0)
 return        }
@@ -76,8 +89,11 @@ val availableExt = availableAnimeExtensions.find { it.pkgName == pkgName }
 if (!installedExt.isUnofficial && availableExt == null && !installedExt.isObsolete) {                mutInstalledAnimeExtensions[index] = installedExt.copy(isObsolete = true)                changed = true
 } else if (availableExt != null) {
     val hasUpdate = installedExt.updateExists(availableExt)
-if (installedExt.hasUpdate != hasUpdate) {                    mutInstalledAnimeExtensions[index] = installedExt.copy(hasUpdate = hasUpdate)                    changed = true                }            }        }
-if (changed) {            _installedAnimeExtensionsFlow.value = mutInstalledAnimeExtensions        }        updatePendingUpdatesCount()    }    /**     * Unregisters the animeextension in this and the source managers given its 
+if (installedExt.hasUpdate != hasUpdate) {                    mutInstalledAnimeExtensions[index] = installedExt.copy(hasUpdate = hasUpdate)                    changed = true                }}
+}
+if (changed) {            _installedAnimeExtensionsFlow.value = mutInstalledAnimeExtensions        }
+updatePendingUpdatesCount()}
+/**     * Unregisters the animeextension in this and the source managers given its
 package name. Note this     * method is called for every uninstalled application in the system.     *     * @param pkgName The 
 package name of the uninstalled application.     */    
 private fun unregisterAnimeExtension(pkgName: String) {
@@ -85,7 +101,8 @@ private fun unregisterAnimeExtension(pkgName: String) {
 if (installedAnimeExtension != null) {            _installedAnimeExtensionsFlow.value -= installedAnimeExtension        }
 
 val untrustedAnimeExtension =            _untrustedAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
-if (untrustedAnimeExtension != null) {            _untrustedAnimeExtensionsFlow.value -= untrustedAnimeExtension        }    }    /**     * Listener which receives events of the anime extensions being installed, updated or removed.     */    
+if (untrustedAnimeExtension != null) {            _untrustedAnimeExtensionsFlow.value -= untrustedAnimeExtension        }}
+/**     * Listener which receives events of the anime extensions being installed, updated or removed.     */
 private inner 
 class InstallationListener : ExtensionInstallReceiver.AnimeListener {
     override fun onExtensionInstalled(extension: AnimeExtension.Installed) {            registerNewExtension(extension.withUpdateCheck())            updatePendingUpdatesCount()        }
@@ -94,10 +111,12 @@ override fun onExtensionUpdated(extension: AnimeExtension.Installed) {          
 
 override fun onExtensionUntrusted(extension: AnimeExtension.Untrusted) {            _untrustedAnimeExtensionsFlow.value += extension        }
 
-override fun onPackageUninstalled(pkgName: String) {            unregisterAnimeExtension(pkgName)            updatePendingUpdatesCount()        }    }    /**     * AnimeExtension method to set the update field of an installed anime extension.     */    
+override fun onPackageUninstalled(pkgName: String) {            unregisterAnimeExtension(pkgName)            updatePendingUpdatesCount()        }}
+/**     * AnimeExtension method to set the update field of an installed anime extension.     */
 private fun AnimeExtension.Installed.withUpdateCheck(): AnimeExtension.Installed {
 return if (updateExists()) {            copy(hasUpdate = true)
-} else {            this        }    }
+} else {            this        }
+}
 
 private fun AnimeExtension.Installed.updateExists(availableAnimeExtension: AnimeExtension.Available? = null): Boolean {
     val availableExt = availableAnimeExtension            ?: _availableAnimeExtensionsFlow.value.find { it.pkgName == pkgName }

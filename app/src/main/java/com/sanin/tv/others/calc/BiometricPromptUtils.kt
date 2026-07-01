@@ -15,6 +15,8 @@ object : BiometricPrompt.AuthenticationCallback() {
 
 override fun onAuthenticationFailed() {                super.onAuthenticationFailed()                Logger.log("$TAG User biometric rejected.")            }
 
-override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {                super.onAuthenticationSucceeded(result)                Log.d(TAG, "Authentication was successful")                processSuccess(result)            }        }
-return BiometricPrompt(activity, executor, callback)    }    /**     * Create a BiometricPrompt.PromptInfo instance     * @param activity: AppCompatActivity     * @return BiometricPrompt.PromptInfo: instance     */    
+override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {                super.onAuthenticationSucceeded(result)                Log.d(TAG, "Authentication was successful")                processSuccess(result)            }
+}
+return BiometricPrompt(activity, executor, callback)    }
+/**     * Create a BiometricPrompt.PromptInfo instance     * @param activity: AppCompatActivity     * @return BiometricPrompt.PromptInfo: instance     */
 fun createPromptInfo(activity: AppCompatActivity): BiometricPrompt.PromptInfo =        BiometricPrompt.PromptInfo.Builder().apply {            setTitle(activity.getString(R.string.bio_prompt_info_title))            setDescription(activity.getString(R.string.bio_prompt_info_desc))            setConfirmationRequired(false)            setNegativeButtonText(activity.getString(R.string.cancel))        }.build()}

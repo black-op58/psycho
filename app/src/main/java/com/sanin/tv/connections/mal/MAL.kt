@@ -27,14 +27,16 @@ fun loginIntent(context: Context) {
     val codeVerifierBytes = ByteArray(96)        SecureRandom().nextBytes(codeVerifierBytes)        
 val codeChallenge = Base64.encodeToString(codeVerifierBytes, Base64.DEFAULT).trimEnd('=')            .replace("+", "-")            .replace("/", "_")            .replace("\n", "")        PrefManager.setVal(PrefName.MALCodeChallenge, codeChallenge)        
 val request =            "https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=$clientId&code_challenge=$codeChallenge"
-try {            CustomTabsIntent.Builder().build().launchUrl(                context,                Uri.parse(request)            )        } catch (e: ActivityNotFoundException) {            openLinkInBrowser(request)        }    }
+try {            CustomTabsIntent.Builder().build().launchUrl(                context,                Uri.parse(request)            )        } catch (e: ActivityNotFoundException) {            openLinkInBrowser(request)        }
+}
 
 private suspend 
 fun refreshToken(): ResponseToken? {
 return tryWithSuspend {
     val token = PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)                ?: throw Exception(currContext()?.getString(R.string.refresh_token_load_failed))            
 val res = client.post(                "https://myanimelist.net/v1/oauth2/token",
-data = mapOf(                    "client_id" to clientId,                    "grant_type" to "refresh_token",                    "refresh_token" to token.refreshToken                )            ).parsed<ResponseToken>()            saveResponse(res)            return@tryWithSuspend res        }    }    suspend 
+data = mapOf(                    "client_id" to clientId,                    "grant_type" to "refresh_token",                    "refresh_token" to token.refreshToken                )            ).parsed<ResponseToken>()            saveResponse(res)            return@tryWithSuspend res        }}
+suspend
 fun getSavedToken(): Boolean {
 return tryWithSuspend(false) {
     var res: ResponseToken =                PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)                    ?: return@tryWithSuspend false
@@ -55,4 +57,5 @@ val accessToken: String,
 @SerialName("refresh_token") 
 val refreshToken: String,    ) : java.io.Serializable {        
 companion object {
-    private const val serialVersionUID = 1L        }    }}
+    private const val serialVersionUID = 1L        }
+    }}

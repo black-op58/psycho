@@ -11,9 +11,11 @@ abstract suspend
 fun extract(): VideoContainer    /**     * Loads videos & subtitles from a given Url     *     * & returns itself with the data loaded     * **/    
 open suspend 
 fun load(): VideoExtractor {        extract().also {            videos = it.videos            subtitles = it.subtitles            audioTracks = it.audioTracks
-return this        }    }    /**     * Gets called when a Video from this extractor starts playing     *     * Useful for Extractor that require Polling     * **/    
+return this        }}
+/**     * Gets called when a Video from this extractor starts playing     *     * Useful for Extractor that require Polling     * **/
 open suspend 
-fun onVideoPlayed(video: Video?) {}    /**     * Called when a particular video has been stopped playing     **/    
+fun onVideoPlayed(video: Video?) {}
+/**     * Called when a particular video has been stopped playing     **/
 open suspend 
 fun onVideoStopped(video: Video?) {}}/** * A simple 
 class containing name, link & extraData(in case you want to give some to it) of the embed which shows the video present on the site * * `name` variable is used when checking if there was a Default Server Selected with the same name * * * **/

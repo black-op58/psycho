@@ -24,7 +24,8 @@ val subscriptionInter
 val =                    SubscriptionNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.SubscriptionNotificationInterval)]                scheduler.scheduleRepeatingTask(                    TaskType.COMMENT_NOTIFICATION,                    commentInter
 val                )                scheduler.scheduleRepeatingTask(                    TaskType.ANILIST_NOTIFICATION,                    anilistInter
 val                )                scheduler.scheduleRepeatingTask(                    TaskType.SUBSCRIPTION_NOTIFICATION,                    subscriptionInter
-val                )            }        }    }}
+val                )            }}
+}}
 
 class AlarmPermissionStateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
@@ -33,4 +34,6 @@ val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManag
 val canScheduleExactAlarms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {                alarmManager.canScheduleExactAlarms()
 } else {                true            }
 if (canScheduleExactAlarms) {                TaskScheduler.create(context, false).cancelAllTasks()                TaskScheduler.create(context, true).scheduleAllTasks(context)
-} else {                TaskScheduler.create(context, true).cancelAllTasks()                TaskScheduler.create(context, false).scheduleAllTasks(context)            }            PrefManager.setVal(PrefName.UseAlarmManager, canScheduleExactAlarms)        }    }}
+} else {                TaskScheduler.create(context, true).cancelAllTasks()                TaskScheduler.create(context, false).scheduleAllTasks(context)            }
+PrefManager.setVal(PrefName.UseAlarmManager, canScheduleExactAlarms)}
+}}

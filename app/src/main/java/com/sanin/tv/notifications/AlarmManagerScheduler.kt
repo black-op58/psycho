@@ -25,7 +25,9 @@ val pendingIntent = PendingIntent.getBroadcast(            context,            t
 val triggerAtMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(interval)
 try {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {                alarmManager.setExactAndAllowWhileIdle(                    AlarmManager.RTC_WAKEUP,                    triggerAtMillis,                    pendingIntent                )
-} else {                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)            }        } catch (e: SecurityException) {            PrefManager.setVal(PrefName.UseAlarmManager, false)            TaskScheduler.create(context, true).cancelAllTasks()            TaskScheduler.create(context, false).scheduleAllTasks(context)        }    }
+} else {                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)            }
+} catch (e: SecurityException) {            PrefManager.setVal(PrefName.UseAlarmManager, false)            TaskScheduler.create(context, true).cancelAllTasks()            TaskScheduler.create(context, false).scheduleAllTasks(context)}
+}
 
 override fun cancelTask(taskType: TaskType) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

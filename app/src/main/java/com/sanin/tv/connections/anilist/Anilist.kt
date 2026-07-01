@@ -62,7 +62,8 @@ val matchResult = regex.find(displayTimezone)
 return if (matchResult != null) {
     val (sign, hours, minutes) = matchResult.destructured
 val formattedSign = if (sign == "+") "" else "-"            "$formattedSign$hours:$minutes"
-} else {            "00:00"        }    }
+} else {            "00:00"        }
+}
 
 private fun getSeason(next: Boolean): Pair<String, Int> {
     var newSeason = if (next) currentSeason + 1 else currentSeason - 1
@@ -74,7 +75,8 @@ return seasons[newSeason] to newYear    }
 val currentSeasons = listOf(        getSeason(false),        seasons[currentSeason] to currentYear,        getSeason(true)    )    
 fun loginIntent(context: Context) {
     val clientID = 14959
-try {            CustomTabsIntent.Builder().build().launchUrl(                context,                "https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token".toUri()            )        } catch (_: ActivityNotFoundException) {            openLinkInBrowser("https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token")        }    }
+try {            CustomTabsIntent.Builder().build().launchUrl(                context,                "https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token".toUri()            )        } catch (_: ActivityNotFoundException) {            openLinkInBrowser("https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token")        }
+}
 
 fun getSavedToken(): Boolean {
         token = PrefManager.getVal(PrefName.AnilistToken, null as String?)
@@ -90,7 +92,8 @@ fun getSavedToken(): Boolean {
         return true
     }
 
-fun removeSavedToken() {        token = null        username = null        adult = false        userid = null        avatar = null        bg = null        episodesWatched = null        chapterRead = null        PrefManager.removeVal(PrefName.AnilistToken)        // Reset per-section notification counts        PrefManager.setVal(PrefName.UnreadUserNotifications, 0)        PrefManager.setVal(PrefName.UnreadMediaNotifications, 0)        PrefManager.setVal(PrefName.UnreadSubscriptionNotifications, 0)        PrefManager.setVal(PrefName.UnreadCommentNotifications, 0)        Anilist.unreadNotificationCount = 0        //logout from comments api        CommentsAPI.logout()    }    /**     * Decodes the JWT token and returns the number of days until expiry.     * Returns null if the token is missing or cannot be decoded.     * Returns a negative number if the token is already expired.     */    
+fun removeSavedToken() {        token = null        username = null        adult = false        userid = null        avatar = null        bg = null        episodesWatched = null        chapterRead = null        PrefManager.removeVal(PrefName.AnilistToken)        // Reset per-section notification counts        PrefManager.setVal(PrefName.UnreadUserNotifications, 0)        PrefManager.setVal(PrefName.UnreadMediaNotifications, 0)        PrefManager.setVal(PrefName.UnreadSubscriptionNotifications, 0)        PrefManager.setVal(PrefName.UnreadCommentNotifications, 0)        Anilist.unreadNotificationCount = 0        //logout from comments api        CommentsAPI.logout()    }
+/**     * Decodes the JWT token and returns the number of days until expiry.     * Returns null if the token is missing or cannot be decoded.     * Returns a negative number if the token is already expired.     */
 fun getTokenExpiryDays(): Long? {
     val t = token ?: return null
 return try {
@@ -100,7 +103,8 @@ val payload = android.util.Base64.decode(                parts[1].replace('-', '
 val json = JSONObject(String(payload))
 if (!json.has("exp")) return null
 val expSeconds = json.getLong("exp")            
-val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        } catch (e: Exception) {            Logger.log("getTokenExpiryDays error: ${e.message}")            null        }    }    suspend inline 
+val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        } catch (e: Exception) {            Logger.log("getTokenExpiryDays error: ${e.message}")            null        }}
+suspend inline
 fun <reified T : Any> executeQuery(        query: String,        variables: String = "",        force: Boolean = false,        useToken: Boolean = true,        show: Boolean = false,        cache: Int? = null    ): T? {
 return try {
 if (show) Logger.log("Anilist Query: $query")
@@ -117,7 +121,8 @@ val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1      
 if (json.code == 429) {
     val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
 val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
-if (retry > 0) {                        rateLimitReset = passedLimitReset                    }                    toast("Rate limited. Try after $retry seconds")
+if (retry > 0) {                        rateLimitReset = passedLimitReset                    }
+toast("Rate limited. Try after $retry seconds")
 throw Exception("Rate limited after $retry seconds")                }
 if (json.code == 403 || json.code == 400) {
     val obj = try {                        JSONObject(json.text)                    } catch (_: Exception) {                        null                    }
@@ -131,8 +136,10 @@ if (!show) snackString("Anilist token expired, please login again")
 if (!show) snackString("Error fetching Anilist data: $message")                    }
 throw Exception(message)                }
 if (!json.text.startsWith("{")) {                    anilistDisabledSignal = true
-throw Exception(currContext()?.getString(R.string.anilist_down) + " (error: ${json.code})")                }                anilistDisabledSignal = false                json.parsed()
+throw Exception(currContext()?.getString(R.string.anilist_down) + " (error: ${json.code})")                }
+anilistDisabledSignal = false                json.parsed()
 } else null        } catch (e: Exception) {
 if (e is java.net.UnknownHostException ||                e is java.net.ConnectException ||                e is java.net.SocketTimeoutException ||                e.cause is java.net.UnknownHostException ||                e.cause is java.net.ConnectException ||                e.cause is java.net.SocketTimeoutException) {                anilistDisabledSignal = true            }
-if (show) snackString("Error fetching Anilist data: ${e.message}")            Logger.log("Anilist Query Error: ${e.message}")            null        }    }}
+if (show) snackString("Error fetching Anilist data: ${e.message}")            Logger.log("Anilist Query Error: ${e.message}")            null        }
+}}
 }

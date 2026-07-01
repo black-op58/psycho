@@ -50,19 +50,29 @@ private var screenWidth: Float = 0f
 override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCharacterBinding.inflate(layoutInflater)        setContentView(binding.root)        initActivity(this)        screenWidth = resources.displayMetrics.run { widthPixels / density }
 if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =            ContextCompat.getColor(this, R.color.transparent)        
 val banner =
-if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams { height += statusBarHeight }        binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }        binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }        binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()        }        binding.authorCharactersRecycler.isVisible = false        binding.AuthorCharactersText.isVisible = false        binding.authorCharacterDesc.isVisible = false        character = intent.getSerialized("character") ?: return        binding.characterTitle.text = character.name        banner.loadImage(character.banner)        binding.characterCoverImage.loadImage(character.image)        binding.characterFav.setImageResource(
+if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams { height += statusBarHeight }
+binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
+binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
+binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+binding.authorCharactersRecycler.isVisible = false        binding.AuthorCharactersText.isVisible = false        binding.authorCharacterDesc.isVisible = false        character = intent.getSerialized("character") ?: return        binding.characterTitle.text = character.name        banner.loadImage(character.banner)        binding.characterCoverImage.loadImage(character.image)        binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {            ImageViewDialog.newInstance(                this,                character.name,                character.image            )        }
 
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        
 val link = if (rescueMode) {            "https://myanimelist.net/character/${character.id}"
-} else {            "https://anilist.co/character/${character.id}"        }        binding.characterShare.setOnClickListener {
-    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, character.name))        }        binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true        }
-if (!rescueMode) {            lifecycleScope.launch {                withContext(Dispatchers.IO) {                    character.isFav =                        Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)                }                withContext(Dispatchers.Main) {                    binding.characterFav.setImageResource(
-if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                    )                }            }            binding.characterFav.setOnClickListener {                lifecycleScope.launch {
+} else {            "https://anilist.co/character/${character.id}"        }
+binding.characterShare.setOnClickListener {
+    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, character.name))        }
+    binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true        }
+if (!rescueMode) {            lifecycleScope.launch {                withContext(Dispatchers.IO) {                    character.isFav =                        Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)                }
+withContext(Dispatchers.Main) {                    binding.characterFav.setImageResource(
+if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                    )                }}
+binding.characterFav.setOnClickListener {                lifecycleScope.launch {
 if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)) {                        character.isFav = !character.isFav                        binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                        )
-} else {                        snackString("Failed to toggle favorite")                    }                }            }
-} else {            binding.characterFav.visibility = View.GONE        }        model.getCharacter().observe(this) {
+} else {                        snackString("Failed to toggle favorite")                    }}
+}
+} else {            binding.characterFav.visibility = View.GONE        }
+model.getCharacter().observe(this) {
 if (it != null && !loaded) {
     val preservedFavState = character.isFav                character = it                character.isFav = preservedFavState                loaded = true                binding.characterProgress.visibility = View.GONE                binding.characterRecyclerView.visibility = View.VISIBLE
 val roles = character.roles ?: arrayListOf()                
@@ -73,9 +83,13 @@ val gridLayoutManager = GridLayoutManager(this, gridSize)                gridLay
 object : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
 return when (position) {                            0 -> gridSize
-else -> 1                        }                    }                }                binding.characterRecyclerView.adapter = concatAdaptor                binding.characterRecyclerView.layoutManager = gridLayoutManager            }        }
+else -> 1                        }}}
+binding.characterRecyclerView.adapter = concatAdaptor                binding.characterRecyclerView.layoutManager = gridLayoutManager}
+}
 
-val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }        live.observe(this) {            scope.launch(Dispatchers.IO) {                model.loadCharacter(character)            }        }    }
+val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
+live.observe(this) {            scope.launch(Dispatchers.IO) {                model.loadCharacter(character)}}
+}
 
 override fun onResume() {        binding.characterProgress.isGone = loaded        super.onResume()    }
 
@@ -88,4 +102,5 @@ val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
 if (percentage >= percent && !isCollapsed) {            isCollapsed = true
 if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg)        }
 if (percentage <= percent && isCollapsed) {            isCollapsed = false
-if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.transparent)        }    }}
+if (immersiveMode) this.window.statusBarColor =                ContextCompat.getColor(this, R.color.transparent)        }
+}}

@@ -20,9 +20,12 @@ fun setMediaData(media: Media) {        showPreview(media)    }
 
 private fun showPreview(media: Media) {        removeAllViews()        previewBinding = ItemAnilistLinkPreviewBinding.inflate(            LayoutInflater.from(context),            this,            }
 if (episodesOrChapters != null) {                previewEpisodes.text = episodesOrChapters                previewEpisodes.isVisible = true
-} else {                previewEpisodes.isVisible = false            }            previewCard.setOnClickListener {
+} else {                previewEpisodes.isVisible = false            }
+previewCard.setOnClickListener {
     val intent = Intent(context, MediaDetailsActivity::class.java).apply {                    putExtra("mediaId", media.id)
-if (context !is android.app.Activity) {                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)                    }                }                context.startActivity(intent)            }        }    }
+if (context !is android.app.Activity) {                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)                    }}
+context.startActivity(intent)}}
+}
 
 private fun buildSeasonYearString(media: Media): String {
     val season = media.anime?.season?.lowercase()?.replaceFirstChar { it.uppercase() }

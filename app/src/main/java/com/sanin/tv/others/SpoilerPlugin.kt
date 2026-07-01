@@ -14,17 +14,21 @@ class SpoilerPlugin(
 private val anilist: Boolean = false) : AbstractMarkwonPlugin() {
     override fun beforeSetText(textView: TextView, markdown: Spanned) {
 if (anilist) {            applySpoilerSpans(markdown as Spannable, ARE)
-} else {            applySpoilerSpans(markdown as Spannable)        }    }
+} else {            applySpoilerSpans(markdown as Spannable)        }
+}
 
 private class RedditSpoilerSpan : CharacterStyle() {
     private var revealed = false        
 override fun updateDrawState(tp: TextPaint) {
 if (!revealed) {                // use the same text color                tp.bgColor = Color.DKGRAY                tp.color = Color.DKGRAY
-} else {                // for example keep a bit of black background to remind that it is a spoiler                tp.bgColor = ColorUtils.applyAlpha(Color.DKGRAY, 25)            }        }
+} else {                // for example keep a bit of black background to remind that it is a spoiler                tp.bgColor = ColorUtils.applyAlpha(Color.DKGRAY, 25)            }
+}
 
-fun setRevealed(revealed: Boolean) {            this.revealed = revealed        }    }    // we also could make text size smaller (but then MetricAffectingSpan should be used)    
+fun setRevealed(revealed: Boolean) {            this.revealed = revealed        }}
+// we also could make text size smaller (but then MetricAffectingSpan should be used)
 private class HideSpoilerSyntaxSpan : CharacterStyle() {
-    override fun updateDrawState(tp: TextPaint) {            // set transparent color            tp.color = 0        }    }
+    override fun updateDrawState(tp: TextPaint) {            // set transparent color            tp.color = 0        }
+    }
 
 companion object {
     private val RE = Pattern.compile("\\|\\|.+?\\|\\|")        
@@ -38,7 +42,9 @@ val clickableSpan: ClickableSpan =
 object : ClickableSpan() {
     override fun onClick(widget: View) {                        spoilerSpan.setRevealed(true)                        widget.postInvalidateOnAnimation()                    }
 
-override fun updateDrawState(ds: TextPaint) {                        // no op                    }                }
+override fun updateDrawState(ds: TextPaint) {                        // no op                    }
+}
 
 val s = matcher.start()                
-val e = matcher.end()                spannable.setSpan(spoilerSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)                spannable.setSpan(clickableSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)                // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }        }    }}
+val e = matcher.end()                spannable.setSpan(spoilerSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)                spannable.setSpan(clickableSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)                // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
+}}

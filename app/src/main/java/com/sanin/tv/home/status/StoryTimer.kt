@@ -15,19 +15,24 @@ fun start(durationInMillis: Long = updateInterval) {        cancel()        time
 object : CountDownTimer(durationInMillis, 1) {
     override fun onTick(millisUntilFinished: Long) {                timeLeft = millisUntilFinished
 val percent =                    ((pauseLength + durationInMillis - millisUntilFinished) * 100 / (pauseLength + durationInMillis)).toInt()
-if (percent != prevVal) {                    percentTick.invoke(percent)                    prevVal = percent                }            }
+if (percent != prevVal) {                    percentTick.invoke(percent)                    prevVal = percent                }
+}
 
-override fun onFinish() {                onTimerCompleted.invoke()                pauseLength = 0            }        }        timer.start()    }
+override fun onFinish() {                onTimerCompleted.invoke()                pauseLength = 0            }}
+timer.start()    }
 
 fun cancel() {
-if (::timer.isInitialized) {            timer.cancel()        }    }
+if (::timer.isInitialized) {            timer.cancel()        }
+}
 
 fun pause() {
 if (::timer.isInitialized) {            timer.cancel()            pauseLength = updateInter
-val - timeLeft        }    }
+val - timeLeft        }
+}
 
 fun resume() {
-if (::timer.isInitialized && timeLeft > 0) {            start(timeLeft)            timer.start()        }    }
+if (::timer.isInitialized && timeLeft > 0) {            start(timeLeft)            timer.start()        }
+}
 
 fun setOnTimerCompletedListener(onTimerCompleted: () -> Unit) {        this.onTimerCompleted = onTimerCompleted    }
 

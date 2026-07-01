@@ -22,7 +22,8 @@ class PinsBuilder(
 var code: Int = 0) {        operator 
 fun Pin.unaryPlus() {            this
 @PinsBuilder.code = code or this
-@PinsBuilder.code        }        operator 
+@PinsBuilder.code        }
+operator
 fun Pin.unaryMinus() {            this
 @PinsBuilder.code = code or this
 @PinsBuilder.code        }

@@ -1,6 +1,8 @@
 package eu.kanade.tachiyomi.extension.util
 
-}            deferred.map { it.await() }        }    }        /**     * Attempts to load an extension from the given 
+}
+deferred.map { it.await()}}}
+/**     * Attempts to load an extension from the given
 package name. It checks if the extension     * contains the required feature flag before trying to load it.     */    
 fun loadAnimeExtensionFromPkgName(context: Context, pkgName: String): AnimeLoadResult {
     val pkgInfo = try {            context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)        } catch (error: PackageManager.NameNotFoundException) {            // Unlikely, but the 
@@ -19,7 +21,8 @@ val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter(
 val versionName = pkgInfo.versionName
 val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 if (versionName.isNullOrEmpty()) {            Logger.log("Missing versionName for extension $extName")
-return AnimeLoadResult.Error        }        // Validate lib version
+return AnimeLoadResult.Error        }
+// Validate lib version
 val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
 if (libVersion == null || libVersion < ANIME_LIB_VERSION_MIN || libVersion > ANIME_LIB_VERSION_MAX) {            Logger.log(                "Lib version is $libVersion, while only versions " +                        "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"            )
 return AnimeLoadResult.Error        }
@@ -37,12 +40,15 @@ val sources = appInfo.metaData.getString("$ANIME_PACKAGE$XX_METADATA_SOURCE_CLAS
 ")            .map {
     val sourceClass = it.trim()
 if (sourceClass.startsWith(".")) {                    pkgInfo.packageName + sourceClass
-} else {                    sourceClass                }            }            .flatMap {
+} else {                    sourceClass                }}
+.flatMap {
 try {
 when (
 val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()                        .newInstance()) {                        is AnimeSource -> listOf(obj)                        is AnimeSourceFactory -> obj.createSources()
 else -> throw Exception("Unknown source 
-class type! ${obj.javaClass}")                    }                } catch (e: Throwable) {                    Logger.log("Extension load error: $extName ($it)")
-return AnimeLoadResult.Error                }            }
+class type! ${obj.javaClass}")                    }
+} catch (e: Throwable) {                    Logger.log("Extension load error: $extName ($it)")
+return AnimeLoadResult.Error                }
+}
 
 val langs = sources.filterIsInstance<AnimeCatalogueSource>()

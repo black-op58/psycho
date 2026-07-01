@@ -9,7 +9,8 @@ import com.sanin.tv.setAnimation
 class DevelopersAdapter(
 private val developers: Array<Developer>) :    RecyclerView.Adapter<DevelopersAdapter.DeveloperViewHolder>() {    inner 
 class DeveloperViewHolder(
-val binding: ItemDeveloperBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {                openLinkInBrowser(developers[bindingAdapterPosition].url)            }        }    }
+val binding: ItemDeveloperBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {                openLinkInBrowser(developers[bindingAdapterPosition].url)            }}
+}
 
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeveloperViewHolder {
 return DeveloperViewHolder(            ItemDeveloperBinding.inflate(                LayoutInflater.from(parent.context),                parent,                false            )        )    }

@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.onEach
 import tachiyomi.core.preference.Preference
 class PreferenceMutableState<T>(    
 private val preference: Preference<T>,    scope: CoroutineScope,) : MutableState<T> {
-    private val state = mutableStateOf(preference.get())    init {        preference.changes()            .onEach { state.value = it }            .launchIn(scope)    }
+    private val state = mutableStateOf(preference.get())    init {        preference.changes()            .onEach { state.value = it }
+    .launchIn(scope)    }
 
 override var value: T        get() = state.value        set(value) {            preference.set(value)        }
 

@@ -23,4 +23,5 @@ fun copy() = create().also {        it.url = url        it.title = title        
 
 companion object {        const val UNKNOWN = 0        const val ONGOING = 1        const val COMPLETED = 2        const val LICENSED = 3        const val PUBLISHING_FINISHED = 4        const val CANCELLED = 5        const val ON_HIATUS = 6
 fun create(): SAnime {
-return SAnimeImpl()        }    }}
+return SAnimeImpl()        }
+}}

@@ -169,7 +169,8 @@ lateinit var bottomBar: AnimatedBottomBar
 var selectedOption = 1
 object Refresh {
     fun all() {
-for (i in activity) {            activity[i.key]!!.postValue(true)        }    }
+for (i in activity) {            activity[i.key]!!.postValue(true)        }
+}
     val activity = mutableMapOf<Int, MutableLiveData<Boolean>>()}
     fun currContext(): Context? {
 return App.currentContext()}
@@ -186,7 +187,8 @@ fun initActivity(a: Activity) {
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
     darkMode.apply {        AppCompatDelegate.setDefaultNightMode(
 when (this) {                2 -> AppCompatDelegate.MODE_NIGHT_YES                1 -> AppCompatDelegate.MODE_NIGHT_NO
-else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM            }        )    }
+else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM            }
+)    }
 if (immersiveMode) {
 if (navBarHeight == 0) {            ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))                ?.apply {                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
@@ -194,7 +196,8 @@ if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
         }
         WindowInsetsControllerCompat(            window,            window.decorView        ).hide(WindowInsetsCompat.Type.statusBars())
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT        ) {            window.decorView.rootWindowInsets?.displayCutout?.apply {
-if (boundingRects.size > 0) {                    statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())                }            }
+if (boundingRects.size > 0) {                    statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())                }
+}
         }
         }
         else
@@ -238,7 +241,13 @@ fun ViewGroup.setBaseline(view: View, includeSystemNavBar: Boolean = true) {
 val isVerticalSidebar = view.height > view.width && isLandscape
 val baselineHeight = if (view.isVisible && !isVerticalSidebar) view.measuredHeight else 0
         clipToPadding = false
-        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (includeSystemNavBar) navBarHeight else 0) + baselineHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }    }    post { updateLayout() }    view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
+        setPadding(paddingLeft, paddingTop, paddingRight, (if (includeSystemNavBar) navBarHeight else 0) + baselineHeight)
+        updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = 0 }
+    }
+    post { updateLayout() }
+    view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }
+    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }
+}
     fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
     setBaseline(navBar as View)
 }
@@ -247,25 +256,35 @@ val baselineHeight = if (view.isVisible && !isVerticalSidebar) view.measuredHeig
     fun updateLayout() {
     val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 val isVerticalSidebar = navBar.height > navBar.width && isLandscape
-val barHeight = if (navBar.isVisible && !isVerticalSidebar) navBar.measuredHeight else 0        clipToPadding = false        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (isLandscape) navBarHeight else navBarHeight + barHeight) + extraPaddingBottom        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }    }    post { updateLayout() }    navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
+val barHeight = if (navBar.isVisible && !isVerticalSidebar) navBar.measuredHeight else 0        clipToPadding = false        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (isLandscape) navBarHeight else navBarHeight + barHeight) + extraPaddingBottom        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }}
+post { updateLayout()}
+navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
+rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
     fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
     fun updateLayout() {
     val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 val isVerticalSidebar = navBar.height > navBar.width && isLandscape
 val barHeight = if (navBar.isVisible && !isVerticalSidebar) navBar.measuredHeight else 0
-val overlayHeight = if (overlayView.isVisible) overlayView.measuredHeight else 0        clipToPadding = false        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (isLandscape) navBarHeight else navBarHeight + barHeight) + overlayHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }    }    post { updateLayout() }    navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }    overlayView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
+val overlayHeight = if (overlayView.isVisible) overlayView.measuredHeight else 0        clipToPadding = false        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (isLandscape) navBarHeight else navBarHeight + barHeight) + overlayHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }}
+post { updateLayout()}
+navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
+overlayView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
+rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
     fun Activity.reloadActivity() {    Refresh.all()    finish()    startActivity(Intent(this, this::class.java))    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)    initActivity(this)}
     fun Activity.restartApp() {
     val mainIntent = Intent.makeRestartActivityTask(        packageManager.getLaunchIntentForPackage(this.packageName)!!.component    )    
 val component =        ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
-try {        startActivity(Intent().setComponent(component))    } catch (e: Exception) {        startActivity(mainIntent)    }    finishAndRemoveTask()    PrefManager.setCustomVal("reload", true)}
+try {        startActivity(Intent().setComponent(component))    } catch (e: Exception) {        startActivity(mainIntent)    }
+finishAndRemoveTask()    PrefManager.setCustomVal("reload", true)}
 
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {        super.onStart()        dialog?.window?.let { window ->            WindowCompat.setDecorFitsSystemWindows(window, false)            
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
 if (immersiveMode) {                WindowInsetsControllerCompat(                    window, window.decorView                ).hide(WindowInsetsCompat.Type.statusBars())            }
 if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
-    val behavior = BottomSheetBehavior.from(requireView().parent as View)                behavior.state = BottomSheetBehavior.STATE_EXPANDED            }            window.navigationBarColor =                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)        }    }
+    val behavior = BottomSheetBehavior.from(requireView().parent as View)                behavior.state = BottomSheetBehavior.STATE_EXPANDED            }
+    window.navigationBarColor =                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)}
+    }
     override fun show(manager: FragmentManager, tag: String?) {
     val ft = manager.beginTransaction()        ft.add(this, tag)        ft.commitAllowingStateLoss()    }}
     fun isOnline(context: Context): Boolean {
@@ -277,9 +296,11 @@ when {                    cap.hasTransport(TRANSPORT_BLUETOOTH) ||              
 else -> false                }
 } else false
 } else {            
-@Suppress("DEPRECATION")            return@tryWith connectivityManager.activeNetworkInfo?.run {                type == ConnectivityManager.TYPE_BLUETOOTH ||                        type == ConnectivityManager.TYPE_ETHERNET ||                        type == ConnectivityManager.TYPE_MOBILE ||                        type == ConnectivityManager.TYPE_MOBILE_DUN ||                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||                        type == ConnectivityManager.TYPE_WIFI ||                        type == ConnectivityManager.TYPE_WIMAX ||                        type == ConnectivityManager.TYPE_VPN            } ?: false        }    } ?: false}
+@Suppress("DEPRECATION")            return@tryWith connectivityManager.activeNetworkInfo?.run {                type == ConnectivityManager.TYPE_BLUETOOTH ||                        type == ConnectivityManager.TYPE_ETHERNET ||                        type == ConnectivityManager.TYPE_MOBILE ||                        type == ConnectivityManager.TYPE_MOBILE_DUN ||                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||                        type == ConnectivityManager.TYPE_WIFI ||                        type == ConnectivityManager.TYPE_WIMAX ||                        type == ConnectivityManager.TYPE_VPN            } ?: false        }
+} ?: false}
     fun startMainActivity(activity: Activity, bundle: Bundle? = null) {    activity.finishAffinity()    activity.startActivity(        Intent(            activity,            MainActivity::class.java        ).apply {            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-if (bundle != null) putExtras(bundle)        }    )}
+if (bundle != null) putExtras(bundle)        }
+)}
     class DatePickerFragment(activity: Activity, 
 var date: FuzzyDate = FuzzyDate().getToday()) :    DialogFragment(),    DatePickerDialog.OnDateSetListener {
     var dialog: DatePickerDialog
@@ -292,7 +313,8 @@ if (c == b) {            status?.setText(statusStrings, false)            status
 return if (b > a) c in a..b else c in b..a    }}
     class ZoomOutPageTransformer :    ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
-if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {            setAnimation(                view.context,                view,                300,                floatArrayOf(1.3f, 1f, 1.3f, 1f),                0.5f to 0f            )            ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong())                .start()        }    }}
+if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {            setAnimation(                view.context,                view,                300,                floatArrayOf(1.3f, 1f, 1.3f, 1f),                0.5f to 0f            )            ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong())                .start()        }
+}}
     fun setAnimation(    context: Context,    viewToAnimate: View,    duration: Long = 150,    list: FloatArray = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),    pivot: Pair<Float, Float> = 0.5f to 0.5f) {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
     val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        )        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()        anim.setInterpolator(context, R.anim.over_shoot)        viewToAnimate.startAnimation(anim)    }}
@@ -346,28 +368,36 @@ return string.ifEmpty { null }}
 if (!url.isNullOrEmpty()) {
     val localFile = File(url)
 if (localFile.exists()) {            loadLocalImage(localFile, size)
-} else {            loadImage(FileUrl(url), size)        }    }}
+} else {            loadImage(FileUrl(url), size)        }
+}}
     fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
 if (file?.url?.isNotEmpty() == true) {        tryWith {
 if (file.url.startsWith("content://")) {                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())                    .override(size).into(this)
 } else {
-    val glideUrl = GlideUrl(file.url) { file.headers }                Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)                    .into(this)            }        }    }}
+    val glideUrl = GlideUrl(file.url) { file.headers }
+    Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)                    .into(this)}}
+    }}
     fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
 if (file?.url?.isNotEmpty() == true) {        tryWith {
 if (file.url.startsWith("content://")) {                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())                    .override(width, height).into(this)
 } else {
-    val glideUrl = GlideUrl(file.url) { file.headers }                Glide.with(this.context).load(glideUrl).transition(withCrossFade())                    .override(width, height)                    .into(this)            }        }    }}
+    val glideUrl = GlideUrl(file.url) { file.headers }
+    Glide.with(this.context).load(glideUrl).transition(withCrossFade())                    .override(width, height)                    .into(this)}}
+    }}
     fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
-if (file?.exists() == true) {        tryWith {            Glide.with(this.context).load(file).transition(withCrossFade()).override(size)                .into(this)        }    }}
+if (file?.exists() == true) {        tryWith {            Glide.with(this.context).load(file).transition(withCrossFade()).override(size)                .into(this)        }
+}}
     class SafeClickListener(    
 private var defaultInterval: Int = 1000,    
 private val onSafeCLick: (View) -> Unit) : View.OnClickListener {
     private var lastTimeClicked: Long = 0    
 override fun onClick(v: View) {
 if (SystemClock.elapsedRealtime() - lastTimeClicked < defaultInterval) {
-return        }        lastTimeClicked = SystemClock.elapsedRealtime()        onSafeCLick(v)    }}
+return        }
+lastTimeClicked = SystemClock.elapsedRealtime()        onSafeCLick(v)    }}
     fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
-    val safeClickListener = SafeClickListener {        onSafeClick(it)    }    setOnClickListener(safeClickListener)}suspend 
+    val safeClickListener = SafeClickListener {        onSafeClick(it)    }
+    setOnClickListener(safeClickListener)}suspend
 fun getSize(file: FileUrl): Double? {
 return tryWithSuspend {        client.head(file.url, file.headers, timeout = 1000).size?.toDouble()?.div(1024 * 1024)    }}suspend 
 fun getSize(file: String): Double? {
@@ -385,11 +415,16 @@ return super.onDoubleTap(e)    }
 return super.onScroll(e1, e2, distanceX, distanceY)    }
     private fun processSingleClickEvent(e: MotionEvent) {
     val handler = Handler(Looper.getMainLooper())        
-val mRunnable = Runnable {            onSingleClick(e)        }        timer = Timer().apply {            schedule(
+val mRunnable = Runnable {            onSingleClick(e)        }
+timer = Timer().apply {            schedule(
 object : TimerTask() {
-    override fun run() {                    handler.post(mRunnable)                }            }, delay)        }    }
-    private fun processDoubleClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()        }        onDoubleClick(e)    }
-    private fun processLongClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()        }        onLongClick(e)    }
+    override fun run() {                    handler.post(mRunnable)                }
+    }, delay)}
+    }
+    private fun processDoubleClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()        }
+    onDoubleClick(e)    }
+    private fun processLongClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()        }
+    onLongClick(e)    }
 
 open fun onSingleClick(event: MotionEvent) {}
 
@@ -407,15 +442,19 @@ try {
     val emptyBrowserIntent = Intent(Intent.ACTION_VIEW).apply {                addCategory(Intent.CATEGORY_BROWSABLE)
 data = Uri.fromParts("http", "", null)            }
     val sendIntent = Intent().apply {                action = Intent.ACTION_VIEW                addCategory(Intent.CATEGORY_BROWSABLE)
-data = Uri.parse(link)                selector = emptyBrowserIntent            }            currContext()!!.startActivity(sendIntent)        } catch (e: ActivityNotFoundException) {            snackString("No browser found")        } catch (e: Exception) {            Logger.log(e)        }    }}
+data = Uri.parse(link)                selector = emptyBrowserIntent            }
+currContext()!!.startActivity(sendIntent)        } catch (e: ActivityNotFoundException) {            snackString("No browser found")        } catch (e: Exception) {            Logger.log(e)}
+}}
     fun openLinkInCustomTab(link: String?) {    link?.let {
 try {
     val builder = androidx.browser.customtabs.CustomTabsIntent.Builder()            
-val customTabsIntent = builder.build()            customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))        } catch (e: Exception) {            openLinkInBrowser(it)        }    }}
+val customTabsIntent = builder.build()            customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))        } catch (e: Exception) {            openLinkInBrowser(it)        }
+}}
     fun openLinkInYouTube(link: String?) {    link?.let {
 try {
     val videoIntent = Intent(Intent.ACTION_VIEW).apply {                addCategory(Intent.CATEGORY_BROWSABLE)
-data = Uri.parse(link)                setPackage("com.google.android.youtube")            }            currContext()!!.startActivity(videoIntent)        } catch (e: ActivityNotFoundException) {
+data = Uri.parse(link)                setPackage("com.google.android.youtube")            }
+currContext()!!.startActivity(videoIntent)        } catch (e: ActivityNotFoundException) {
             openLinkInBrowser(link)
         }
     }}
@@ -449,7 +488,8 @@ return try {
     class MediaPageTransformer : ViewPager2.PageTransformer {
     private fun parallax(view: View, position: Float) {
 if (position > -1 && position < 1) {
-    val width = view.width.toFloat()            view.translationX = -(position * width * 0.8f)        }    }
+    val width = view.width.toFloat()            view.translationX = -(position * width * 0.8f)        }
+    }
     override fun transformPage(view: View, position: Float) {
     val bannerContainer = view.findViewById<View>(R.id.itemCompactBanner)        parallax(bannerContainer, position)    }}
     class NoGestureSubsamplingImageView(context: Context?, attr: AttributeSet?) :    SubsamplingScaleImageView(context, attr) {    
@@ -467,19 +507,23 @@ fun countDown(media: Media, view: ViewGroup) {
 if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()    ) {        activeTimers[view]?.cancel()
 for (i in view.childCount - 1 downTo 0) {
     val child = view.getChildAt(i)
-if (child.tag == "countdown_view") {                view.removeViewAt(i)            }        }
+if (child.tag == "countdown_view") {                view.removeViewAt(i)            }
+}
     val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)        v.root.tag = "countdown_view"        view.addView(v.root, 0)        v.mediaCountdownText.text =            currActivity()?.getString(                R.string.episode_release_countdown,                media.anime.nextAiringEpisode!! + 1            )        
 val timer = 
 object : CountDownTimer(            (media.anime.nextAiringEpisodeTime!! + 10000) * 1000 - System.currentTimeMillis(),            1000        ) {
     override fun onTick(millisUntilFinished: Long) {
     val a = millisUntilFinished / 1000                v.mediaCountdown.text = currActivity()?.getString(                    R.string.time_format,                    a / 86400,                    a % 86400 / 3600,                    a % 86400 % 3600 / 60,                    a % 86400 % 3600 % 60                )            }
-    override fun onFinish() {                v.mediaCountdownContainer.visibility = View.GONE                snackString(currContext()?.getString(R.string.congrats_vro))            }        }        activeTimers[view] = timer        timer.start()    }}
+    override fun onFinish() {                v.mediaCountdownContainer.visibility = View.GONE                snackString(currContext()?.getString(R.string.congrats_vro))            }}
+    activeTimers[view] = timer        timer.start()    }}
     fun displayTimer(media: Media, view: ViewGroup) {
 when {        media.anime != null -> countDown(media, view)
-else -> {}    }}
+else -> {}
+}}
     fun MutableMap<String, Genre>.checkId(id: Int): Boolean {    this.forEach {
 if (it.value.id == id) {
-return false        }    }
+return false        }
+}
 return true}
     fun MutableMap<String, Genre>.checkGenreTime(genre: String): Boolean {
 if (containsKey(genre))
@@ -503,13 +547,19 @@ class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)}
     fun getAppString(res: Int): String {
 return currContext()?.getString(res) ?: ""}
     fun toast(string: String?) {
-if (string != null) {        Logger.log(string)        MainScope().launch {            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)                .show()        }    }}
+if (string != null) {        Logger.log(string)        MainScope().launch {            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)                .show()        }
+}}
     fun toast(res: Int) {    toast(getAppString(res))}
     fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
 try { //I have no idea why this sometimes crashes for some people...
 if (s != null) {            (activity ?: currActivity())?.apply {
-    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    snackBar.view.apply {                        updateLayoutParams<FrameLayout.LayoutParams> {                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)                            width = WRAP_CONTENT                        }                        translationY = -(navBarHeight.dp + 32f)                        translationZ = 32f                        updatePadding(16f.px, right = 16f.px)                        setOnClickListener {                            snackBar.dismiss()                        }                        setOnLongClickListener {                            copyToClipboard(clipboard ?: s, false)                            toast(getString(R.string.copied_to_clipboard))                            true                        }                    }                    snackBar.show()                }
-return snackBar            }            Logger.log(s)        }    } catch (e: Exception) {        Logger.log(e)        Injekt.get<CrashlyticsInterface>().logException(e)    }
+    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    snackBar.view.apply {                        updateLayoutParams<FrameLayout.LayoutParams> {                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)                            width = WRAP_CONTENT                        }
+    translationY = -(navBarHeight.dp + 32f)                        translationZ = 32f                        updatePadding(16f.px, right = 16f.px)                        setOnClickListener {                            snackBar.dismiss()}
+    setOnLongClickListener {                            copyToClipboard(clipboard ?: s, false)                            toast(getString(R.string.copied_to_clipboard))                            true}}
+    snackBar.show()                }
+return snackBar            }
+Logger.log(s)}
+} catch (e: Exception) {        Logger.log(e)        Injekt.get<CrashlyticsInterface>().logException(e)    }
 return null}
     fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
 return snackString(getAppString(r), activity, clipboard)}
@@ -528,13 +578,16 @@ class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
     private fun setup() {        mGestureDetector =            GestureDetector(context, 
 object : GestureDetector.SimpleOnGestureListener() {
     override fun onSingleTapUp(e: MotionEvent): Boolean {
-return performClick()                }            })    }
+return performClick()                }
+})    }
     override fun onTouchEvent(event: MotionEvent): Boolean {        mGestureDetector!!.onTouchEvent(event)
 return true    }}
 
 @SuppressLint("RestrictedApi")
 class CustomBottomNavBar 
-@JvmOverloads constructor(    context: Context, attrs: AttributeSet? = null) : BottomNavigationView(context, attrs) {    init {        ViewUtils.doOnApplyWindowInsets(            this        ) { view, insets, initialPadding ->            initialPadding.bottom = 0            updateLayoutParams<MarginLayoutParams> { bottomMargin = navBarHeight }            initialPadding.applyToView(view)            insets        }    }}
+@JvmOverloads constructor(    context: Context, attrs: AttributeSet? = null) : BottomNavigationView(context, attrs) {    init {        ViewUtils.doOnApplyWindowInsets(            this        ) { view, insets, initialPadding ->            initialPadding.bottom = 0            updateLayoutParams<MarginLayoutParams> { bottomMargin = navBarHeight }
+initialPadding.applyToView(view)            insets}
+}}
     fun getCurrentBrightnessValue(context: Context): Float {
     fun getMax(): Int {
     val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -555,7 +608,8 @@ else it, 0.001f, 1f    )
 fun checkCountry(context: Context): Boolean {
     val telMgr = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 return when (telMgr.simState) {        TelephonyManager.SIM_STATE_ABSENT -> {
-    val tz = TimeZone.getDefault().id            tz.equals("Asia/Kolkata", ignoreCase = true)        }        TelephonyManager.SIM_STATE_READY -> {
+    val tz = TimeZone.getDefault().id            tz.equals("Asia/Kolkata", ignoreCase = true)        }
+    TelephonyManager.SIM_STATE_READY -> {
     val countryCodeValue = telMgr.networkCountryIso            countryCodeValue.equals("in", ignoreCase = true)
 }
 else -> false    }}const val INCOGNITO_CHANNEL_ID = 26
@@ -575,9 +629,12 @@ return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {        conte
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     val intent = Intent(
 if (channelId != null) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS
-else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)        }        context.startActivity(intent)        true
+else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)        }
+context.startActivity(intent)        true
 } else false}suspend 
-fun View.pop() {    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1f, 1.25f).setDuration(120).start()    }    delay(120)    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1.25f, 1f).setDuration(100).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()    }    delay(100)}
+fun View.pop() {    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1f, 1.25f).setDuration(120).start()    }
+delay(120)    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1.25f, 1f).setDuration(100).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()}
+delay(100)}
     fun blurImage(imageView: ImageView, banner: String?) {
 if (banner != null) {
     val radius = PrefManager.getVal<Float>(PrefName.BlurRadius).toInt()        
@@ -599,7 +656,8 @@ val id = username.toIntOrNull()
 if (currContext() != null) {
     val intent = Intent(currContext()!!, ProfileActivity::class.java)
 if (id != null) {                intent.putExtra("userId", id)
-} else {                intent.putExtra("username", username)            }            ContextCompat.startActivity(                currContext()!!,                intent,                null            )
+} else {                intent.putExtra("username", username)            }
+ContextCompat.startActivity(                currContext()!!,                intent,                null            )
 } else {            copyToClipboard(link, true)        }
 } else if (getYoutubeId(link).isNotEmpty()) {        openLinkInYouTube(link)
 } else {        copyToClipboard(link, true)    }}/** * Builds the markwon instance with all the plugins * @return the markwon instance */
@@ -611,8 +669,10 @@ val maxImageHeight = (metrics.heightPixels.toLong() * MARKDOWN_IMAGE_MAX_SCREEN_
 val markdownImageRequestOptions = RequestOptions()        .downsample(DownsampleStrategy.AT_MOST)        .override(maxImageWidth, maxImageHeight)    
 val markwon = Markwon.builder(activity)        .usePlugin(
 object : AbstractMarkwonPlugin() {
-    override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {                builder.linkResolver { _, link ->                    openOrCopyAnilistLink(link)                }            }        })        .usePlugin(SoftBreakAddsNewLinePlugin.create())        .usePlugin(StrikethroughPlugin.create())        .usePlugin(TablePlugin.create(activity))        .usePlugin(TaskListPlugin.create(activity))        .usePlugin(SpoilerPlugin(anilist))        .usePlugin(HtmlPlugin.create { plugin ->
-if (userInputContent) {                plugin.addHandler(                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")                )            }            plugin.addHandler(AlignTagHandler())        })        .usePlugin(GlideImagesPlugin.create(
+    override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {                builder.linkResolver { _, link ->                    openOrCopyAnilistLink(link)                }}
+    })        .usePlugin(SoftBreakAddsNewLinePlugin.create())        .usePlugin(StrikethroughPlugin.create())        .usePlugin(TablePlugin.create(activity))        .usePlugin(TaskListPlugin.create(activity))        .usePlugin(SpoilerPlugin(anilist))        .usePlugin(HtmlPlugin.create { plugin ->
+if (userInputContent) {                plugin.addHandler(                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")                )            }
+plugin.addHandler(AlignTagHandler())        })        .usePlugin(GlideImagesPlugin.create(
 object : GlideImagesPlugin.GlideStore {
     private val requestManager: RequestManager = glideContext.apply {                addDefaultRequestListener(
 object : RequestListener<Any> {
@@ -620,10 +680,12 @@ object : RequestListener<Any> {
 if (resource is GifDrawable) {                            resource.start()                        }
 return false                    }
     override fun onLoadFailed(                        e: GlideException?,                        model: Any?,                        target: Target<Any>,                        isFirstResource: Boolean                    ): Boolean {                        Logger.log("Image failed to load: $model")                        Logger.log(e as Exception)
-return false                    }                })            }
+return false                    }
+})            }
     override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {                Logger.log("Loading image: ${drawable.destination}")
 return requestManager                    .load(drawable.destination)                    .apply(markdownImageRequestOptions)            }
-    override fun cancel(target: Target<*>) {                Logger.log("Cancelling image load")                requestManager.clear(target)            }        }))        .build()
+    override fun cancel(target: Target<*>) {                Logger.log("Cancelling image load")                requestManager.clear(target)            }
+    }))        .build()
 return markwon}
     fun getYoutubeId(url: String): String {
     val regex =        """(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|(?:youtu\.be|youtube\.com)/)([^"&?/\s]{11})|youtube\.com/""".toRegex()    
@@ -634,14 +696,16 @@ return matchResult?.groupValues?.getOrNull(1) ?: ""}
 for (locale in locales) {
 if (locale.displayLanguage.equals(language, ignoreCase = true)) {
     val lang: CharSequence = locale.language
-return lang        }    }
+return lang        }
+}
     val out: CharSequence = "null"
 return out}
     fun getLanguageName(language: String): String? {
     val locales = Locale.getAvailableLocales()
 for (locale in locales) {
 if (locale.language.equals(language, ignoreCase = true)) {
-return locale.displayLanguage        }    }
+return locale.displayLanguage        }
+}
 return null}
 
 @OptIn(ExperimentalEncodingApi::class)

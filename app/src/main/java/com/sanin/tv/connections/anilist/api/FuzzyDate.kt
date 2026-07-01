@@ -24,7 +24,8 @@ fun getToday(): FuzzyDate {
 return FuzzyDate(            cal.get(Calendar.YEAR),            cal.get(Calendar.MONTH) + 1,            cal.get(Calendar.DAY_OF_MONTH)        )    }
 
 fun toVariableString(): String {
-return listOfNotNull(            year?.let { "year:$it" },            month?.let { "month:$it" },            day?.let { "day:$it" }        ).joinToString(",", "{", "}")    }
+return listOfNotNull(            year?.let { "year:$it" },            month?.let { "month:$it" },            day?.let { "day:$it" }
+).joinToString(",", "{", "}")    }
 
 fun toMALString(): String {
     val padding = '0'        

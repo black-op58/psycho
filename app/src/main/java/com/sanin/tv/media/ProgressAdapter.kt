@@ -31,9 +31,12 @@ object : GesturesListener() {
 
 override fun onScrollYClick(y: Float) {}
 
-override fun onSingleClick(event: MotionEvent) {}        })        progressBar.setOnTouchListener { v, event ->            doubleClickDetector.onTouchEvent(event)            v.performClick()            true        }
-if (ready.value == false) {            ready.postValue(true)        }    }
+override fun onSingleClick(event: MotionEvent) {}
+})        progressBar.setOnTouchListener { v, event ->            doubleClickDetector.onTouchEvent(event)            v.performClick()            true        }
+if (ready.value == false) {            ready.postValue(true)        }
+}
 
 override fun getItemCount(): Int = 1    inner 
 class ProgressViewHolder(
-val binding: ItemProgressbarBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.updateLayoutParams { if (horizontal) width = -1 else height = -1 }        }    }}
+val binding: ItemProgressbarBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.updateLayoutParams { if (horizontal) width = -1 else height = -1 }}
+}}

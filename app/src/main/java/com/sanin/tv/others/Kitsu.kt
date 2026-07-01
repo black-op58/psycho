@@ -21,8 +21,10 @@ if (graphqlRes.data?.lookupMapping != null) {                        Logger.log(
 val mapping = graphqlRes.data.lookupMapping                        media.idKitsu = mapping.id
 val nodes = mapping.episodes?.nodes
 if (!nodes.isNullOrEmpty()) {                            returnedEpisodes = nodes.mapNotNull { ep ->                                
-val num = ep?.number?.toString() ?: return@mapNotNull null                                num to Episode(                                    number = num,                                    title = ep.titles?.canonical,                                    desc = ep.description?.en ?: ep.description?.enUs,                                    thumb = FileUrl[ep.thumbnail?.original?.url]                                )                            }.toMap()                        }                    }                } catch (e: Exception) {                    Logger.log("Kitsu GraphQL failed: ${e.message}")                }
-if (!returnedEpisodes.isNullOrEmpty()) {                    return@tryWithSuspend returnedEpisodes                }                // 2. Fallback to REST API Method (Secondary Priority)                // Search for Anime by Title
+val num = ep?.number?.toString() ?: return@mapNotNull null                                num to Episode(                                    number = num,                                    title = ep.titles?.canonical,                                    desc = ep.description?.en ?: ep.description?.enUs,                                    thumb = FileUrl[ep.thumbnail?.original?.url]                                )                            }.toMap()                        }}
+} catch (e: Exception) {                    Logger.log("Kitsu GraphQL failed: ${e.message}")                }
+if (!returnedEpisodes.isNullOrEmpty()) {                    return@tryWithSuspend returnedEpisodes                }
+// 2. Fallback to REST API Method (Secondary Priority)                // Search for Anime by Title
 val title = URLEncoder.encode(media.mainName(), "utf-8")                
 val searchUrl = "https://kitsu.io/api/edge/anime?filter[text]=$title&page[limit]=1"                
 val searchRes = client.get(searchUrl).parsed<KitsuAnimeSearch>()                                
@@ -37,7 +39,11 @@ val pageEpisodes = episodesRes.data?.associate { ep ->
 val num = ep.attributes?.number?.toString() ?: return@associate null to null
 val epNum = if (num.endsWith(".0")) num.substringBefore(".") else num                        epNum to Episode(                            number = epNum,                            title = ep.attributes.canonicalTitle,                            desc = (ep.attributes.synopsis ?: ep.attributes.description)?.replace(                                Regex("\\(Source:.*\\)"),                                ""                            )?.trim(),                            thumb = FileUrl[ep.attributes.thumbnail?.original],                            extra = mapOf(                                "season" to ep.attributes.seasonNumber.toString(),                                "airDate" to ep.attributes.airdate.toString(),                                "length" to ep.attributes.length.toString()                            )                        )                    }?.filterKeys { it != null }?.mapKeys { it.key!! }?.filterValues { it != null }?.mapValues { it.value!! }
 if (pageEpisodes != null) {                        allEpisodes.putAll(pageEpisodes)                    }
-if (episodesRes.links?.next == null || pageEpisodes.isNullOrEmpty()) {                        break                    }                    offset += limit                }                                allEpisodes            }        } catch (e: Exception) {            null        }    }
+if (episodesRes.links?.next == null || pageEpisodes.isNullOrEmpty()) {                        break                    }
+offset += limit}
+allEpisodes}
+} catch (e: Exception) {            null}
+}
 
 @Serializable    
 data class KitsuGraphQLResponse(        

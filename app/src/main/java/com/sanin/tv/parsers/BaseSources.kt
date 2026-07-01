@@ -8,7 +8,8 @@ abstract val list: List<Lazier<BaseParser>>
 val names: List<String> get() = list.map { it.name }
 
 fun flushText() {        list.forEach {
-if (it.get.isInitialized())                it.get.value?.showUserText = ""        }    }
+if (it.get.isInitialized())                it.get.value?.showUserText = ""        }
+}
 
 open operator 
 fun get(i: Int): BaseParser? {

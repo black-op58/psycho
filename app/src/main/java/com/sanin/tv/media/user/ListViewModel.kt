@@ -16,8 +16,10 @@ fun getLists(): LiveData<MutableMap<String, ArrayList<Media>>> = lists    suspen
 fun loadLists(anime: Boolean, userId: Int, sortOrder: String? = null) {
     val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
 if (rescueMode) {            loadListsFromMAL(anime)
-return        }        tryWithSuspend {
-    val res = Anilist.query.getMediaLists(anime, userId, sortOrder)            lists.postValue(res)            unfilteredLists.postValue(res)        }    }
+return        }
+tryWithSuspend {
+    val res = Anilist.query.getMediaLists(anime, userId, sortOrder)            lists.postValue(res)            unfilteredLists.postValue(res)        }
+    }
 
 private suspend 
 fun loadListsFromMAL(anime: Boolean) {        tryWithSuspend {

@@ -69,7 +69,8 @@ val data: Data?    ) {
 @Serializable        
 data class Data(            
 @SerialName("Staff")            
-val author: Staff?        )    }    //    
+val author: Staff?        )    }
+//
 data class MediaList(//        
 val data: Data?//    ){//        
 data class Data(//            

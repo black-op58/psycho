@@ -65,7 +65,8 @@ val availableExtensions =            availableExtensionsFlow.filterNot { it.pkgN
 val query = searchQuery
 val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)        
 val filteredExtensions = if (query.isEmpty()) {            availableExtensions
-} else {            availableExtensions.filter { it.name.contains(query, ignoreCase = true) }        }
+} else {            availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
+}
 
 val lang: String = PrefManager.getVal(PrefName.LangSort)        
 val langFilter =
@@ -73,7 +74,8 @@ if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredEx
 val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { it.isNsfw }
 return try {
     val sublist = filternfsw.subList(                fromIndex = position,                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)            )            LoadResult.Page(
-data = sublist,                prevKey = if (position == 0) null else position - params.loadSize,                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize            )        } catch (e: Exception) {            LoadResult.Error(e)        }    }
+data = sublist,                prevKey = if (position == 0) null else position - params.loadSize,                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize            )        } catch (e: Exception) {            LoadResult.Error(e)        }
+}
 
 override fun getRefreshKey(state: PagingState<Int, AnimeExtension.Available>): Int? {
 return null    }}
@@ -88,7 +90,8 @@ object : DiffUtil.ItemCallback<AnimeExtension.Available>() {
 return oldItem.pkgName == newItem.pkgName            }
 
 override fun areContentsTheSame(                oldItem: AnimeExtension.Available,                newItem: AnimeExtension.Available            ): Boolean {                // Your logic here
-return oldItem == newItem            }        }    }
+return oldItem == newItem            }}
+}
 
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeExtensionViewHolder {
     val binding =            ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -97,7 +100,9 @@ return AnimeExtensionViewHolder(binding)    }
 override fun onBindViewHolder(holder: AnimeExtensionViewHolder, position: Int) {
     val extension = getItem(position)
 if (extension != null) {
-if (!skipIcons) {                Glide.with(holder.itemView.context)                    .load(extension.iconUrl)                    .into(holder.extensionIconImageView)            }            holder.bind(extension)        }    }    inner 
+if (!skipIcons) {                Glide.with(holder.itemView.context)                    .load(extension.iconUrl)                    .into(holder.extensionIconImageView)            }
+holder.bind(extension)}}
+inner
 class AnimeExtensionViewHolder(
 private val binding: ItemExtensionAllBinding) :        RecyclerView.ViewHolder(binding.root) {
     private val job = Job()        
@@ -105,7 +110,9 @@ private val scope = CoroutineScope(Dispatchers.Main + job)        init {        
 if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
 val extension = getItem(bindingAdapterPosition)
 if (extension != null) {                    clickListener.onInstallClick(extension)                    binding.closeTextView.setImageResource(R.drawable.ic_sync)                    scope.launch {
-while (isActive) {                            withContext(Dispatchers.Main) {                                binding.closeTextView.animate()                                    .rotationBy(360f)                                    .setDuration(1000)                                    .setInterpolator(LinearInterpolator())                                    .start()                            }                            delay(1000)                        }                    }                }            }        }
+while (isActive) {                            withContext(Dispatchers.Main) {                                binding.closeTextView.animate()                                    .rotationBy(360f)                                    .setDuration(1000)                                    .setInterpolator(LinearInterpolator())                                    .start()                            }
+delay(1000)}}}}
+}
 
 val extensionIconImageView: ImageView = binding.extensionIconImageView
 fun bind(extension: AnimeExtension.Available) {
@@ -113,7 +120,8 @@ fun bind(extension: AnimeExtension.Available) {
 val lang = LanguageMapper.getLanguageName(extension.lang)            binding.extensionNameTextView.text = extension.name
 val versionText = "$lang ${extension.versionName} $nsfw"            binding.extensionVersionTextView.text = versionText        }
 
-fun clear() {            job.cancel() // Cancel the coroutine when the view is recycled        }    }
+fun clear() {            job.cancel() // Cancel the coroutine when the view is recycled        }
+}
 
 override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        super.onViewRecycled(holder)        holder.clear()    }}
 interface OnAnimeInstallClickListener {

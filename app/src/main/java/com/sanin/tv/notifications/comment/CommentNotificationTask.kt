@@ -31,9 +31,11 @@ val notificationResponse = CommentsAPI.getNotifications(client)
 var notifications = notificationResponse?.notifications?.toMutableList()                //if we have at least one reply notification, we need to fetch the media titles
 var names = emptyMap<Int, MediaNameFetch.Companion.ReturnedData>()
 if (notifications?.any { it.type == 1 || it.type == null } == true) {
-    val mediaIds =                        notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }                    names = MediaNameFetch.fetchMediaTitles(mediaIds)                }
+    val mediaIds =                        notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }
+    names = MediaNameFetch.fetchMediaTitles(mediaIds)                }
 
-val recentGlobal = PrefManager.getVal<Int>(                    PrefName.RecentGlobalNotification                )                notifications =                    notifications?.filter { !it.type.isGlobal() || it.notificationId > recentGlobal }                        ?.toMutableList()                
+val recentGlobal = PrefManager.getVal<Int>(                    PrefName.RecentGlobalNotification                )                notifications =                    notifications?.filter { !it.type.isGlobal() || it.notificationId > recentGlobal }
+?.toMutableList()
 val newRecentGlobal =                    notifications?.filter { it.type.isGlobal() }?.maxOfOrNull { it.notificationId }
 if (newRecentGlobal != null) {                    PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)                }
 if (notifications.isNullOrEmpty()) return@withContext
@@ -43,51 +45,63 @@ var updateCount = 0                notifications.forEach {
     val type: CommentNotificationWorker.NotificationType = when (it.type) {                        1 -> CommentNotificationWorker.NotificationType.COMMENT_REPLY                        2 -> CommentNotificationWorker.NotificationType.COMMENT_WARNING                        3 -> CommentNotificationWorker.NotificationType.SANINTV_UPDATE                        420 -> CommentNotificationWorker.NotificationType.NO_NOTIFICATION
 else -> CommentNotificationWorker.NotificationType.UNKNOWN                    }
 when (type) {                        CommentNotificationWorker.NotificationType.COMMENT_REPLY -> commentCount++                        CommentNotificationWorker.NotificationType.COMMENT_WARNING -> warningCount++                        CommentNotificationWorker.NotificationType.SANINTV_UPDATE -> updateCount++
-else -> {}                    }
+else -> {}
+}
 
 val notification = when (type) {                        CommentNotificationWorker.NotificationType.COMMENT_WARNING -> {
     val title = "You received a warning"                            
 val message = it.content ?: "Be more thoughtful with your comments"                            
-val commentStore = CommentStore(                                title,                                message,                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,                                it.mediaId,                                it.commentId                            )                            addNotificationToStore(commentStore)                            createNotification(                                context,                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,                                message,                                title,                                it.mediaId,                                it.commentId,                                "",                                ""                            )                        }                        CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
+val commentStore = CommentStore(                                title,                                message,                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,                                it.mediaId,                                it.commentId                            )                            addNotificationToStore(commentStore)                            createNotification(                                context,                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,                                message,                                title,                                it.mediaId,                                it.commentId,                                "",                                ""                            )                        }
+CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
     val title = "New Comment Reply"                            
 val mediaName = names[it.mediaId]?.title ?: "Unknown"                            
 val message = "${it.username} replied to your comment in $mediaName"                            
-val commentStore = CommentStore(                                title,                                message,                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,                                it.mediaId,                                it.commentId                            )                            addNotificationToStore(commentStore)                            createNotification(                                context,                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,                                message,                        CommentNotificationWorker.NotificationType.UNKNOWN -> {                            null                        }                    }
+val commentStore = CommentStore(                                title,                                message,                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,                                it.mediaId,                                it.commentId                            )                            addNotificationToStore(commentStore)                            createNotification(                                context,                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,                                message,                        CommentNotificationWorker.NotificationType.UNKNOWN -> {                            null                        }
+}
 if (ActivityCompat.checkSelfPermission(                            context,                            Manifest.permission.POST_NOTIFICATIONS                        ) == PackageManager.PERMISSION_GRANTED                    ) {
-if (notification != null) {                            NotificationManagerCompat.from(context)                                .notify(                                    type.id,                                    System.currentTimeMillis().toInt(),                                    notification                                )                        }                    }                }                                // Update comment notification count (combining replies and warnings as they appear in the Comments section)                
+if (notification != null) {                            NotificationManagerCompat.from(context)                                .notify(                                    type.id,                                    System.currentTimeMillis().toInt(),                                    notification                                )                        }}}
+// Update comment notification count (combining replies and warnings as they appear in the Comments section)
 val totalNewComments = commentCount + warningCount
 if (totalNewComments > 0) {
-    val currentCommentCount = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)                    PrefManager.setVal(PrefName.UnreadCommentNotifications, currentCommentCount + totalNewComments)                }            }
+    val currentCommentCount = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)                    PrefManager.setVal(PrefName.UnreadCommentNotifications, currentCommentCount + totalNewComments)                }
+    }
 return true        } catch (e: Exception) {            Logger.log("CommentNotificationTask: ${e.message}")            Logger.log(e)
-return false        }    }
+return false        }
+}
 
 private fun addNotificationToStore(notification: CommentStore) {
     val notificationStore = PrefManager.getNullableVal<List<CommentStore>>(            PrefName.CommentNotificationStore,            null        ) ?: listOf()        
 val newStore = notificationStore.toMutableList()
 if (newStore.size > 30) {            newStore.remove(newStore.minByOrNull { it.time })        }
 if (newStore.any { it.content == notification.content }) {
-return        }        newStore.add(notification)        PrefManager.setVal(PrefName.CommentNotificationStore, newStore)    }
+return        }
+newStore.add(notification)        PrefManager.setVal(PrefName.CommentNotificationStore, newStore)    }
 
 private fun createNotification(        context: Context,        notificationType: CommentNotificationWorker.NotificationType,        message: String,        title: String,        mediaId: Int,        commentId: Int,        color: String,        imageUrl: String    ): android.app.Notification? {        Logger.log(            "Creating notification of type $notificationType" +                    ", message: $message, title: $title, mediaId: $mediaId, commentId: $commentId"        )        
 val notification = when (notificationType) {            CommentNotificationWorker.NotificationType.COMMENT_WARNING -> {
     val intent = Intent(context, MainActivity::class.java).apply {                    putExtra("FRAGMENT_TO_LOAD", "COMMENTS")                    putExtra("mediaId", mediaId)                    putExtra("commentId", commentId)                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK                }
 
 val pendingIntent = PendingIntent.getActivity(                    context,                    commentId,                    intent,                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT                )                
-val builder = NotificationCompat.Builder(context, notificationType.id)                    .setContentTitle(title)                    .setContentText(message)                    .setSmallIcon(R.drawable.notification_icon)                    .setPriority(NotificationCompat.PRIORITY_HIGH)                    .setContentIntent(pendingIntent)                    .setAutoCancel(true)                builder.build()            }            CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
+val builder = NotificationCompat.Builder(context, notificationType.id)                    .setContentTitle(title)                    .setContentText(message)                    .setSmallIcon(R.drawable.notification_icon)                    .setPriority(NotificationCompat.PRIORITY_HIGH)                    .setContentIntent(pendingIntent)                    .setAutoCancel(true)                builder.build()            }
+CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
     val intent = Intent(context, MainActivity::class.java).apply {                    putExtra("FRAGMENT_TO_LOAD", "COMMENTS")                    putExtra("mediaId", mediaId)                    putExtra("commentId", commentId)                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK                }
 
 val pendingIntent = PendingIntent.getActivity(                    context,                    commentId,                    intent,                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT                )                
 val builder = NotificationCompat.Builder(context, notificationType.id)                    .setContentTitle(title)                    .setContentText(message)                    .setSmallIcon(R.drawable.notification_icon)                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)                    .setContentIntent(pendingIntent)                    .setAutoCancel(true)
 if (imageUrl.isNotEmpty()) {
     val bitmap = getBitmapFromUrl(imageUrl)
-if (bitmap != null) {                        builder.setLargeIcon(bitmap)                    }                }
-if (color.isNotEmpty()) {                    builder.color = Color.parseColor(color)                }                builder.build()            }            CommentNotificationWorker.NotificationType.SANINTV_UPDATE -> {
+if (bitmap != null) {                        builder.setLargeIcon(bitmap)                    }
+}
+if (color.isNotEmpty()) {                    builder.color = Color.parseColor(color)                }
+builder.build()}
+CommentNotificationWorker.NotificationType.SANINTV_UPDATE -> {
     val intent = Intent(context, MainActivity::class.java).apply {                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK                }
 
 val pendingIntent = PendingIntent.getActivity(                    context,                    System.currentTimeMillis().toInt(),                    intent,                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT                )                
 val builder = NotificationCompat.Builder(context, notificationType.id)                    .setContentTitle(title)                    .setContentText(message)                    .setSmallIcon(R.drawable.notification_icon)                    .setPriority(NotificationCompat.PRIORITY_HIGH)                    .setContentIntent(pendingIntent)                    .setAutoCancel(true)                builder.build()
 }
-else -> {                null            }        }
+else -> {                null            }
+}
 return notification    }
 
 @Suppress("unused")    
@@ -99,7 +113,8 @@ return bitmap    }
 
 private fun getBitmapFromUrl(url: String): Bitmap? {
 return try {
-    val inputStream = java.net.URL(url).openStream()            BitmapFactory.decodeStream(inputStream)        } catch (e: Exception) {            null        }    }
+    val inputStream = java.net.URL(url).openStream()            BitmapFactory.decodeStream(inputStream)        } catch (e: Exception) {            null        }
+    }
 
 private fun Int?.isGlobal() = this == 3 || this == 420}
 })

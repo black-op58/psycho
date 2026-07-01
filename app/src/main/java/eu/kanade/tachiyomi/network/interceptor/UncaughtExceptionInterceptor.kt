@@ -11,4 +11,5 @@ throw IOException("Request timed out")  // there's some odd behavior throwing a 
 if (e is IOException) {
 throw e
 } else {
-throw IOException(e)            }        }    }}
+throw IOException(e)            }}
+}}

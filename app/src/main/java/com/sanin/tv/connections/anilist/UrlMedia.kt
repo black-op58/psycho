@@ -18,4 +18,5 @@ if (id == 0) {                continueMedia = false                isMAL = data?
 } else loadMedia = id
 val mediaType = type?.uppercase()            startMainActivity(                this,                bundleOf("mediaId" to id, "mal" to isMAL, "continue" to continueMedia, "mediaType" to mediaType)            )
 } else {
-    val username = data.pathSegments?.getOrNull(1)            startMainActivity(this, bundleOf("username" to username))        }    }}
+    val username = data.pathSegments?.getOrNull(1)            startMainActivity(this, bundleOf("username" to username))        }
+    }}

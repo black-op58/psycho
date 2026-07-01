@@ -39,7 +39,8 @@ private val model: ProfileViewModel by activityViewModels()
 companion object {
     fun newInstance(userId: Int, user: Query.UserProfile?): ProfileFragment {
 return ProfileFragment().apply {                arguments = Bundle().apply {                    putInt("userId", userId)
-if (user != null) putSerializable("user", user as Serializable)                }            }        }    }
+if (user != null) putSerializable("user", user as Serializable)                }}}
+}
 
 override fun onCreateView(        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?    ): View {        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 return binding.root    }
@@ -48,8 +49,11 @@ override fun onDestroyView() {        super.onDestroyView()        _binding = nu
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        userId = arguments?.getInt("userId", -1) ?: -1        user = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)            arguments?.getSerializable("user", Query.UserProfile::class.java)
 else            
-@Suppress("DEPRECATION")            arguments?.getSerializable("user") as? Query.UserProfile        user?.let { populateStaticFields(it) }        // Load/refresh user data from network.        model.getUserProfile(userId).observe(viewLifecycleOwner) { profile ->
-if (profile != null) {                populateStaticFields(profile)                populateAnimeMangaLists(profile)            }        }        lifecycleScope.launch {            withContext(Dispatchers.IO) { model.loadProfile(userId) }        }    }
+@Suppress("DEPRECATION")            arguments?.getSerializable("user") as? Query.UserProfile        user?.let { populateStaticFields(it) }
+// Load/refresh user data from network.        model.getUserProfile(userId).observe(viewLifecycleOwner) { profile ->
+if (profile != null) {                populateStaticFields(profile)                populateAnimeMangaLists(profile)            }}
+lifecycleScope.launch {            withContext(Dispatchers.IO) { model.loadProfile(userId)}}
+}
 
 private fun populateStaticFields(profile: Query.UserProfile) {
 if (_binding == null) return        binding.profileUserAvatar.loadImage(profile.avatar?.large)        binding.profileUserName.text = profile.name ?: ""        
@@ -59,19 +63,29 @@ if (bio.isNotBlank()) {            binding.profileUserBio.visibility = View.VISI
 font-family:sans-serif'>$bio</body></html>",                "text/html", "utf-8"            )            binding.profileUserBio.webViewClient = 
 object : WebViewClient() {
     override fun shouldOverrideUrlLoading(                    view: WebView?,                    url: String?                ): Boolean {                    url?.let {
-try {                            startActivity(                                android.content.Intent(                                    android.content.Intent.ACTION_VIEW,                                    android.net.Uri.parse(it)                                )                            )                        } catch (_: Exception) {}                    }
-return true                }            }
-} else {            binding.profileUserBio.visibility = View.GONE        }    }
+try {                            startActivity(                                android.content.Intent(                                    android.content.Intent.ACTION_VIEW,                                    android.net.Uri.parse(it)                                )                            )                        } catch (_: Exception) {}
+}
+return true                }
+}
+} else {            binding.profileUserBio.visibility = View.GONE        }
+}
 
 private fun populateAnimeMangaLists(profile: Query.UserProfile) {
 if (_binding == null) return
-val favAnime: List<Media> = profile.favourites?.anime?.nodes            ?.mapNotNull { it }            ?.map {                Media(                    id     = it.id ?: return@map null,                    name   = it.title?.english ?: it.title?.romaji ?: "",                    nameRomaji = it.title?.romaji ?: "",                    cover  = it.coverImage?.large,                    banner = it.bannerImage,                    isAdult = it.isAdult ?: false                )            }            ?.filterNotNull() ?: emptyList()        
-val favManga: List<Media> = profile.favourites?.manga?.nodes            ?.mapNotNull { it }            ?.map {                Media(                    id     = it.id ?: return@map null,                    name   = it.title?.english ?: it.title?.romaji ?: "",                    nameRomaji = it.title?.romaji ?: "",                    cover  = it.coverImage?.large,                    banner = it.bannerImage,                    isAdult = it.isAdult ?: false,                    anime  = false                )            }            ?.filterNotNull() ?: emptyList()
+val favAnime: List<Media> = profile.favourites?.anime?.nodes            ?.mapNotNull { it }
+?.map {                Media(                    id     = it.id ?: return@map null,                    name   = it.title?.english ?: it.title?.romaji ?: "",                    nameRomaji = it.title?.romaji ?: "",                    cover  = it.coverImage?.large,                    banner = it.bannerImage,                    isAdult = it.isAdult ?: false                )}
+?.filterNotNull() ?: emptyList()
+val favManga: List<Media> = profile.favourites?.manga?.nodes            ?.mapNotNull { it }
+?.map {                Media(                    id     = it.id ?: return@map null,                    name   = it.title?.english ?: it.title?.romaji ?: "",                    nameRomaji = it.title?.romaji ?: "",                    cover  = it.coverImage?.large,                    banner = it.bannerImage,                    isAdult = it.isAdult ?: false,                    anime  = false                )}
+?.filterNotNull() ?: emptyList()
 if (favAnime.isEmpty()) {            binding.profileFavAnimeContainer.visibility = View.GONE
-} else {            binding.profileFavAnimeContainer.visibility = View.VISIBLE            binding.profileFavAnimeRecyclerView.apply {                adapter = MediaAdaptor(0, ArrayList(favAnime), requireActivity())                layoutManager = LinearLayoutManager(                    requireContext(), LinearLayoutManager.HORIZONTAL, false                )                enableDpadNavigation()            }        }
+} else {            binding.profileFavAnimeContainer.visibility = View.VISIBLE            binding.profileFavAnimeRecyclerView.apply {                adapter = MediaAdaptor(0, ArrayList(favAnime), requireActivity())                layoutManager = LinearLayoutManager(                    requireContext(), LinearLayoutManager.HORIZONTAL, false                )                enableDpadNavigation()            }
+}
 if (favManga.isEmpty()) {            binding.profileFavMangaContainer.visibility = View.GONE
-} else {            binding.profileFavMangaContainer.visibility = View.VISIBLE            binding.profileFavMangaRecyclerView.apply {                adapter = MediaAdaptor(0, ArrayList(favManga), requireActivity())                layoutManager = LinearLayoutManager(                    requireContext(), LinearLayoutManager.HORIZONTAL, false                )                enableDpadNavigation()            }        }
+} else {            binding.profileFavMangaContainer.visibility = View.VISIBLE            binding.profileFavMangaRecyclerView.apply {                adapter = MediaAdaptor(0, ArrayList(favManga), requireActivity())                layoutManager = LinearLayoutManager(                    requireContext(), LinearLayoutManager.HORIZONTAL, false                )                enableDpadNavigation()            }
+}
 
 val favCharacters = profile.favourites?.characters?.nodes?.filterNotNull() ?: emptyList()
 if (favCharacters.isEmpty()) {            binding.profileFavCharacterContainer.visibility = View.GONE
-} else {            binding.profileFavCharacterContainer.visibility = View.VISIBLE            binding.profileFavCharacterRecyclerView.apply {                adapter = CharacterAdapter(favCharacters, requireActivity())                layoutManager = LinearLayoutManager(                    requireContext(), LinearLayoutManager.HORIZONTAL, false                )                enableDpadNavigation()            }        }    }
+} else {            binding.profileFavCharacterContainer.visibility = View.VISIBLE            binding.profileFavCharacterRecyclerView.apply {                adapter = CharacterAdapter(favCharacters, requireActivity())                layoutManager = LinearLayoutManager(                    requireContext(), LinearLayoutManager.HORIZONTAL, false                )                enableDpadNavigation()            }}
+}

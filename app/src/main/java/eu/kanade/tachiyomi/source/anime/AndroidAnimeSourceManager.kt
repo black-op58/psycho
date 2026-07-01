@@ -24,20 +24,25 @@ private val extensionManager: AnimeExtensionManager,) : AnimeSourceManager {
     private val scope = CoroutineScope(Job() + Dispatchers.IO)    
 private val sourcesMapFlow = MutableStateFlow(ConcurrentHashMap<Long, AnimeSource>())    
 private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()    
-override val catalogueSources: Flow<List<AnimeCatalogueSource>> =        sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }    init {        scope.launch {            extensionManager.installedExtensionsFlow                .collectLatest { extensions ->                    
-val mutableMap = ConcurrentHashMap<Long, AnimeSource>(                        mapOf(                            LocalAnimeSource.ID to LocalAnimeSource(                                context,                            ),                        ),                    )                    extensions.forEach { extension ->                        extension.sources.forEach {                            mutableMap[it.id] = it                            registerStubSource(it.toSourceData())                        }                    }                    sourcesMapFlow.value = mutableMap                }        }    }
+override val catalogueSources: Flow<List<AnimeCatalogueSource>> =        sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
+init {        scope.launch {            extensionManager.installedExtensionsFlow                .collectLatest { extensions ->
+val mutableMap = ConcurrentHashMap<Long, AnimeSource>(                        mapOf(                            LocalAnimeSource.ID to LocalAnimeSource(                                context,                            ),                        ),                    )                    extensions.forEach { extension ->                        extension.sources.forEach {                            mutableMap[it.id] = it                            registerStubSource(it.toSourceData())                        }}
+sourcesMapFlow.value = mutableMap}}
+}
 
 override fun get(sourceKey: Long): AnimeSource? {
 return sourcesMapFlow.value[sourceKey]    }
 
 override fun getOrStub(sourceKey: Long): AnimeSource {
-return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {            runBlocking { createStubSource(sourceKey) }        }    }
+return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {            runBlocking { createStubSource(sourceKey) }}
+}
 
 override fun getOnlineSources() =        sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()    
 override fun getCatalogueSources() =        sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()    
 override fun getStubSources(): List<StubAnimeSource> {
     val onlineSourceIds = getOnlineSources().map { it.id }
-return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }    }
+return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }
+}
 
 private fun registerStubSource(sourceData: AnimeSourceData) {    }
 

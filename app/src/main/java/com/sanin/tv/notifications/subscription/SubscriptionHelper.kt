@@ -6,13 +6,16 @@ val selected = loadSelected(id)
 if (selected.sourceIndex >= sources.list.size) {                selected.sourceIndex = 0                saveSelected(id, selected)            }
 
 val parser = sources[selected.sourceIndex]            parser.selectDub = selected.preferDub
-return parser        }        suspend 
+return parser        }
+suspend
 fun getEpisode(            parser: AnimeParser,            subscribeMedia: SubscribeMedia        ): Episode? {
     val selected = loadSelected(subscribeMedia.id)            
 val ep = withTimeoutOrNull(10 * 1000) {                tryWithSuspend {
-    val show = parser.loadSavedShowResponse(subscribeMedia.id)                        ?: forceLoadShowResponse(subscribeMedia, selected, parser)                        ?: throw Exception(                            currContext()?.getString(                                R.string.failed_to_load_data,                                subscribeMedia.id                            )                        )                    show.sAnime?.let {                        parser.getLatestEpisode(                            show.link, show.extra,                            it, selected.latest                        )                    }                }            }
+    val show = parser.loadSavedShowResponse(subscribeMedia.id)                        ?: forceLoadShowResponse(subscribeMedia, selected, parser)                        ?: throw Exception(                            currContext()?.getString(                                R.string.failed_to_load_data,                                subscribeMedia.id                            )                        )                    show.sAnime?.let {                        parser.getLatestEpisode(                            show.link, show.extra,                            it, selected.latest                        )                    }}
+    }
 return ep?.apply {
-return chp?.apply {                selected.latest = MediaNameAdapter.findChapterNumber(number) ?: 0f                saveSelected(subscribeMedia.id, selected)            }        }
+return chp?.apply {                selected.latest = MediaNameAdapter.findChapterNumber(number) ?: 0f                saveSelected(subscribeMedia.id, selected)            }
+}
 
 private suspend 
 fun forceLoadShowResponse(            subscribeMedia: SubscribeMedia,            selected: Selected,            parser: BaseParser        ): ShowResponse? {
@@ -27,7 +30,8 @@ val name: String,
 val image: String?,            
 val banner: String? = null        ) : java.io.Serializable {            
 companion object {
-    private const val serialVersionUID = 1L            }        }
+    private const val serialVersionUID = 1L            }
+    }
 
 private const val SUBSCRIPTIONS = "subscriptions"        
 @Suppress("UNCHECKED_CAST")        
@@ -46,5 +50,9 @@ if (!data.containsKey(media.id)) {
     val new = SubscribeMedia(                        media.anime != null,                        media.isAdult,                        media.id,                        media.userPreferredName,                        media.cover,                        media.banner                    )                    data[media.id] = new
 val current = PrefManager.getNullableCustomVal(                        "Selected-${media.id}", null, Selected::class.java                    )
 if (current == null) {
-    val selected = Selected().apply {                            sourceIndex = media.selected?.sourceIndex ?: 0                            preferDub = media.selected?.preferDub                                ?: PrefManager.getVal(PrefName.SettingsPreferDub)                            latest = media.selected?.latest ?: 0f                        }                        saveSelected(media.id, selected)                    }                }
-} else {                data.remove(media.id)            }            PrefManager.setCustomVal(SUBSCRIPTIONS, data)        }    }
+    val selected = Selected().apply {                            sourceIndex = media.selected?.sourceIndex ?: 0                            preferDub = media.selected?.preferDub                                ?: PrefManager.getVal(PrefName.SettingsPreferDub)                            latest = media.selected?.latest ?: 0f                        }
+    saveSelected(media.id, selected)}
+    }
+} else {                data.remove(media.id)            }
+PrefManager.setCustomVal(SUBSCRIPTIONS, data)}
+}

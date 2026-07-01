@@ -12,7 +12,8 @@ abstract class TriState(name: String, state: Int = STATE_IGNORE) : AnimeFilter<I
     fun isIgnored() = state == STATE_IGNORE
 fun isIncluded() = state == STATE_INCLUDE
 fun isExcluded() = state == STATE_EXCLUDE        
-companion object {            const val STATE_IGNORE = 0            const val STATE_INCLUDE = 1            const val STATE_EXCLUDE = 2        }    }
+companion object {            const val STATE_IGNORE = 0            const val STATE_INCLUDE = 1            const val STATE_EXCLUDE = 2        }
+}
 
 abstract class Group<V>(name: String, state: List<V>) : AnimeFilter<List<V>>(name, state)    
 abstract class Sort(name: String, 

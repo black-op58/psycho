@@ -27,8 +27,11 @@ if (serialized != null) {
 val bis = ByteArrayInputStream(data)                
 val ois = ObjectInputStream(bis)                
 val obj = ois.readObject() as T                obj
-} else {                Logger.log("Serialized data is null (key: $key)")                defValue            }        } catch (e: java.io.InvalidClassException) {            Logger.log(e)
-try {                sharedPrefs.edit().remove(key).apply()                defValue            } catch (e: Exception) {                Logger.log(e)                defValue            }        } catch (e: Exception) {            Logger.log(e)            defValue        }    }}
+} else {                Logger.log("Serialized data is null (key: $key)")                defValue            }
+} catch (e: java.io.InvalidClassException) {            Logger.log(e)
+try {                sharedPrefs.edit().remove(key).apply()                defValue            } catch (e: Exception) {                Logger.log(e)                defValue            }
+} catch (e: Exception) {            Logger.log(e)            defValue}
+}}
 
 @Suppress("unused")
 fun SharedPreferences.intLiveData(key: String, defValue: Int): SharedPreferenceLiveData<Int> {

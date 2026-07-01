@@ -49,14 +49,18 @@ override fun <T : Any> parse(text: String, kClass: KClass<T>): T {
 return json.decodeFromString(kClass.serializer(), text)    }
 
 override fun <T : Any> parseSafe(text: String, kClass: KClass<T>): T? {
-return tryWith {            parse(text, kClass)        }    }
+return tryWith {            parse(text, kClass)        }
+}
 
 override fun writeValueAsString(obj: Any): String {
-return json.encodeToString(obj)    }    inline 
+return json.encodeToString(obj)    }
+inline
 fun <reified T> parse(text: String): T {
 return json.decodeFromString(text)    }}/** * Performs parallel processing of collection items without blocking threads. * Each operation runs in its own coroutine on the specified dispatcher. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of results in the same order as the original collection */suspend 
-fun <A, B> Collection<A>.asyncMap(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B): List<B> = coroutineScope {    map { item ->        async(dispatcher) {            f(item)        }    }.awaitAll()}/** * Performs parallel processing of collection items without blocking threads, * filtering out null results. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of non-null results in the same order as the original collection */suspend 
-fun <A, B> Collection<A>.asyncMapNotNull(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B?): List<B> = coroutineScope {    map { item ->        async(dispatcher) {            f(item)        }    }.mapNotNull { it.await() }}
+fun <A, B> Collection<A>.asyncMap(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B): List<B> = coroutineScope {    map { item ->        async(dispatcher) {            f(item)        }
+}.awaitAll()}/** * Performs parallel processing of collection items without blocking threads, * filtering out null results. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of non-null results in the same order as the original collection */suspend
+fun <A, B> Collection<A>.asyncMapNotNull(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B?): List<B> = coroutineScope {    map { item ->        async(dispatcher) {            f(item)        }
+}.mapNotNull { it.await() }}
 
 fun logError(e: Throwable, post: Boolean = true, snackbar: Boolean = true) {
     val sw = StringWriter()    
@@ -64,7 +68,8 @@ val pw = PrintWriter(sw)    e.printStackTrace(pw)
 val stackTrace: String = sw.toString()
 if (post) {
 if (snackbar)            snackString(e.localizedMessage, null, stackTrace)
-else            toast(e.localizedMessage)    }    e.printStackTrace()    Logger.log(e)}
+else            toast(e.localizedMessage)    }
+e.printStackTrace()    Logger.log(e)}
 
 fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T): T? {
 return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null    }}

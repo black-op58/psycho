@@ -7,15 +7,19 @@ private val unwanted = Regex("""\b(?:v|ver|vol|version|volume|season|s)[^a-z]?[0
 private val unwantedWhiteSpace = Regex("""\s(?=extra|special|omake)""")    
 fun parseEpisodeNumber(        animeTitle: String,        episodeName: String,        episodeNumber: Float? = null    ): Float {        // If episode number is known return.
 if (episodeNumber != null && (episodeNumber == -2f || episodeNumber > -1f)) {
-return episodeNumber        }        // Get chapter title with lower case
-var name = episodeName.lowercase()        // Remove anime title from episode title.        name = name.replace(animeTitle.lowercase(), "").trim()        // Remove comma's or hyphens.        name = name.replace(',', '.').replace('-', '.')        // Remove unwanted white spaces.        name = unwantedWhiteSpace.replace(name, "")        // Remove unwanted tags.        name = unwanted.replace(name, "")        // Check base case ch.xx        basic.find(name)?.let { return getEpisodeNumberFromMatch(it) }        // Take the first number encountered.        number.find(name)?.let { return getEpisodeNumberFromMatch(it) }
-return episodeNumber ?: -1f    }    /**     * Check if episode number is found and return it     * @param match result of regex     * @return chapter number if found else null     */    
+return episodeNumber        }
+// Get chapter title with lower case
+var name = episodeName.lowercase()        // Remove anime title from episode title.        name = name.replace(animeTitle.lowercase(), "").trim()        // Remove comma's or hyphens.        name = name.replace(',', '.').replace('-', '.')        // Remove unwanted white spaces.        name = unwantedWhiteSpace.replace(name, "")        // Remove unwanted tags.        name = unwanted.replace(name, "")        // Check base case ch.xx        basic.find(name)?.let { return getEpisodeNumberFromMatch(it) }
+// Take the first number encountered.        number.find(name)?.let { return getEpisodeNumberFromMatch(it) }
+return episodeNumber ?: -1f    }
+/**     * Check if episode number is found and return it     * @param match result of regex     * @return chapter number if found else null     */
 private fun getEpisodeNumberFromMatch(match: MatchResult): Float {
 return match.let {
     val initial = it.groups[1]?.value?.toFloat()!!            
 val subChapterDecimal = it.groups[2]?.value
 val subChapterAlpha = it.groups[3]?.value
-val addition = checkForDecimal(subChapterDecimal, subChapterAlpha)            initial.plus(addition)        }    }    /**     * Check for decimal in received strings     * @param decimal decimal value of regex     * @param alpha alpha value of regex     * @return decimal/alpha float value     */    
+val addition = checkForDecimal(subChapterDecimal, subChapterAlpha)            initial.plus(addition)        }}
+/**     * Check for decimal in received strings     * @param decimal decimal value of regex     * @param alpha alpha value of regex     * @return decimal/alpha float value     */
 private fun checkForDecimal(decimal: String?, alpha: String?): Float {
 if (!decimal.isNullOrEmpty()) {
 return decimal.toFloat()        }
@@ -29,8 +33,10 @@ return .97f            }
 
 val trimmedAlpha = alpha.trimStart('.')
 if (trimmedAlpha.length == 1) {
-return parseAlphaPostFix(trimmedAlpha[0])            }        }
-return .0f    }    /**     * x.a -> x.1, x.b -> x.2, etc     */    
+return parseAlphaPostFix(trimmedAlpha[0])            }
+}
+return .0f    }
+/**     * x.a -> x.1, x.b -> x.2, etc     */
 private fun parseAlphaPostFix(alpha: Char): Float {
     val number = alpha.code - ('a'.code - 1)
 if (number >= 10) return 0f

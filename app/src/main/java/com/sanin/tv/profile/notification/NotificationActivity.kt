@@ -36,25 +36,41 @@ private var userTab: AnimatedBottomBar.Tab? = null
 private var mediaTab: AnimatedBottomBar.Tab? = null    
 private var subsTab: AnimatedBottomBar.Tab? = null    
 private var commentTab: AnimatedBottomBar.Tab? = null    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityNotificationBinding.inflate(layoutInflater)        setContentView(binding.root)        binding.notificationTitle.text = getString(R.string.notifications)        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }        navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight        }        updateCounts()        
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityNotificationBinding.inflate(layoutInflater)        setContentView(binding.root)        binding.notificationTitle.text = getString(R.string.notifications)        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
+navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight}
+updateCounts()
 val tabs = mutableListOf(            Pair(R.drawable.ic_round_person_24, "User"),            Pair(R.drawable.ic_round_movie_filter_24, "Media"),            Pair(R.drawable.ic_round_notifications_active_24, "Subs")        )
-if (CommentsEnabled) {            tabs.add(Pair(R.drawable.ic_round_comment_24, "Comments"))        }        tabs.forEachIndexed { index, (icon, title) ->            
+if (CommentsEnabled) {            tabs.add(Pair(R.drawable.ic_round_comment_24, "Comments"))        }
+tabs.forEachIndexed { index, (icon, title) ->
 val tab = navBar.createTab(icon, title)
 when (index) {                0 -> {                    userTab = tab
-if (userCount > 0) tab.badge = AnimatedBottomBar.Badge("$userCount")                }                1 -> {                    mediaTab = tab
-if (mediaCount > 0) tab.badge = AnimatedBottomBar.Badge("$mediaCount")                }                2 -> {                    subsTab = tab
-if (subsCount > 0) tab.badge = AnimatedBottomBar.Badge("$subsCount")                }                3 -> {                    commentTab = tab
-if (commentCount > 0) tab.badge = AnimatedBottomBar.Badge("$commentCount")                }            }            navBar.addTab(tab)        }        binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+if (userCount > 0) tab.badge = AnimatedBottomBar.Badge("$userCount")                }
+1 -> {                    mediaTab = tab
+if (mediaCount > 0) tab.badge = AnimatedBottomBar.Badge("$mediaCount")                }
+2 -> {                    subsTab = tab
+if (subsCount > 0) tab.badge = AnimatedBottomBar.Badge("$subsCount")                }
+3 -> {                    commentTab = tab
+if (commentCount > 0) tab.badge = AnimatedBottomBar.Badge("$commentCount")                }}
+navBar.addTab(tab)}
+binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
 val getOne = intent.getIntExtra("activityId", -1)
 if (getOne != -1) navBar.isVisible = false        binding.notificationViewPager.isUserInputEnabled = false        binding.notificationViewPager.adapter =            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne, CommentsEnabled) { type, reset ->
 if (reset) {
-when (type) {                        USER -> {                            userCount = 0                            userTab?.badge = null                        }                        MEDIA -> {                            mediaCount = 0                            mediaTab?.badge = null                        }                        SUBSCRIPTION -> {                            subsCount = 0                            subsTab?.badge = null                        }                        COMMENT -> {                            commentCount = 0
-if (CommentsEnabled) commentTab?.badge = null                        }                        ONE -> {}                    }                    saveCounts()                }            }        binding.notificationViewPager.registerOnPageChangeCallback(            
+when (type) {                        USER -> {                            userCount = 0                            userTab?.badge = null                        }
+MEDIA -> {                            mediaCount = 0                            mediaTab?.badge = null}
+SUBSCRIPTION -> {                            subsCount = 0                            subsTab?.badge = null}
+COMMENT -> {                            commentCount = 0
+if (CommentsEnabled) commentTab?.badge = null                        }
+ONE -> {}}
+saveCounts()}}
+binding.notificationViewPager.registerOnPageChangeCallback(
 object : ViewPager2 .OnPageChangeCallback() {
-    override fun onPageSelected(position: Int) {                    super.onPageSelected(position)                    fragments[position]?.onVisible()                }            }        )        binding.notificationViewPager.setCurrentItem(selected, false)        navBar.selectTabAt(selected)        navBar.setOnTabSelectListener(
+    override fun onPageSelected(position: Int) {                    super.onPageSelected(position)                    fragments[position]?.onVisible()                }}
+    )        binding.notificationViewPager.setCurrentItem(selected, false)        navBar.selectTabAt(selected)        navBar.setOnTabSelectListener(
 object : AnimatedBottomBar.OnTabSelectListener {
-    override fun onTabSelected(                lastIndex: Int,                lastTab: AnimatedBottomBar.Tab?,                newIndex: Int,                newTab: AnimatedBottomBar.Tab            ) {                selected = newIndex                binding.notificationViewPager.setCurrentItem(selected, false)            }        })    }
+    override fun onTabSelected(                lastIndex: Int,                lastTab: AnimatedBottomBar.Tab?,                newIndex: Int,                newTab: AnimatedBottomBar.Tab            ) {                selected = newIndex                binding.notificationViewPager.setCurrentItem(selected, false)            }
+    })    }
 
 private fun updateCounts() {        userCount = PrefManager.getVal(PrefName.UnreadUserNotifications, 0)        mediaCount = PrefManager.getVal(PrefName.UnreadMediaNotifications, 0)        subsCount = PrefManager.getVal(PrefName.UnreadSubscriptionNotifications, 0)        commentCount = PrefManager.getVal(PrefName.UnreadCommentNotifications, 0)    }
 
@@ -66,7 +82,9 @@ if (userCount > 0) userTab?.badge = AnimatedBottomBar.Badge("$userCount") else u
 if (mediaCount > 0) mediaTab?.badge = AnimatedBottomBar.Badge("$mediaCount") else mediaTab?.badge = null
 if (subsCount > 0) subsTab?.badge = AnimatedBottomBar.Badge("$subsCount") else subsTab?.badge = null
 if (CommentsEnabled) {
-if (commentCount > 0) commentTab?.badge = AnimatedBottomBar.Badge("$commentCount") else commentTab?.badge = null            }            navBar.selectTabAt(selected)        }    }
+if (commentCount > 0) commentTab?.badge = AnimatedBottomBar.Badge("$commentCount") else commentTab?.badge = null            }
+navBar.selectTabAt(selected)}
+}
 
 val fragments = mutableMapOf<Int, NotificationFragment>()    
 private inner 
@@ -77,5 +95,7 @@ private val countResetCallback: (NotificationFragment.Companion.NotificationType
     override fun getItemCount(): Int = if (id != -1) 1 else if (commentsEnabled) 4 else 3        
 override fun createFragment(position: Int): Fragment {
     val fragment = when (position) {                0 -> newInstance(if (id != -1) ONE else USER, id, countResetCallback)                1 -> newInstance(MEDIA, countResetCallback = countResetCallback)                2 -> newInstance(SUBSCRIPTION, countResetCallback = countResetCallback)                3 -> newInstance(COMMENT, countResetCallback = countResetCallback)
-else -> newInstance(MEDIA, countResetCallback = countResetCallback)            }            fragments[position] = fragment
-return fragment        }    }}
+else -> newInstance(MEDIA, countResetCallback = countResetCallback)            }
+fragments[position] = fragment
+return fragment        }
+}}

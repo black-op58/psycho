@@ -8,9 +8,11 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
     override suspend 
 fun doWork(): Result {        Logger.log("CommentNotificationWorker: doWork")
 if (System.currentTimeMillis() - lastCheck < 60000) {            Logger.log("CommentNotificationWorker: doWork skipped")
-return Result.success()        }        lastCheck = System.currentTimeMillis()
+return Result.success()        }
+lastCheck = System.currentTimeMillis()
 return if (CommentNotificationTask().execute(applicationContext)) {            Result.success()
-} else {            Logger.log("CommentNotificationWorker: doWork failed")            Result.retry()        }    }
+} else {            Logger.log("CommentNotificationWorker: doWork failed")            Result.retry()        }
+}
 
 enum class NotificationType(
 val id: String) {        COMMENT_REPLY(Notifications.CHANNEL_COMMENTS),        COMMENT_WARNING(Notifications.CHANNEL_COMMENT_WARING),        SANINTV_UPDATE(Notifications.CHANNEL_APP_GLOBAL),        NO_NOTIFICATION("no_notification"),        UNKNOWN("unknown")    }

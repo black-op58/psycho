@@ -16,7 +16,9 @@ private val adapter: GroupieAdapter,
 private val onItemRemoved: (Int) -> Unit) : BindableItem<ItemSubscriptionBinding>() {
     private lateinit var binding: ItemSubscriptionBinding    
 override fun bind(viewBinding: ItemSubscriptionBinding, position: Int) {        binding = viewBinding
-val context = binding.root.context        binding.subscriptionName.text = media.name        binding.root.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, MediaDetailsActivity::class.java).putExtra("mediaId", media.id),                null            )        }        binding.subscriptionCover.loadImage(media.image)        binding.deleteSubscription.setOnClickListener {            SubscriptionHelper.deleteSubscription(id, true)            adapter.remove(this)            onItemRemoved(id)        }    }
+val context = binding.root.context        binding.subscriptionName.text = media.name        binding.root.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, MediaDetailsActivity::class.java).putExtra("mediaId", media.id),                null            )        }
+binding.subscriptionCover.loadImage(media.image)        binding.deleteSubscription.setOnClickListener {            SubscriptionHelper.deleteSubscription(id, true)            adapter.remove(this)            onItemRemoved(id)}
+}
 
 override fun getLayout(): Int = R.layout.item_subscription    
 override fun initializeViewBinding(view: View): ItemSubscriptionBinding =        ItemSubscriptionBinding.bind(view)}

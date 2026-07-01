@@ -13,8 +13,10 @@ class ChildFirstPathClassLoader(    dexPath: String,    librarySearchPath: Strin
 override fun loadClass(name: String?, resolve: Boolean): Class<*> {
     var c = findLoadedClass(name)
 if (c == null && systemClassLoader != null) {
-try {                c = systemClassLoader.loadClass(name)            } catch (_: ClassNotFoundException) {}        }
-if (c == null) {            c = try {                findClass(name)            } catch (_: ClassNotFoundException) {                super.loadClass(name, resolve)            }        }
+try {                c = systemClassLoader.loadClass(name)            } catch (_: ClassNotFoundException) {}
+}
+if (c == null) {            c = try {                findClass(name)            } catch (_: ClassNotFoundException) {                super.loadClass(name, resolve)            }
+}
 if (resolve) {            resolveClass(c)        }
 return c    }
 
@@ -28,13 +30,16 @@ val parentUrls = parent?.getResources(name)
 val urls = buildList {
 while (systemUrls?.hasMoreElements() == true) {               add(systemUrls.nextElement())            }
 while (localUrls?.hasMoreElements() == true) {               add(localUrls.nextElement())            }
-while (parentUrls?.hasMoreElements() == true) {               add(parentUrls.nextElement())            }        }
+while (parentUrls?.hasMoreElements() == true) {               add(parentUrls.nextElement())            }
+}
 return 
 object : Enumeration<URL> {
     val iterator = urls.iterator()            
 override fun hasMoreElements() = iterator.hasNext()            
-override fun nextElement() = iterator.next()        }    }
+override fun nextElement() = iterator.next()        }
+}
 
 override fun getResourceAsStream(name: String?): InputStream? {
 return try {            getResource(name)?.openStream()        } catch (_: IOException) {
-return null        }    }}
+return null        }
+}}

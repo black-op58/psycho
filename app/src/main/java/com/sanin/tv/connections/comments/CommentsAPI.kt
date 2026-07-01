@@ -38,7 +38,8 @@ var isMod: Boolean = false
 var totalVotes: Int = 0    suspend 
 fun getCommentsForId(        id: Int,        page: Int = 1,        tag: Int?,        sort: String?    ): CommentResponse? {
     var url = "$ADDRESS/comments/$id/$page"        
-val request = requestBuilder()        tag?.let {            url += "?tag=$it"        }        sort?.let {            url += if (tag != null) "&sort=$it" else "?sort=$it"        }
+val request = requestBuilder()        tag?.let {            url += "?tag=$it"        }
+sort?.let {            url += if (tag != null) "&sort=$it" else "?sort=$it"        }
 
 val json = try {            request.get(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to fetch comments")
 return null        }
@@ -48,7 +49,8 @@ if (!res && json.code != 404) {            errorReason(json.code, json.text)    
 
 val parsed = try {            Json.decodeFromString<CommentResponse>(json.text)        } catch (e: Exception) {
 return null        }
-return parsed    }    suspend 
+return parsed    }
+suspend
 fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
     val url = "$ADDRESS/comments/parent/$id/$page"        
 val request = requestBuilder()        
@@ -60,7 +62,8 @@ if (!res && json.code != 404) {            errorReason(json.code, json.text)    
 
 val parsed = try {            Json.decodeFromString<CommentResponse>(json.text)        } catch (e: Exception) {
 return null        }
-return parsed    }    suspend 
+return parsed    }
+suspend
 fun getSingleComment(id: Int): Comment? {
     val url = "$ADDRESS/comments/$id"        
 val request = requestBuilder()        
@@ -72,7 +75,8 @@ if (!res && json.code != 404) {            errorReason(json.code, json.text)    
 
 val parsed = try {            Json.decodeFromString<Comment>(json.text)        } catch (e: Exception) {
 return null        }
-return parsed    }    suspend 
+return parsed    }
+suspend
 fun vote(commentId: Int, voteType: Int): Boolean {
     val url = "$ADDRESS/comments/vote/$commentId/$voteType"        
 val request = requestBuilder()        
@@ -81,11 +85,13 @@ return false        }
 
 val res = json.code == 200
 if (!res) {            errorReason(json.code, json.text)        }
-return res    }    suspend 
+return res    }
+suspend
 fun comment(mediaId: Int, parentCommentId: Int?, content: String, tag: Int?): Comment? {
     val url = "$ADDRESS/comments"        
 val body = FormBody.Builder()            .add("user_id", userId ?: return null)            .add("media_id", mediaId.toString())            .add("content", content)
-if (tag != null) {            body.add("tag", tag.toString())        }        parentCommentId?.let {            body.add("parent_comment_id", it.toString())        }
+if (tag != null) {            body.add("tag", tag.toString())        }
+parentCommentId?.let {            body.add("parent_comment_id", it.toString())        }
 
 val request = requestBuilder()        
 val json = try {            request.post(url, requestBody = body.build())        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to comment")
@@ -97,7 +103,8 @@ return null        }
 
 val parsed = try {            Json.decodeFromString<ReturnedComment>(json.text)        } catch (e: Exception) {            Logger.log(e)            errorMessage("Failed to parse comment")
 return null        }
-return Comment(            parsed.id,            parsed.userId,            parsed.mediaId,            parsed.parentCommentId,            parsed.content,            parsed.timestamp,            parsed.deleted,            parsed.tag,            0,            0,            null,            Anilist.username ?: "",            Anilist.avatar,            totalVotes = totalVotes        )    }    suspend 
+return Comment(            parsed.id,            parsed.userId,            parsed.mediaId,            parsed.parentCommentId,            parsed.content,            parsed.timestamp,            parsed.deleted,            parsed.tag,            0,            0,            null,            Anilist.username ?: "",            Anilist.avatar,            totalVotes = totalVotes        )    }
+suspend
 fun deleteComment(commentId: Int): Boolean {
     val url = "$ADDRESS/comments/$commentId"        
 val request = requestBuilder()        
@@ -106,7 +113,8 @@ return false        }
 
 val res = json.code == 200
 if (!res) {            errorReason(json.code, json.text)        }
-return res    }    suspend 
+return res    }
+suspend
 fun editComment(commentId: Int, content: String): Boolean {
     val url = "$ADDRESS/comments/$commentId"        
 val body = FormBody.Builder()            .add("content", content)            .build()        
@@ -116,7 +124,8 @@ return false        }
 
 val res = json.code == 200
 if (!res) {            errorReason(json.code, json.text)        }
-return res    }    suspend 
+return res    }
+suspend
 fun banUser(userId: String): Boolean {
     val url = "$ADDRESS/ban/$userId"        
 val request = requestBuilder()        
@@ -125,7 +134,8 @@ return false        }
 
 val res = json.code == 200
 if (!res) {            errorReason(json.code, json.text)        }
-return res    }    suspend 
+return res    }
+suspend
 fun reportComment(        commentId: Int,        username: String,        mediaTitle: String,        reportedId: String    ): Boolean {
     val url = "$ADDRESS/report/$commentId"        
 val body = FormBody.Builder()            .add("username", username)            .add("mediaName", mediaTitle)            .add("reporter", Anilist.username ?: "unknown")            .add("reportedId", reportedId)            .build()        
@@ -135,7 +145,8 @@ return false        }
 
 val res = json.code == 200
 if (!res) {            errorReason(json.code, json.text)        }
-return res    }    suspend 
+return res    }
+suspend
 fun getNotifications(client: OkHttpClient): NotificationResponse? {
     val url = "$ADDRESS/notification/reply"        
 val request = requestBuilder(client)        
@@ -158,9 +169,11 @@ val json = try {            request.get(url)        } catch (e: IOException) {
 return null        }
 if (json.code == 200) {
     val parsed = try {                Json.decodeFromString<UserResponse>(json.text)            } catch (e: Exception) {                e.printStackTrace()
-return null            }            isBanned = parsed.user.isBanned ?: false            isAdmin = parsed.user.isAdmin ?: false            isMod = parsed.user.isMod ?: false            totalVotes = parsed.user.totalVotes
+return null            }
+isBanned = parsed.user.isBanned ?: false            isAdmin = parsed.user.isAdmin ?: false            isMod = parsed.user.isMod ?: false            totalVotes = parsed.user.totalVotes
 return parsed.user        }
-return null    }    suspend 
+return null    }
+suspend
 fun fetchAuthToken(context: Context, client: OkHttpClient? = null) {        isOnline = isOnline(context)
 if (authToken != null) return
 val MAX_RETRIES = 5
@@ -169,7 +182,8 @@ val tokenExpiry = PrefManager.getVal<Long>(PrefName.CommentTokenExpiry)
 if (tokenExpiry < System.currentTimeMillis() + tokenLifetime) {
     val commentResponse =                PrefManager.getNullableVal<AuthResponse>(PrefName.CommentAuthResponse, null)
 if (commentResponse != null) {                authToken = commentResponse.authToken                userId = commentResponse.user.id                isBanned = commentResponse.user.isBanned ?: false                isAdmin = commentResponse.user.isAdmin ?: false                isMod = commentResponse.user.isMod ?: false                totalVotes = commentResponse.user.totalVotes
-if (getUserDetails(client) != null) return            }        }
+if (getUserDetails(client) != null) return            }
+}
 
 val url = "$ADDRESS/authenticate"        
 val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return        repeat(MAX_RETRIES) {
@@ -178,11 +192,15 @@ try {
 if (json.code == 200) {
 if (!json.text.startsWith("{")) throw IOException("Invalid response")                    
 val parsed = try {                        Json.decodeFromString<AuthResponse>(json.text)                    } catch (e: Exception) {                        Logger.log(e)                        errorMessage("Failed to login to comments API: ${e.printStackTrace()}")
-return                    }                    PrefManager.setVal(PrefName.CommentAuthResponse, parsed)                    PrefManager.setVal(                        PrefName.CommentTokenExpiry,                        System.currentTimeMillis() + tokenLifetime                    )                    authToken = parsed.authToken                    userId = parsed.user.id                    isBanned = parsed.user.isBanned ?: false                    isAdmin = parsed.user.isAdmin ?: false                    isMod = parsed.user.isMod ?: false                    totalVotes = parsed.user.totalVotes
+return                    }
+PrefManager.setVal(PrefName.CommentAuthResponse, parsed)                    PrefManager.setVal(                        PrefName.CommentTokenExpiry,                        System.currentTimeMillis() + tokenLifetime                    )                    authToken = parsed.authToken                    userId = parsed.user.id                    isBanned = parsed.user.isBanned ?: false                    isAdmin = parsed.user.isAdmin ?: false                    isMod = parsed.user.isMod ?: false                    totalVotes = parsed.user.totalVotes
 return
 } else if (json.code != 429) {                    errorReason(json.code, json.text)
-return                }            } catch (e: IOException) {                Logger.log(e)                errorMessage("Failed to login to comments API")
-return            }            kotlinx.coroutines.delay(60000)        }        errorMessage("Failed to login after multiple attempts")    }
+return                }
+} catch (e: IOException) {                Logger.log(e)                errorMessage("Failed to login to comments API")
+return            }
+kotlinx.coroutines.delay(60000)}
+errorMessage("Failed to login after multiple attempts")    }
 
 private fun errorMessage(reason: String) {
 if (commentsEnabled) Logger.log(reason)

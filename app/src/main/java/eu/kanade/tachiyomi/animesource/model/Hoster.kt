@@ -20,7 +20,8 @@ return Hoster(hosterUrl, hosterName, videoList, internalData, lazy)    }
 
 companion object {        const val NO_HOSTER_LIST = "no_hoster_list"        
 fun List<Video>.toHosterList(): List<Hoster> {
-return listOf(                Hoster(                    hosterUrl = "",                    hosterName = NO_HOSTER_LIST,                    videoList = this,                ),            )        }    }}
+return listOf(                Hoster(                    hosterUrl = "",                    hosterName = NO_HOSTER_LIST,                    videoList = this,                ),            )        }
+}}
 
 @Serializable
 data class SerializableHoster(    
@@ -31,4 +32,5 @@ val internalData: String = "",
 val lazy: Boolean = false,) {    
 companion object {
     fun List<Hoster>.serialize(): String =            Json.encodeToString(                this.map { host ->                    SerializableHoster(                        host.hosterUrl,                        host.hosterName,                        host.videoList?.serialize(),                        host.internalData,                        host.lazy,                    )                },            )        
-fun String.toHosterList(): List<Hoster> =            Json.decodeFromString<List<SerializableHoster>>(this)                .map { sHost ->                    Hoster(                        sHost.hosterUrl,                        sHost.hosterName,                        sHost.videoList?.toVideoList(),                        sHost.internalData,                        sHost.lazy,                    )                }    }}
+fun String.toHosterList(): List<Hoster> =            Json.decodeFromString<List<SerializableHoster>>(this)                .map { sHost ->                    Hoster(                        sHost.hosterUrl,                        sHost.hosterName,                        sHost.videoList?.toVideoList(),                        sHost.internalData,                        sHost.lazy,                    )                }
+}}

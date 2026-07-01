@@ -35,9 +35,12 @@ if (call.isCanceled()) {
 throw IOException("Canceled")
 } else if (hasRemovedExpired) {                        break
 } else {
-try { // wait for the first entry to expire, or notified by cached response                            (requestQueue as Object).wait(requestQueue.first - periodStart)                        } catch (_: InterruptedException) {                            continue                        }                    }                }                // add request to queue                timestamp = SystemClock.elapsedRealtime()                requestQueue.addLast(timestamp)            }        } finally {            fairLock.release()        }
+try { // wait for the first entry to expire, or notified by cached response                            (requestQueue as Object).wait(requestQueue.first - periodStart)                        } catch (_: InterruptedException) {                            continue                        }}}
+// add request to queue                timestamp = SystemClock.elapsedRealtime()                requestQueue.addLast(timestamp)}
+} finally {            fairLock.release()        }
 
 val response = chain.proceed(request)
 if (response.networkResponse == null) { // response is cached, remove it from queue            synchronized(requestQueue) {
-if (requestQueue.isEmpty() || timestamp < requestQueue.first) return@synchronized                requestQueue.removeFirstOccurrence(timestamp)                (requestQueue as Object).notifyAll()            }        }
+if (requestQueue.isEmpty() || timestamp < requestQueue.first) return@synchronized                requestQueue.removeFirstOccurrence(timestamp)                (requestQueue as Object).notifyAll()            }
+}
 return response    }}

@@ -18,11 +18,13 @@ fun Context.notify(    id: Int,    channelId: String,    block: (NotificationCom
 
 fun Context.notify(id: Int, notification: Notification) {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.checkSelfPermission(            this,            Manifest.permission.POST_NOTIFICATIONS        ) != PermissionChecker.PERMISSION_GRANTED    ) {
-return    }    NotificationManagerCompat.from(this).notify(id, notification)}
+return    }
+NotificationManagerCompat.from(this).notify(id, notification)}
 
 fun Context.notify(notificationWithIdAndTags: List<NotificationWithIdAndTag>) {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.checkSelfPermission(            this,            Manifest.permission.POST_NOTIFICATIONS        ) != PermissionChecker.PERMISSION_GRANTED    ) {
-return    }    NotificationManagerCompat.from(this).notify(notificationWithIdAndTags)}
+return    }
+NotificationManagerCompat.from(this).notify(notificationWithIdAndTags)}
 
 fun Context.cancelNotification(id: Int) {    NotificationManagerCompat.from(this).cancel(id)}/** * Helper method to create a notification builder. * * @param id the channel id. * @param block the function that will execute inside the builder. * @return a notification to be displayed or updated. */
 fun Context.notificationBuilder(    channelId: String,    block: (NotificationCompat.Builder.() -> Unit)? = null): NotificationCompat.Builder {

@@ -4,4 +4,5 @@ class ToggleLanguage(
 val preferences: SourcePreferences,) {
     fun await(language: String) {
     val isEnabled = language in preferences.enabledLanguages().get()        preferences.enabledLanguages().getAndSet { enabled ->
-if (isEnabled) enabled.minus(language) else enabled.plus(language)        }    }}
+if (isEnabled) enabled.minus(language) else enabled.plus(language)        }
+}}

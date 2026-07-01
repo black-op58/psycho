@@ -14,4 +14,5 @@ fun copyFrom(other: SEpisode) {        name = other.name        url = other.url 
 
 companion object {
     fun create(): SEpisode {
-return SEpisodeImpl()        }    }}
+return SEpisodeImpl()        }
+}}

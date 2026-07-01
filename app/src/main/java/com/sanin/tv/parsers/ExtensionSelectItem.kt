@@ -14,7 +14,9 @@ val selectCallback: (String, Boolean) -> Unit) : BindableItem<ItemExtensionSelec
     private lateinit var binding: ItemExtensionSelectBinding    
 override fun bind(viewBinding: ItemExtensionSelectBinding, position: Int) {        binding = viewBinding        binding.extensionNameTextView.text = name        Glide.with(binding.root.context).clear(binding.extensionIconImageView)        binding.extensionIconImageView.setImageDrawable(null)
 if (image != null) {            binding.extensionIconImageView.setImageDrawable(image)
-} else if (iconUrl != null) {            Glide.with(binding.root.context)                .load(iconUrl)                .into(binding.extensionIconImageView)        }        binding.extensionCheckBox.setOnCheckedChangeListener(null)        binding.extensionCheckBox.isChecked = isSelected        binding.extensionCheckBox.setOnCheckedChangeListener { _, isChecked ->            isSelected = isChecked            selectCallback(name, isChecked)        }    }
+} else if (iconUrl != null) {            Glide.with(binding.root.context)                .load(iconUrl)                .into(binding.extensionIconImageView)        }
+binding.extensionCheckBox.setOnCheckedChangeListener(null)        binding.extensionCheckBox.isChecked = isSelected        binding.extensionCheckBox.setOnCheckedChangeListener { _, isChecked ->            isSelected = isChecked            selectCallback(name, isChecked)}
+}
 
 override fun getLayout(): Int {
 return R.layout.item_extension_select    }

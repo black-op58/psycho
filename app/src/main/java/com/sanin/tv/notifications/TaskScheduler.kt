@@ -9,7 +9,8 @@ interface TaskScheduler {
     fun scheduleRepeatingTask(taskType: TaskType, interval: Long)    
 fun cancelTask(taskType: TaskType)    
 fun cancelAllTasks() {
-for (taskType in TaskType.entries) {            cancelTask(taskType)        }    }
+for (taskType in TaskType.entries) {            cancelTask(taskType)        }
+}
 
 fun scheduleAllTasks(context: Context) {
 for (taskType in TaskType.entries) {
@@ -17,15 +18,19 @@ for (taskType in TaskType.entries) {
 val = when (taskType) {                TaskType.COMMENT_NOTIFICATION -> CommentNotificationWorker.checkIntervals[PrefManager.getVal(                    PrefName.CommentNotificationInter
 val                )]                TaskType.ANILIST_NOTIFICATION -> AnilistNotificationWorker.checkIntervals[PrefManager.getVal(                    PrefName.AnilistNotificationInter
 val                )]                TaskType.SUBSCRIPTION_NOTIFICATION -> SubscriptionNotificationWorker.checkIntervals[PrefManager.getVal(                    PrefName.SubscriptionNotificationInter
-val                )]            }            scheduleRepeatingTask(taskType, interval)        }    }
+val                )]            }
+scheduleRepeatingTask(taskType, interval)}
+}
 
 companion object {
     fun create(context: Context, useAlarmManager: Boolean): TaskScheduler {
 return if (useAlarmManager) {                AlarmManagerScheduler(context)
-} else {                WorkManagerScheduler(context)            }        }
+} else {                WorkManagerScheduler(context)            }
+}
 
 fun scheduleSingleWork(context: Context) {
-    val workManager = androidx.work.WorkManager.getInstance(context)            workManager.enqueueUniqueWork(                CommentNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(CommentNotificationWorker::class.java)                    .build()            )            workManager.enqueueUniqueWork(                AnilistNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)                    .build()            )            workManager.enqueueUniqueWork(                SubscriptionNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)                    .build()            )        }    }
+    val workManager = androidx.work.WorkManager.getInstance(context)            workManager.enqueueUniqueWork(                CommentNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(CommentNotificationWorker::class.java)                    .build()            )            workManager.enqueueUniqueWork(                AnilistNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)                    .build()            )            workManager.enqueueUniqueWork(                SubscriptionNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)                    .build()            )        }
+    }
 
 enum class TaskType {        COMMENT_NOTIFICATION,        ANILIST_NOTIFICATION,        SUBSCRIPTION_NOTIFICATION    }}
 interface Task {    suspend 

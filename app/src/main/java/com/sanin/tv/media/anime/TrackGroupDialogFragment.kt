@@ -29,7 +29,8 @@ override fun onCreateView(        inflater: LayoutInflater,        container: Vi
 return binding.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)
-if (type == TRACK_TYPE_AUDIO) binding.selectionTitle.text = getString(R.string.audio_tracks)        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())        binding.subtitlesRecycler.adapter = TrackGroupAdapter()    }    inner 
+if (type == TRACK_TYPE_AUDIO) binding.selectionTitle.text = getString(R.string.audio_tracks)        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())        binding.subtitlesRecycler.adapter = TrackGroupAdapter()    }
+inner
 class TrackGroupAdapter : RecyclerView.Adapter<TrackGroupAdapter.StreamViewHolder>() {        inner 
 class StreamViewHolder(
 val binding: ItemSubtitleTextBinding) :            RecyclerView.ViewHolder(binding.root)        
@@ -43,7 +44,8 @@ if (overrideTrackNames?.getOrNull(                        position - (trackGroup
 } else when (
 val language = trackGroup.getTrackFormat(0).language?.lowercase()) {                    null -> {
     val label = trackGroup.getTrackFormat(0).label                        binding.subtitleTitle.text =
-if (!label.isNullOrBlank()) label else getString(R.string.unknown_track, "Track $position")                    }                    "none" -> {                        binding.subtitleTitle.text = getString(R.string.disabled_track)
+if (!label.isNullOrBlank()) label else getString(R.string.unknown_track, "Track $position")                    }
+"none" -> {                        binding.subtitleTitle.text = getString(R.string.disabled_track)
 }
 else -> {
     val format = trackGroup.getTrackFormat(0)                        
@@ -51,14 +53,19 @@ val locale = if (language.contains("-")) {
     val parts = language.split("-")
 try {                                Locale(parts[0], parts[1])                            } catch (ignored: Exception) {                                null                            }
 } else {
-try {                                Locale(language)                            } catch (ignored: Exception) {                                null                            }                        }                        binding.subtitleTitle.text = locale?.let {
+try {                                Locale(language)                            } catch (ignored: Exception) {                                null                            }}
+binding.subtitleTitle.text = locale?.let {
     val label = format.label
 if (!label.isNullOrBlank()) {                                "[${it.language}] $label"
-} else {                                "[${it.language}] ${it.displayName}"                            }                        } ?: run {
+} else {                                "[${it.language}] ${it.displayName}"                            }
+} ?: run {
     val label = format.label
-if (!label.isNullOrBlank()) label else getString(R.string.unknown_track, language)                        }                    }                }
+if (!label.isNullOrBlank()) label else getString(R.string.unknown_track, language)                        }}
+}
 if (trackGroup.isSelected) {
-    val selected = "✔ ${binding.subtitleTitle.text}"                    binding.subtitleTitle.text = selected                }                binding.root.setOnClickListener {                    dismiss()                    instance.onSetTrackGroupOverride(trackGroup, type)                }            }        }
+    val selected = "✔ ${binding.subtitleTitle.text}"                    binding.subtitleTitle.text = selected                }
+    binding.root.setOnClickListener {                    dismiss()                    instance.onSetTrackGroupOverride(trackGroup, type)}}
+    }
 
 override fun getItemCount(): Int = trackGroups.size    }
 

@@ -21,19 +21,24 @@ return SearchHeaderViewHolder(binding)    }
 fun setHistoryVisibility(visible: Boolean) {
 if (visible) {            binding.searchResultLayout.startAnimation(fadeOutAnimation())            binding.searchHistoryList.startAnimation(fadeInAnimation())            binding.searchResultLayout.visibility = View.GONE            binding.searchHistoryList.visibility = View.VISIBLE            binding.searchByImage.visibility = View.VISIBLE            updateClearHistoryVisibility()
 } else {
-if (binding.searchResultLayout.visibility != View.VISIBLE) {                binding.searchResultLayout.startAnimation(fadeInAnimation())                binding.searchHistoryList.startAnimation(fadeOutAnimation())            }            binding.searchResultLayout.visibility = View.VISIBLE            binding.clearHistory.visibility = View.GONE            binding.searchHistoryList.visibility = View.GONE            binding.searchByImage.visibility = View.GONE        }    }
+if (binding.searchResultLayout.visibility != View.VISIBLE) {                binding.searchResultLayout.startAnimation(fadeInAnimation())                binding.searchHistoryList.startAnimation(fadeOutAnimation())            }
+binding.searchResultLayout.visibility = View.VISIBLE            binding.clearHistory.visibility = View.GONE            binding.searchHistoryList.visibility = View.GONE            binding.searchByImage.visibility = View.GONE}
+}
 
 private fun fadeInAnimation(): Animation {
-return AlphaAnimation(0f, 1f).apply {            duration = 150        }    }
+return AlphaAnimation(0f, 1f).apply {            duration = 150        }
+}
 
 protected fun fadeOutAnimation(): Animation {
-return AlphaAnimation(1f, 0f).apply {            duration = 150        }    }
+return AlphaAnimation(1f, 0f).apply {            duration = 150        }
+}
 
 protected fun updateClearHistoryVisibility() {        binding.clearHistory.visibility =
 if (searchHistoryAdapter.itemCount > 0) View.VISIBLE else View.GONE    }
 
 fun addHistory() {
-if (::searchHistoryAdapter.isInitialized && binding.searchBarText.text.toString()                .isNotBlank()        ) searchHistoryAdapter.add(binding.searchBarText.text.toString())    }    inner 
+if (::searchHistoryAdapter.isInitialized && binding.searchBarText.text.toString()                .isNotBlank()        ) searchHistoryAdapter.add(binding.searchBarText.text.toString())    }
+inner
 class SearchHeaderViewHolder(
 val binding: ItemSearchHeaderBinding) :        RecyclerView.ViewHolder(binding.root)    
 override fun getItemCount(): Int = 1    

@@ -7,4 +7,5 @@ private val defaultUserAgentProvider: () -> String,) : Interceptor {
     val originalRequest = chain.request()
 return if (originalRequest.header("User-Agent").isNullOrEmpty()) {
     val newRequest = originalRequest                .newBuilder()                .removeHeader("User-Agent")                .addHeader("User-Agent", defaultUserAgentProvider())                .build()            chain.proceed(newRequest)
-} else {            chain.proceed(originalRequest)        }    }}
+} else {            chain.proceed(originalRequest)        }
+}}

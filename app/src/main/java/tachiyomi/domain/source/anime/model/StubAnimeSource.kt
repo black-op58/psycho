@@ -29,6 +29,7 @@ override fun toString(): String =
 if (!isInvalid) "$name " else id.toString()    
 companion object {
     fun from(source: AnimeSource): StubAnimeSource {
-return StubAnimeSource(id = source.id, name = source.name)        }    }}
+return StubAnimeSource(id = source.id, name = source.name)        }
+}}
 
 class AnimeSourceNotInstalledException : Exception()

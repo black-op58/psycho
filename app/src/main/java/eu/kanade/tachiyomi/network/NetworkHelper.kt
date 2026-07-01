@@ -36,8 +36,10 @@ if (PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)) {
 val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)                Authenticator.setDefault(
 object : Authenticator() {
     override fun getPasswordAuthentication(): PasswordAuthentication {
-return PasswordAuthentication(proxyUsername, proxyPassword.toCharArray())                    }                 }              )            }
-} else {            System.clearProperty("socksProxyHost")            System.clearProperty("socksProxyPort")            Authenticator.setDefault(null)        }    }
+return PasswordAuthentication(proxyUsername, proxyPassword.toCharArray())                    }}
+)            }
+} else {            System.clearProperty("socksProxyHost")            System.clearProperty("socksProxyPort")            Authenticator.setDefault(null)        }
+}
 
 val cookieJar = AndroidCookieJar()    
 val client: OkHttpClient = run {

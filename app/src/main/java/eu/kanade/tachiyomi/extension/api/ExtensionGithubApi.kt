@@ -1,6 +1,8 @@
 package eu.kanade.tachiyomi.extension.api
 
-val libVersion = it.extractLibVersion()                libVersion >= ExtensionLoader.ANIME_LIB_VERSION_MIN && libVersion <= ExtensionLoader.ANIME_LIB_VERSION_MAX            }            .map {                AnimeExtension.Available(                    name = it.name.substringAfter("Aniyomi: "),                    pkgName = it.pkg,                    versionName = it.version,                    versionCode = it.code,                    libVersion = it.extractLibVersion(),                    lang = it.lang,                    isNsfw = it.nsfw == 1,                    hasReadme = it.hasReadme == 1,                    hasChangelog = it.hasChangelog == 1,                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),                    apkName = it.apk,                    repository = repository,                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",                )            }    }    suspend 
+val libVersion = it.extractLibVersion()                libVersion >= ExtensionLoader.ANIME_LIB_VERSION_MIN && libVersion <= ExtensionLoader.ANIME_LIB_VERSION_MAX            }
+.map {                AnimeExtension.Available(                    name = it.name.substringAfter("Aniyomi: "),                    pkgName = it.pkg,                    versionName = it.version,                    versionCode = it.code,                    libVersion = it.extractLibVersion(),                    lang = it.lang,                    isNsfw = it.nsfw == 1,                    hasReadme = it.hasReadme == 1,                    hasChangelog = it.hasChangelog == 1,                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),                    apkName = it.apk,                    repository = repository,                    iconUrl = "${repository.removeSuffix("/index.min.json")}/icon/${it.pkg}.png",                )}}
+suspend
 fun findAnimeExtensions(): List<AnimeExtension.Available> {
 return withIOContext {
     val extensions: ArrayList<AnimeExtension.Available> = arrayListOf()            
@@ -20,7 +22,8 @@ return null        }
 val repoOwner = repoUrlParts[1]        
 val repoName = repoUrlParts[2]        fallbackRepoUrl += "$repoOwner/$repoName"        
 val repoBranch = if (repoUrlParts.size > 3) {            repoUrlParts[3]
-} else {            "main"        }        fallbackRepoUrl += "@$repoBranch"
+} else {            "main"        }
+fallbackRepoUrl += "@$repoBranch"
 return fallbackRepoUrl    }}
 
 @Serializable

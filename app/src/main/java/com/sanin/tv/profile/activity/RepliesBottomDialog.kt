@@ -32,13 +32,17 @@ override fun onCreateView(        inflater: LayoutInflater,        container: Vi
 return _binding?.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.repliesRecyclerView.adapter = adapter        binding.repliesRecyclerView.layoutManager = LinearLayoutManager(            context,            LinearLayoutManager.VERTICAL,            false        )        
-val context = requireContext()        binding.replyButton.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", activityId),                null            )        }        activityId = requireArguments().getInt("activityId")        loading(true)        lifecycleScope.launch(Dispatchers.IO) {            loadData()        }    }
+val context = requireContext()        binding.replyButton.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", activityId),                null            )        }
+activityId = requireArguments().getInt("activityId")        loading(true)        lifecycleScope.launch(Dispatchers.IO) {            loadData()}
+}
 
 private suspend 
 fun loadData() {
     val response = Anilist.query.getReplies(activityId)        withContext(Dispatchers.Main) {            loading(false)
-if (response != null) {                replies.clear()                replies.addAll(response.data.page.activityReplies)                adapter.update(                    replies.map {                        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) { i, _ ->                            onClick(i)                        }                    }                )
-} else {                snackString("Failed to load replies")            }        }    }
+if (response != null) {                replies.clear()                replies.addAll(response.data.page.activityReplies)                adapter.update(                    replies.map {                        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) { i, _ ->                            onClick(i)                        }}
+)
+} else {                snackString("Failed to load replies")            }}
+}
 
 private fun onClick(int: Int) {        ContextCompat.startActivity(            requireContext(),            Intent(requireContext(), ProfileActivity::class.java).putExtra("userId", int),            null        )    }
 
@@ -50,10 +54,13 @@ override fun onDismiss(dialog: DialogInterface) {        super.onDismiss(dialog)
 
 private fun notifyDialogClosed() {
 if (didNotifyClose) {
-return        }        didNotifyClose = true        onDialogClosed?.invoke()        onDialogClosed = null    }
+return        }
+didNotifyClose = true        onDialogClosed?.invoke()        onDialogClosed = null    }
 
-override fun onResume() {        super.onResume()        loading(true)        lifecycleScope.launch(Dispatchers.IO) {            loadData()        }    }
+override fun onResume() {        super.onResume()        loading(true)        lifecycleScope.launch(Dispatchers.IO) {            loadData()        }
+}
 
 companion object {
     fun newInstance(activityId: Int): RepliesBottomDialog {
-return RepliesBottomDialog().apply {                arguments = Bundle().apply {                    putInt("activityId", activityId)                }            }        }    }}
+return RepliesBottomDialog().apply {                arguments = Bundle().apply {                    putInt("activityId", activityId)                }}}
+}}

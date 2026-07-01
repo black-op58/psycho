@@ -20,7 +20,9 @@ val callback: AAChartView.AAChartViewCallBack =
 object : AAChartView.AAChartViewCallBack {
     override fun chartViewDidFinishLoad(aaChartView: AAChartView) {                binding.root.visibility = View.VISIBLE            }
 
-override fun chartViewMoveOverEventMessage(                aaChartView: AAChartView,                messageModel: AAMoveOverEventMessageModel            ) {            }        }        binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)        binding.chartView.callBack = callback        binding.chartView.reload()        binding.chartView.aa_drawChartWithChartOptions(aaOptions)        binding.openButton.setOnClickListener {            SingleStatActivity.chartOptions = aaOptions            activity.startActivity(                Intent(activity, SingleStatActivity::class.java)            )        }    }
+override fun chartViewMoveOverEventMessage(                aaChartView: AAChartView,                messageModel: AAMoveOverEventMessageModel            ) {            }}
+binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)        binding.chartView.callBack = callback        binding.chartView.reload()        binding.chartView.aa_drawChartWithChartOptions(aaOptions)        binding.openButton.setOnClickListener {            SingleStatActivity.chartOptions = aaOptions            activity.startActivity(                Intent(activity, SingleStatActivity::class.java)            )}
+}
 
 override fun getLayout(): Int {
 return R.layout.item_chart    }

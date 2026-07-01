@@ -43,7 +43,8 @@ val adjustment = if (isBackgroundDark) 10 else -10                // Adjust the 
 val newR = (r + adjustment).coerceIn(0, 255)                
 val newG = (g + adjustment).coerceIn(0, 255)                
 val newB = (b + adjustment).coerceIn(0, 255)                adjustedColor = Color.rgb(newR, newG, newB)                contrastRatio = getContrastRatio(adjustedColor, backgroundColor)                // Break the loop if the color adjustment does not change (to avoid infinite loop)
-if (newR == r && newG == g && newB == b) {                    break                }            }
+if (newR == r && newG == g && newB == b) {                    break                }
+}
 return adjustedColor        }
 
 fun Int.toCssColor(): String {
@@ -51,4 +52,5 @@ fun Int.toCssColor(): String {
 return base        }
 
 fun Int.toHexColor(): String {
-return String.format("#%06X", 0xFFFFFF and this)        }    }}
+return String.format("#%06X", 0xFFFFFF and this)        }
+}}

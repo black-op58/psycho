@@ -23,4 +23,6 @@ override fun onDetachedFromWindow() {        super.onDetachedFromWindow()       
 
 companion object {        /**         * Sets Flow to this [EditText] that sets [EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING] to imeOptions         * if [BasePreferences.incognitoMode] is true. Some IMEs may not respect this flag.         */        
 fun EditText.setIncognito(viewScope: CoroutineScope) {            Injekt.get<BasePreferences>().incognitoMode().changes()                .onEach {                    imeOptions = if (it) {                        imeOptions or EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
-} else {                        imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()                    }                }                .launchIn(viewScope)        }    }}
+} else {                        imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()                    }}
+.launchIn(viewScope)}
+}}

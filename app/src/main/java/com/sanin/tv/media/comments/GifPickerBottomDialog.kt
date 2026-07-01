@@ -40,16 +40,21 @@ override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int
 override fun afterTextChanged(s: Editable?) {                searchJob?.cancel()                
 val query = s?.toString()?.trim() ?: ""                searchJob = CoroutineScope(Dispatchers.Main).launch {                    delay(800)
 if (query.isEmpty()) loadTrending()
-else searchGifs(query)                }            }        })        loadTrending()    }
+else searchGifs(query)                }}
+})        loadTrending()    }
 
 private fun loadTrending() {        binding.gifProgressBar.visibility = View.VISIBLE        binding.gifRecycler.visibility = View.GONE        CoroutineScope(Dispatchers.IO).launch {
     val gifs = try {
-    val response = client.get(                    "$baseUrl/v2/featured?key=$apiKey&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )                parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }            withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)                    dismiss()                }            }        }    }
+    val response = client.get(                    "$baseUrl/v2/featured?key=$apiKey&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )                parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }
+    withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)                    dismiss()}}}
+    }
 
 private fun searchGifs(query: String) {        binding.gifProgressBar.visibility = View.VISIBLE        binding.gifRecycler.visibility = View.GONE        CoroutineScope(Dispatchers.IO).launch {
     val gifs = try {
     val encodedQuery = java.net.URLEncoder.encode(query, "UTF-8")                
-val response = client.get(                    "$baseUrl/v2/search?key=$apiKey&q=$encodedQuery&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )                parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }            withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)                    dismiss()                }            }        }    }
+val response = client.get(                    "$baseUrl/v2/search?key=$apiKey&q=$encodedQuery&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )                parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }
+withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)                    dismiss()}}}
+}
 
 private fun parseGifs(json: String): List<String> {
 return try {
@@ -61,7 +66,9 @@ for (i in 0 until results.length()) {
 val formats = item.optJSONObject("media_formats")                
 val tinygif = formats?.optJSONObject("tinygif")                
 val url = tinygif?.optString("url") ?: item.optString("url")
-if (url.isNotEmpty()) urls.add(url)            }            urls        } catch (_: Exception) {            emptyList()        }    }
+if (url.isNotEmpty()) urls.add(url)            }
+urls        } catch (_: Exception) {            emptyList()}
+}
 
 override fun onDestroyView() {        super.onDestroyView()        _binding = null    }
 
@@ -75,7 +82,8 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifViewHolder
 return GifViewHolder(binding)        }
 
 override fun onBindViewHolder(holder: GifViewHolder, position: Int) {
-    val url = gifs[position]            holder.binding.gifImage.loadImage(url)            holder.binding.root.setOnClickListener { onClick(url) }        }
+    val url = gifs[position]            holder.binding.gifImage.loadImage(url)            holder.binding.root.setOnClickListener { onClick(url) }
+    }
 
 override fun getItemCount() = gifs.size    }
 

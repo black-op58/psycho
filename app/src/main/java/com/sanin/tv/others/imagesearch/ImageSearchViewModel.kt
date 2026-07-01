@@ -14,7 +14,8 @@ class ImageSearchViewModel : ViewModel() {
 private val url = "https://api.trace.moe/search?cutBorders&anilistInfo"    suspend 
 fun analyzeImage(inputStream: InputStream) {
     val requestBody = MultipartBody.Builder()            .setType(MultipartBody.FORM)            .addFormDataPart(                "image",                "image.jpg",                inputStream.readBytes().toRequestBody("image/jpeg".toMediaType())            )            .build()        
-val res = try {            client.post(url, requestBody = requestBody).parsed<SearchResult>()        } catch (e: Exception) {            SearchResult(error = e.message)        }        searchResultLiveData.postValue(res)    }
+val res = try {            client.post(url, requestBody = requestBody).parsed<SearchResult>()        } catch (e: Exception) {            SearchResult(error = e.message)        }
+searchResultLiveData.postValue(res)    }
 
 fun clearResults() {        searchResultLiveData.postValue(SearchResult())    }
 
@@ -36,7 +37,8 @@ val video: String? = null,
 val image: String? = null    ) {
     val episode: String?            get() = rawEpisode?.toString()        
 override fun toString(): String {
-return "$image & $video"        }    }
+return "$image & $video"        }
+}
 
 @Serializable    
 data class AnilistData(        
