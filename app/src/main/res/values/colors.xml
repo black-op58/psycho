@@ -191,4 +191,5 @@
     <color name="md_theme_dark_11_scrim">#000000</color>
     <color name="anilist_blue">#2D6A0A</color>
     <color name="white">#FFFFFF</color>
-</resources>
+    <color name="ic_banner_background">#FF6200EE</color>
+</resources>color/ic_banner_background
