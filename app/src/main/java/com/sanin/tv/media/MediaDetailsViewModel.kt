@@ -97,7 +97,8 @@ if (post) {            episode.postValue(ep)            MainScope().launch(Dispa
 }
 
 val timeStamps = MutableLiveData<List<AniSkip.Stamp>?>()    
-private val timeStampsMap: MutableMap<Int, List<AniSkip.Stamp>?> = mutableMapOf()    suspend 
+private val timeStampsMap: MutableMap<Int, List<AniSkip.Stamp>?> = mutableMapOf()
+suspend 
 fun loadTimeStamps(        malId: Int?,        episodeNum: Int?,        duration: Long,        useProxyForTimeStamps: Boolean,        extensionTimestamps: List<eu.kanade.tachiyomi.animesource.model.TimeStamp> = emptyList()    ) {        episodeNum ?: return
 if (timeStampsMap.containsKey(episodeNum))
 return timeStamps.postValue(timeStampsMap[episodeNum])        // Extension timestamps take priority
@@ -155,7 +156,8 @@ novelChapters.postValue(novelLoaded)}
 suspend
 fun overrideNovelChapters(i: Int, source: ShowResponse, mediaId: Int) {        novelSources.saveResponse(i, mediaId, source)        novelLoaded.remove(i)    }
 
-val book: MutableLiveData<Book> = MutableLiveData(null)    suspend 
+val book: MutableLiveData<Book> = MutableLiveData(null)
+suspend 
 fun loadBook(novel: ShowResponse, i: Int) {        tryWithSuspend {            book.postValue(                novelSources[i]?.loadBook(novel.link, novel.extra) ?: return@tryWithSuspend            )        }
 }
 

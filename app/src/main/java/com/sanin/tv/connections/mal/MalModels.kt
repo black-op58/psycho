@@ -152,7 +152,8 @@ val embedUrl: String? = null,) {
     fun effectiveYoutubeId(): String? {
 if (!youtubeId.isNullOrBlank()) return youtubeId
 val url = embedUrl ?: return null
-val regex = Regex("""youtube(?:-nocookie)?\.com/embed/([\w-]+)""")        return regex.find(url)?.groupValues?.getOrNull(1)    }}
+val regex = Regex("""youtube(?:-nocookie)?\.com/embed/([\w-]+)""")
+return regex.find(url)?.groupValues?.getOrNull(1)    }}
 
 @Serializable
 data class JikanTheme(    

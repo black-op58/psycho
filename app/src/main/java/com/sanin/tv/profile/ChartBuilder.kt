@@ -111,5 +111,7 @@ let spanStyleEndStr = '</span> <br/>'
 wholeContentStr += spanStyleStartStr + this.point.series.name + ': ' + this.point.y + spanStyleEndStr
 }
 return wholeContentStr
-}        """.trimIndent()                    }                }            }        }
+}        """.trimIndent()                    }
+        }            }
+        }
 }

@@ -15,7 +15,8 @@ val season: Int,
 val episode: Int)    
 private val jsonParser = Json { ignoreUnknownKeys = true }
 
-private val episodeCache = HashMap<String, SeasonEpisode>()    suspend 
+private val episodeCache = HashMap<String, SeasonEpisode>()
+suspend 
 fun mapEpisode(media: Media, episodeNumber: Int, episode: Episode? = null): SeasonEpisode {
     val cacheKey = "${media.id}-$episodeNumber"
 if (episodeCache.containsKey(cacheKey)) {

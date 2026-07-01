@@ -4,7 +4,8 @@ import com.sanin.tv.tryWithSuspend
 import kotlinx.serialization.Serializable
 import java.net.URLEncoder
 object AniSkip {    
-@Suppress("BlockingMethodInNonBlockingContext")    suspend 
+@Suppress("BlockingMethodInNonBlockingContext")
+suspend 
 fun getResult(        malId: Int,        episodeNumber: Int,        episodeLength: Long,        useProxyForTimeStamps: Boolean    ): List<Stamp>? {
     val url =            "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=$episodeLength"
 return tryWithSuspend {

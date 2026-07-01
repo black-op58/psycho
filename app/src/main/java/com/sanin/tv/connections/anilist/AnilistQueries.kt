@@ -149,7 +149,8 @@ private fun missingSequelsAllListSourceQuery(): String {
 
 private val batchSize = 50    
 private fun missingSequelsLookupQuery(ids: List<Int>): String {
-    val idsString = ids.joinToString(",")        return """ { Page(page: 1, perPage: $batchSize) { media( id_in: [$idsString], type: ANIME, status_in: [RELEASING, FINISHED], onList: false ) { id mediaListEntry { progress progressVolumes 
+    val idsString = ids.joinToString(",")
+return """ { Page(page: 1, perPage: $batchSize) { media( id_in: [$idsString], type: ANIME, status_in: [RELEASING, FINISHED], onList: false ) { id mediaListEntry { progress progressVolumes 
 private score(format: POINT_100) status } idMal type isAdult popularity status(version: 2) chapters volumes episodes nextAiringEpisode { episode } meanScore isFavourite format bannerImage coverImage { large } title { english romaji userPreferred } startDate { year } } } } """.trimIndent()    }
 
 private fun extractMissingSequelIds(completedEntries: List<MediaList>?): Set<Int> {
@@ -206,7 +207,8 @@ fun initHomePage(): Map<String, ArrayList<Media>> {
 val hidePrivate = PrefManager.getVal<Boolean>(PrefName.HidePrivate)        
 val removedMedia = ArrayList<Media>()        
 val toShow = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toMutableList()        
-val queries = mutableListOf<String>()        if (toShow.getOrNull(0) == true) {            queries.add("""currentAnime: ${continueMediaQuery("ANIME", "CURRENT")}""")        }
+val queries = mutableListOf<String>()
+if (toShow.getOrNull(0) == true) {            queries.add("""currentAnime: ${continueMediaQuery("ANIME", "CURRENT")}""")        }
 
 val response = if (queries.isEmpty()) {            null
 } else {
@@ -231,7 +233,10 @@ fun getGenresAndTags(): Boolean {
     var genres: ArrayList<String>? = PrefManager.getVal<Set<String>>(PrefName.GenresList)            .toMutableList() as ArrayList<String>?        
 val adultTags = PrefManager.getVal<Set<String>>(PrefName.TagsListIsAdult).toMutableList()        
 val nonAdultTags =            PrefManager.getVal<Set<String>>(PrefName.TagsListNonAdult).toMutableList()        
-var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else            mapOf(                true to adultTags.sortedBy { it },                false to nonAdultTags.sortedBy { it }            )        if (genres.isNullOrEmpty()) {            executeQuery<Query.GenreCollection>(                """{GenreCollection}""",                force = true,                useToken = false            )?.data?.genreCollection?.apply {                genres = arrayListOf()                forEach {                    genres?.add(it)                }                PrefManager.setVal(PrefName.GenresList, genres?.toSet())            }        }        if (tags == null) {            executeQuery<Query.MediaTagCollection>(                """{ MediaTagCollection { name isAdult } }""",                force = true            )?.data?.mediaTagCollection?.apply {
+var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else            mapOf(                true to adultTags.sortedBy { it },                false to nonAdultTags.sortedBy { it }            )
+if (genres.isNullOrEmpty()) {            executeQuery<Query.GenreCollection>(                """{GenreCollection}""",                force = true,                useToken = false            )?.data?.genreCollection?.apply {                genres = arrayListOf()                forEach {                    genres?.add(it)                }                PrefManager.setVal(PrefName.GenresList, genres?.toSet())            }
+        }
+        if (tags == null) {            executeQuery<Query.MediaTagCollection>(                """{ MediaTagCollection { name isAdult } }""",                force = true            )?.data?.mediaTagCollection?.apply {
     val adult = mutableListOf<String>()                
 val good = mutableListOf<String>()                forEach { node ->
 if (node.isAdult == true) adult.add(node.name)
@@ -270,10 +275,14 @@ fun getGenreThumbnail(genre: String): Genre? {
 if (genres.checkGenreTime(genre)) {
 try {
     val genreQuery =                    """{ Page(perPage: 10){media(genre:"$genre", sort: TRENDING_DESC, type: ANIME, countryOfOrigin:"JP") {id bannerImage title{english romaji userPreferred} } } }"""                executeQuery<Query.Page>(genreQuery, force = true)?.data?.page?.media?.forEach {
-    if (genres.checkId(it.id) && it.bannerImage != null) {                        genres[genre] = Genre(                            genre,                            it.id,                            it.bannerImage!!,                            System.currentTimeMillis()                        )                        saveSerializableMap("genre_thumb", genres)                        return genres[genre]                    }}
+    if (genres.checkId(it.id) && it.bannerImage != null) {                        genres[genre] = Genre(                            genre,                            it.id,                            it.bannerImage!!,                            System.currentTimeMillis()                        )                        saveSerializableMap("genre_thumb", genres)
+return genres[genre]                    }}
     } catch (e: Exception) {                logError(e)}
     } else {
-    return genres[genre]        }        return null    }               $standardPageInformation               characters(search: "$search") {                  ${characterInformation(false)}               }             }           }        """.prepare()        
+    return genres[genre]        }
+        return null    }               $standardPageInformation               characters(search: "$search") {                  ${characterInformation(false)}
+        }             }
+        }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.characters != null) {
     val responseArray = arrayListOf<Character>()            response.characters?.forEach { i ->                responseArray.add(                    Character(                        i.id,                        i.name?.full,                        i.image?.medium ?: i.image?.large,                        null,                        null.toString(),                        i.isFavourite ?: false,                        i.description,                        i.age,                        i.gender,                        i.dateOfBirth,                    )                )            }
@@ -284,7 +293,9 @@ return null    }
 suspend
 fun searchStudios(page: Int, search: String?): StudioSearchResults? {
 if (search.isNullOrBlank()) return null
-val query = """           {             Page(page: $page, perPage: $ITEMS_PER_PAGE) {               $standardPageInformation               studios(search: "$search") {                  ${studioInformation(1, 1)}               }             }           }        """.prepare()        
+val query = """           {             Page(page: $page, perPage: $ITEMS_PER_PAGE) {               $standardPageInformation               studios(search: "$search") {                  ${studioInformation(1, 1)}
+        }             }
+        }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.studios != null) {
     val responseArray = arrayListOf<Studio>()            response.studios?.forEach { i ->                responseArray.add(                    Studio(                        i.id.toString(),                        i.name ?: return null,                        i.isFavourite ?: false,                        i.favourites,                        i.media?.edges?.firstOrNull()?.node?.let { it.coverImage?.large }
@@ -296,7 +307,9 @@ return null    }
 suspend
 fun searchStaff(page: Int, search: String?): StaffSearchResults? {
 if (search.isNullOrBlank()) return null
-val query = """           {             Page(page: $page, perPage: $ITEMS_PER_PAGE) {               $standardPageInformation               staff(search: "$search") {                  ${staffInformation(1, 1)}               }             }           }        """.prepare()        
+val query = """           {             Page(page: $page, perPage: $ITEMS_PER_PAGE) {               $standardPageInformation               staff(search: "$search") {                  ${staffInformation(1, 1)}
+        }             }
+        }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.staff != null) {
     val responseArray = arrayListOf<Author>()            response.staff?.forEach { i ->                responseArray.add(                    Author(                        i.id,                        i.name?.userPreferred ?: return null,                        i.image?.large,                        null,                        null,                        null                    )                )            }
@@ -306,7 +319,9 @@ return StaffSearchResults(                search = search,                result
 return null    }
 suspend
 fun searchUsers(page: Int, search: String?): UserSearchResults? {
-    val query = """           {             Page(page: $page, perPage: $ITEMS_PER_PAGE) {               $standardPageInformation               users(search: "$search") {                  ${userInformation()}               }             }           }        """.prepare()        
+    val query = """           {             Page(page: $page, perPage: $ITEMS_PER_PAGE) {               $standardPageInformation               users(search: "$search") {                  ${userInformation()}
+        }             }
+        }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.users != null) {
     val users = response.users?.map { user ->                User(                    user.id,                    user.name ?: return null,                    user.avatar?.medium,                    user.bannerImage                )            } ?: return null
@@ -350,7 +365,8 @@ if (yearMedia.contains("CANCELLED")) {
 return studio    }
 suspend
 fun getAuthorDetails(author: Author): Author {
-    fun query(page: Int = 0) = """ {  Staff(id: ${author.id}) {    ${staffInformation(page, ITEMS_PER_PAGE)}    characters(page: $page,sort:FAVOURITES_DESC) {      $standardPageInformation      nodes{        ${characterInformation(false)}      }    }  }}""".prepare()        
+    fun query(page: Int = 0) = """ {  Staff(id: ${author.id}) {    ${staffInformation(page, ITEMS_PER_PAGE)}    characters(page: $page,sort:FAVOURITES_DESC) {      $standardPageInformation      nodes{        ${characterInformation(false)}
+        }    }  }}""".prepare()        
 var hasNextPage = true
 val yearMedia = mutableMapOf<String, ArrayList<Media>>()        
 var page = 0

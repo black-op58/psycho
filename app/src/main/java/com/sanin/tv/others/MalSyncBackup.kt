@@ -15,7 +15,8 @@ val identifier: String,
 val title: String,        
 val url: String? = null,        
 val image: String? = null,        
-val active: Boolean? = null,    )    suspend 
+val active: Boolean? = null,    )
+suspend 
 fun get(id: Int, name: String, dub: Boolean = false): ShowResponse? {
 return tryWithSuspend {
     val json =                client.get("https://raw.githubusercontent.com/MALSync/MAL-Sync-Backup/master/data/anilist/anime/$id.json")
