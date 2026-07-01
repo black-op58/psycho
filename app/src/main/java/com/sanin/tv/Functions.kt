@@ -186,7 +186,8 @@ fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)    
 val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)    
-val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)    darkMode.apply {        AppCompatDelegate.setDefaultNightMode(
+val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
+    darkMode.apply {        AppCompatDelegate.setDefaultNightMode(
 when (this) {                2 -> AppCompatDelegate.MODE_NIGHT_YES                1 -> AppCompatDelegate.MODE_NIGHT_NO
 else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM            }        )    }
 if (immersiveMode) {
@@ -561,7 +562,8 @@ return view    }}
 
 @SuppressLint("ClickableViewAccessibility")
 class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
-    private var mGestureDetector: GestureDetector? = null    constructor(context: Context) : super(context) {        setup()    }    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {        setup()    }    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    ) {        setup()    }
+    private var mGestureDetector: GestureDetector? = null
+    constructor(context: Context) : super(context) {        setup()    }    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {        setup()    }    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    ) {        setup()    }
 
 private fun setup() {        mGestureDetector =            GestureDetector(context, 
 object : GestureDetector.SimpleOnGestureListener() {
