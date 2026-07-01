@@ -14,7 +14,8 @@ val linkUrl = matchResult.groupValues[3]                """<a href="$linkUrl"><i
 private fun String.convertImageToHtml(): String {
     val regex = """!\[(.*?)]\((.*?)\)""".toRegex()            
 val anilistRegex = """img\(.*?\)""".toRegex()            
-val markdownImage = regex.replace(this) { matchResult ->                
+val markdownImage = regex.replace(this) { 
+        m
 val altText = matchResult.groupValues[1]                
 val imageUrl = matchResult.groupValues[2]                """<img src="$imageUrl" alt="$altText">"""            }
         return anilistRegex.replace(markdownImage) { matchResult ->                
@@ -34,7 +35,8 @@ return regex.replace(this) { matchResult ->
 val url = matchResult.groupValues[1]                
 val id = getYoutubeId(url)
 if (id.isNotEmpty()) {                    """<div>                    <a href="https://www.youtube.com/watch?v=$id"><img src="https://i3.ytimg.com/vi/$id/maxresdefault.jpg" alt="$url"></a>                    <align center>                    <a href="https://www.youtube.com/watch?v=$id">Youtube Link</a>                    </align>                    </div>""".trimIndent()                } else {                    """<a href="$url">Youtube Video</a>"""                }
-        }        }
+        }
+    }
 
 private fun String.replaceLeftovers(): String {
 return this.replace("&nbsp
@@ -59,7 +61,8 @@ return html                .convertNestedImageToHtml()                .convertIm
 
 fun getFullAniHTML(html: String, textColor: Int): String {
     val basicHtml = getBasicAniHTML(html)            
-val returnHtml = """            <html><head>    <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">        <style>            body {                color: ${textColor.toCssColor()}
+val returnHtml = """            <html><head>    <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">        <style>            body {                
+        c
 margin: 0
 padding: 0
 max-width: 100%

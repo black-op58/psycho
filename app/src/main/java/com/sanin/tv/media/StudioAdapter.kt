@@ -27,7 +27,8 @@ val studio = studioList.getOrNull(position) ?: return        binding.itemCompact
 
 override fun getItemCount(): Int = studioList.size    inner 
 class StudioViewHolder(
-val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {
+val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
     val studio = studioList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        StudioActivity::class.java                    ).putExtra("studio", studio as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )            }
     itemView.setOnLongClickListener {                copyToClipboard(                    studioList[bindingAdapterPosition].name                )
 true            }}

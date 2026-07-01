@@ -28,5 +28,6 @@ if (other !is Filter<*>) return false
 return name == other.name && state == other.state    }
 
 override fun hashCode(): Int {
-    var result = name.hashCode()        result = 31 * result + (state?.hashCode() ?: 0)
+    var result = name.hashCode();
+        result = 31 * result + (state?.hashCode() ?: 0)
 return result    }}

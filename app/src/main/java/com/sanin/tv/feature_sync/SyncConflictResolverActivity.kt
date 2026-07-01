@@ -46,7 +46,8 @@ class SyncConflictResolverActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
     try {
-    val conflicts = withContext(Dispatchers.IO) { loadConflicts() }
+    val conflicts = withContext(Dispatchers.IO) { 
+        l
                 progress.visibility = View.GONE
                 subtitle.text = if (conflicts.isEmpty())
                     "✓ No conflicts found. Your lists are in sync!"
@@ -108,10 +109,12 @@ class SyncConflictResolverActivity : AppCompatActivity() {
             })
         }
 
-        val btnRow = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val btnRow = LinearLayout(this).apply { 
+        o
         card.addView(btnRow)
 
-        val statusLabel = TextView(this).apply { textSize = 12f }
+        val statusLabel = TextView(this).apply { 
+        t
 
         fun addBtn(label: String, res: SyncResolution) {
             btnRow.addView(Button(this).apply {

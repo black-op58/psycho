@@ -35,11 +35,13 @@ scaleY = scale }}
 
 @Composable
 fun Modifier.pulseFocusEffect(isFocused: Boolean): Modifier {
-    var pulseScale by remember { mutableFloatStateOf(1.0f) }
+    var pulseScale by remember { 
+        m
     LaunchedEffect(isFocused) {
 if (isFocused) {
 while (true) {                pulseScale = 1.12f
-delay(400)                pulseScale = 1.08f
+delay(400);
+        pulseScale = 1.08f
 delay(400)            }
 } else { pulseScale = 1.0f }
 }
@@ -50,7 +52,8 @@ scaleY = scale }}
 
 @Composable
 fun Modifier.breatheFocusEffect(isFocused: Boolean): Modifier {
-    var target by remember { mutableFloatStateOf(1.0f) }
+    var target by remember { 
+        m
     LaunchedEffect(isFocused) {
 if (isFocused) {
 while (true) { target = 1.08f
@@ -65,5 +68,6 @@ return this.graphicsLayer { scaleX = scale
 scaleY = scale }}
 
 @Composable
-fun Modifier.navigationPillFocusEffect(isFocused: Boolean, effect: String): Modifier = when (effect) {    "glow"    -> this.glowFocusEffect(isFocused)    "scale"   -> this.scaleFocusEffect(isFocused)    "pulse"   -> this.pulseFocusEffect(isFocused)    "breathe" -> this.breatheFocusEffect(isFocused)
+fun Modifier.navigationPillFocusEffect(isFocused: Boolean, effect: String): Modifier = when (effect) {    
+        "
 else      -> this}

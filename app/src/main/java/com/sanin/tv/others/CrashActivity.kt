@@ -20,12 +20,16 @@ class CrashActivity : AppCompatActivity() {
 private lateinit var stackTrace: String    
 private lateinit var logcat: String    /** Which content is currently shown — false = stack trace, true = logcat */    
 private var showingLogcat = false    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,            WindowManager.LayoutParams.FLAG_SECURE        )        binding = ActivityCrashBinding.inflate(layoutInflater)        setContentView(binding.root)
+            WindowManager.LayoutParams.FLAG_SECURE,            WindowManager.LayoutParams.FLAG_SECURE        );
+        binding = ActivityCrashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight            bottomMargin = navBarHeight        }
-stackTrace = intent.getStringExtra("stackTrace") ?: "No stack trace available"        logcat = intent.getStringExtra("logcat") ?: "No logcat available"        // Show stack trace by default        showReport(stackTrace)        binding.crashReportView.setOnKeyListener(View.OnKeyListener { _, _, _ ->
+stackTrace = intent.getStringExtra("stackTrace") ?: "No stack trace available"        logcat = intent.getStringExtra("logcat") ?: "No logcat available"        // Show stack trace by default        showReport(stackTrace)
+        binding.crashReportView.setOnKeyListener(View.OnKeyListener { _, _, _ ->
             true // Blocks input from hardware keyboards.        })        binding.copyButton.setOnClickListener {
     val label = if (showingLogcat) "Logcat" else "Crash log"            copyToClipboard(label, currentContent())        }
     binding.shareAsTextFileButton.setOnClickListener {            shareAsTextFile(currentContent(), if (showingLogcat) "logcat.txt" else "crash_log.txt")}
@@ -36,15 +40,18 @@ if (showingLogcat) {                showReport(logcat)                binding.to
 }
 
 private fun currentContent() = if (showingLogcat) logcat else stackTrace    
-private fun showReport(content: String) {        binding.crashReportView.setText(content)        // Scroll to bottom for logcat (most recent lines last), top for stack trace
+private fun showReport(content: String) {        
+        b
 if (showingLogcat) {            binding.crashReportScrollView.post {                binding.crashReportScrollView.fullScroll(View.FOCUS_DOWN)            }
 } else {            binding.crashReportScrollView.scrollTo(0, 0)        }
 }
 
 private fun shareAsTextFile(content: String, fileName: String) {
-    val file = File(cacheDir, fileName)        file.writeText(content)
+    val file = File(cacheDir, fileName)
+        file.writeText(content)
         
 val uri = FileProvider.getUriForFile(this, "${packageName}.provider", file)        
-val intent = Intent(Intent.ACTION_SEND).apply {            type = "text/plain"            putExtra(Intent.EXTRA_STREAM, uri)            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+val intent = Intent(Intent.ACTION_SEND).apply {            
+        t
         }
 startActivity(Intent.createChooser(intent, getString(R.string.share)))    }

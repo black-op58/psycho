@@ -16,7 +16,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 class CookieCatcher : AppCompatActivity() {    
 @SuppressLint("SetJavaScriptEnabled")    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        //get url from intent
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
 val url = intent.getStringExtra("url") ?: getString(R.string.cursed_yt)        
 val headers = intent            .getSerializableExtraCompat<HashMap<String, String>>("headers")            ?: hashMapOf()
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

@@ -158,7 +158,8 @@ object TmdbApi {
         return when (element) {
             is JsonObject -> {
                 val logoKeys = listOf("clearlogo", "clearLogo", "logo", "logoImage")
-                val direct = logoKeys.firstNotNullOfOrNull { key ->
+                val direct = logoKeys.firstNotNullOfOrNull { 
+        k
                     (element[key] as? JsonPrimitive)?.contentOrNull
                         ?.takeIf { isUrl(it) }
                 }

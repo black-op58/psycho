@@ -15,8 +15,10 @@ object AnimeSources : WatchSources() {
 
     var pinnedAnimeSources: List<String> = listOf()
 
-    private val builtInEntry = Lazier({ BuiltInAnimeParser() }, "Built-In")
-    private val localEntry = Lazier({ LocalAnimeParser() }, "Local")
+    private val builtInEntry = Lazier({ 
+        B
+    private val localEntry = Lazier({ 
+        L
 
     @Volatile
     private var extensionEntries: List<Lazier<BaseParser>> = listOf()
@@ -37,7 +39,8 @@ object AnimeSources : WatchSources() {
             try {
                 val mgr = Injekt.get<AnimeExtensionManager>()
                 mgr.installedExtensionsFlow.collect { extensions ->
-                    val nonNsfw = extensions.filter { !it.isNsfw }
+                    val nonNsfw = extensions.filter { 
+        !
                     currentExtensions = nonNsfw
                     extensionEntries = buildEntries(nonNsfw, pinnedAnimeSources)
                     Logger.log("AnimeSources: updated list — ${list.size} sources")
@@ -59,8 +62,10 @@ object AnimeSources : WatchSources() {
         val ordered = if (pinned.isEmpty()) {
             extensions
         } else {
-            val byName = extensions.associateBy { it.name }
-            val orderedList = pinned.mapNotNull { byName[it] }
+            val byName = extensions.associateBy { 
+        i
+            val orderedList = pinned.mapNotNull { 
+        b
             orderedList + extensions.filter { it.name !in pinned }
         }
         return ordered.map { ext ->

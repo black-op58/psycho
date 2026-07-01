@@ -20,13 +20,15 @@ override val saveName = "Local"
 override val hostUrl = "Local"    
 override val isNSFW = false    
 override suspend 
-fun loadEpisodes(        animeLink: String,        extra: Map<String, String>?,        sAnime: SAnime    ): List<Episode> {        sAnime.url = animeLink
+fun loadEpisodes(        animeLink: String,        extra: Map<String, String>?,        sAnime: SAnime    ): List<Episode> {        
+        s
 val sEpisodes = localSource.getEpisodeList(sAnime)
 return sEpisodes.map { sEpisode ->            
 val extraData = mutableMapOf<String, String>()            extraData["animeUrl"] = animeLink
             extraData["episodeUrl"] = sEpisode.url           // fallback : thumbnail/poster
 val videoUri = localSource.cachedVideoUris[sEpisode.url] ?: localSource.getVideoUri(sEpisode)            
-val thumbFileUrl = videoUri?.let { FileUrl(it.toString()) }
+val thumbFileUrl = videoUri?.let { 
+        F
 
 val episodeNumberStr = sEpisode.episode_number.let {
 if (it == -1f) sEpisode.name else {
@@ -41,7 +43,8 @@ return listOf(            VideoServer(                name = "Local",           
 override suspend 
 fun autoSearch(mediaObj: com.sanin.tv.media.Media): ShowResponse? {
     val folderName = mediaObj.folderName ?: mediaObj.name ?: mediaObj.mainName()        
-val sAnime = SAnime.create().apply {            title = folderName            url = folderName        }
+val sAnime = SAnime.create().apply {            
+        t
 return ShowResponse(            name = folderName,            link = folderName,            coverUrl = FileUrl(""),            sAnime = sAnime        )    }
 
 override suspend 
@@ -52,7 +55,8 @@ return searchResults.animes.map { sAnime ->            ShowResponse(            
 
 override suspend 
 fun loadByVideoServers(        episodeUrl: String,        extra: Map<String, String>?,        sEpisode: SEpisode,        callback: (VideoExtractor) -> Unit    ) {
-    val server = loadVideoServers(episodeUrl, extra, sEpisode).first()        LocalVideoExtractor(server, localSource).apply {            tryWithSuspend {                load()            }
+    val server = loadVideoServers(episodeUrl, extra, sEpisode).first()
+        LocalVideoExtractor(server, localSource).apply {            tryWithSuspend {                load()            }
     callback.invoke(this)}
     }
 
@@ -67,14 +71,16 @@ private val localSource: LocalAnimeSource) : VideoExtractor() {
 override suspend 
 fun extract(): VideoContainer {
     val episodeUrl = videoServer.extraData?.get("episodeUrl") ?: ""        
-val sEpisode = SEpisodeImpl().apply {            url = episodeUrl            name = episodeUrl.substringAfterLast("/").substringBeforeLast(".")        }
+val sEpisode = SEpisodeImpl().apply {            
+        u
 
 val videoUri = localSource.getVideoUri(sEpisode)                
 var quality: Int? = null
 if (videoUri != null) {            currContext()?.let { ctx ->                
 val retriever = MediaMetadataRetriever()
 try {                    retriever.setDataSource(ctx, videoUri)                    
-val heightStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)                    quality = heightStr?.toIntOrNull()
+val heightStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+        quality = heightStr?.toIntOrNull()
                 } catch (e: Exception) {                    // Ignore metadata ext errors                } finally {
 try {                        retriever.release()                    } catch (e: Exception) {}}}}
 // show resolution

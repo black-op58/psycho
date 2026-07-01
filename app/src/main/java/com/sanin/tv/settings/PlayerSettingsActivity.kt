@@ -43,12 +43,14 @@ private val player = "player_settings"
 var media: Media? = null
 var subtitle: Subtitle? = null    
 private val Int.toSP        get() =            TypedValue.applyDimension(                TypedValue.COMPLEX_UNIT_SP,                this.toFloat(),                Resources.getSystem().displayMetrics,            )    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityPlayerSettingsBinding.inflate(layoutInflater)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         setContentView(binding.root)
         initActivity(this)
         onBackPressedDispatcher.addCallback(this) {
             finish()        }
-try {            media = intent.getSerialized("media")            subtitle = intent.getSerialized("subtitle")
+try {            media = intent.getSerialized("media");
+        subtitle = intent.getSerialized("subtitle")
         } catch (e: Exception) {            toast(e.toString())        }
 binding.playerSettingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight            bottomMargin = navBarHeight}
 binding.playerSettingsBack.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
@@ -56,14 +58,18 @@ binding.playerSettingsBack.setOnClickListener {            onBackPressedDispatch
 val speeds =            arrayOf(                0.25f,                0.33f,                0.5f,                0.66f,                0.75f,                1f,                1.15f,                1.25f,                1.33f,                1.5f,                1.66f,                1.75f,                2f,            )        
 val cursedSpeeds = arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)        
 var curSpeedArr = if (PrefManager.getVal(PrefName.CursedSpeeds)) cursedSpeeds else speeds
-var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()        binding.playerSettingsSpeed.text =
-            getString(                R.string.default_playback_speed,                speedsName[PrefManager.getVal(PrefName.DefaultSpeed)],            )        binding.playerSettingsSpeed.setOnClickListener {            customAlertDialog().apply {                setTitle(getString(R.string.default_speed))                singleChoiceItems(
+var speedsName = curSpeedArr.map { 
+        "
+            getString(                R.string.default_playback_speed,                speedsName[PrefManager.getVal(PrefName.DefaultSpeed)],            )        binding.playerSettingsSpeed.setOnClickListener {            customAlertDialog().apply {                setTitle(getString(R.string.default_speed))
+        singleChoiceItems(
                     speedsName,                    PrefManager.getVal(PrefName.DefaultSpeed),                ) { i ->                    PrefManager.setVal(PrefName.DefaultSpeed, i)                    binding.playerSettingsSpeed.text =
                         getString(R.string.default_playback_speed, speedsName[i])                }
 show()}}
 binding.playerSettingsCursedSpeeds.isChecked = PrefManager.getVal(PrefName.CursedSpeeds)        binding.playerSettingsCursedSpeeds.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.CursedSpeeds, isChecked)            curSpeedArr = if (isChecked) cursedSpeeds else speeds
-val newDefaultSpeed = if (isChecked) 0 else 5            PrefManager.setVal(PrefName.DefaultSpeed, newDefaultSpeed)            speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
+            PrefManager.setVal(PrefName.CursedSpeeds, isChecked);
+        curSpeedArr = if (isChecked) cursedSpeeds else speeds
+val newDefaultSpeed = if (isChecked) 0 else 5            PrefManager.setVal(PrefName.DefaultSpeed, newDefaultSpeed);
+        speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
             binding.playerSettingsSpeed.text =
                 getString(                    R.string.default_playback_speed,                    speedsName[PrefManager.getVal(PrefName.DefaultSpeed)],                )        }
 // Time Stamp        binding.playerSettingsTimeStamps.isChecked = PrefManager.getVal(PrefName.TimeStampsEnabled)        binding.playerSettingsTimeStamps.setOnCheckedChangeListener { _, isChecked ->
@@ -125,7 +131,8 @@ binding.playerSettingsAdditionalCodec.isChecked =            PrefManager.getVal(
             PrefManager.setVal(PrefName.UseAdditionalCodec, isChecked)        }
 
 val resizeModes = arrayOf("Original", "Zoom", "Stretch")        binding.playerResizeMode.setOnClickListener {
-            customAlertDialog().apply {                setTitle(getString(R.string.default_resize_mode))                singleChoiceItems(
+            customAlertDialog().apply {                setTitle(getString(R.string.default_resize_mode))
+        singleChoiceItems(
                     resizeModes,                    PrefManager.getVal<Int>(PrefName.Resize),                ) { count ->                    PrefManager.setVal(PrefName.Resize, count)                }
 show()}}
 // Online Subtitles        binding.playerSettingsOnlineSubtitles.isChecked = PrefManager.getVal(PrefName.OnlineSubtitlesEnabled)        binding.playerSettingsOnlineSubtitles.setOnCheckedChangeListener { _, isChecked ->
@@ -135,94 +142,125 @@ binding.playerSettingsOnlineProviders.isEnabled = binding.playerSettingsOnlineSu
 val allProviders = arrayOf("Wyzie", "Stremio")        
 val allProviderLabels = arrayOf("Wyzie", "Stremio")        binding.playerSettingsOnlineProviders.setOnClickListener {
     val currentProviders = PrefManager.getVal<Set<String>>(PrefName.OnlineSubtitleProviders)            
-val checkedItems = BooleanArray(allProviders.size) { index ->                currentProviders.contains(allProviders[index])            }
-customAlertDialog().apply {                setTitle("Subtitle Providers")                multiChoiceItems(allProviderLabels, checkedItems) { checked ->
-val selected = mutableSetOf<String>()                    checked.forEachIndexed { index, isChecked ->
+val checkedItems = BooleanArray(allProviders.size) { 
+        i
+customAlertDialog().apply {                setTitle("Subtitle Providers")
+        multiChoiceItems(allProviderLabels, checkedItems) { checked ->
+val selected = mutableSetOf<String>()                    checked.forEachIndexed { 
+        i
 if (isChecked) selected.add(allProviders[index])                    }
 PrefManager.setVal(PrefName.OnlineSubtitleProviders, selected)}
-setPosButton("Done", null)                show()}
+setPosButton("Done", null)
+        show()}
 }
 
 val allLanguages = arrayOf(            "en", "ar", "pt", "es", "id", "fr", "ru", "zh", "ja", "tr", "it", "de", "pl", "th", "vi", "ko"        )        
 val allFullLanguages = arrayOf(             "English", "Arabic", "Portuguese", "Spanish", "Indonesian", "French", "Russian",             "Chinese", "Japanese", "Turkish", "Italian", "German", "Polish", "Thai",             "Vietnamese", "Korean"        )        binding.playerSettingsOnlineLanguages.setOnClickListener {
     val currentLanguages = PrefManager.getVal<Set<String>>(PrefName.OnlineSubtitleLanguages)            
-val checkedItems = BooleanArray(allLanguages.size) { index ->                currentLanguages.contains(allLanguages[index])            }
-customAlertDialog().apply {                setTitle("Online Languages")                multiChoiceItems(allFullLanguages, checkedItems) { checked ->
-val selected = mutableSetOf<String>()                    checked.forEachIndexed { index, isChecked ->
+val checkedItems = BooleanArray(allLanguages.size) { 
+        i
+customAlertDialog().apply {                setTitle("Online Languages")
+        multiChoiceItems(allFullLanguages, checkedItems) { checked ->
+val selected = mutableSetOf<String>()                    checked.forEachIndexed { 
+        i
 if (isChecked) selected.add(allLanguages[index])                    }
 PrefManager.setVal(PrefName.OnlineSubtitleLanguages, selected)}
-setPosButton("Done", null)                show()}
+setPosButton("Done", null)
+        show()}
 }
 
-fun toggleSubOptions(isChecked: Boolean) {            arrayOf(                binding.videoSubColorPrimary,                binding.videoSubColorSecondary,                binding.videoSubOutline,                binding.videoSubColorBackground,                binding.videoSubAlphaButton,                binding.videoSubColorWindow,                binding.videoSubFont,                binding.videoSubAlpha,                binding.videoSubStroke,                binding.subtitleFontSizeText,                binding.subtitleFontSize,                binding.videoSubLanguage,                binding.subTextSwitch,            ).forEach {                it.isEnabled = isChecked                it.alpha =
+fun toggleSubOptions(isChecked: Boolean) {            
+        a
 when (isChecked) {                        true -> 1f                        false -> 0.5f                    }}
 }
 
-fun toggleExpSubOptions(isChecked: Boolean) {            arrayOf(                binding.videoSubStrokeButton,                binding.videoSubStroke,                binding.videoSubBottomMarginButton,                binding.videoSubBottomMargin,            ).forEach {                it.isEnabled = isChecked                it.alpha =
+fun toggleExpSubOptions(isChecked: Boolean) {            
+        a
 when (isChecked) {                        true -> 1f                        false -> 0.5f                    }}}
 binding.subSwitch.isChecked = PrefManager.getVal(PrefName.Subtitles)        binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.Subtitles, isChecked)            toggleSubOptions(isChecked)
+            PrefManager.setVal(PrefName.Subtitles, isChecked)
+        toggleSubOptions(isChecked)
             toggleExpSubOptions(binding.subTextSwitch.isChecked && isChecked)}
 toggleSubOptions(binding.subSwitch.isChecked)        binding.subTextSwitch.isChecked = PrefManager.getVal(PrefName.TextviewSubtitles)
         binding.subTextSwitch.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.TextviewSubtitles, isChecked)            toggleExpSubOptions(isChecked)}
+            PrefManager.setVal(PrefName.TextviewSubtitles, isChecked)
+        toggleExpSubOptions(isChecked)}
 toggleExpSubOptions(binding.subTextSwitch.isChecked)
-val subLanguages =            arrayOf(                "Albanian",                "Arabic",                "Bosnian",                "Bulgarian",                "Chinese",                "Croatian",                "Czech",                "Danish",                "Dutch",                "English",                "Estonian",                "Finnish",                "French",                "Georgian",                "German",                "Greek",                "Hebrew",                "Hindi",                "Indonesian",                "Irish",                "Italian",                "Japanese",                "Korean",                "Lithuanian",                "Luxembourgish",                "Macedonian",                "Mongolian",                "Norwegian",                "Polish",                "Portuguese",                "Punjabi",                "Romanian",                "Russian",                "Serbian",                "Slovak",                "Slovenian",                "Spanish",                "Turkish",                "Ukrainian",                "Urdu",                "Vietnamese",            )        binding.videoSubLanguage.setOnClickListener {            customAlertDialog().apply {                setTitle(getString(R.string.subtitle_langauge))                singleChoiceItems(
+val subLanguages =            arrayOf(                "Albanian",                "Arabic",                "Bosnian",                "Bulgarian",                "Chinese",                "Croatian",                "Czech",                "Danish",                "Dutch",                "English",                "Estonian",                "Finnish",                "French",                "Georgian",                "German",                "Greek",                "Hebrew",                "Hindi",                "Indonesian",                "Irish",                "Italian",                "Japanese",                "Korean",                "Lithuanian",                "Luxembourgish",                "Macedonian",                "Mongolian",                "Norwegian",                "Polish",                "Portuguese",                "Punjabi",                "Romanian",                "Russian",                "Serbian",                "Slovak",                "Slovenian",                "Spanish",                "Turkish",                "Ukrainian",                "Urdu",                "Vietnamese",            )        binding.videoSubLanguage.setOnClickListener {            
+        c
                     subLanguages,                    PrefManager.getVal(PrefName.SubLanguage),                ) { count ->                    PrefManager.setVal(PrefName.SubLanguage, count)                }
 show()}}
 binding.videoSubColorPrimary.setOnClickListener {
     val color = PrefManager.getVal<Int>(PrefName.PrimaryColor)            
-val title = getString(R.string.primary_sub_color)            showColorPicker(
+val title = getString(R.string.primary_sub_color)
+        showColorPicker(
                 color,                title,                
 object : ColorPickerCallback {
-    override fun onColorSelected(color: Int) {                        PrefManager.setVal(PrefName.PrimaryColor, color)                        updateSubPreview()
+    override fun onColorSelected(color: Int) {                        
+        P
                     }
     },            )}
     binding.videoSubColorSecondary.setOnClickListener {
     val color = PrefManager.getVal<Int>(PrefName.SecondaryColor)            
-val title = getString(R.string.outline_sub_color)            showColorPicker(
+val title = getString(R.string.outline_sub_color)
+        showColorPicker(
                 color,                title,                
 object : ColorPickerCallback {
-    override fun onColorSelected(color: Int) {                        PrefManager.setVal(PrefName.SecondaryColor, color)                        updateSubPreview()
+    override fun onColorSelected(color: Int) {                        
+        P
                     }
     },            )        }
 
 val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")        binding.videoSubOutline.setOnClickListener {
-            customAlertDialog().apply {                setTitle(getString(R.string.outline_type))                singleChoiceItems(
-                    typesOutline,                    PrefManager.getVal(PrefName.Outline),                ) { count ->                    PrefManager.setVal(PrefName.Outline, count)                    updateSubPreview()
+            customAlertDialog().apply {                setTitle(getString(R.string.outline_type))
+        singleChoiceItems(
+                    typesOutline,                    PrefManager.getVal(PrefName.Outline),                ) { count ->                    PrefManager.setVal(PrefName.Outline, count)
+        updateSubPreview()
                 }
 show()}}
 binding.videoSubColorBackground.setOnClickListener {
     val color = PrefManager.getVal<Int>(PrefName.SubBackground)            
-val title = getString(R.string.sub_background_color_select)            showColorPicker(
+val title = getString(R.string.sub_background_color_select)
+        showColorPicker(
                 color,                title,                
 object : ColorPickerCallback {
-    override fun onColorSelected(color: Int) {                        PrefManager.setVal(PrefName.SubBackground, color)                        updateSubPreview()
+    override fun onColorSelected(color: Int) {                        
+        P
                     }
     },            )}
     binding.videoSubColorWindow.setOnClickListener {
     val color = PrefManager.getVal<Int>(PrefName.SubWindow)            
-val title = getString(R.string.sub_window_color_select)            showColorPicker(
+val title = getString(R.string.sub_window_color_select)
+        showColorPicker(
                 color,                title,                
 object : ColorPickerCallback {
-    override fun onColorSelected(color: Int) {                        PrefManager.setVal(PrefName.SubWindow, color)                        updateSubPreview()
+    override fun onColorSelected(color: Int) {                        
+        P
                     }
     },            )}
-    binding.videoSubAlpha.value = PrefManager.getVal(PrefName.SubAlpha)        binding.videoSubAlpha.addOnChangeListener(
+    binding.videoSubAlpha.value = PrefManager.getVal(PrefName.SubAlpha)
+        binding.videoSubAlpha.addOnChangeListener(
             OnChangeListener { _, value, fromUser ->
-if (fromUser) {                    PrefManager.setVal(PrefName.SubAlpha, value)                    updateSubPreview()
+if (fromUser) {                    PrefManager.setVal(PrefName.SubAlpha, value)
+        updateSubPreview()
                 }
-},        )        binding.videoSubStroke.value = PrefManager.getVal(PrefName.SubStroke)        binding.videoSubStroke.addOnChangeListener(
+},        )        binding.videoSubStroke.value = PrefManager.getVal(PrefName.SubStroke)
+        binding.videoSubStroke.addOnChangeListener(
             OnChangeListener { _, value, fromUser ->
-if (fromUser) {                    PrefManager.setVal(PrefName.SubStroke, value)                    updateSubPreview()
+if (fromUser) {                    PrefManager.setVal(PrefName.SubStroke, value)
+        updateSubPreview()
                 }
-},        )        binding.videoSubBottomMargin.value = PrefManager.getVal(PrefName.SubBottomMargin)        binding.videoSubBottomMargin.addOnChangeListener(
+},        )        binding.videoSubBottomMargin.value = PrefManager.getVal(PrefName.SubBottomMargin)
+        binding.videoSubBottomMargin.addOnChangeListener(
             OnChangeListener { _, value, fromUser ->
-if (fromUser) {                    PrefManager.setVal(PrefName.SubBottomMargin, value)                    updateSubPreview()
+if (fromUser) {                    PrefManager.setVal(PrefName.SubBottomMargin, value)
+        updateSubPreview()
                 }
 },        )
-val fonts =            arrayOf(                "Poppins Semi Bold",                "Poppins Bold",                "Poppins",                "Poppins Thin",                "Century Gothic",                "Levenim MT Bold",                "Blocky",            )        binding.videoSubFont.setOnClickListener {            customAlertDialog().apply {                setTitle(getString(R.string.subtitle_font))                singleChoiceItems(
-                    fonts,                    PrefManager.getVal(PrefName.Font),                ) { count ->                    PrefManager.setVal(PrefName.Font, count)                    updateSubPreview()
+val fonts =            arrayOf(                "Poppins Semi Bold",                "Poppins Bold",                "Poppins",                "Poppins Thin",                "Century Gothic",                "Levenim MT Bold",                "Blocky",            )        binding.videoSubFont.setOnClickListener {            
+        c
+                    fonts,                    PrefManager.getVal(PrefName.Font),                ) { count ->                    PrefManager.setVal(PrefName.Font, count)
+        updateSubPreview()
                 }
 show()}}
 binding.subtitleFontSize.setText(PrefManager.getVal<Int>(PrefName.FontSize).toString())        binding.subtitleFontSize.setOnEditorActionListener { _, actionId, _ ->
@@ -230,16 +268,20 @@ if (actionId == EditorInfo.IME_ACTION_DONE) {                binding.subtitleFon
 false}
 binding.subtitleFontSize.addTextChangedListener {
     val size =                binding.subtitleFontSize.text                    .toString()                    .toIntOrNull()
-if (size != null) {                PrefManager.setVal(PrefName.FontSize, size)                updateSubPreview()
+if (size != null) {                PrefManager.setVal(PrefName.FontSize, size)
+        updateSubPreview()
             }}
 binding.subtitleTest.addOnChangeListener(
 object : Xpandable.OnChangeListener {
-    override fun onExpand() {                    updateSubPreview()                }
+    override fun onExpand() {                    
+        u
 
 override fun onRetract() {}
-},        )        updateSubPreview()    }
+},        )
+        updateSubPreview()    }
 
-private fun showColorPicker(        originalColor: Int,        title: String,        callback: ColorPickerCallback,    ) {        colorPickerCallback = callback        SimpleColorPicker.showColorWheelDialog(this, title, originalColor, true, "colorPicker", R.style.MyPopup)    }
+private fun showColorPicker(        originalColor: Int,        title: String,        callback: ColorPickerCallback,    ) {        
+        c
 
 override fun onResult(        dialogTag: String,        which: Int,        extras: Bundle,    ): Boolean {
 if (dialogTag == "colorPicker" && which == SimpleColorPicker.OnDialogResultListener.BUTTON_POSITIVE) {
@@ -247,12 +289,14 @@ if (dialogTag == "colorPicker" && which == SimpleColorPicker.OnDialogResultListe
 return true        }
 return false    }
 
-private fun updateSubPreview() {        binding.subtitleTestWindow.run {            alpha = PrefManager.getVal(PrefName.SubAlpha)            setBackgroundColor(PrefManager.getVal(PrefName.SubWindow))
+private fun updateSubPreview() {        
+        b
         }
 binding.subtitleTestText.run {            textSize = PrefManager.getVal<Int>(PrefName.FontSize).toSP            typeface =
 when (PrefManager.getVal<Int>(PrefName.Font)) {                    0 -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)                    1 -> ResourcesCompat.getFont(this.context, R.font.poppins_bold)                    2 -> ResourcesCompat.getFont(this.context, R.font.poppins)                    3 -> ResourcesCompat.getFont(this.context, R.font.poppins_thin)                    4 -> ResourcesCompat.getFont(this.context, R.font.century_gothic_regular)                    5 -> ResourcesCompat.getFont(this.context, R.font.levenim_mt_bold)                    6 -> ResourcesCompat.getFont(this.context, R.font.blocky)
 else -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)                }
-setTextColor(PrefManager.getVal<Int>(PrefName.PrimaryColor))            setBackgroundColor(PrefManager.getVal<Int>(PrefName.SubBackground))
+setTextColor(PrefManager.getVal<Int>(PrefName.PrimaryColor))
+        setBackgroundColor(PrefManager.getVal<Int>(PrefName.SubBackground))
         }
     }
 }

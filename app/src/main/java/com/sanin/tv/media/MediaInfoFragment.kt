@@ -162,7 +162,8 @@ class MediaInfoFragment : Fragment() {
                     }
                     // Show producers as a chip group (same style as External Links)
                     if (!media.anime.producers.isNullOrEmpty()) {
-                        val validProducers = media.anime.producers!!.filter { it.id != "null" }
+                        val validProducers = media.anime.producers!!.filter { 
+        i
                         if (validProducers.isNotEmpty()) {
                             val bind = ItemTitleChipgroupBinding.inflate(
                                 LayoutInflater.from(context),
@@ -400,8 +401,10 @@ class MediaInfoFragment : Fragment() {
                         .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
 
                     fun makeLink(a: String): String {
-                        val first = a.indexOf('"').let { if (it != -1) it else return a } + 1
-                        val end = a.indexOf('"', first).let { if (it != -1) it else return a }
+                        val first = a.indexOf('"').let { 
+        i
+                        val end = a.indexOf('"', first).let { 
+        i
                         val name = a.subSequence(first, end).toString()
                         return "${a.subSequence(0, first)}" +
                                 "[$name](https://www.youtube.com/results?search_query=${

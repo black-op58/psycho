@@ -72,8 +72,10 @@ object OledBackgroundManager {
             }
         }
 
-        override fun setAlpha(alpha: Int)              { paint.alpha = alpha }
-        override fun setColorFilter(cf: ColorFilter?)  { paint.colorFilter = cf }
+        override fun setAlpha(alpha: Int)              { 
+        p
+        override fun setColorFilter(cf: ColorFilter?)  { 
+        p
         override fun getOpacity() = PixelFormat.TRANSLUCENT
     }
 
@@ -115,8 +117,10 @@ object OledBackgroundManager {
             canvas.drawRect(0f, 0f, w, h, paint)
         }
 
-        override fun setAlpha(alpha: Int)              { paint.alpha = alpha }
-        override fun setColorFilter(cf: ColorFilter?)  { paint.colorFilter = cf }
+        override fun setAlpha(alpha: Int)              { 
+        p
+        override fun setColorFilter(cf: ColorFilter?)  { 
+        p
         override fun getOpacity() = PixelFormat.TRANSLUCENT
     }
 
@@ -146,8 +150,10 @@ object OledBackgroundManager {
             canvas.drawRect(0f, 0f, w, h, paint)
         }
 
-        override fun setAlpha(alpha: Int)              { paint.alpha = alpha }
-        override fun setColorFilter(cf: ColorFilter?)  { paint.colorFilter = cf }
+        override fun setAlpha(alpha: Int)              { 
+        p
+        override fun setColorFilter(cf: ColorFilter?)  { 
+        p
         override fun getOpacity() = PixelFormat.TRANSLUCENT
     }
 }

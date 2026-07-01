@@ -13,7 +13,8 @@ object EpisodeMapper {
 data class SeasonEpisode(
 val season: Int, 
 val episode: Int)    
-private val jsonParser = Json { ignoreUnknownKeys = true }
+private val jsonParser = Json { 
+        i
 
 private val episodeCache = HashMap<String, SeasonEpisode>()
 suspend 
@@ -27,7 +28,8 @@ return result    }
 /**     * MAIN FUNCTION     * Pass the Episode
 object so we can read AniZip data already stored in     * episode.extra["season"] / episode.extra["episode"] — no second network call.     */    
 private suspend 
-fun mapEpisodeInternal(media: Media, episodeNumber: Int, episode: Episode? = null): SeasonEpisode {        Logger.log("EpisodeMapper: Mapping ${media.userPreferredName} (ID: ${media.id}) Ep: $episodeNumber")        // STEP 0: Read season/episode from already-fetched AniZip data in Episode.extra
+fun mapEpisodeInternal(media: Media, episodeNumber: Int, episode: Episode? = null): SeasonEpisode {        
+        L
 val aniZipResult = getAniZipFromEpisode(episode, episodeNumber)
 if (aniZipResult != null) {            Logger.log("EpisodeMapper: AniZip (from cache) mapping found: $aniZipResult")
 return aniZipResult        }
@@ -40,8 +42,10 @@ val totalEpisodes = media.anime?.totalEpisodes ?: 0
 val isLongRunning = totalEpisodes > 300 || totalEpisodes == 0  // ← Raised to 300+        Logger.log("EpisodeMapper: TotalEp: $totalEpisodes, isLongRunning: $isLongRunning")
 if (isLongRunning && episodeNumber > 100) {  // ← Extra safety for One Piece            Logger.log("EpisodeMapper: Using Continuous Mapping (Long Running & Ep > 100)")
 return getContinuousMapping(media, episodeNumber)        }
-// STEP 3: For everything else (seasonal shows)        Logger.log("EpisodeMapper: Using Seasonal Offset")
-val calculatedSeason = getSeasonOffset(media)        Logger.log("EpisodeMapper: Calculated Season: $calculatedSeason")
+// STEP 3: For everything else (seasonal shows)
+        Logger.log("EpisodeMapper: Using Seasonal Offset")
+val calculatedSeason = getSeasonOffset(media)
+        Logger.log("EpisodeMapper: Calculated Season: $calculatedSeason")
 return SeasonEpisode(calculatedSeason.coerceAtLeast(1), episodeNumber)    }
 /**     * STEP 0: Read AniZip season/episode from Episode.extra (already fetched by Anify).     * No network call — episode.extra["season"] is set by Anify.fetchAndParseMetadata().     * episode.extra["episode"] may also be present
 if not, use the incoming episodeNumber.     */    
@@ -58,20 +62,23 @@ var mappings = ids?.tmdbMappings
 if (mappings != null) {
     val result = checkMappings(mappings, episodeNumber)
 if (result != null) return result        }
-// 2. Try TVDB Mappings (Fallback)        mappings = ids?.tvdbMappings
+// 2. Try TVDB Mappings (Fallback);
+        mappings = ids?.tvdbMappings
 if (mappings != null) {
     val result = checkMappings(mappings, episodeNumber)
 if (result != null) return result        }
 Logger.log("EpisodeMapper: No API Mapping found")
 return null    }
 
-private fun checkMappings(mappings: Map<String, String>, episodeNumber: Int): SeasonEpisode? {        Logger.log("EpisodeMapper: Checking ${mappings.size} mappings")
+private fun checkMappings(mappings: Map<String, String>, episodeNumber: Int): SeasonEpisode? {        
+        L
 for ((key, value) in mappings) {
 try {                // Key format: "s1", "s2"                
 val season = key.removePrefix("s").toIntOrNull() ?: continue                // Value format: "e1-e12", "e13-", "e5"                
 val parts = value.split("-")                
 val start = parts[0].removePrefix("e").toIntOrNull() ?: continue
-val end = if (parts.size > 1 && parts[1].isNotEmpty()) {                    parts[1].removePrefix("e").toIntOrNull() ?: Int.MAX_VALUE
+val end = if (parts.size > 1 && parts[1].isNotEmpty()) {                    
+        p
 } else if (parts.size > 1) {                    Int.MAX_VALUE // "e13-" means 13 to infinity
 } else {                    start // "e5" means just 5                }
 if (episodeNumber in start..end) {                    Logger.log("EpisodeMapper: Match found for $key: $value")
@@ -81,7 +88,8 @@ return SeasonEpisode(season, episodeNumber - start + 1)                }
 return null    }
 /**     * STRATEGY MANAGER     */
 private suspend 
-fun getContinuousMapping(media: Media, episodeNumber: Int): SeasonEpisode {        Logger.log("EpisodeMapper: Entering getContinuousMapping")        // EXTRA SAFETY: If tmdb_mappings exist, trust them over everything
+fun getContinuousMapping(media: Media, episodeNumber: Int): SeasonEpisode {        
+        L
 val apiMapping = getApiMapping(media, episodeNumber)
 if (apiMapping != null) return apiMapping
 val imdbId = IdMappers.getImdbId(media.id) ?: return SeasonEpisode(1, episodeNumber)        // SPECIAL FIX FOR ONE PIECE:        // ImdbApi.dev often fails for One Piece. We trust TVMaze (Hardcoded 1505) more.
@@ -121,7 +129,8 @@ else {
     val lookupUrl = "https://api.tvmaze.com/lookup/shows?imdb=$imdbId"                    
 val showResponse = client.get(lookupUrl)
 if (showResponse.code in 200..299) {
-    val showData = jsonParser.decodeFromString<TvMazeShow>(showResponse.text)                        tvMazeId = showData.id
+    val showData = jsonParser.decodeFromString<TvMazeShow>(showResponse.text);
+        tvMazeId = showData.id
 } else if (showResponse.code in 300..399) {
     val location = showResponse.headers["Location"]                        tvMazeId = location?.substringAfterLast("/")?.toIntOrNull() ?: 0                    }
     }
@@ -138,18 +147,21 @@ val e = ep.number ?: (index + 1)                    return@withContext SeasonEpi
 return@withContext null            } catch (e: Exception) {                return@withContext null}}}
 /**     * LOGIC C: Prequel Counting     */
 private suspend 
-fun getSeasonOffset(media: Media): Int {        // Logger.log("EpisodeMapper: Calculating season offset for ${media.userPreferredName} (ID: ${media.id})")        
+fun getSeasonOffset(media: Media): Int {        
+        /
 var current = media
 var season = 1
 var safety = 0
 while (safety < 20) {
     val relations = current.relations            // Logger.log("EpisodeMapper: S$season Current media ${current.id} has ${relations?.size ?: 0} relations")            
-val prequel = relations?.find {                (it.relation != null && (it.relation == "PREQUEL" || it.relation!!.startsWith("PREQUEL\n"))) &&                        (it.format == "TV" || it.format == "TV_SHORT" || it.format == "ONA")            }
+val prequel = relations?.find {                
+        (
 if (prequel != null) {                // Logger.log("EpisodeMapper: Found prequel: ${prequel.userPreferredName} (ID: ${prequel.id})")                season++
                 
 val fetchedPrequel = AnilistQueries().getMedia(prequel.id)
 if (fetchedPrequel != null) {
-    val detailedPrequel = AnilistQueries().mediaDetails(fetchedPrequel)                    current = detailedPrequel
+    val detailedPrequel = AnilistQueries().mediaDetails(fetchedPrequel);
+        current = detailedPrequel
 } else {                    // Logger.log("EpisodeMapper: Failed to fetch prequel details for ID ${prequel.id}")                    break
                 }
 } else {                // Logger.log("EpisodeMapper: No TV/ONA prequel found for ${current.id}")                break

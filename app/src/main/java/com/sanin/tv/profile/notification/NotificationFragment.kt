@@ -37,22 +37,29 @@ private var adapter: GroupieAdapter = GroupieAdapter()
 private var currentPage = 1    
 private var hasNextPage = false    
 private var countResetCallback: ((NotificationType, Boolean) -> Unit)? = null    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        b
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        arguments?.let {
-            getID = it.getInt("id")            type = it.getSerializableCompat<NotificationType>("type") as NotificationType
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
+            getID = it.getInt("id");
+        type = it.getSerializableCompat<NotificationType>("type") as NotificationType
         }
 binding.notificationRecyclerView.adapter = adapter        binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)        binding.notificationProgressBar.isVisible = true
         binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {
-            getList()            resetCountIfNeeded()
+            getList()
+        resetCountIfNeeded()
             binding.notificationProgressBar.isVisible = false}
-binding.notificationSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()                currentPage = 1
-                resetCountIfNeeded()                getList()
+binding.notificationSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear();
+        currentPage = 1
+                resetCountIfNeeded()
+        getList()
                 binding.notificationSwipeRefresh.isRefreshing = false}}
 binding.notificationRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                super.onScrolled(recyclerView, dx, dy)
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                
+        s
 if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.notificationRefresh.isVisible = true                        getList()                        binding.notificationRefresh.isVisible = false
                     }}}
 })    }
@@ -68,7 +75,8 @@ countResetCallback?.invoke(type, true)    }
 
 private suspend 
 fun getList() {
-    val list = when (type) {            ONE -> getNotificationsFiltered(false) { it.id == getID }
+    val list = when (type) {            
+        O
     MEDIA -> getNotificationsFiltered(type = true) { it.media != null || it.notificationType == com.sanin.tv.connections.anilist.api.NotificationType.MEDIA_DELETION.value}
     USER -> getNotificationsFiltered { it.media == null && it.notificationType != com.sanin.tv.connections.anilist.api.NotificationType.RELATED_MEDIA_ADDITION.value}
     SUBSCRIPTION -> getSubscriptions()            COMMENT -> getComments()}
@@ -100,20 +108,24 @@ val adapter = binding.notificationRecyclerView.adapter
 return hasNextPage && !binding.notificationRefresh.isVisible && adapter?.itemCount != 0 &&                layoutManager == (adapter!!.itemCount - 1) &&                !binding.notificationRecyclerView.canScrollVertically(1)    }
 
 fun onClick(id: Int, optional: Int?, type: NotificationClickType) {
-    val intent = when (type) {            NotificationClickType.USER -> Intent(                requireContext(),                ProfileActivity::class.java            ).apply {                putExtra("userId", id)            }
+    val intent = when (type) {            
+        N
     NotificationClickType.MEDIA -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("mediaId", id)}
     NotificationClickType.ACTIVITY -> Intent(                requireContext(),                FeedActivity::class.java            ).apply {                putExtra("activityId", id)}
-    NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("FRAGMENT_TO_LOAD", "COMMENTS")                putExtra("mediaId", id)
+    NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+        putExtra("mediaId", id)
                 putExtra("commentId", optional ?: -1)}
     NotificationClickType.UNDEFINED -> null}
     intent?.let {            ContextCompat.startActivity(requireContext(), it, null)}
     }
 
-override fun onResume() {        super.onResume()
+override fun onResume() {        
+        s
 if (this::binding.isInitialized) {            binding.root.requestLayout()        }
 }
 
-fun onVisible() {        resetCountIfNeeded()    }
+fun onVisible() {        
+        r
 
 companion object {        
 enum class NotificationClickType { USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
@@ -121,7 +133,8 @@ enum class NotificationClickType { USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
 enum class NotificationType { MEDIA, USER, SUBSCRIPTION, COMMENT, ONE }
 
 fun newInstance(            type: NotificationType,             id: Int = -1,            countResetCallback: ((NotificationType, Boolean) -> Unit)? = null        ): NotificationFragment {
-return NotificationFragment().apply {                this.countResetCallback = countResetCallback                arguments = Bundle().apply {                    putSerializable("type", type)                    putInt("id", id)
+return NotificationFragment().apply {                this.countResetCallback = countResetCallback                arguments = Bundle().apply {                    putSerializable("type", type)
+        putInt("id", id)
                 }}}
 }}
 }

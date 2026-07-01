@@ -5,12 +5,14 @@ import androidx.work.WorkerParameters
 import com.sanin.tv.util.Logger
 class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParameters) :    CoroutineWorker(appContext, workerParams) {
     override suspend 
-fun doWork(): Result {        Logger.log("AnilistNotificationWorker: doWork")
+fun doWork(): Result {        
+        L
 if (System.currentTimeMillis() - lastCheck < 60000) {            Logger.log("AnilistNotificationWorker: doWork skipped")
 return Result.success()        }
 lastCheck = System.currentTimeMillis()
 return if (AnilistNotificationTask().execute(applicationContext)) {            Result.success()
-} else {            Logger.log("AnilistNotificationWorker: doWork failed")            Result.retry()        }
+} else {            Logger.log("AnilistNotificationWorker: doWork failed")
+        Result.retry()        }
 }
 
 companion object {

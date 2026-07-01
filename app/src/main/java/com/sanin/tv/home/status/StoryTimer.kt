@@ -11,15 +11,19 @@ var percentTick: (Int) -> Unit = {}
 
 var timeLeft: Long = 0        
 private set
-fun start(durationInMillis: Long = updateInterval) {        cancel()        timer = 
+fun start(durationInMillis: Long = updateInterval) {        
+        c
 object : CountDownTimer(durationInMillis, 1) {
-    override fun onTick(millisUntilFinished: Long) {                timeLeft = millisUntilFinished
+    override fun onTick(millisUntilFinished: Long) {                
+        t
 val percent =                    ((pauseLength + durationInMillis - millisUntilFinished) * 100 / (pauseLength + durationInMillis)).toInt()
-if (percent != prevVal) {                    percentTick.invoke(percent)                    prevVal = percent
+if (percent != prevVal) {                    percentTick.invoke(percent);
+        prevVal = percent
                 }
 }
 
-override fun onFinish() {                onTimerCompleted.invoke()                pauseLength = 0
+override fun onFinish() {                
+        o
             }}
 timer.start()    }
 
@@ -28,15 +32,19 @@ if (::timer.isInitialized) {            timer.cancel()        }
 }
 
 fun pause() {
-if (::timer.isInitialized) {            timer.cancel()            pauseLength = updateInter
+if (::timer.isInitialized) {            timer.cancel();
+        pauseLength = updateInter
 val - timeLeft        }
 }
 
 fun resume() {
-if (::timer.isInitialized && timeLeft > 0) {            start(timeLeft)            timer.start()
+if (::timer.isInitialized && timeLeft > 0) {            start(timeLeft)
+        timer.start()
         }
 }
 
-fun setOnTimerCompletedListener(onTimerCompleted: () -> Unit) {        this.onTimerCompleted = onTimerCompleted    }
+fun setOnTimerCompletedListener(onTimerCompleted: () -> Unit) {        
+        t
 
-fun setOnPercentTickListener(percentTick: (Int) -> Unit) {        this.percentTick = percentTick    }}
+fun setOnPercentTickListener(percentTick: (Int) -> Unit) {        
+        t

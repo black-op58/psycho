@@ -57,7 +57,8 @@ object AniSkipApi {
     suspend fun getSkipTimes(malId: Int, episodeNumber: Int): AniSkipResult =
         withContext(Dispatchers.IO) {
             try {
-                val types = SkipType.entries.joinToString("&") { "types=${it.param}" }
+                val types = SkipType.entries.joinToString("&") { 
+        "
                 val url = "$BASE_URL/$malId/$episodeNumber?$types&episodeLength=0"
                 val json = JSONObject(URL(url).readText())
 
@@ -71,7 +72,8 @@ object AniSkipApi {
                 for (i in 0 until results.length()) {
                     val item = results.getJSONObject(i)
                     val typeStr = item.getString("skipType")
-                    val type = SkipType.entries.firstOrNull { it.param == typeStr } ?: continue
+                    val type = SkipType.entries.firstOrNull { 
+        i
                     val interval = item.getJSONObject("interval")
 
                     intervals += SkipInterval(

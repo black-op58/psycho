@@ -20,16 +20,19 @@ private var isMonetEnabled = false
 private var onClickListener = View.OnClickListener {
     val context = this
 @UpcomingWidgetConfigure
-val appWidgetManager = AppWidgetManager.getInstance(context)        updateAppWidget(
+val appWidgetManager = AppWidgetManager.getInstance(context)
+        updateAppWidget(
             context,            appWidgetManager,            appWidgetId,        )        
-val resultValue = Intent()        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+val resultValue = Intent()
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()
     }
 
 private lateinit var binding: UpcomingWidgetConfigureBinding    
 public override 
-fun onCreate(icicle: Bundle?) {        ThemeManager(this).applyTheme()        super.onCreate(icicle)
+fun onCreate(icicle: Bundle?) {        
+        T
         setResult(RESULT_CANCELED)
         binding = UpcomingWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -60,8 +63,10 @@ return        }
 private fun themeColors() {
     val backgroundColor = getThemeColor(com.google.android.material.R.attr.colorSurface)        
 val textColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)        
-val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
-            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)            putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)
+val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
+        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)
+        putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)
             putInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, textColor)
             putInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, subTextColor)
             apply()

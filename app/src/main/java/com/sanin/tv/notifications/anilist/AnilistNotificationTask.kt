@@ -28,10 +28,12 @@ if (userId.isNotEmpty()) {                    Anilist.getSavedToken()
 val res = Anilist.query.getNotifications(                        userId.toInt(),                        resetNotification = false                    )                    
 val unreadNotificationCount = res?.data?.user?.unreadNotificationCount ?: 0
 if (unreadNotificationCount > 0) {
-    val unreadNotifications =                            res?.data?.page?.notifications?.sortedBy { it.id }
+    val unreadNotifications =                            res?.data?.page?.notifications?.sortedBy { 
+        i
     ?.takeLast(unreadNotificationCount)
 val lastId = PrefManager.getVal<Int>(PrefName.LastAnilistNotificationId)                        
-val newNotifications = unreadNotifications?.filter { it.id > lastId }
+val newNotifications = unreadNotifications?.filter { 
+        i
 
 val filteredTypes =                            PrefManager.getVal<Set<String>>(PrefName.AnilistFilteredTypes)                        
 val mediaSectionTypes = setOf(                            NotificationType.AIRING.value,                            NotificationType.MEDIA_MERGE.value,                            NotificationType.MEDIA_DELETION.value,                            NotificationType.MEDIA_DATA_CHANGE.value,                            NotificationType.RELATED_MEDIA_ADDITION.value                        )                                                
@@ -46,19 +48,24 @@ if (it.notificationType in mediaSectionTypes) {                                 
 } else {                                    // User section displays all notifications that are not in the media section.                                    userCount++                                }}}
 // Update per-section counts
 if (userCount > 0) {
-    val currentUserCount = PrefManager.getVal<Int>(PrefName.UnreadUserNotifications)                            PrefManager.setVal(PrefName.UnreadUserNotifications, currentUserCount + userCount)                        }
+    val currentUserCount = PrefManager.getVal<Int>(PrefName.UnreadUserNotifications)
+        PrefManager.setVal(PrefName.UnreadUserNotifications, currentUserCount + userCount)                        }
 if (mediaCount > 0) {
-    val currentMediaCount = PrefManager.getVal<Int>(PrefName.UnreadMediaNotifications)                            PrefManager.setVal(PrefName.UnreadMediaNotifications, currentMediaCount + mediaCount)                        }
+    val currentMediaCount = PrefManager.getVal<Int>(PrefName.UnreadMediaNotifications)
+        PrefManager.setVal(PrefName.UnreadMediaNotifications, currentMediaCount + mediaCount)                        }
 if (newNotifications?.isNotEmpty() == true) {                            PrefManager.setVal(                                PrefName.LastAnilistNotificationId,                                newNotifications.last().id                            )                        }}}
 }
-return true        } catch (e: Exception) {            Logger.log("AnilistNotificationTask: ${e.message}")            Logger.log(e)
+return true        } catch (e: Exception) {            Logger.log("AnilistNotificationTask: ${e.message}")
+        Logger.log(e)
 return false        }
 }
 
 private fun createNotification(        context: Context,        content: String,        notificationId: Int? = null    ): android.app.Notification {
     val title = "New Anilist Notification"        
-val intent = Intent(context, MainActivity::class.java).apply {            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK            putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
-if (notificationId != null) {                Logger.log("notificationId: $notificationId")                putExtra("activityId", notificationId)
+val intent = Intent(context, MainActivity::class.java).apply {            
+        f
+if (notificationId != null) {                Logger.log("notificationId: $notificationId")
+        putExtra("activityId", notificationId)
             }
 }
 

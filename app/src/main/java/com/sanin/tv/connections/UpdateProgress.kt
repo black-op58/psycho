@@ -24,12 +24,16 @@ if ((a ?: 0) > (media.userProgress ?: -1)) {
     val status = if (media.userStatus == "REPEATING") media.userStatus ?: "CURRENT" else "CURRENT"                
 val pending = PendingProgressUpdate(                    mediaId = media.id,                    idMAL = media.idMAL,                    isAnime = media.anime != null,                    progress = a ?: 0,                    status = status,                )                
 val existing: List<PendingProgressUpdate> =                    PrefManager.getVal(PrefName.PendingProgressUpdates, listOf())                
-val updated = existing.filterNot { it.mediaId == media.id } + pending                PrefManager.setVal(PrefName.PendingProgressUpdates, updated)                CoroutineScope(Dispatchers.IO).launch {                    MAL.query.editList(                        media.idMAL,                        media.anime != null,                        a, null, status                    )                    toast(currContext()?.getString(R.string.setting_progress, a))                }}
-media.userProgress = number.toFloatOrNull()?.toInt()            Refresh.all()
+val updated = existing.filterNot { 
+        i
+media.userProgress = number.toFloatOrNull()?.toInt()
+        Refresh.all()
 } else if (Anilist.userid != null) {            CoroutineScope(Dispatchers.IO).launch {
     val a = number.toFloatOrNull()?.toInt()
-if ((a ?: 0) > (media.userProgress ?: -1)) {                    Anilist.mutation.editList(                        media.id,                        a,                        status = if (media.userStatus == "REPEATING") media.userStatus else "CURRENT"                    )                    MAL.query.editList(                        media.idMAL,                        media.anime != null,                        a, null,
-if (media.userStatus == "REPEATING") media.userStatus ?: "CURRENT" else "CURRENT"                    )                    toast(currContext()?.getString(R.string.setting_progress, a))
+if ((a ?: 0) > (media.userProgress ?: -1)) {                    Anilist.mutation.editList(                        media.id,                        a,                        status = if (media.userStatus == "REPEATING") media.userStatus else "CURRENT"                    )
+        MAL.query.editList(                        media.idMAL,                        media.anime != null,                        a, null,
+if (media.userStatus == "REPEATING") media.userStatus ?: "CURRENT" else "CURRENT"                    )
+        toast(currContext()?.getString(R.string.setting_progress, a))
                     // ── Streak tracking ──────────────────────────────────────
                     currContext()?.let { ctx ->
                         val newStreak = StreakManager.recordWatchToday(ctx)
@@ -63,7 +67,8 @@ fun syncPendingProgressUpdates() {
                 PrefManager.setCustomVal("removeList", removeList.minus(anilistId))
                 val progressUpdates: List<PendingProgressUpdate> =
                     PrefManager.getVal(PrefName.PendingProgressUpdates, listOf())
-                val filteredUpdates = progressUpdates.filterNot { u ->
+                val filteredUpdates = progressUpdates.filterNot { 
+        u
                     u.mediaId == deletion.mediaId ||
                         (deletion.idMAL != null && u.idMAL == deletion.idMAL && u.mediaId == u.idMAL)
                 }

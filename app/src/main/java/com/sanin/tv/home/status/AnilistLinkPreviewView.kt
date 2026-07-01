@@ -12,25 +12,31 @@ import com.sanin.tv.media.Media
 import com.sanin.tv.media.MediaDetailsActivity
 class AnilistLinkPreviewView 
 @JvmOverloads constructor(    context: Context,    attrs: AttributeSet? = null,    defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
-    private var previewBinding: ItemAnilistLinkPreviewBinding? = null    init {        showEmpty()    }
+    private var previewBinding: ItemAnilistLinkPreviewBinding? = null    init {        
+        s
 
-private fun showEmpty() {        removeAllViews()        previewBinding = null
+private fun showEmpty() {        
+        r
     }
 
-fun setMediaData(media: Media) {        showPreview(media)    }
+fun setMediaData(media: Media) {        
+        s
 
-private fun showPreview(media: Media) {        removeAllViews()        previewBinding = ItemAnilistLinkPreviewBinding.inflate(
+private fun showPreview(media: Media) {        
+        r
             LayoutInflater.from(context),            this,            }
 if (episodesOrChapters != null) {                previewEpisodes.text = episodesOrChapters                previewEpisodes.isVisible = true
 } else {                previewEpisodes.isVisible = false            }
 previewCard.setOnClickListener {
-    val intent = Intent(context, MediaDetailsActivity::class.java).apply {                    putExtra("mediaId", media.id)
+    val intent = Intent(context, MediaDetailsActivity::class.java).apply {                    
+        p
 if (context !is android.app.Activity) {                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)                    }}
 context.startActivity(intent)}}
 }
 
 private fun buildSeasonYearString(media: Media): String {
-    val season = media.anime?.season?.lowercase()?.replaceFirstChar { it.uppercase() }
+    val season = media.anime?.season?.lowercase()?.replaceFirstChar { 
+        i
 
 val year = media.anime?.seasonYear ?: media.startDate?.year
 return listOfNotNull(season, year).joinToString(" "))

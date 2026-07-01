@@ -71,10 +71,12 @@ var reverse: Boolean = false
 var continueEp: Boolean = false
 var progress: Int = View.GONE
 var subscribed = false    // ──────────────────────────────────────────────────────────────────────────    // Lifecycle    // ──────────────────────────────────────────────────────────────────────────    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?,    ): View {        _binding = FragmentMediaSourceBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?,    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        // ── RecyclerView ──────────────────────────────────────────────────────        gridLayoutManager = GridLayoutManager(requireContext(), 1)        binding.mediaSourceRecycler.layoutManager = gridLayoutManager
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
         binding.mediaSourceRecycler.apply {            isFocusable = true            isFocusableInTouchMode = false            descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS            // D-pad key handler on the RecyclerView itself (catches unhandled keys).            setOnKeyListener { _, keyCode, event ->
 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val lm = gridLayoutManager
@@ -92,11 +94,13 @@ false
 else -> false                }}}
 // Scroll-to-top FAB visibility        binding.mediaSourceRecycler.addOnScrollListener(
 object : RecyclerView.OnScrollListener() {
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                super.onScrolled(recyclerView, dx, dy)                
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                
+        s
 val position = gridLayoutManager.findFirstVisibleItemPosition()
 if (position > 2) {                    binding.ScrollTop.translationY = -(navBarHeight + 12.toPx).toFloat()                    binding.ScrollTop.visibility = View.VISIBLE
 } else {                    binding.ScrollTop.visibility = View.GONE                }}
-})        model.scrolledToTop.observe(viewLifecycleOwner) {
+})
+        model.scrolledToTop.observe(viewLifecycleOwner) {
 if (it) binding.mediaSourceRecycler.scrollToPosition(0)        }
 continueEp = model.continueMedia ?: false        model.getMedia().observe(viewLifecycleOwner) {
 if (it != null) {
@@ -110,14 +114,17 @@ val _srcSize = model.watchSources?.size ?: 0
 if (_lastExt > 0 && _lastExt < _srcSize) {                        media.selected!!.sourceIndex = _lastExt                        model.saveSelected(media.id, media.selected!!)                    }
 }
 if (media.format == "LOCAL") {
-    val localSourceIndex = AnimeSources.list.indexOfFirst { parser -> parser.name == "Local" }
+    val localSourceIndex = AnimeSources.list.indexOfFirst { 
+        p
     .takeIf { parserIndex -> parserIndex >= 0 } ?: 0                    media.selected!!.sourceIndex = localSourceIndex}
-    subscribed =                    SubscriptionHelper.getSubscriptions().containsKey(media.id)                style = media.selected!!.recyclerStyle
+    subscribed =                    SubscriptionHelper.getSubscriptions().containsKey(media.id);
+        style = media.selected!!.recyclerStyle
                 reverse = media.selected!!.recyclerReversed                progress = View.GONE                binding.mediaInfoProgressBar.visibility = progress
 if (loadedEpisodes != null) {
     val episodes = loadedEpisodes[media.selected!!.sourceIndex]
 if (episodes != null) {
-    val metadataPriority = PrefManager.getVal<Int>(PrefName.EpisodeMetadataSource)                        episodes.forEach { (i, episode) ->
+    val metadataPriority = PrefManager.getVal<Int>(PrefName.EpisodeMetadataSource)                        episodes.forEach { 
+        (
                             // 1. Jikan (Lowest for metadata, only source for filler flag)
 if (media.anime?.fillerEpisodes != null) {
 if (media.anime!!.fillerEpisodes!!.containsKey(i)) {
@@ -137,8 +144,10 @@ if (media.anime!!.anifyEpisodes!!.containsKey(i)) {
 val airDate = anifyEp?.extra?.get("airDate")
 if (!airDate.isNullOrBlank()) {                                            episode.date = airDate.substringBefore("T")                                        }}}
 }
-if (metadataPriority == 0) {                                applyAniZip()                                applyKitsu()
-} else {                                applyKitsu()                                applyAniZip()
+if (metadataPriority == 0) {                                applyAniZip()
+        applyKitsu()
+} else {                                applyKitsu()
+        applyAniZip()
                             }
 // Title fallback order: AniZip English -> Kitsu -> Jikan/MAL -> "Episode X"
 val anifyTitle = cleanTitle(media.anime?.anifyEpisodes?.get(i)?.title)                            
@@ -148,20 +157,24 @@ val jikanTitle = cleanTitle(media.anime?.fillerEpisodes?.get(i)?.title)         
 media.anime?.episodes = episodes                        // CHIP GROUP
 val total = episodes.size
 val divisions = total.toDouble() / 10                        start = 0                        end = null
-val limit = when {                            (divisions < 25) -> 25                            (divisions < 50) -> 50
+val limit = when {                            
+        (
 else -> 100                        }
 headerAdapter.clearChips()
 if (total > limit) {
     val arr = media.anime!!.episodes!!.keys.toTypedArray()                            
 val stored = ceil((total).toDouble() / limit).toInt()                            
 val position = MathUtils.clamp(media.selected!!.chip, 0, stored - 1)                            
-val last = if (position + 1 == stored) total else (limit * (position + 1))                            start = limit * (position)
+val last = if (position + 1 == stored) total else (limit * (position + 1));
+        start = limit * (position)
                             end = last - 1
                             headerAdapter.updateChips(                                limit,                                arr,                                (1..stored).toList().toTypedArray(),                                position                            )                        }
 } // end if (episodes != null)                } // end if (loadedEpisodes != null)            } // end if (it != null)        } // end observe    } // end onViewCreated
-override fun onDestroyView() {        _binding = null        super.onDestroyView()    }
+override fun onDestroyView() {        
+        _
 // ──────────────────────────────────────────────────────────────────────────    // Public API called by the host Activity / HeaderAdapter    // ──────────────────────────────────────────────────────────────────────────
-fun onSourceChange(i: Int): AnimeParser {        media.anime?.episodes = null        reload()        
+fun onSourceChange(i: Int): AnimeParser {        
+        m
 val selected = model.loadSelected(media)        model.watchSources?.get(selected.sourceIndex)?.showUserTextListener = null
         selected.sourceIndex = i        selected.server = null        model.saveSelected(media.id, selected)        media.selected = selected
         com.sanin.tv.home.WatchProgressManager.saveLastExtensionIndex(i)
@@ -178,24 +191,30 @@ fun onDubClicked(checked: Boolean) {
         lifecycleScope.launch(Dispatchers.IO) {            model.forceLoadEpisode(                media,                selected.sourceIndex            )        }
     }
 
-fun loadEpisodes(i: Int, invalidate: Boolean) {        lifecycleScope.launch(Dispatchers.IO) { model.loadEpisodes(media, i, invalidate) }
+fun loadEpisodes(i: Int, invalidate: Boolean) {        
+        l
 }
 
-fun loadKitsuEpisodesAsync() {        lifecycleScope.launch(Dispatchers.IO) { model.loadKitsuEpisodes(media) }
+fun loadKitsuEpisodesAsync() {        
+        l
 }
 
-fun onIconPressed(viewType: Int, rev: Boolean) {        style = viewType        reverse = rev        media.selected!!.recyclerStyle = style        media.selected!!.recyclerReversed = reverse        model.saveSelected(media.id, media.selected!!)        reload()
+fun onIconPressed(viewType: Int, rev: Boolean) {        
+        s
     }
 
-fun onChipClicked(i: Int, s: Int, e: Int) {        media.selected!!.chip = i        start = s        end = e        model.saveSelected(media.id, media.selected!!)        reload()
+fun onChipClicked(i: Int, s: Int, e: Int) {        
+        m
     }
 
-fun onNotificationPressed(subscribed: Boolean, source: String) {        this.subscribed = subscribed        saveSubscription(media, subscribed)        snackString(
+fun onNotificationPressed(subscribed: Boolean, source: String) {        
+        t
 if (subscribed) getString(R.string.subscribed_notification, source)
 else getString(R.string.unsubscribed_notification)        )    }
 
 fun openSettings(pkg: AnimeExtension.Installed) {
-    val changeUIVisibility: (Boolean) -> Unit = { show ->            
+    val changeUIVisibility: (Boolean) -> Unit = { 
+        s
 val activity = activity
 if (activity is MediaDetailsActivity && isAdded) {                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).isVisible = show                activity.findViewById<ViewPager2>(R.id.mediaViewPager).isVisible = show                activity.findViewById<CardView>(R.id.mediaCover).isVisible = show                activity.findViewById<CardView>(R.id.mediaClose).isVisible = show                activity.navBar.isVisible = show                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show            }
 }
@@ -205,22 +224,28 @@ val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>(
 if (allSettings.isNotEmpty()) {
     var selectedSetting = allSettings[0]
 if (allSettings.size > 1) {
-    val names =                    allSettings.map { LanguageMapper.getLanguageName(it.lang) }.toTypedArray()                requireContext()
-                    .customAlertDialog()                    .apply {                        setTitle("Select a Source")                        singleChoiceItems(names) { which ->
+    val names =                    allSettings.map { 
+        L
+                    .customAlertDialog()                    .apply {                        setTitle("Select a Source")
+        singleChoiceItems(names) { which ->
                             selectedSetting = allSettings[which]                            itemSelected = true                            requireActivity().runOnUiThread {
-    val fragment =                                    AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {                                        changeUIVisibility(true)                                        loadEpisodes(media.selected!!.sourceIndex, true)
+    val fragment =                                    AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {                                        
+        c
                                     }
     parentFragmentManager.beginTransaction()                                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)                                    .replace(R.id.fragmentExtensionsContainer, fragment)                                    .addToBackStack(null)                                    .commit()}}
     onDismiss {
 if (!itemSelected) {                                changeUIVisibility(true)                            }}
 show()                    }
 } else {                // If there's only one setting, proceed with the fragment transaction                requireActivity().runOnUiThread {
-    val fragment =                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {                            changeUIVisibility(true)                            loadEpisodes(media.selected!!.sourceIndex, true)
+    val fragment =                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {                            
+        c
                         }
-    changeUIVisibility(false)                    parentFragmentManager.beginTransaction()
+    changeUIVisibility(false)
+        parentFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)                        .replace(R.id.fragmentExtensionsContainer, fragment)                        .addToBackStack(null)                        .commit()}}}}
     // ──────────────────────────────────────────────────────────────────────────    // Private helpers    // ──────────────────────────────────────────────────────────────────────────
-private fun reload() {        // Triggers the RecyclerView adapter to re-bind with the current episode range.        model.scrolledToTop.postValue(true)    }
+private fun reload() {        
+        /
 /** Returns null for blank/generic titles like "null" or empty strings. */
 private fun cleanTitle(raw: String?): String? {
 if (raw.isNullOrBlank() || raw.equals("null", ignoreCase = true)) return null

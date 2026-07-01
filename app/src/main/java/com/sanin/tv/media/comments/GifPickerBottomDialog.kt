@@ -26,35 +26,47 @@ private var onGifSelected: ((String) -> Unit)? = null
 private var searchJob: Job? = null    
 private val apiKey = "29Hflu9yLfJoQy9uVbrSg5pPkaGgIr7CDDpx0bCtVxQFBTnNWXb4moqYsR70Yzzv"    
 private val baseUrl = "https://api.klipy.com"    
-fun setOnGifSelectedListener(listener: (String) -> Unit) {        onGifSelected = listener    }
+fun setOnGifSelectedListener(listener: (String) -> Unit) {        
+        o
 
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetGifPickerBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.gifRecycler.layoutManager = GridLayoutManager(context, 2)        binding.gifSearchInput.addTextChangedListener(
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        b
 object : TextWatcher {
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
-override fun afterTextChanged(s: Editable?) {                searchJob?.cancel()                
-val query = s?.toString()?.trim() ?: ""                searchJob = CoroutineScope(Dispatchers.Main).launch {                    delay(800)
+override fun afterTextChanged(s: Editable?) {                
+        s
+val query = s?.toString()?.trim() ?: ""                searchJob = CoroutineScope(Dispatchers.Main).launch {                    
+        d
 if (query.isEmpty()) loadTrending()
 else searchGifs(query)                }}
-})        loadTrending()
+})
+        loadTrending()
     }
 
-private fun loadTrending() {        binding.gifProgressBar.visibility = View.VISIBLE        binding.gifRecycler.visibility = View.GONE        CoroutineScope(Dispatchers.IO).launch {
+private fun loadTrending() {        
+        b
     val gifs = try {
-    val response = client.get(                    "$baseUrl/v2/featured?key=$apiKey&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )                parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }
-    withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)                    dismiss()}}}
+    val response = client.get(                    "$baseUrl/v2/featured?key=$apiKey&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )
+        parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }
+    withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)
+        dismiss()}}}
     }
 
-private fun searchGifs(query: String) {        binding.gifProgressBar.visibility = View.VISIBLE        binding.gifRecycler.visibility = View.GONE        CoroutineScope(Dispatchers.IO).launch {
+private fun searchGifs(query: String) {        
+        b
     val gifs = try {
     val encodedQuery = java.net.URLEncoder.encode(query, "UTF-8")                
-val response = client.get(                    "$baseUrl/v2/search?key=$apiKey&q=$encodedQuery&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )                parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }
-withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)                    dismiss()}}}
+val response = client.get(                    "$baseUrl/v2/search?key=$apiKey&q=$encodedQuery&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )
+        parseGifs(response.text)            } catch (_: Exception) {                emptyList()            }
+withContext(Dispatchers.Main) {                binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)
+        dismiss()}}}
 }
 
 private fun parseGifs(json: String): List<String> {
@@ -71,7 +83,8 @@ if (url.isNotEmpty()) urls.add(url)            }
 urls        } catch (_: Exception) {            emptyList()}
 }
 
-override fun onDestroyView() {        super.onDestroyView()        _binding = null
+override fun onDestroyView() {        
+        s
     }
 
 class GifAdapter(        
@@ -84,7 +97,8 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifViewHolder
 return GifViewHolder(binding)        }
 
 override fun onBindViewHolder(holder: GifViewHolder, position: Int) {
-    val url = gifs[position]            holder.binding.gifImage.loadImage(url)            holder.binding.root.setOnClickListener { onClick(url) }
+    val url = gifs[position]            holder.binding.gifImage.loadImage(url)            holder.binding.root.setOnClickListener { 
+        o
     }
 
 override fun getItemCount() = gifs.size    }

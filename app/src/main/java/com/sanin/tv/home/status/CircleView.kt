@@ -14,21 +14,26 @@ private var maxGapAngle: Float = 12f
 private val path = Path()    
 private var isUser = false    
 private var booleanList = listOf<Boolean>()    
-private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {        style = Paint.Style.STROKE        strokeWidth = 6f        strokeCap = Paint.Cap.ROUND    }
+private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {        
+        s
 
 @SuppressLint("DrawAllocation")    
-override fun onDraw(canvas: Canvas) {        super.onDraw(canvas)        
+override fun onDraw(canvas: Canvas) {        
+        s
 val centerX = width / 2f
 val centerY = height / 2f
 val radius = centerX.coerceAtMost(centerY) - paint.strokeWidth / 2
 val primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)        
 val secondColor = context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary)        
-fun setColor(int: Int) {            paint.color = if (int < booleanList.size && booleanList[int]) {                Color.GRAY
+fun setColor(int: Int) {            
+        p
 } else {
 if (isUser) secondColor else primaryColor            }
 canvas.drawPath(path, paint)        }
-if (parts <= 1) {            path.reset()            path.addArc(
-                centerX - radius,                centerY - radius,                centerX + radius,                centerY + radius,                0f,                360f            )            setColor(0)
+if (parts <= 1) {            path.reset()
+        path.addArc(
+                centerX - radius,                centerY - radius,                centerX + radius,                centerY + radius,                0f,                360f            )
+        setColor(0)
 } else {            // Scale gap angle down so total gaps never exceed 30% of the circle
 val maxTotalGap = 360f * 0.30f
 val gapAngle = (maxGapAngle).coerceAtMost(maxTotalGap / parts)            
@@ -36,8 +41,11 @@ val totalGapAngle = gapAngle * parts
 val totalAngle = 360f - totalGapAngle
 val effectiveAngle = totalAngle / parts
 for (i in 0 until parts) {
-    val startAngle = i * (effectiveAngle + gapAngle) - 90f                path.reset()                path.addArc(
-                    centerX - radius,                    centerY - radius,                    centerX + radius,                    centerY + radius,                    startAngle,                    effectiveAngle                )                setColor(i)            }}
+    val startAngle = i * (effectiveAngle + gapAngle) - 90f                path.reset()
+        path.addArc(
+                    centerX - radius,                    centerY - radius,                    centerX + radius,                    centerY + radius,                    startAngle,                    effectiveAngle                )
+        setColor(i)            }}
     }
 
-fun setParts(parts: Int, list: List<Boolean> = mutableListOf(), isUser: Boolean) {        this.parts = parts        this.booleanList = list        this.isUser = isUser        invalidate()    }}
+fun setParts(parts: Int, list: List<Boolean> = mutableListOf(), isUser: Boolean) {        
+        t

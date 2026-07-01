@@ -55,17 +55,20 @@ private var storyIndex: Int = 1
 private var primaryColor: Int = 0    
 private var onPrimaryColor: Int = 0    
 private var storyDuration: Int = 6    
-private val timer: StoryTimer = StoryTimer(secondsToMillis(storyDuration))    init {        initLayout()    }
+private val timer: StoryTimer = StoryTimer(secondsToMillis(storyDuration))    init {        
+        i
 
 @SuppressLint("ClickableViewAccessibility")    
 fun initLayout() {
-    val inflater: LayoutInflater = LayoutInflater.from(context)        binding = FragmentStatusBinding.inflate(inflater, this, false)
+    val inflater: LayoutInflater = LayoutInflater.from(context);
+        binding = FragmentStatusBinding.inflate(inflater, this, false)
         addView(binding.root)
         primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
         onPrimaryColor = context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary)
 if (context is StoriesCallback) storiesListener = context as StoriesCallback        binding.touchPanel.setOnTouchListener(this)    }
 
-fun setStoriesList(        activityList: List<Activity>, startIndex: Int = 1    ) {        this.activityList = activityList        this.storyIndex = startIndex        addLoadingViews(activityList)    }
+fun setStoriesList(        activityList: List<Activity>, startIndex: Int = 1    ) {        
+        t
 
 private fun addLoadingViews(storiesList: List<Activity>) {
     var idCounter = 1
@@ -76,24 +79,35 @@ val progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHori
 val params = LayoutParams(0, LayoutParams.WRAP_CONTENT)            params.marginEnd = 5
             params.marginStart = 5            binding.progressBarContainer.addView(progressBar, params)        }
 
-val constraintSet = ConstraintSet()        constraintSet.clone(binding.progressBarContainer)
+val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.progressBarContainer)
         
 var counter = storiesList.size
 for (story in storiesList) {
     val progressBar = findViewWithTag<ProgressBar>("story${counter}")
 if (progressBar != null) {
 if (storiesList.size > 1) {
-when (counter) {                        storiesList.size -> {                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.END,                                LayoutParams.PARENT_ID,                                ConstraintSet.END                            )                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.TOP,                                LayoutParams.PARENT_ID,                                ConstraintSet.TOP                            )                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.START,                                getId("story${counter - 1}"),                                ConstraintSet.END                            )                        }
-1 -> {                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.TOP,                                LayoutParams.PARENT_ID,                                ConstraintSet.TOP                            )                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.START,                                LayoutParams.PARENT_ID,                                ConstraintSet.START                            )                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.END,                                getId("story${counter + 1}"),                                ConstraintSet.START                            )
+when (counter) {                        storiesList.size -> {                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.END,                                LayoutParams.PARENT_ID,                                ConstraintSet.END                            )
+        constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.TOP,                                LayoutParams.PARENT_ID,                                ConstraintSet.TOP                            )
+        constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.START,                                getId("story${counter - 1}"),                                ConstraintSet.END                            )                        }
+1 -> {                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.TOP,                                LayoutParams.PARENT_ID,                                ConstraintSet.TOP                            )
+        constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.START,                                LayoutParams.PARENT_ID,                                ConstraintSet.START                            )
+        constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.END,                                getId("story${counter + 1}"),                                ConstraintSet.START                            )
 }
-else -> {                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.TOP,                                LayoutParams.PARENT_ID,                                ConstraintSet.TOP                            )                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.START,                                getId("story${counter - 1}"),                                ConstraintSet.END                            )                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.END,                                getId("story${counter + 1}"),                                ConstraintSet.START                            )                        }
+else -> {                            constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.TOP,                                LayoutParams.PARENT_ID,                                ConstraintSet.TOP                            )
+        constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.START,                                getId("story${counter - 1}"),                                ConstraintSet.END                            )
+        constraintSet.connect(                                getId("story${counter}"),                                ConstraintSet.END,                                getId("story${counter + 1}"),                                ConstraintSet.START                            )                        }
 }
-} else {                    constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.END,                        LayoutParams.PARENT_ID,                        ConstraintSet.END                    )                    constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.TOP,                        LayoutParams.PARENT_ID,                        ConstraintSet.TOP                    )                    constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.START,                        LayoutParams.PARENT_ID,                        ConstraintSet.START                    )                }}
+} else {                    constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.END,                        LayoutParams.PARENT_ID,                        ConstraintSet.END                    )
+        constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.TOP,                        LayoutParams.PARENT_ID,                        ConstraintSet.TOP                    )
+        constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.START,                        LayoutParams.PARENT_ID,                        ConstraintSet.START                    )                }}
 counter--}
-constraintSet.applyTo(binding.progressBarContainer)        startShowContent()
+constraintSet.applyTo(binding.progressBarContainer)
+        startShowContent()
     }
 
-private fun startShowContent() {        showStory()    }
+private fun startShowContent() {        
+        s
 
 private fun showStory() {
 if (storyIndex > 1) {            completeProgressBar(storyIndex - 1)        }
@@ -125,54 +139,72 @@ for (i in 1 until storyIndex + 1) {
                 it.progress = 100            }}
     }
 
-private fun rightPanelTouch() {        Logger.log("rightPanelTouch: $storyIndex")
-if (storyIndex == activityList.size) {            completeProgressBar(storyIndex)            onStoriesCompleted()
+private fun rightPanelTouch() {        
+        L
+if (storyIndex == activityList.size) {            completeProgressBar(storyIndex)
+        onStoriesCompleted()
 return        }
 userClicked = true        timer.cancel()
 if (storyIndex <= activityList.size) storyIndex += 1        showStory()    }
 
-private fun leftPanelTouch() {        Logger.log("leftPanelTouch: $storyIndex")
+private fun leftPanelTouch() {        
+        L
 if (storyIndex == 1) {            onStoriesPrevious()
 return        }
-userClicked = true        timer.cancel()        resetProgressBar(storyIndex)
+userClicked = true        timer.cancel()
+        resetProgressBar(storyIndex)
 if (storyIndex > 1) storyIndex -= 1        showStory()    }
 
-private fun onStoriesCompleted() {        Logger.log("onStoriesCompleted")
-if (::storiesListener.isInitialized) {            storyIndex = 1            storiesListener.onStoriesEnd()            resetProgressBar(storyIndex)
+private fun onStoriesCompleted() {        
+        L
+if (::storiesListener.isInitialized) {            storyIndex = 1            storiesListener.onStoriesEnd()
+        resetProgressBar(storyIndex)
         }
 }
 
 private fun onStoriesPrevious() {
-if (::storiesListener.isInitialized) {            storyIndex = 1            storiesListener.onStoriesStart()            resetProgressBar(storyIndex)
+if (::storiesListener.isInitialized) {            storyIndex = 1            storiesListener.onStoriesStart()
+        resetProgressBar(storyIndex)
         }
 }
 
-fun pause() {        timer.pause()    }
+fun pause() {        
+        t
 
-fun resume() {        timer.resume()    }
+fun resume() {        
+        t
 
 @SuppressLint("ClickableViewAccessibility")    
-private fun loadStory(story: Activity) {        binding.linkPreviewContainer.removeAllViews()        binding.linkPreviewContainer.visibility = GONE
+private fun loadStory(story: Activity) {        
+        b
 val key = "activities"        
 val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))        
-val newList = set.sorted().takeLast(200).toSet()        PrefManager.setCustomVal(key, newList)        binding.statusUserAvatar.loadImage(story.user?.avatar?.large)
+val newList = set.sorted().takeLast(200).toSet()
+        PrefManager.setCustomVal(key, newList)
+        binding.statusUserAvatar.loadImage(story.user?.avatar?.large)
         binding.statusUserName.text = story.user?.name
         binding.statusUserTime.text = ActivityItemBuilder.getDateTime(story.createdAt)        binding.statusUserContainer.setOnClickListener {
             ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java).putExtra("userId", story.userId),                null            )        }
-binding.textActivity.setOnTouchListener { v, event ->            onTouchView(v, event, true)            v.onTouchEvent(event)}
-binding.textActivityContainer.setOnTouchListener { v, event ->            onTouchView(v, event, true)            v.onTouchEvent(event)        }
+binding.textActivity.setOnTouchListener { v, event ->            onTouchView(v, event, true)
+        v.onTouchEvent(event)}
+binding.textActivityContainer.setOnTouchListener { v, event ->            onTouchView(v, event, true)
+        v.onTouchEvent(event)        }
 
-fun visible(isList: Boolean) {            binding.textActivity.isVisible = !isList            binding.textActivityContainer.isVisible = !isList            binding.infoText.isVisible = isList            binding.coverImage.isVisible = isList            binding.infoText.visibility = if (isList) View.VISIBLE else View.INVISIBLE            binding.infoText.text = ""            binding.contentImageViewKen.isVisible = isList            binding.contentImageView.isVisible = isList        }
+fun visible(isList: Boolean) {            
+        b
 when (story.typename) {            "ListActivity" -> {                visible(true)                
-val text = "${                    story.status?.replaceFirstChar {
+val text = "${                    
+        s
 if (it.isLowerCase()) {                            it.titlecase(Locale.ROOT)
 } else {                            it.toString()                        }}
 } ${story.progress ?: story.media?.title?.userPreferred} " +
 if (                            story.status?.contains("completed") == false &&                            !story.status.contains("plans") &&                            !story.status.contains("repeating") &&                            !story.status.contains("paused") &&                            !story.status.contains("dropped")                        ) {                            "of ${story.media?.title?.userPreferred}"
 } else {                            ""                        }
 binding.infoText.text = text
-val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)                blurImage(
-if (bannerAnimations) binding.contentImageViewKen else binding.contentImageView,                    story.media?.bannerImage ?: story.media?.coverImage?.extraLarge                )                binding.coverImage.loadImage(story.media?.coverImage?.extraLarge)                binding.coverImage.setOnClickListener {
+val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+        blurImage(
+if (bannerAnimations) binding.contentImageViewKen else binding.contentImageView,                    story.media?.bannerImage ?: story.media?.coverImage?.extraLarge                )
+        binding.coverImage.loadImage(story.media?.coverImage?.extraLarge)                binding.coverImage.setOnClickListener {
                     ContextCompat.startActivity(                        context,                        Intent(context, MediaDetailsActivity::class.java).putExtra(                            "mediaId",                            story.media?.id                        ),                        ActivityOptionsCompat.makeSceneTransitionAnimation(                            (it.context as FragmentActivity),                            binding.coverImage,                            ViewCompat.getTransitionName(binding.coverImage)!!                        ).toBundle()                    )                }}
 "TextActivity" -> {                visible(false)
 if (!(context as android.app.Activity).isDestroyed) {
@@ -180,7 +212,8 @@ if (!(context as android.app.Activity).isDestroyed) {
 val anilistLinks = AnilistLinkParser.extractAnilistLinks(originalText)                    
 val htmlText = AniMarkdown.getBasicAniHTML(originalText)                    
 val cleanedHtml = AnilistLinkParser.removeAnilistUrlsFromHtml(htmlText)                    
-val markwon = buildMarkwon(context, false)                    markwon.setMarkdown(binding.textActivity, cleanedHtml)
+val markwon = buildMarkwon(context, false)
+        markwon.setMarkdown(binding.textActivity, cleanedHtml)
                     addLinkPreviews(anilistLinks)
                 }}
 "MessageActivity" -> {                visible(false)
@@ -189,25 +222,29 @@ if (!(context as android.app.Activity).isDestroyed) {
 val anilistLinks = AnilistLinkParser.extractAnilistLinks(originalMessage)                    
 val htmlMessage = AniMarkdown.getBasicAniHTML(originalMessage)                    
 val cleanedHtml = AnilistLinkParser.removeAnilistUrlsFromHtml(htmlMessage)                    
-val markwon = buildMarkwon(context, false)                    markwon.setMarkdown(binding.textActivity, cleanedHtml)
+val markwon = buildMarkwon(context, false)
+        markwon.setMarkdown(binding.textActivity, cleanedHtml)
                     addLinkPreviews(anilistLinks)
                 }}
 }
 
-val userList = arrayListOf<User>()        story.likes?.forEach { i ->
+val userList = arrayListOf<User>()        story.likes?.forEach { 
+        i
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage, isFollowing = i.isFollowing, isFollower = i.isFollower))        }
 
 val likeColor = ContextCompat.getColor(context, R.color.yt_red)        
 val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)        binding.replyCount.text = story.replyCount.toString()
         binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityRepliesContainer.setOnClickListener {
-    val hostActivity = it.context as? FragmentActivity ?: return@setOnClickListener            pause()            RepliesBottomDialog.newInstance(story.id).apply {                onDialogClosed = {                    hostActivity.window?.decorView?.post {
+    val hostActivity = it.context as? FragmentActivity ?: return@setOnClickListener            pause()
+        RepliesBottomDialog.newInstance(story.id).apply {                onDialogClosed = {                    hostActivity.window?.decorView?.post {
 if (!hostActivity.isFinishing &&                            !hostActivity.isDestroyed &&                            hostActivity.hasWindowFocus()                        ) {                            resume()                        }}}
 }.show(hostActivity.supportFragmentManager, "replies")}
 binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)        binding.activityLikeCount.text = story.likeCount.toString()
         binding.activityLikeContainer.setOnClickListener {
             like()}
-binding.activityLikeContainer.setOnLongClickListener {            UsersDialogFragment().apply {                userList(userList)                show((it.context as FragmentActivity).supportFragmentManager, "dialog")}
+binding.activityLikeContainer.setOnLongClickListener {            UsersDialogFragment().apply {                userList(userList)
+        show((it.context as FragmentActivity).supportFragmentManager, "dialog")}
 true}
 binding.androidStoriesLoadingView.visibility = GONE        timer.start()    }
 
@@ -216,7 +253,8 @@ fun like() {
 val likeColor = ContextCompat.getColor(context, R.color.yt_red)        
 val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)        
 val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())        scope.launch {
-    val res = Anilist.mutation.toggleLike(story.id, "ACTIVITY")            withContext(Dispatchers.Main) {
+    val res = Anilist.mutation.toggleLike(story.id, "ACTIVITY")
+        withContext(Dispatchers.Main) {
 if (res != null) {
 if (story.isLiked == true) {                        story.likeCount = story.likeCount?.minus(1)
 } else {                        story.likeCount = story.likeCount?.plus(1)                    }
@@ -225,16 +263,20 @@ binding.activityLikeCount.text = (story.likeCount ?: 0).toString()              
 } else {                    snackString("Failed to like activity")                }}}
 }
 
-private fun addLinkPreviews(links: List<AnilistLinkParser.AnilistLink>) {        binding.linkPreviewContainer.removeAllViews()
+private fun addLinkPreviews(links: List<AnilistLinkParser.AnilistLink>) {        
+        b
 if (links.isEmpty()) {            binding.linkPreviewContainer.visibility = GONE
 return        }
 binding.linkPreviewContainer.visibility = VISIBLE
-val mediaIds = links.map { it.id }.distinct()        
+val mediaIds = links.map { 
+        i
 val fragmentActivity = context as? FragmentActivity
 if (fragmentActivity != null && mediaIds.isNotEmpty()) {            fragmentActivity.lifecycleScope.launch {
-    val mediaList = withContext(Dispatchers.IO) {                    Anilist.query.getMediaList(mediaIds)                }
+    val mediaList = withContext(Dispatchers.IO) {                    
+        A
 
-val mediaMap = mediaList?.associateBy { it.id } ?: emptyMap()                withContext(Dispatchers.Main) {
+val mediaMap = mediaList?.associateBy { 
+        i
                     links.forEach { link ->                        
 val previewView = AnilistLinkPreviewView(context)                        
 val media = mediaMap[link.id]
@@ -248,7 +290,8 @@ private var startX = 0f
 private var startY = 0f    
 private var isLongPress = false    
 private val swipeThreshold = 100    
-override fun onTouch(view: View, event: MotionEvent): Boolean {        onTouchView(view, event)
+override fun onTouch(view: View, event: MotionEvent): Boolean {        
+        o
 return true    }
 
 private fun onTouchView(view: View, event: MotionEvent, isText: Boolean = false) {
@@ -257,7 +300,8 @@ val screenWidth = view.width
 val leftHalf = screenWidth / 2
 val leftQuarter = screenWidth * 0.15
 val rightQuarter = screenWidth * 0.85
-when (event.action) {            MotionEvent.ACTION_DOWN -> {                startX = event.x                startY = event.y                startClickTime = Calendar.getInstance().timeInMillis                pause()                isLongPress = false
+when (event.action) {            MotionEvent.ACTION_DOWN -> {                startX = event.x                startY = event.y                startClickTime = Calendar.getInstance().timeInMillis                pause();
+        isLongPress = false
             }
 MotionEvent.ACTION_MOVE -> {
     val deltaX = event.x - startX

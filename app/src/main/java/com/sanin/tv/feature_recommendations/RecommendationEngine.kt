@@ -63,8 +63,10 @@ object RecommendationEngine {
         }
 
         // Deduplicate across groups — remove titles already on user's list
-        val onListIds = completedList.mapNotNull { it.id }.toSet()
-        val deduped = groups.map { group ->
+        val onListIds = completedList.mapNotNull { 
+        i
+        val deduped = groups.map { 
+        g
             group.copy(recommendations = group.recommendations
                 .filter { it.id !in onListIds }
                 .distinctBy { it.id }

@@ -39,7 +39,8 @@ return ""            }
 val currentDate = Date()            
 val difference = currentDate.time - targetDate.time
 return when (
-val daysDifference = difference / (1000 * 60 * 60 * 24)) {                0L -> {
+val daysDifference = difference / (1000 * 60 * 60 * 24)) {                
+        0
     val hoursDifference = difference / (1000 * 60 * 60)                    
 val minutesDifference = (difference / (1000 * 60)) % 60
 when {                        hoursDifference > 0 -> "$hoursDifference hour${if (hoursDifference > 1) "s" else ""} ago"                        minutesDifference > 0 -> "$minutesDifference minute${if (minutesDifference > 1) "s" else ""} ago"

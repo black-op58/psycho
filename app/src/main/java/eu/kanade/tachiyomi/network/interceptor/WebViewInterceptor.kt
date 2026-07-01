@@ -19,8 +19,10 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 abstract class WebViewInterceptor(    
 private val context: Context,    
-private val defaultUserAgentProvider: () -> String,) : Interceptor {    /**     * When this is called, it initializes the WebView if it wasn't already. We use this to avoid     * blocking the main thread too much. If used too often we could consider moving it to the     * Application class.     */    
-private val initWebView by lazy {        // Crashes on some devices. We skip this in some cases since the only impact is slower        // WebView init in those rare cases.        // See https://bugs.chromium.org/p/chromium/issues/detail?id=1279562
+private val defaultUserAgentProvider: () -> String,) : Interceptor {    
+        /
+private val initWebView by lazy {        
+        /
 if (DeviceUtil.isMiui || Build.VERSION.SDK_INT == Build.VERSION_CODES.S && DeviceUtil.isSamsung) {            return@lazy        }
 try {            WebSettings.getDefaultUserAgent(context)        } catch (_: Exception) {            // Avoid some crashes like when Chrome/WebView is being updated.        }
 }
@@ -44,7 +46,8 @@ return headers            // Keeping unsafe header makes webview throw [net::ERR
 .mapValues { it.value.getOrNull(0).orEmpty()}
 }
 
-fun CountDownLatch.awaitFor30Seconds() {        await(30, TimeUnit.SECONDS)    }
+fun CountDownLatch.awaitFor30Seconds() {        
+        a
 
 fun createWebView(request: Request): WebView {
 return WebView(context).apply {            setDefaultSettings()            // Avoid sending empty User-Agent, Chromium WebView will reset to default if empty            settings.userAgentString = request.header("User-Agent") ?: defaultUserAgentProvider()        }

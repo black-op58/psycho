@@ -57,13 +57,20 @@ class NavigationPillsViewModel @Inject constructor(
         .map { it == "home" || it == "anime" || it == "discovery" || it == "library" }
         .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
-    fun setRoute(route: String) { _currentRoute.value = route }
-    fun setExpanded(expanded: Boolean) { _isExpanded.value = expanded }
-    fun setNavFocus(focused: Boolean) { _hasNavFocus.value = focused }
-    fun toggleExpanded() { _isExpanded.value = !_isExpanded.value }
-    fun showSideRail() { _sideRailVisible.value = true }
-    fun hideSideRail() { _sideRailVisible.value = false }
-    fun updateNotificationCount(count: Int) { _notificationCount.value = count }
+    fun setRoute(route: String) { 
+        _
+    fun setExpanded(expanded: Boolean) { 
+        _
+    fun setNavFocus(focused: Boolean) { 
+        _
+    fun toggleExpanded() { 
+        _
+    fun showSideRail() { 
+        _
+    fun hideSideRail() { 
+        _
+    fun updateNotificationCount(count: Int) { 
+        _
     fun updateUserInfo(avatarUrl: String?, username: String?) {
         _avatarUrl.value = avatarUrl
         _username.value = username

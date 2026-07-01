@@ -62,7 +62,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsAdapter = AnimeExtensionsAdapter(
             onSettingsClicked = { pkg ->
                 val name = pkg.name
-                val changeUIVisibility: (Boolean) -> Unit = { show ->
+                val changeUIVisibility: (Boolean) -> Unit = { 
+        s
                     val activity = requireActivity() as ExtensionsActivity
                     activity.findViewById<ViewPager2>(R.id.viewPager).isVisible = show
                     activity.findViewById<TabLayout>(R.id.tabLayout).isVisible = show
@@ -77,7 +78,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 if (allSettings.isNotEmpty()) {
                     var selectedSetting = allSettings[0]
                     if (allSettings.size > 1) {
-                        val names = allSettings.map { getLanguageName(it.lang) }.toTypedArray()
+                        val names = allSettings.map { 
+        g
                         var selectedIndex = 0
                         requireContext().customAlertDialog().apply {
                             setTitle("Select a Source")
@@ -170,8 +172,10 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     private fun sortToAnimeSourcesList(inpt: List<AnimeExtension.Installed>): List<AnimeExtension.Installed> {
-        val sourcesMap = inpt.associateBy { it.name }
-        val orderedSources = AnimeSources.pinnedAnimeSources.mapNotNull { name ->
+        val sourcesMap = inpt.associateBy { 
+        i
+        val orderedSources = AnimeSources.pinnedAnimeSources.mapNotNull { 
+        n
             sourcesMap[name]
         }
         return orderedSources + inpt.filter { !AnimeSources.pinnedAnimeSources.contains(it.name) }
@@ -189,7 +193,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         )
     }
 
-    override fun notifyDataChanged() { /* Do nothing */ }
+    override fun notifyDataChanged() { 
+        /
 
     private class AnimeExtensionsAdapter(
         private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
@@ -203,7 +208,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         }
 
         fun updatePref() {
-            val map = currentList.map { it.name }
+            val map = currentList.map { 
+        i
             PrefManager.setVal(PrefName.AnimeSourcesOrder, map)
             AnimeSources.pinnedAnimeSources = map
             AnimeSources.performReorderAnimeSources()

@@ -26,7 +26,8 @@ val author = authorList.getOrNull(position) ?: return        binding.itemCompact
 
 override fun getItemCount(): Int = authorList.size    inner 
 class AuthorViewHolder(
-val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {
+val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
 if (!clickEnabled) return@setOnClickListener
 val author = authorList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        AuthorActivity::class.java                    ).putExtra("author", author as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )            }}
 }}

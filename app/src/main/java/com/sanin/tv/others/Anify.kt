@@ -15,12 +15,14 @@ val episodes = response.episodes ?: return emptyMap()            episodes.entrie
                 .filter { (key, _) ->                    // Only include numbered episodes (1, 2, 3 …)
 skip specials like "S1", "S2"                    key.toIntOrNull() != null                }
 .associate { (key, ep) ->
-val title = ep.title?.en                    key to Episode(                        number = key,                        title = title,                        desc = ep.overview ?: ep.summary,                        thumb = FileUrl[ep.image],                        extra = buildMap {                            ep.airDate?.let { put("airDate", it) }
+val title = ep.title?.en                    key to Episode(                        number = key,                        title = title,                        desc = ep.overview ?: ep.summary,                        thumb = FileUrl[ep.image],                        extra = buildMap {                            
+        e
 ep.rating?.let { put("rating", it)}
 ep.seasonNumber?.let { put("season", it.toString())}
 ep.episodeNumber?.let { put("episode", it.toString())}}
 )}
-} catch (e: Exception) {            Logger.log("AniZip : error fetching episodes: ${e.message}")            emptyMap()}}
+} catch (e: Exception) {            Logger.log("AniZip : error fetching episodes: ${e.message}")
+        emptyMap()}}
 // ── Data models ────────────────────────────────────────────────────────────
 @Serializable    
 data class AniZipResponse(        

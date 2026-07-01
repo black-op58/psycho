@@ -9,7 +9,8 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.util.Logger
 import kotlinx.coroutines.runBlocking
 class CommentNotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {        Logger.log("CommentNotificationReceiver: onReceive")        runBlocking(Dispatchers.IO) {
+    override fun onReceive(context: Context, intent: Intent?) {        
+        L
             CommentNotificationTask().execute(context)        }
 
 val commentInter

@@ -59,7 +59,8 @@ class SkipIntroManager(
         if (!PrefManager.getVal<Boolean>(PrefName.ShowSkipIntroButton)) return
         val skipResult = result ?: return
 
-        val activeInterval = skipResult.intervals.firstOrNull { it.containsTime(currentSeconds) }
+        val activeInterval = skipResult.intervals.firstOrNull { 
+        i
 
         if (activeInterval != null && activeInterval != currentInterval) {
             currentInterval = activeInterval

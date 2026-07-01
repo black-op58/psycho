@@ -32,11 +32,14 @@ private var page: Int = 1
 private var allActivities: MutableList<Activity> = mutableListOf()    
 private var currentFilter: ActivityFilterType = ActivityFilterType.ALL    
 private var hasMoreActivities: Boolean = true    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        binding = FragmentFeedBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        b
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        arguments?.let {
-            type = it.getSerializableCompat<ActivityType>("type") as ActivityType            userId = it.getInt("userId")            activityId = it.getInt("activityId")
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
+            type = it.getSerializableCompat<ActivityType>("type") as ActivityType            userId = it.getInt("userId");
+        activityId = it.getInt("activityId")
         }
 binding.titleBar.visibility =
 if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.titleText.text =
@@ -48,17 +51,20 @@ binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleSc
             getList()
 if (adapter.itemCount == 0) {                binding.emptyTextView.isVisible = true            }
 binding.listProgressBar.isVisible = false}
-binding.feedSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()                allActivities.clear()
+binding.feedSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()
+        allActivities.clear()
                 page = 1
                 hasMoreActivities = true                getList()                binding.feedSwipeRefresh.isRefreshing = false}}
 binding.listRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                super.onScrolled(recyclerView, dx, dy)
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                
+        s
 if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.feedRefresh.isVisible = true                        getList()                        binding.feedRefresh.isVisible = false
                     }}}
 })    }
 
-private fun showFilterBottomSheet() {        ActivityFilterBottomSheet.newInstance(currentFilter) { filterType ->            currentFilter = filterType            lifecycleScope.launch {                binding.listProgressBar.isVisible = true                adapter.clear()                allActivities.clear()
+private fun showFilterBottomSheet() {        
+        A
                 page = 1
                 hasMoreActivities = true                getList()                binding.listProgressBar.isVisible = false
             }
@@ -70,11 +76,13 @@ val adapter = binding.listRecyclerView.adapter
 return hasMoreActivities &&                !binding.listRecyclerView.canScrollVertically(1) &&                !binding.feedRefresh.isVisible && adapter?.itemCount != 0 &&                layoutManager == (adapter!!.itemCount - 1)    }
 
 private fun onActivityClick(id: Int, type: String) {
-    val intent = when (type) {            "USER" -> Intent(requireContext(), ProfileActivity::class.java).putExtra("userId", id)            "MEDIA" -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).putExtra("mediaId", id)
+    val intent = when (type) {            
+        "
 else -> return        }
 ContextCompat.startActivity(requireContext(), intent, null)    }
 
-override fun onResume() {        super.onResume()
+override fun onResume() {        
+        s
 if (this::binding.isInitialized) {            binding.root.requestLayout()        }
 }
 

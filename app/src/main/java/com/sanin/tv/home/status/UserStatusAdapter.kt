@@ -16,9 +16,11 @@ import com.sanin.tv.settings.saving.PrefManager
 import com.sanin.tv.snackString
 import com.sanin.tv.util.ActivityMarkdownCreator
 class UserStatusAdapter(
-private val user: ArrayList<User>) :    RecyclerView.Adapter<UserStatusAdapter.UsersViewHolder>() {    inner 
+private val user: ArrayList<User>) :    RecyclerView.Adapter<UserStatusAdapter.UsersViewHolder>() {    
+        i
 class UsersViewHolder(
-val binding: ItemUserStatusBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {
+val binding: ItemUserStatusBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
 if (user[bindingAdapterPosition].activity.isEmpty()) {                    snackString("No activity")                    return@setOnClickListener
                 }
 StatusActivity.user = user                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        StatusActivity::class.java                    ).putExtra("position", bindingAdapterPosition),                    null                )}
@@ -36,7 +38,8 @@ override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
 val user = user[position]        b.profileUserAvatar.loadImage(user.pfp)        b.profileUserName.text =
 if (Anilist.userid == user.id) getAppString(R.string.your_story) else user.name
 val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())        
-val booleanList = user.activity.map { watchedActivity.contains(it.id) }
+val booleanList = user.activity.map { 
+        w
 b.profileUserStatusIndicator.setParts(            user.activity.size,            booleanList,            user.id == Anilist.userid        )    }
 
 override fun getItemCount(): Int = user.size}

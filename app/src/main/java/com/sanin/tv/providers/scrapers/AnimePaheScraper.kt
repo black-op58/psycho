@@ -82,7 +82,8 @@ object AnimePaheScraper {
             )
             if (resp.statusCode != 200) return null
             val links = Mapper.json.decodeFromString<AnimePaheLinksResp>(resp.text)
-            val best = links.data.values.flatten().maxByOrNull { qualityScore(it.quality) }
+            val best = links.data.values.flatten().maxByOrNull { 
+        q
                 ?: return null
             extractKwikStream(base, best)
         } catch (e: CancellationException) { throw e }

@@ -282,7 +282,8 @@ post { updateLayout()}
 navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
 overlayView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() }}
 rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
-    fun Activity.reloadActivity() {    Refresh.all()    finish()    startActivity(Intent(this, this::class.java))    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)    initActivity(this)}
+    fun Activity.reloadActivity() {    
+        R
     fun Activity.restartApp() {
     val mainIntent = Intent.makeRestartActivityTask(        packageManager.getLaunchIntentForPackage(this.packageName)!!.component    )    
 val component =        ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
@@ -290,7 +291,8 @@ try {        startActivity(Intent().setComponent(component))    } catch (e: Exce
 finishAndRemoveTask()    PrefManager.setCustomVal("reload", true)}
 
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
-    override fun onStart() {        super.onStart()        dialog?.window?.let { window ->
+    override fun onStart() {        
+        s
             WindowCompat.setDecorFitsSystemWindows(window, false)            
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
 if (immersiveMode) {                WindowInsetsControllerCompat(                    window, window.decorView                ).hide(WindowInsetsCompat.Type.statusBars())            }
@@ -300,7 +302,8 @@ if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRA
     window.navigationBarColor =                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)}
     }
     override fun show(manager: FragmentManager, tag: String?) {
-    val ft = manager.beginTransaction()        ft.add(this, tag)
+    val ft = manager.beginTransaction()
+        ft.add(this, tag)
         ft.commitAllowingStateLoss()
     }}
     fun isOnline(context: Context): Boolean {
@@ -315,7 +318,8 @@ else -> false                }
 @Suppress("DEPRECATION")            return@tryWith connectivityManager.activeNetworkInfo?.run {
                 type == ConnectivityManager.TYPE_BLUETOOTH ||                        type == ConnectivityManager.TYPE_ETHERNET ||                        type == ConnectivityManager.TYPE_MOBILE ||                        type == ConnectivityManager.TYPE_MOBILE_DUN ||                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||                        type == ConnectivityManager.TYPE_WIFI ||                        type == ConnectivityManager.TYPE_WIMAX ||                        type == ConnectivityManager.TYPE_VPN            } ?: false        }
 } ?: false}
-    fun startMainActivity(activity: Activity, bundle: Bundle? = null) {    activity.finishAffinity()    activity.startActivity(        Intent(            activity,            MainActivity::class.java        ).apply {            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    fun startMainActivity(activity: Activity, bundle: Bundle? = null) {    
+        a
 if (bundle != null) putExtras(bundle)        }
 )}
     class DatePickerFragment(activity: Activity, 
@@ -325,18 +329,21 @@ var date: FuzzyDate = FuzzyDate().getToday()) :    DialogFragment(),    DatePick
     val c = Calendar.getInstance()        
 val year = date.year ?: c.get(Calendar.YEAR)        
 val month = if (date.month != null) date.month!! - 1 else c.get(Calendar.MONTH)        
-val day = date.day ?: c.get(Calendar.DAY_OF_MONTH)        dialog = DatePickerDialog(activity, this, year, month, day)
+val day = date.day ?: c.get(Calendar.DAY_OF_MONTH);
+        dialog = DatePickerDialog(activity, this, year, month, day)
         dialog.setButton(
 if (c == b) {            status?.setText(statusStrings, false)            status?.parent?.requestLayout()
         }
 return if (b > a) c in a..b else c in b..a    }}
     class ZoomOutPageTransformer :    ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
-if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {            setAnimation(                view.context,                view,                300,                floatArrayOf(1.3f, 1f, 1.3f, 1f),                0.5f to 0f            )            ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong())                .start()        }
+if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {            setAnimation(                view.context,                view,                300,                floatArrayOf(1.3f, 1f, 1.3f, 1f),                0.5f to 0f            )
+        ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong())                .start()        }
 }}
     fun setAnimation(    context: Context,    viewToAnimate: View,    duration: Long = 150,    list: FloatArray = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),    pivot: Pair<Float, Float> = 0.5f to 0.5f) {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
-    val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        )        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()        anim.setInterpolator(context, R.anim.over_shoot)
+    val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        )        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
+        anim.setInterpolator(context, R.anim.over_shoot)
         viewToAnimate.startAnimation(anim)
     }}
     class FadingEdgeRecyclerView : RecyclerView {    constructor(context: Context) : super(context)    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    )    
@@ -359,8 +366,10 @@ if (rhs.isEmpty()) {
 return lhs.length    }
     val lhsLength = lhs.length + 1
 val rhsLength = rhs.length + 1
-var cost = Array(lhsLength) { it }
-    var newCost = Array(lhsLength) { 0 }
+var cost = Array(lhsLength) { 
+        i
+    var newCost = Array(lhsLength) { 
+        0
 for (i in 1 until rhsLength) {        newCost[0] = i
 for (j in 1 until lhsLength) {
     val match = if (lhs[j - 1] == rhs[i - 1]) 0 else 1
@@ -375,7 +384,8 @@ return list}
     fun MutableList<ShowResponse>.sortByTitle(string: String) {
     val temp: MutableMap<Int, Int> = mutableMapOf()
 for (i in 0 until this.size) {        temp[i] = levenshtein(string.lowercase(), this[i].name.lowercase())    }
-    val c = temp.toList().sortedBy { (_, value) -> value }.toMap()    
+    val c = temp.toList().sortedBy { 
+        (
 val a = ArrayList(c.keys.toList().subList(0, min(this.size, 25)))    
 val b = c.values.toList().subList(0, min(this.size, 25))
 for (i in b.indices.reversed()) {
@@ -391,18 +401,22 @@ if (!url.isNullOrEmpty()) {
 if (localFile.exists()) {            loadLocalImage(localFile, size)
 } else {            loadImage(FileUrl(url), size)        }
 }}
-    fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
+    fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {    
+        f
 if (file?.url?.isNotEmpty() == true) {        tryWith {
 if (file.url.startsWith("content://")) {                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())                    .override(size).into(this)
 } else {
-    val glideUrl = GlideUrl(file.url) { file.headers }
+    val glideUrl = GlideUrl(file.url) { 
+        f
     Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)                    .into(this)}}
     }}
-    fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
+    fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {    
+        f
 if (file?.url?.isNotEmpty() == true) {        tryWith {
 if (file.url.startsWith("content://")) {                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())                    .override(width, height).into(this)
 } else {
-    val glideUrl = GlideUrl(file.url) { file.headers }
+    val glideUrl = GlideUrl(file.url) { 
+        f
     Glide.with(this.context).load(glideUrl).transition(withCrossFade())                    .override(width, height)                    .into(this)}}
     }}
     fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
@@ -415,10 +429,12 @@ private val onSafeCLick: (View) -> Unit) : View.OnClickListener {
 override fun onClick(v: View) {
 if (SystemClock.elapsedRealtime() - lastTimeClicked < defaultInterval) {
 return        }
-lastTimeClicked = SystemClock.elapsedRealtime()        onSafeCLick(v)
+lastTimeClicked = SystemClock.elapsedRealtime()
+        onSafeCLick(v)
     }}
     fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
-    val safeClickListener = SafeClickListener {        onSafeClick(it)    }
+    val safeClickListener = SafeClickListener {        
+        o
     setOnClickListener(safeClickListener)}suspend
 fun getSize(file: FileUrl): Double? {
 return tryWithSuspend {        client.head(file.url, file.headers, timeout = 1000).size?.toDouble()?.div(1024 * 1024)    }}suspend 
@@ -428,26 +444,34 @@ return getSize(FileUrl(file))}
 abstract class GesturesListener : GestureDetector.SimpleOnGestureListener() {
     private var timer: Timer? = null // at class level
     private val delay: Long = 200    
-override fun onSingleTapUp(e: MotionEvent): Boolean {        processSingleClickEvent(e)
+override fun onSingleTapUp(e: MotionEvent): Boolean {        
+        p
 return super.onSingleTapUp(e)    }
-    override fun onLongPress(e: MotionEvent) {        processLongClickEvent(e)        super.onLongPress(e)
+    override fun onLongPress(e: MotionEvent) {        
+        p
     }
-    override fun onDoubleTap(e: MotionEvent): Boolean {        processDoubleClickEvent(e)
+    override fun onDoubleTap(e: MotionEvent): Boolean {        
+        p
 return super.onDoubleTap(e)    }
-    override fun onScroll(        e1: MotionEvent?,        e2: MotionEvent,        distanceX: Float,        distanceY: Float    ): Boolean {        onScrollYClick(distanceY)        onScrollXClick(distanceX)
+    override fun onScroll(        e1: MotionEvent?,        e2: MotionEvent,        distanceX: Float,        distanceY: Float    ): Boolean {        
+        o
 return super.onScroll(e1, e2, distanceX, distanceY)    }
     private fun processSingleClickEvent(e: MotionEvent) {
     val handler = Handler(Looper.getMainLooper())        
-val mRunnable = Runnable {            onSingleClick(e)        }
+val mRunnable = Runnable {            
+        o
 timer = Timer().apply {            schedule(
 object : TimerTask() {
-    override fun run() {                    handler.post(mRunnable)                }
+    override fun run() {                    
+        h
     }, delay)}
     }
-    private fun processDoubleClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()
+    private fun processDoubleClickEvent(e: MotionEvent) {        
+        t
         }
     onDoubleClick(e)    }
-    private fun processLongClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()
+    private fun processLongClickEvent(e: MotionEvent) {        
+        t
         }
     onLongClick(e)    }
 
@@ -460,27 +484,37 @@ open fun onScrollYClick(y: Float) {}
 open fun onScrollXClick(y: Float) {}
 
 open fun onLongClick(event: MotionEvent) {}}
-    fun View.circularReveal(ex: Int, ey: Int, subX: Boolean, time: Long) {    ViewAnimationUtils.createCircularReveal(        this,
+    fun View.circularReveal(ex: Int, ey: Int, subX: Boolean, time: Long) {    
+        V
 if (subX) (ex - x.toInt()) else ex,        ey - y.toInt(),        0f,        max(height, width).toFloat()    ).setDuration(time).start()}
-    fun openLinkInBrowser(link: String?) {    link?.let {
+    fun openLinkInBrowser(link: String?) {    
+        l
 try {
-    val emptyBrowserIntent = Intent(Intent.ACTION_VIEW).apply {                addCategory(Intent.CATEGORY_BROWSABLE)
+    val emptyBrowserIntent = Intent(Intent.ACTION_VIEW).apply {                
+        a
 data = Uri.fromParts("http", "", null)            }
-    val sendIntent = Intent().apply {                action = Intent.ACTION_VIEW                addCategory(Intent.CATEGORY_BROWSABLE)
-data = Uri.parse(link)                selector = emptyBrowserIntent
+    val sendIntent = Intent().apply {                
+        a
+data = Uri.parse(link);
+        selector = emptyBrowserIntent
             }
 currContext()!!.startActivity(sendIntent)        } catch (e: ActivityNotFoundException) {            snackString("No browser found")        } catch (e: Exception) {            Logger.log(e)}
 }}
-    fun openLinkInCustomTab(link: String?) {    link?.let {
+    fun openLinkInCustomTab(link: String?) {    
+        l
 try {
     val builder = androidx.browser.customtabs.CustomTabsIntent.Builder()            
-val customTabsIntent = builder.build()            customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))
+val customTabsIntent = builder.build()
+        customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))
         } catch (e: Exception) {            openLinkInBrowser(it)        }
 }}
-    fun openLinkInYouTube(link: String?) {    link?.let {
+    fun openLinkInYouTube(link: String?) {    
+        l
 try {
-    val videoIntent = Intent(Intent.ACTION_VIEW).apply {                addCategory(Intent.CATEGORY_BROWSABLE)
-data = Uri.parse(link)                setPackage("com.google.android.youtube")
+    val videoIntent = Intent(Intent.ACTION_VIEW).apply {                
+        a
+data = Uri.parse(link)
+        setPackage("com.google.android.youtube")
             }
 currContext()!!.startActivity(videoIntent)        } catch (e: ActivityNotFoundException) {
             openLinkInBrowser(link)
@@ -493,7 +527,8 @@ fun savePrefs(serialized: String, path: String, title: String, context: Context)
 var counter = 1
 while (file.exists()) {        file = File(path, "${title}_${counter}.ani")        counter++
     }
-return try {        file.writeText(serialized)        scanFile(file.absolutePath, context)
+return try {        file.writeText(serialized)
+        scanFile(file.absolutePath, context)
         toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file
     } catch (e: Exception) {        snackString("Failed to save settings: ${e.localizedMessage}")        null
@@ -508,7 +543,8 @@ while (file.exists()) {        file = File(path, "${title}_${counter}.sani")    
     val salt = generateSalt()
 return try {
     val encryptedData = PreferenceKeystore.encryptWithPassword(password, serialized, salt)        // Combine salt and encrypted data
-val dataToSave = salt + encryptedData        file.writeBytes(dataToSave)        scanFile(file.absolutePath, context)
+val dataToSave = salt + encryptedData        file.writeBytes(dataToSave)
+        scanFile(file.absolutePath, context)
         toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file
     } catch (e: Exception) {        snackString("Failed to save settings: ${e.localizedMessage}")        null
@@ -521,14 +557,16 @@ val intent = Intent(Intent.ACTION_SEND)    intent.type = "image/png"    intent.p
 fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
     val imageFile = File(path, "$imageFileName.png")
 return try {
-    val fOut: OutputStream = FileOutputStream(imageFile)        image.compress(Bitmap.CompressFormat.PNG, 0, fOut)
+    val fOut: OutputStream = FileOutputStream(imageFile)
+        image.compress(Bitmap.CompressFormat.PNG, 0, fOut)
         fOut.close()
         scanFile(imageFile.absolutePath, currContext()!!)
         toast(String.format(currContext()!!.getString(R.string.saved_to_path, path)))
         imageFile
     } catch (e: Exception) {        snackString("Failed to save image: ${e.localizedMessage}")        null
     }}
-    private fun scanFile(path: String, context: Context) {    MediaScannerConnection.scanFile(context, arrayOf(path), null) { p, _ ->        Logger.log("Finished scanning $p")    }}
+    private fun scanFile(path: String, context: Context) {    
+        M
     class MediaPageTransformer : ViewPager2.PageTransformer {
     private fun parallax(view: View, position: Float) {
 if (position > -1 && position < 1) {
@@ -536,7 +574,8 @@ if (position > -1 && position < 1) {
         }
     }
     override fun transformPage(view: View, position: Float) {
-    val bannerContainer = view.findViewById<View>(R.id.itemCompactBanner)        parallax(bannerContainer, position)
+    val bannerContainer = view.findViewById<View>(R.id.itemCompactBanner)
+        parallax(bannerContainer, position)
     }}
     class NoGestureSubsamplingImageView(context: Context?, attr: AttributeSet?) :    SubsamplingScaleImageView(context, attr) {    
 @SuppressLint("ClickableViewAccessibility")    
@@ -560,13 +599,15 @@ val timer =
 object : CountDownTimer(            (media.anime.nextAiringEpisodeTime!! + 10000) * 1000 - System.currentTimeMillis(),            1000        ) {
     override fun onTick(millisUntilFinished: Long) {
     val a = millisUntilFinished / 1000                v.mediaCountdown.text = currActivity()?.getString(                    R.string.time_format,                    a / 86400,                    a % 86400 / 3600,                    a % 86400 % 3600 / 60,                    a % 86400 % 3600 % 60                )            }
-    override fun onFinish() {                v.mediaCountdownContainer.visibility = View.GONE                snackString(currContext()?.getString(R.string.congrats_vro))            }}
+    override fun onFinish() {                
+        v
     activeTimers[view] = timer        timer.start()    }}
     fun displayTimer(media: Media, view: ViewGroup) {
 when {        media.anime != null -> countDown(media, view)
 else -> {}
 }}
-    fun MutableMap<String, Genre>.checkId(id: Int): Boolean {    this.forEach {
+    fun MutableMap<String, Genre>.checkId(id: Int): Boolean {    
+        t
 if (it.value.id == id) {
 return false        }
 }
@@ -605,18 +646,23 @@ class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)}
     fun getAppString(res: Int): String {
 return currContext()?.getString(res) ?: ""}
     fun toast(string: String?) {
-if (string != null) {        Logger.log(string)        MainScope().launch {            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)                .show()        }
+if (string != null) {        Logger.log(string)
+        MainScope().launch {            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)                .show()        }
 }}
-    fun toast(res: Int) {    toast(getAppString(res))}
+    fun toast(res: Int) {    
+        t
     fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
 try { //I have no idea why this sometimes crashes for some people...
 if (s != null) {            (activity ?: currActivity())?.apply {
-    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    snackBar.view.apply {                        updateLayoutParams<FrameLayout.LayoutParams> {                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)                            width = WRAP_CONTENT
+    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    
+        s
                         }
-    translationY = -(navBarHeight.dp + 32f)                        translationZ = 32f
+    translationY = -(navBarHeight.dp + 32f);
+        translationZ = 32f
                         updatePadding(16f.px, right = 16f.px)                        setOnClickListener {
                             snackBar.dismiss()}
-    setOnLongClickListener {                            copyToClipboard(clipboard ?: s, false)                            toast(getString(R.string.copied_to_clipboard))
+    setOnLongClickListener {                            copyToClipboard(clipboard ?: s, false)
+        toast(getString(R.string.copied_to_clipboard))
                             true}}
     snackBar.show()                }
 return snackBar            }
@@ -628,7 +674,8 @@ return snackString(getAppString(r), activity, clipboard)}
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :    ArrayAdapter<T>(context, layoutId, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-    val view = super.getView(position, convertView, parent)        view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
+    val view = super.getView(position, convertView, parent)
+        view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
         (view as TextView).setTextColor(Color.WHITE)
 return view    }}
 
@@ -638,12 +685,14 @@ class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
     constructor(context: Context) : super(context) {        setup()    }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {        setup()    }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    ) {        setup()    }
-    private fun setup() {        mGestureDetector =            GestureDetector(context, 
+    private fun setup() {        
+        m
 object : GestureDetector.SimpleOnGestureListener() {
     override fun onSingleTapUp(e: MotionEvent): Boolean {
 return performClick()                }
 })    }
-    override fun onTouchEvent(event: MotionEvent): Boolean {        mGestureDetector!!.onTouchEvent(event)
+    override fun onTouchEvent(event: MotionEvent): Boolean {        
+        m
 return true    }}
 
 @SuppressLint("RestrictedApi")
@@ -683,7 +732,8 @@ val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
 if (incognito) {
     val intent = Intent(context, IncognitoNotificationClickReceiver::class.java)        
 val pendingIntent = PendingIntent.getBroadcast(            context, 0, intent,            PendingIntent.FLAG_IMMUTABLE        )        
-val builder = NotificationCompat.Builder(context, Notifications.CHANNEL_INCOGNITO_MODE)            .setSmallIcon(R.drawable.ic_incognito_24)            .setContentTitle("Incognito Mode")            .setContentText("Disable Incognito Mode")            .setPriority(NotificationCompat.PRIORITY_HIGH)            .setContentIntent(pendingIntent)            .setOngoing(true)        notificationManager.notify(INCOGNITO_CHANNEL_ID, builder.build())
+val builder = NotificationCompat.Builder(context, Notifications.CHANNEL_INCOGNITO_MODE)            .setSmallIcon(R.drawable.ic_incognito_24)            .setContentTitle("Incognito Mode")            .setContentText("Disable Incognito Mode")            .setPriority(NotificationCompat.PRIORITY_HIGH)            .setContentIntent(pendingIntent)            .setOngoing(true)
+        notificationManager.notify(INCOGNITO_CHANNEL_ID, builder.build())
 } else {        notificationManager.cancel(INCOGNITO_CHANNEL_ID)    }}
     fun hasNotificationPermission(context: Context): Boolean {
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
@@ -692,12 +742,15 @@ return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {        conte
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     val intent = Intent(
 if (channelId != null) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS
-else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
         }
 context.startActivity(intent)        true
 } else false}suspend 
-fun View.pop() {    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1f, 1.25f).setDuration(120).start()    }
-delay(120)    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1.25f, 1f).setDuration(100).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()}
+fun View.pop() {    
+        c
+delay(120)    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1.25f, 1f).setDuration(100).start()
+        ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()}
 delay(100)}
     fun blurImage(imageView: ImageView, banner: String?) {
 if (banner != null) {
@@ -705,7 +758,8 @@ if (banner != null) {
 val sampling = PrefManager.getVal<Float>(PrefName.BlurSampling).toInt()        
 val context = imageView.context
 if (!(context as Activity).isDestroyed) {
-    val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
+    val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { 
+        b
 if (PrefManager.getVal(PrefName.BlurBanners)) {                Glide.with(context as Context)                    .load(
 if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(                            url                        ) else File(url)                    )                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)                    .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))                    .into(imageView)
 } else {                Glide.with(context as Context)                    .load(
@@ -726,29 +780,35 @@ ContextCompat.startActivity(                currContext()!!,                inte
 } else if (getYoutubeId(link).isNotEmpty()) {        openLinkInYouTube(link)
 } else {        copyToClipboard(link, true)    }}/** * Builds the markwon instance with all the plugins * @return the markwon instance */
 fun buildMarkwon(    activity: Context,    userInputContent: Boolean = true,    fragment: Fragment? = null,    anilist: Boolean = false): Markwon {
-    val glideContext = fragment?.let { Glide.with(it) } ?: Glide.with(activity)    
+    val glideContext = fragment?.let { 
+        G
 val metrics = activity.resources.displayMetrics    // Allow modestly larger-than-screen markdown images while preventing oversized bitmap draw crashes.    
 val maxImageWidth = (metrics.widthPixels.toLong() * MARKDOWN_IMAGE_MAX_SCREEN_SCALE_FACTOR)        .coerceAtMost(Int.MAX_VALUE.toLong())        .toInt()    
 val maxImageHeight = (metrics.heightPixels.toLong() * MARKDOWN_IMAGE_MAX_SCREEN_SCALE_FACTOR)        .coerceAtMost(Int.MAX_VALUE.toLong())        .toInt()    
 val markdownImageRequestOptions = RequestOptions()        .downsample(DownsampleStrategy.AT_MOST)        .override(maxImageWidth, maxImageHeight)    
 val markwon = Markwon.builder(activity)        .usePlugin(
 object : AbstractMarkwonPlugin() {
-    override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {                builder.linkResolver { _, link ->                    openOrCopyAnilistLink(link)                }}
+    override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {                
+        b
     })        .usePlugin(SoftBreakAddsNewLinePlugin.create())        .usePlugin(StrikethroughPlugin.create())        .usePlugin(TablePlugin.create(activity))        .usePlugin(TaskListPlugin.create(activity))        .usePlugin(SpoilerPlugin(anilist))        .usePlugin(HtmlPlugin.create { plugin ->
 if (userInputContent) {                plugin.addHandler(                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")                )            }
 plugin.addHandler(AlignTagHandler())        })        .usePlugin(GlideImagesPlugin.create(
 object : GlideImagesPlugin.GlideStore {
-    private val requestManager: RequestManager = glideContext.apply {                addDefaultRequestListener(
+    private val requestManager: RequestManager = glideContext.apply {                
+        a
 object : RequestListener<Any> {
     override fun onResourceReady(                        resource: Any,                        model: Any,                        target: Target<Any>,                        dataSource: DataSource,                        isFirstResource: Boolean                    ): Boolean {
 if (resource is GifDrawable) {                            resource.start()                        }
 return false                    }
-    override fun onLoadFailed(                        e: GlideException?,                        model: Any?,                        target: Target<Any>,                        isFirstResource: Boolean                    ): Boolean {                        Logger.log("Image failed to load: $model")                        Logger.log(e as Exception)
+    override fun onLoadFailed(                        e: GlideException?,                        model: Any?,                        target: Target<Any>,                        isFirstResource: Boolean                    ): Boolean {                        
+        L
 return false                    }
 })            }
-    override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {                Logger.log("Loading image: ${drawable.destination}")
+    override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {                
+        L
 return requestManager                    .load(drawable.destination)                    .apply(markdownImageRequestOptions)            }
-    override fun cancel(target: Target<*>) {                Logger.log("Cancelling image load")                requestManager.clear(target)
+    override fun cancel(target: Target<*>) {                
+        L
             }
     }))        .build()
 return markwon}

@@ -42,7 +42,8 @@ fun initializeNetwork() {
 
 object Mapper : ResponseParser {    
 @OptIn(ExperimentalSerializationApi::class)    
-val json = Json {        isLenient = true        ignoreUnknownKeys = true        explicitNulls = false    }
+val json = Json {        
+        i
 
 @OptIn(InternalSerializationApi::class)    
 override fun <T : Any> parse(text: String, kClass: KClass<T>): T {
@@ -57,9 +58,11 @@ return json.encodeToString(obj)    }
 inline
 fun <reified T> parse(text: String): T {
 return json.decodeFromString(text)    }}/** * Performs parallel processing of collection items without blocking threads. * Each operation runs in its own coroutine on the specified dispatcher. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of results in the same order as the original collection */suspend 
-fun <A, B> Collection<A>.asyncMap(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B): List<B> = coroutineScope {    map { item ->        async(dispatcher) {            f(item)        }
+fun <A, B> Collection<A>.asyncMap(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B): List<B> = coroutineScope {    
+        m
 }.awaitAll()}/** * Performs parallel processing of collection items without blocking threads, * filtering out null results. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of non-null results in the same order as the original collection */suspend
-fun <A, B> Collection<A>.asyncMapNotNull(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B?): List<B> = coroutineScope {    map { item ->        async(dispatcher) {            f(item)        }
+fun <A, B> Collection<A>.asyncMapNotNull(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B?): List<B> = coroutineScope {    
+        m
 }.mapNotNull { it.await() }}
 
 fun logError(e: Throwable, post: Boolean = true, snackbar: Boolean = true) {
@@ -67,7 +70,8 @@ fun logError(e: Throwable, post: Boolean = true, snackbar: Boolean = true) {
 val pw = PrintWriter(sw)    e.printStackTrace(pw)    
 val stackTrace: String = sw.toString()
 if (post) {
-if (snackbar)            snackString(e.localizedMessage, null, stackTrace)
+if (snackbar)
+        snackString(e.localizedMessage, null, stackTrace)
 else            toast(e.localizedMessage)    }
 e.printStackTrace()    Logger.log(e)}
 
@@ -89,12 +93,14 @@ data class Lazier<T>(
 val factory: () -> T,    
 val name: String,    
 val lClass: KFunction<T>? = null) {
-    val get = lazy { factory() ?: lClass?.call() }}
+    val get = lazy { 
+        f
 
 fun <T> lazyList(vararg objects: Pair<String, () -> T>): List<Lazier<T>> {
 return objects.map {        Lazier(it.second, it.first)    }}
 
-fun <T> T.printIt(pre: String = ""): T {    println("$pre$this")
+fun <T> T.printIt(pre: String = ""): T {    
+        p
 return this}
 
 fun OkHttpClient.Builder.addGoogleDns() = (        addGenericDns(            "https://dns.google/dns-query",            listOf(                "8.8.4.4",                "8.8.8.8"            )        ))
@@ -103,12 +109,14 @@ fun OkHttpClient.Builder.addAdGuardDns() = (        addGenericDns(            "h
 @Suppress("BlockingMethodInNonBlockingContext")
 suspend fun webViewInterface(webViewDialog: WebViewBottomDialog): Map<String, String>? {
     var map: Map<String, String>? = null
-val latch = CountDownLatch(1)    webViewDialog.callback = {        map = it        latch.countDown()    }
+val latch = CountDownLatch(1)    webViewDialog.callback = {        
+        m
 
 val fragmentManager =        (currContext() as FragmentActivity?)?.supportFragmentManager ?: return null    webViewDialog.show(fragmentManager, "web-view")    delay(0)    latch.await(2, TimeUnit.MINUTES)
 return map}
 suspend fun webViewInterface(type: String, url: FileUrl): Map<String, String>? {
-    val webViewDialog: WebViewBottomDialog = when (type) {        "Cloudflare" -> CloudFlare.newInstance(url)
+    val webViewDialog: WebViewBottomDialog = when (type) {        
+        "
 else -> return null    }
 return webViewInterface(webViewDialog)}
 suspend fun webViewInterface(type: String, url: String): Map<String, String>? {

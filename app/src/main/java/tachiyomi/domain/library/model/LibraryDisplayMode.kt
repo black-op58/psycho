@@ -23,7 +23,8 @@ sealed class LibraryDisplayMode(
     }
 
     companion object {
-        val values by lazy { setOf(CompactGrid, ComfortableGrid, List, CoverOnlyGrid) }
+        val values by lazy { 
+        s
 
         val default = CompactGrid
 

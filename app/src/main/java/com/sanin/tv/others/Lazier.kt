@@ -7,7 +7,8 @@ data class Lazier<T>(
     val name: String,
     val lClass: KFunction<T>? = null
 ) {
-    val get = lazy { factory() ?: lClass?.call() }
+    val get = lazy { 
+        f
 }
 
 fun <T> lazyList(vararg objects: Pair<String, () -> T>): List<Lazier<T>> =

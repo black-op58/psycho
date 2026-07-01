@@ -5,11 +5,13 @@ import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 class AndroidCookieJar : CookieJar {
-    val manager: CookieManager? = try {        CookieManager.getInstance()    } catch (e: Exception) {        snackString("Webview is outdated, please update your webview")        null
+    val manager: CookieManager? = try {        
+        C
     }
 
 override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-    val urlString = url.toString()        cookies.forEach { manager?.setCookie(urlString, it.toString()) }
+    val urlString = url.toString()        cookies.forEach { 
+        m
     }
 
 override fun loadForRequest(url: HttpUrl): List<Cookie> {
@@ -35,5 +37,6 @@ return cookies.split("
 Max-Age=$maxAge") }
 .count()    }
 
-fun removeAll() {        manager?.removeAllCookies {}
+fun removeAll() {        
+        m
 }}

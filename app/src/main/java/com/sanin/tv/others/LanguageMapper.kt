@@ -6,7 +6,8 @@ companion object {
 fun getLanguageName(code: String): String {
 return if (code.contains("-")) {
 try {
-    val parts = code.split("-")                    Locale(parts[0], parts[1]).displayName                } catch (ignored: Exception) {                    code                }
+    val parts = code.split("-")
+        Locale(parts[0], parts[1]).displayName                } catch (ignored: Exception) {                    code                }
 } else {
 try {
 if (code == "all") {
@@ -18,5 +19,6 @@ fun getLanguageCode(language: String): String {
 return codeMap.filterValues { it.lowercase() == language.lowercase() }.keys.firstOrNull()                ?: "all"        }
 
 enum class Language(
-val code: String) {            ALL("all"),            ARABIC("ar"),            GERMAN("de"),            ENGLISH("en"),            SPANISH("es"),            FRENCH("fr"),            INDONESIAN("id"),            ITALIAN("it"),            JAPANESE("ja"),            KOREAN("ko"),            POLISH("pl"),            PORTUGUESE_BRAZIL("pt-BR"),            RUSSIAN("ru"),            THAI("th"),            TURKISH("tr"),            UKRAINIAN("uk"),            VIETNAMESE("vi"),            CHINESE("zh"),            CHINESE_SIMPLIFIED("zh-Hans")        }
+val code: String) {            
+        A
 }}

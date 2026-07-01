@@ -19,7 +19,8 @@ object CustomThemeManager {
 
     fun saveTheme(theme: CustomTheme) {
     val current = getAllThemes().toMutableList()
-        val existing = current.indexOfFirst { it.id == theme.id }
+        val existing = current.indexOfFirst { 
+        i
         if (existing >= 0) current[existing] = theme else current.add(theme)
         PrefManager.setCustomVal(KEY_THEMES, current)
     }

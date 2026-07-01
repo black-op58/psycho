@@ -5,7 +5,8 @@ deferred.map { it.await()}}}
 /**     * Attempts to load an extension from the given
 package name. It checks if the extension     * contains the required feature flag before trying to load it.     */    
 fun loadAnimeExtensionFromPkgName(context: Context, pkgName: String): AnimeLoadResult {
-    val pkgInfo = try {            context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)        } catch (error: PackageManager.NameNotFoundException) {            // Unlikely, but the 
+    val pkgInfo = try {            
+        c
 package may have been uninstalled at this point            Logger.log(error)
 return AnimeLoadResult.Error        }
 if (!isPackageAnExtension(MediaType.ANIME, pkgInfo)) {     * @param pkgName The 
@@ -13,7 +14,8 @@ package name of the extension to load.     * @param pkgInfo The
 package info of the extension.     */    
 private fun loadAnimeExtension(        context: Context,        pkgName: String,        pkgInfo: PackageInfo    ): AnimeLoadResult {
     val pkgManager = context.packageManager
-val appInfo = try {            pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)        } catch (error: PackageManager.NameNotFoundException) {            // Unlikely, but the 
+val appInfo = try {            
+        p
 package may have been uninstalled at this point            Logger.log(error)
 return AnimeLoadResult.Error        }
 
@@ -33,7 +35,8 @@ return AnimeLoadResult.Error        }
 
 val hasReadme = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_README", 0) == 1
 val hasChangelog =            appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
-val classLoader = try{            PathClassLoader(appInfo.sourceDir, null, context.classLoader)        } catch (e: Throwable) {            Logger.log("Extension load error: $extName")            Injekt.get<CrashlyticsInterface>().logException(e)
+val classLoader = try{            
+        P
 return AnimeLoadResult.Error        }
 
 val sources = appInfo.metaData.getString("$ANIME_PACKAGE$XX_METADATA_SOURCE_CLASS")!!            .split("
@@ -44,7 +47,8 @@ if (sourceClass.startsWith(".")) {                    pkgInfo.packageName + sour
 .flatMap {
 try {
 when (
-val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()                        .newInstance()) {                        is AnimeSource -> listOf(obj)                        is AnimeSourceFactory -> obj.createSources()
+val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()                        .newInstance()) {                        
+        i
 else -> throw Exception("Unknown source 
 class type! ${obj.javaClass}")                    }
 } catch (e: Throwable) {                    Logger.log("Extension load error: $extName ($it)")

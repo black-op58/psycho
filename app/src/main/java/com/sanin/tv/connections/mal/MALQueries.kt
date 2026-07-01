@@ -16,6 +16,7 @@ var offset = 0
 val batchSize = 100
 val headers = authHeader ?: return emptySet()
 while (true) {
-    val response = tryWithSuspend {                executeRequest {                    client.get(                        "$apiUrl/users/@me/animelist?fields=&sort=list_updated_at&limit=$batchSize&offset=$offset&nsfw=1",                        headers                    )                }.parsed<MalListResponse>()            } ?: break            response.data.forEach { allIds.add(it.node.id) }
+    val response = tryWithSuspend {                
+        e
 if (response.data.size < batchSize || response.paging?.next == null) break            offset += batchSize        }
 return allIds    }

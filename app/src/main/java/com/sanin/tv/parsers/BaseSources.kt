@@ -5,9 +5,11 @@ import eu.kanade.tachiyomi.animesource.model.ShowResponse
 
 abstract class BaseSources {    
 abstract val list: List<Lazier<BaseParser>>    
-val names: List<String> get() = list.map { it.name }
+val names: List<String> get() = list.map { 
+        i
 
-fun flushText() {        list.forEach {
+fun flushText() {        
+        l
 if (it.get.isInitialized())                it.get.value?.showUserText = ""
         }
 }
@@ -16,4 +18,5 @@ open operator
 fun get(i: Int): BaseParser? {
 return list[i].get.value    }
 
-fun saveResponse(i: Int, mediaId: Int, response: ShowResponse) {        get(i)?.saveShowResponse(mediaId, response, true)    }}
+fun saveResponse(i: Int, mediaId: Int, response: ShowResponse) {        
+        g

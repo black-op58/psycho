@@ -42,7 +42,8 @@ class RecommendationsViewModel : ViewModel() {
                 val topGenres = RecommendationEngine.extractGenres(completedList)
 
                 // Re-rank recommendations within each group
-                val rankedGroups = groups.map { group ->
+                val rankedGroups = groups.map { 
+        g
                     group.copy(
                         recommendations = RecommendationEngine.rankRecommendations(
                             group.recommendations,

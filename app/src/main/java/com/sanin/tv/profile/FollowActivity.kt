@@ -28,12 +28,14 @@ class FollowActivity : AppCompatActivity() {
 val adapter = GroupieAdapter()    
 var users: List<User>? = null    
 private lateinit var selected: ImageButton    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         binding = ActivityFollowBinding.inflate(layoutInflater)
         binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
 binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> {            bottomMargin = navBarHeight}
 setContentView(binding.root)
-val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)        selected = getSelected(layoutType)
+val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout);
+        selected = getSelected(layoutType)
         binding.followFilterButton.visibility = View.GONE
         binding.followerGrid.alpha = 0.33f        binding.followerList.alpha = 0.33f        selected(selected)        binding.listRecyclerView.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false        )        binding.listRecyclerView.adapter = adapter        binding.listProgressBar.visibility = View.VISIBLE        binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
@@ -41,16 +43,23 @@ val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)        selecte
 val title = intent.getStringExtra("title")        
 val userID = intent.getIntExtra("userId", 0)        binding.listTitle.text = title
         lifecycleScope.launch(Dispatchers.IO) {
-    val respond: List<User>? = when (title) {                "Following" -> Anilist.query.userFollowing(userID)                "Followers" -> Anilist.query.userFollowers(userID)
+    val respond: List<User>? = when (title) {                
+        "
 else -> null            }
 users = respond            withContext(Dispatchers.Main) {                fillList()                binding.listProgressBar.visibility = View.GONE}}
-binding.followerList.setOnClickListener {            selected(it as ImageButton)            PrefManager.setVal(PrefName.FollowerLayout, 0)            fillList()}
-binding.followerGrid.setOnClickListener {            selected(it as ImageButton)            PrefManager.setVal(PrefName.FollowerLayout, 1)            fillList()}
+binding.followerList.setOnClickListener {            selected(it as ImageButton)
+        PrefManager.setVal(PrefName.FollowerLayout, 0)
+        fillList()}
+binding.followerGrid.setOnClickListener {            selected(it as ImageButton)
+        PrefManager.setVal(PrefName.FollowerLayout, 1)
+        fillList()}
 binding.followSwipeRefresh.setOnRefreshListener {            binding.followSwipeRefresh.isRefreshing = false}
 }
 
-private fun fillList() {        adapter.clear()        
-val screenWidth = resources.displayMetrics.run { widthPixels / density }
+private fun fillList() {        
+        a
+val screenWidth = resources.displayMetrics.run { 
+        w
 binding.listRecyclerView.layoutManager = when (getLayoutType(selected)) {            0 -> LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)            1 -> GridLayoutManager(                this, (screenWidth / 120f).toInt(), GridLayoutManager.VERTICAL, false            )
 else -> LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)        }
 users?.forEach { user ->
@@ -58,7 +67,8 @@ if (getLayoutType(selected) == 0) {                adapter.add(                 
 } else {                adapter.add(                    FollowerItem(                        true,                        user,                        lifecycleScope,                    ) { onUserClick(it) })            }}
 }
 
-fun selected(it: ImageButton) {        selected.alpha = 0.33f        selected = it        selected.alpha = 1f    }
+fun selected(it: ImageButton) {        
+        s
 
 private fun getSelected(pos: Int): ImageButton {
 return when (pos) {            0 -> binding.followerList            1 -> binding.followerGrid
@@ -71,6 +81,7 @@ else -> 0        }
 }
 
 private fun onUserClick(id: Int) {
-    val intent = Intent(this, ProfileActivity::class.java)        intent.putExtra("userId", id)
+    val intent = Intent(this, ProfileActivity::class.java)
+        intent.putExtra("userId", id)
         startActivity(intent)
     }}

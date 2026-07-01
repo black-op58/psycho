@@ -29,11 +29,13 @@ class CalcActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalcBinding    
 private lateinit var code: String    
 private val handler = Handler(Looper.getMainLooper())    
-private val runnable = Runnable {        success()    }
+private val runnable = Runnable {        
+        s
 
 private val stack = CalcStack()    
 @SuppressLint("ClickableViewAccessibility")    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCalcBinding.inflate(layoutInflater)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         setContentView(binding.root)
         binding.root.doOnAttach {
             initActivity(this)            binding.displayContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -71,7 +73,8 @@ buttonDivide.setOnClickListener { stack.add('/')
 updateDisplay() }
 buttonEquals.setOnClickListener {
 try {
-    val ans = stack.evaluate()                    updateDisplay()
+    val ans = stack.evaluate()
+        updateDisplay()
                     binding.displayBinary.text = ans.toBinary()
                     binding.displayHex.text = ans.toHex()
                 } catch (e: Exception) {                    display.text = getString(R.string.error)                }}
@@ -80,25 +83,31 @@ try {
 if (PrefManager.getVal(PrefName.OverridePassword, false)) {                buttonClear.setOnTouchListener { v, event ->
 when (event.action) {                        MotionEvent.ACTION_DOWN -> {                            handler.postDelayed(runnable, 10000)                            true
                         }
-MotionEvent.ACTION_UP -> {                            v.performClick()                            handler.removeCallbacks(runnable)
+MotionEvent.ACTION_UP -> {                            v.performClick()
+        handler.removeCallbacks(runnable)
                             true}
 MotionEvent.ACTION_CANCEL -> {                            handler.removeCallbacks(runnable)                            true
 }
 else -> false                    }}}
-buttonBackspace.setOnClickListener {                stack.remove()                updateDisplay()}
+buttonBackspace.setOnClickListener {                stack.remove()
+        updateDisplay()}
 display.text = "0"}
 }
 
-override fun onResume() {        super.onResume()
+override fun onResume() {        
+        s
 if (hasPermission) {            success()        }
 if (PrefManager.getVal(PrefName.BiometricToken, "").isNotEmpty()) {
-    val bioMetricPrompt = BiometricPromptUtils.createBiometricPrompt(this) {                success()            }
+    val bioMetricPrompt = BiometricPromptUtils.createBiometricPrompt(this) {                
+        s
 
-val promptInfo = BiometricPromptUtils.createPromptInfo(this)            bioMetricPrompt.authenticate(promptInfo)
+val promptInfo = BiometricPromptUtils.createPromptInfo(this)
+        bioMetricPrompt.authenticate(promptInfo)
         }
 }
 
-private fun success() {        hasPermission = true        ContextCompat.startActivity(            this,            Intent(this, MainActivity::class.java)                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),            null        )    }
+private fun success() {        
+        h
 
 private fun updateDisplay() {
 if (stack.getExpression().isEmpty()) {            binding.display.text = "0"
@@ -106,9 +115,11 @@ return        }
 
 val expression = stack.getExpression().replace("*", "×").replace("/", "÷")        
 val spannable = SpannableString(expression)        
-val operators = arrayOf('+', '-', '×', '÷')        expression.forEachIndexed { index, char ->
+val operators = arrayOf('+', '-', '×', '÷')        expression.forEachIndexed { 
+        i
 if (char in operators) {
-    val color = getThemeColor(com.google.android.material.R.attr.colorSecondary)                spannable.setSpan(
+    val color = getThemeColor(com.google.android.material.R.attr.colorSecondary)
+        spannable.setSpan(
                     ForegroundColorSpan(color),                    index,                    index + 1,                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
     binding.display.text = spannable
 val text = binding.display.text.toString()

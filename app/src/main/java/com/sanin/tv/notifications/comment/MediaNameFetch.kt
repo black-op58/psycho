@@ -7,20 +7,25 @@ import kotlinx.coroutines.withContext
 class MediaNameFetch {    
 companion object {
     private fun queryBuilder(mediaIds: List<Int>): String {
-    var query = "{"            mediaIds.forEachIndexed { index, mediaId ->                query += """                media$index: Media(id: $mediaId) {                    coverImage {                        medium                        color                    }                    id                    title {                        romaji                    }
-        }            """.trimIndent()            }            query += "}"            return query        }        suspend 
+    var query = "{"            mediaIds.forEachIndexed { 
+        i
+        }            """.trimIndent()            }            query += "}"            return query        }
+        suspend 
 fun fetchMediaTitles(ids: List<Int>): Map<Int, ReturnedData> {
 return try {
     val url = "https://graphql.anilist.co/"                
-val data = mapOf(                    "query" to queryBuilder(ids),                )                withContext(Dispatchers.IO) {
+val data = mapOf(                    "query" to queryBuilder(ids),                )
+        withContext(Dispatchers.IO) {
     val response = client.post(                        url,                        headers = mapOf(                            "Content-Type" to "application/json",                            "Accept" to "application/json"                        ),
 data = data                    )                    
 val mediaResponse = parseMediaResponseWithGson(response.text)                    
-val mediaMap = mutableMapOf<Int, ReturnedData>()                    mediaResponse.data.forEach { (_, mediaItem) ->
+val mediaMap = mutableMapOf<Int, ReturnedData>()                    mediaResponse.data.forEach { 
+        (
                         mediaMap[mediaItem.id] = ReturnedData(                            mediaItem.title.romaji,                            mediaItem.coverImage.medium,                            mediaItem.coverImage.color                        )                    }
 mediaMap}
 } catch (e: Exception) {
-    val errorMap = mutableMapOf<Int, ReturnedData>()                ids.forEach { errorMap[it] = ReturnedData("Unknown", "", "#222222") }
+    val errorMap = mutableMapOf<Int, ReturnedData>()                ids.forEach { 
+        e
     errorMap}
     }
 

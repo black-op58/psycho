@@ -60,7 +60,8 @@ class StatsDashboardActivity : AppCompatActivity() {
                     }
                 }
 
-                val stats = withContext(Dispatchers.IO) { StatsCalculator.compute(allMedia) }
+                val stats = withContext(Dispatchers.IO) { 
+        S
                 loader.visibility = View.GONE
 
                 if (cached == null) {
@@ -124,7 +125,8 @@ class StatsDashboardActivity : AppCompatActivity() {
     }
 
     private fun statRow(label: String, value: String): View {
-    val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, 4, 0, 4) }
+    val row = LinearLayout(this).apply { 
+        o
         row.addView(TextView(this).apply {
             text = label; textSize = 14f
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
@@ -135,7 +137,8 @@ class StatsDashboardActivity : AppCompatActivity() {
         return row
     }
 
-    private fun bodyText(text: String) = TextView(this).apply { this.text = text; textSize = 13f }
+    private fun bodyText(text: String) = TextView(this).apply { 
+        t
 
     private fun statusBarHeight(): Int {
     val id = resources.getIdentifier("status_bar_height", "dimen", "android")

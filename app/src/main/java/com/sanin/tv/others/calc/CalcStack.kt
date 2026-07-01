@@ -23,23 +23,27 @@ else -> {
 while (!ops.isEmpty() && precedence(ops.peek()) >= precedence(expression[i])) {
     val val2 = values.pop()                        
 val val1 = values.pop()                        
-val op = ops.pop()                        values.push(applyOp(val1, val2, op))
+val op = ops.pop()
+        values.push(applyOp(val1, val2, op))
                     }
 ops.push(expression[i])}}
 i++        }
 while (!ops.isEmpty()) {
     val val2 = values.pop()            
 val val1 = values.pop()            
-val op = ops.pop()            values.push(applyOp(val1, val2, op))
+val op = ops.pop()
+        values.push(applyOp(val1, val2, op))
         }
 
-val ans = values.pop()        expression = ans.toString()
+val ans = values.pop();
+        expression = ans.toString()
 return ans    }
 
 fun add(c: Char) {
 if (expression.length >= maxExpressionLength) return        expression += c    }
 
-fun clear() {        expression = ""    }
+fun clear() {        
+        e
 
 fun remove() {
 if (expression.isNotEmpty()) {            expression = expression.substring(0, expression.length - 1)        }

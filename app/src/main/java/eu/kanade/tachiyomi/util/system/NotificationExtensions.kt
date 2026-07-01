@@ -26,7 +26,8 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.c
 return    }
 NotificationManagerCompat.from(this).notify(notificationWithIdAndTags)}
 
-fun Context.cancelNotification(id: Int) {    NotificationManagerCompat.from(this).cancel(id)}/** * Helper method to create a notification builder. * * @param id the channel id. * @param block the function that will execute inside the builder. * @return a notification to be displayed or updated. */
+fun Context.cancelNotification(id: Int) {    
+        N
 fun Context.notificationBuilder(    channelId: String,    block: (NotificationCompat.Builder.() -> Unit)? = null): NotificationCompat.Builder {
     val builder = NotificationCompat.Builder(this, channelId)        .setColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark))
 if (block != null) {        builder.block()    }

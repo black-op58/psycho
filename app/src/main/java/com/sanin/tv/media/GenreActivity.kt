@@ -22,13 +22,15 @@ import kotlinx.coroutines.launch
 class GenreActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGenreBinding
 val model: GenresViewModel by viewModels()    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityGenreBinding.inflate(layoutInflater)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         setContentView(binding.root)
         initActivity(this)
         binding.genreContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight
 bottomMargin += navBarHeight }
 
-val screenWidth = resources.displayMetrics.run { widthPixels / density }
+val screenWidth = resources.displayMetrics.run { 
+        w
 
 val type = intent.getStringExtra("type")
 if (type != null) {
@@ -38,7 +40,8 @@ if (type != null) {
 if (model.genres != null) {                adapter.genres = model.genres!!                adapter.pos = ArrayList(model.genres!!.keys)
 if (model.done)                    model.doneListener?.invoke()
             }
-binding.mediaInfoGenresRecyclerView.adapter = adapter            binding.mediaInfoGenresRecyclerView.layoutManager =                GridLayoutManager(this, (screenWidth / 156f).toInt())            lifecycleScope.launch(Dispatchers.IO) {
+binding.mediaInfoGenresRecyclerView.adapter = adapter            binding.mediaInfoGenresRecyclerView.layoutManager =                GridLayoutManager(this, (screenWidth / 156f).toInt())
+        lifecycleScope.launch(Dispatchers.IO) {
                 model.loadGenres(                    Anilist.genres ?: loadLocalGenres() ?: arrayListOf()                ) {                    MainScope().launch {                        adapter.addGenre(it)}}}}
 }
 

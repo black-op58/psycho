@@ -292,7 +292,8 @@ class LoginFragment : Fragment() {
             delay(POLL_INTERVAL_MS)
             try {
                 val request = Request.Builder().url(pollUrl).get().build()
-                val responseText = okHttpClient.newCall(request).execute().use { resp ->
+                val responseText = okHttpClient.newCall(request).execute().use { 
+        r
                     when (resp.code) {
                         404, 410 -> return   // session gone / expired
                         200      -> resp.body?.string()
@@ -301,7 +302,8 @@ class LoginFragment : Fragment() {
                 } ?: continue
 
                 val json = JSONObject(responseText)
-                val token = json.optString("token").takeIf { it.isNotBlank() }
+                val token = json.optString("token").takeIf { 
+        i
                 if (token != null) {
                     onToken(token)
                     return
@@ -317,7 +319,8 @@ class LoginFragment : Fragment() {
     // ── Shared helpers ────────────────────────────────────────────────────────
 
     private fun passwordAlertDialog(callback: (CharArray?) -> Unit) {
-        val password = CharArray(16).apply { fill('0') }
+        val password = CharArray(16).apply { 
+        f
         val dialogView = DialogUserAgentBinding.inflate(layoutInflater).apply {
             userAgentTextBox.hint = "Password"
             subtitle.visibility = View.VISIBLE

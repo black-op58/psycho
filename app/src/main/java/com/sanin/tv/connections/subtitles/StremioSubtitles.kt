@@ -11,7 +11,8 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.util.Logger
 object StremioSubtitles {    // The free Stremio OpenSubtitles v3 endpoint    
 private const val BASE_URL = "https://opensubtitles-v3.strem.io/subtitles"    suspend 
-fun getSubtitles(media: Media, season: Int, episode: Int): List<StremioSub> {        // Check if Online Subtitles are enabled
+fun getSubtitles(media: Media, season: Int, episode: Int): List<StremioSub> {        
+        /
 val enabled = PrefManager.getVal<Boolean>(PrefName.OnlineSubtitlesEnabled)
 if (!enabled) return emptyList()        
 val providers = PrefManager.getVal<Set<String>>(PrefName.OnlineSubtitleProviders)        
@@ -21,9 +22,11 @@ if (providers.contains("Wyzie")) {
 try {
     val imdbId = media.idIMDB
 if (imdbId != null) {
-    val wyzieSubs = WyzieSubtitles.getWyzieSubtitles(imdbId, season, episode)                        Logger.log("StremioSubtitles: Wyzie returned ${wyzieSubs.size} subs")
+    val wyzieSubs = WyzieSubtitles.getWyzieSubtitles(imdbId, season, episode)
+        Logger.log("StremioSubtitles: Wyzie returned ${wyzieSubs.size} subs")
 if (wyzieSubs.isNotEmpty()) {
-    val mapped = wyzieSubs.map {                                StremioSub(                                    id = it.id,                                    url = it.url,                                    lang = it.displayLabel // Use display label for nicer UI                                )                            }
+    val mapped = wyzieSubs.map {                                
+        S
     allSubs.addAll(mapped)}}
     } catch (e: Exception) {                    e.printStackTrace()}}
     // 2. Try OpenSubtitles (Stremio) if enabled
@@ -32,14 +35,16 @@ try {
     val imdbId = media.idIMDB
 if (imdbId != null) {
     val isMovie = media.format == "MOVIE"                        
-val url = if (isMovie) {                            "$BASE_URL/movie/$imdbId.json"
+val url = if (isMovie) {                            
+        "
 } else {                            "$BASE_URL/series/$imdbId:$season:$episode.json"                        }
 
 val request = Request.Builder().url(url).build()                        
 val response = okHttpClient.newCall(request).execute()
 if (response.isSuccessful && response.body != null) {
     val text = response.body!!.string()                            
-val data = Mapper.json.decodeFromString<StremioResponse>(text)                            allSubs.addAll(data.subtitles)
+val data = Mapper.json.decodeFromString<StremioResponse>(text)
+        allSubs.addAll(data.subtitles)
                         }}
 } catch (e: Exception) {                    e.printStackTrace()}}
 allSubs}

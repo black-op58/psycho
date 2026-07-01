@@ -8,7 +8,8 @@ import com.sanin.tv.databinding.ItemSettingsBinding
 import com.sanin.tv.databinding.ItemSettingsSwitchBinding
 import com.sanin.tv.setAnimation
 class SettingsAdapter(
-private val settings: ArrayList<Settings>) :    RecyclerView.Adapter<RecyclerView.ViewHolder>() {    inner 
+private val settings: ArrayList<Settings>) :    RecyclerView.Adapter<RecyclerView.ViewHolder>() {    
+        i
 class SettingsViewHolder(
 val binding: ItemSettingsBinding) :        RecyclerView.ViewHolder(binding.root)    inner 
 class SettingsSwitchViewHolder(
@@ -21,7 +22,8 @@ else -> SettingsViewHolder(                ItemSettingsBinding.inflate(         
 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     val settings = settings[position]
 when (settings.type) {            1 -> {
-    val b = (holder as SettingsViewHolder).binding                setAnimation(b.root.context, b.root)                b.settingsTitle.text = settings.name                b.settingsDesc.text = settings.desc                b.settingsIcon.setImageDrawable(                    ContextCompat.getDrawable(                        b.root.context, settings.icon                    )                )                b.settingsLayout.setOnClickListener {                    settings.onClick?.invoke(b)                }
+    val b = (holder as SettingsViewHolder).binding                setAnimation(b.root.context, b.root)                b.settingsTitle.text = settings.name                b.settingsDesc.text = settings.desc                b.settingsIcon.setImageDrawable(                    ContextCompat.getDrawable(                        b.root.context, settings.icon                    )                )                b.settingsLayout.setOnClickListener {                    
+        s
     b.settingsLayout.setOnLongClickListener {                    settings.onLongClick?.invoke()                    true
                 }
 if (settings.isVisible) {                    b.settingsLayout.visibility = View.VISIBLE                    b.settingsLayout.layoutParams = RecyclerView.LayoutParams(                        ViewGroup.LayoutParams.MATCH_PARENT,                        ViewGroup.LayoutParams.WRAP_CONTENT                    ).apply {                        topMargin = (24 * b.root.context.resources.displayMetrics.density).toInt()                    }
@@ -29,7 +31,8 @@ if (settings.isVisible) {                    b.settingsLayout.visibility = View.
 b.settingsIconRight.visibility =
 if (settings.isActivity) View.VISIBLE else View.GONE                b.attachView.visibility = if (settings.attach != null) View.VISIBLE else View.GONE                settings.attach?.invoke(b)            }
 2 -> {
-    val b = (holder as SettingsSwitchViewHolder).binding                setAnimation(b.root.context, b.root)                b.settingsButton.text = settings.name                b.settingsDesc.text = settings.desc                b.settingsIcon.setImageDrawable(                    ContextCompat.getDrawable(                        b.root.context, settings.icon                    )                )                b.settingsButton.isChecked = settings.isChecked                b.settingsButton.setOnCheckedChangeListener { _, isChecked ->                    settings.switch?.invoke(isChecked, b)                }
+    val b = (holder as SettingsSwitchViewHolder).binding                setAnimation(b.root.context, b.root)                b.settingsButton.text = settings.name                b.settingsDesc.text = settings.desc                b.settingsIcon.setImageDrawable(                    ContextCompat.getDrawable(                        b.root.context, settings.icon                    )                )                b.settingsButton.isChecked = settings.isChecked                b.settingsButton.setOnCheckedChangeListener { 
+        _
     b.settingsLayout.setOnLongClickListener {                    settings.onLongClick?.invoke()                    true
                 }
 if (settings.isVisible) {                    b.settingsLayout.visibility = View.VISIBLE                    b.settingsLayout.layoutParams = RecyclerView.LayoutParams(                        ViewGroup.LayoutParams.MATCH_PARENT,                        ViewGroup.LayoutParams.WRAP_CONTENT                    ).apply {                        topMargin = (24 * b.root.context.resources.displayMetrics.density).toInt()                    }

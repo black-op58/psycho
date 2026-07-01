@@ -16,7 +16,8 @@ return if (subdubMatcher.find()) {
     val soft = subdubMatcher.group(1)            
 val subdub = subdubMatcher.group(2)            
 val bed = subdubMatcher.group(3) ?: ""            
-val toggled = when (typeToSetTo) {                SubDubType.SUB -> "sub"                SubDubType.DUB -> "dub"                SubDubType.NULL -> ""            }
+val toggled = when (typeToSetTo) {                
+        S
 
 val toggledCasePreserved =
 if (subdub?.get(0)?.isUpperCase() == true || soft?.get(0)                        ?.isUpperCase() == true                ) toggled.replaceFirstChar {
@@ -60,7 +61,8 @@ if (failedEpisodeNumberMatcher.find()) {                    failedEpisodeNumberM
 
 fun removeEpisodeNumber(text: String): String {
     val regexPattern = Regex(REGEX_EPISODE, RegexOption.IGNORE_CASE)        
-val removedNumber = text.replace(regexPattern, "").ifEmpty {            text        }
+val removedNumber = text.replace(regexPattern, "").ifEmpty {            
+        t
 
 val letterPattern = Regex("[a-zA-Z]")
 return if (letterPattern.containsMatchIn(removedNumber)) {            removedNumber
@@ -71,7 +73,8 @@ fun removeEpisodeNumberCompletely(text: String): String {
     val regexPattern = Regex(REGEX_EPISODE, RegexOption.IGNORE_CASE)        
 val removedNumber = text.replace(regexPattern, "")
 return if (removedNumber.equals(text, true)) {  // if nothing was removed
-val failedEpisodeNumberPattern =                Regex(REGEX_PART_NUMBER, RegexOption.IGNORE_CASE)            failedEpisodeNumberPattern.replace(removedNumber) { mr ->
+val failedEpisodeNumberPattern =                Regex(REGEX_PART_NUMBER, RegexOption.IGNORE_CASE)
+        failedEpisodeNumberPattern.replace(removedNumber) { mr ->
                 mr.value.replaceFirst(mr.groupValues[1], "")            }
 } else {            removedNumber        }
 }

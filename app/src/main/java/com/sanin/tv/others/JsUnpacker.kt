@@ -23,13 +23,16 @@ val count = m.group(3)?.toIntOrNull() ?: 0
 if (tabs.size != count) {
 throw Exception("Unknown p.a.c.k.e.r. encoding")                }
 
-val un = Unbase(radix)                p = Pattern.compile("\\b\\w+\\b")                m = p.matcher(payload)                
+val un = Unbase(radix);
+        p = Pattern.compile("\\b\\w+\\b");
+        m = p.matcher(payload)                
 val decoded = StringBuilder(payload)                
 var replaceOffset = 0
 while (m.find()) {
     val word = m.group(0) ?: continue
 val x = un.unbase(word)                    
-val value = if (x < tabs.size && x >= 0) {                        tabs[x]
+val value = if (x < tabs.size && x >= 0) {                        
+        t
 } else null
 if (!value.isNullOrEmpty()) {                        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value)                        replaceOffset += value.length - word.length
                     }

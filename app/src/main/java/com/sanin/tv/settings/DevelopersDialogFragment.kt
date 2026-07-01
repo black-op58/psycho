@@ -11,10 +11,12 @@ import kotlinx.coroutines.launch
 class DevelopersDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDevelopersBinding? = null    
 private val binding get() = _binding!!    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetDevelopersBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        binding.devsProgressBar.visibility = View.VISIBLE
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
         binding.devsRecyclerView.visibility = View.GONE        lifecycleScope.launch {
 try {
     val contributors = emptyList()                binding.devsRecyclerView.adapter = DevelopersAdapter(contributors)
@@ -24,4 +26,5 @@ try {
             }}
     }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }}
+override fun onDestroy() {        
+        _

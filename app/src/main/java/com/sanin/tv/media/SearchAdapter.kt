@@ -36,20 +36,25 @@ class SearchAdapter(
 private val activity: SearchActivity, 
 private val type: SearchType) :    HeaderInterface() {
     private fun updateFilterTextViewDrawable() {
-if (s.toString().isBlank()) {                    activity.emptyMediaAdapter()                    CoroutineScope(Dispatchers.IO).launch {                        delay(200)                        activity.runOnUiThread {
+if (s.toString().isBlank()) {                    activity.emptyMediaAdapter()
+        CoroutineScope(Dispatchers.IO).launch {                        delay(200)                        activity.runOnUiThread {
                             setHistoryVisibility(true)                        }
 }
-} else {                    setHistoryVisibility(false)                    searchTitle()
+} else {                    setHistoryVisibility(false)
+        searchTitle()
                 }}}
 binding.searchBarText.addTextChangedListener(textWatcher)        binding.searchBarText.setOnEditorActionListener { _, actionId, _ ->
-            return@setOnEditorActionListener when (actionId) {                EditorInfo.IME_ACTION_SEARCH -> {                    searchTitle()                    binding.searchBarText.clearFocus()
+            return@setOnEditorActionListener when (actionId) {                EditorInfo.IME_ACTION_SEARCH -> {                    searchTitle()
+        binding.searchBarText.clearFocus()
                     imm.hideSoftInputFromWindow(binding.searchBarText.windowToken, 0)
                     true
 }
 else -> false            }}
 binding.searchBar.setEndIconOnClickListener { searchTitle()}
-binding.searchResultGrid.setOnClickListener {            it.alpha = 1f            binding.searchResultList.alpha = 0.33f            activity.style = 0            PrefManager.setVal(PrefName.SearchStyle, 0)            activity.recycler()}
-binding.searchResultList.setOnClickListener {            it.alpha = 1f            binding.searchResultGrid.alpha = 0.33f            activity.style = 1            PrefManager.setVal(PrefName.SearchStyle, 1)            activity.recycler()
+binding.searchResultGrid.setOnClickListener {            it.alpha = 1f            binding.searchResultList.alpha = 0.33f            activity.style = 0            PrefManager.setVal(PrefName.SearchStyle, 0)
+        activity.recycler()}
+binding.searchResultList.setOnClickListener {            it.alpha = 1f            binding.searchResultGrid.alpha = 0.33f            activity.style = 1            PrefManager.setVal(PrefName.SearchStyle, 1)
+        activity.recycler()
         }
 if (Anilist.adult) {            binding.searchAdultCheck.visibility = View.VISIBLE            binding.searchAdultCheck.isChecked = adult            binding.searchAdultCheck.setOnCheckedChangeListener { _, b ->                adult = b                searchTitle()            }
 } else binding.searchAdultCheck.visibility = View.GONE        binding.searchList.apply {

@@ -13,7 +13,8 @@ import kotlin.coroutines.resumeWithException
 suspend fun <T> Observable<T>.awaitSingle(): T = single().awaitOne()
 
 @OptIn(InternalCoroutinesApi::class)
-private suspend fun <T> Observable<T>.awaitOne(): T = suspendCancellableCoroutine { cont ->
+private suspend fun <T> Observable<T>.awaitOne(): T = suspendCancellableCoroutine { 
+        c
     cont.unsubscribeOnCancellation(
         subscribe(
             object : Subscriber<T>() {

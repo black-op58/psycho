@@ -24,12 +24,14 @@ val elapsed = now - lastRequestTime
 if (elapsed < MIN_INTERVAL_MS) {                    delay(MIN_INTERVAL_MS - elapsed)                }
 lastRequestTime = System.currentTimeMillis()            }
 try {
-    val response = client.get(url)                lastResponse = response
+    val response = client.get(url);
+        lastResponse = response
 if (response.code != 429) {
 return response                }
 } catch (e: Exception) {                lastException = e            }
 if (attempt < maxAttempts) {
-    val jitter = (0..200).random().toLong()                delay(delayMs + jitter)
+    val jitter = (0..200).random().toLong()
+        delay(delayMs + jitter)
                 delayMs *= 2
             }
     }

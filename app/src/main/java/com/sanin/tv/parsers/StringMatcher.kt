@@ -3,7 +3,8 @@ import com.sanin.tv.util.Logger
 class StringMatcher {    
 companion object {
     private fun levenshteinDistance(s1: String, s2: String): Int {
-    val dp = Array(s1.length + 1) { IntArray(s2.length + 1) }
+    val dp = Array(s1.length + 1) { 
+        I
 for (i in 0..s1.length) {
 for (j in 0..s2.length) {
 when {                        i == 0 -> dp[i][j] = j                        j == 0 -> dp[i][j] = i

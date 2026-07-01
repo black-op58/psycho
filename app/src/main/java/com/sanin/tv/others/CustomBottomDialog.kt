@@ -10,29 +10,36 @@ open class CustomBottomDialog : BottomSheetDialogFragment() {
     private var _binding: BottomSheetCustomBinding? = null    
 private val binding get() = _binding!!    
 private val viewList = mutableListOf<View>()    
-fun addView(view: View) {        viewList.add(view)    }
+fun addView(view: View) {        
+        v
 
 var title: String? = null
-fun setTitleText(string: String) {        title = string    }
+fun setTitleText(string: String) {        
+        t
 
 private var checkText: String? = null    
 private var checkChecked: Boolean = false    
 private var checkCallback: ((Boolean) -> Unit)? = null
-fun setCheck(text: String, checked: Boolean, callback: ((Boolean) -> Unit)) {        checkText = text        checkChecked = checked        checkCallback = callback    }
+fun setCheck(text: String, checked: Boolean, callback: ((Boolean) -> Unit)) {        
+        c
 
 private var negativeText: String? = null    
 private var negativeCallback: (() -> Unit)? = null
-fun setNegativeButton(text: String, callback: (() -> Unit)) {        negativeText = text        negativeCallback = callback    }
+fun setNegativeButton(text: String, callback: (() -> Unit)) {        
+        n
 
 private var positiveText: String? = null    
 private var positiveCallback: (() -> Unit)? = null
-fun setPositiveButton(text: String, callback: (() -> Unit)) {        positiveText = text        positiveCallback = callback    }
+fun setPositiveButton(text: String, callback: (() -> Unit)) {        
+        p
 
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetCustomBinding.inflate(inflater, container, false)        
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 val window = dialog?.window        window?.statusBarColor = Color.TRANSPARENT
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.bottomSheerCustomTitle.text = title        viewList.forEach {            binding.bottomDialogCustomContainer.addView(it)        }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        b
 if (checkText != null) binding.bottomDialogCustomCheckBox.apply {            visibility = View.VISIBLE            text = checkText            isChecked = checkChecked            setOnCheckedChangeListener { _, checked ->                checkCallback?.invoke(checked)            }
 }
 if (negativeText != null) binding.bottomDialogCustomNegative.apply {            visibility = View.VISIBLE            text = negativeText            setOnClickListener {                negativeCallback?.invoke()            }
@@ -40,7 +47,8 @@ if (negativeText != null) binding.bottomDialogCustomNegative.apply {            
 if (positiveText != null) binding.bottomDialogCustomPositive.apply {            visibility = View.VISIBLE            text = positiveText            setOnClickListener {                positiveCallback?.invoke()            }}
 }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }
+override fun onDestroy() {        
+        _
 
 companion object {
     fun newInstance() = CustomBottomDialog()    }}

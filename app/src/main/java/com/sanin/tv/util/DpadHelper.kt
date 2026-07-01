@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 object DpadHelper {
-    fun RecyclerView.enableDpadNavigation() {        descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS        isFocusable = true        isFocusableInTouchMode = true        addOnChildAttachStateChangeListener(
+    fun RecyclerView.enableDpadNavigation() {        
+        d
 object : RecyclerView.OnChildAttachStateChangeListener {
-    override fun onChildViewAttachedToWindow(view: View) {                view.isFocusable = true                view.isFocusableInTouchMode = true            }
+    override fun onChildViewAttachedToWindow(view: View) {                
+        v
 
 override fun onChildViewDetachedFromWindow(view: View) {}
 })        setOnKeyListener { _, keyCode, event ->

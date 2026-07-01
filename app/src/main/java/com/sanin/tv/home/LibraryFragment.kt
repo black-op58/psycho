@@ -115,13 +115,15 @@ class LibraryFragment : Fragment() {
 
             model.getAnimeFav().observe(viewLifecycleOwner) { favs ->
                 // Merge favourites without duplicating
-                val existingIds = allMedia.map { it.id }.toSet()
+                val existingIds = allMedia.map { 
+        i
                 favs?.filter { it.id !in existingIds }?.let { allMedia.addAll(it) }
                 refreshDisplay()
             }
 
             model.getAnimePlanned().observe(viewLifecycleOwner) { planned ->
-                val existingIds = allMedia.map { it.id }.toSet()
+                val existingIds = allMedia.map { 
+        i
                 planned?.filter { it.id !in existingIds }?.let { allMedia.addAll(it) }
                 refreshDisplay()
             }

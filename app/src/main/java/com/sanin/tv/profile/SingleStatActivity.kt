@@ -10,14 +10,17 @@ import com.sanin.tv.toast
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 class SingleStatActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySingleStatBinding    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         binding = ActivitySingleStatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
 val chartOptions = chartOptions
-if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)            binding.chartView.aa_drawChartWithChartOptions(chartOptions)
+if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)
+        binding.chartView.aa_drawChartWithChartOptions(chartOptions)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-} else {            toast("No chart data")            finish()
+} else {            toast("No chart data")
+        finish()
         }
 }
 

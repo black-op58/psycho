@@ -11,21 +11,25 @@ import java.net.URLDecoder
 import java.util.Locale
 class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     val extension: AnimeExtension.Installed
-var sourceLanguage = 0    init {        this.extension = extension    }
+var sourceLanguage = 0    init {        
+        t
 
 override val name = extension.name    
 override val saveName = extension.name    
 override val hostUrl =        (extension.sources.first() as? AnimeHttpSource)?.baseUrl ?: extension.sources.first().name    
 override val isNSFW = extension.isNsfw    
 override val icon = extension.icon    
-override var selectDub: Boolean        get() = getDub()        set(value) {
+override var selectDub: Boolean        get() = getDub()
+        set(value) {
             setDub(value)        }
 
 private fun getDub(): Boolean {
 if (sourceLanguage >= extension.sources.size) {            sourceLanguage = extension.sources.size - 1        }
 
-val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return false        currContext()?.let { context ->            
-val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues { MediaNameAdapter.getSubDub(it.toString()) != MediaNameAdapter.SubDubType.NULL }
+val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return false        currContext()?.let { 
+        c
+val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues { 
+        M
 .forEach { value ->
 return when (MediaNameAdapter.getSubDub(value.value.toString())) {                        MediaNameAdapter.SubDubType.SUB -> false                        MediaNameAdapter.SubDubType.DUB -> true                        MediaNameAdapter.SubDubType.NULL -> false                    }}
 }
@@ -35,27 +39,33 @@ private fun setDub(setDub: Boolean) {
 if (sourceLanguage >= extension.sources.size) {            sourceLanguage = extension.sources.size - 1        }
 
 val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return
-val type = when (setDub) {            true -> MediaNameAdapter.SubDubType.DUB            false -> MediaNameAdapter.SubDubType.SUB        }
+val type = when (setDub) {            
+        t
 currContext()?.let { context ->
-val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues { MediaNameAdapter.getSubDub(it.toString()) != MediaNameAdapter.SubDubType.NULL }
+val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues { 
+        M
 .forEach { value ->
 val setValue = MediaNameAdapter.setSubDub(value.value.toString(), type)
 if (setValue != null) {                        sharedPreferences.edit().putString(value.key, setValue).apply()                    }}}
 }
 
 override fun isDubAvailableSeparately(sourceLang: Int?): Boolean {
-    val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return false        currContext()?.let { context ->            Logger.log("isDubAvailableSeparately: ${configurableSource.getPreferenceKey()}")            
-val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues {                MediaNameAdapter.setSubDub(                    it.toString(),                    MediaNameAdapter.SubDubType.NULL                ) != null            }
+    val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return false        currContext()?.let { 
+        c
+val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues {                
+        M
 .forEach { _ -> return true}
 }
 return false    }
 
 override suspend 
 fun loadEpisodes(        animeLink: String,        extra: Map<String, String>?,        sAnime: SAnime    ): List<Episode> {
-    val source = try {            extension.sources[sourceLanguage]        } catch (e: Exception) {            sourceLanguage = 0            extension.sources[sourceLanguage]        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource            ?: return emptyList())
+    val source = try {            
+        e
 try {
     val res = source.getEpisodeList(sAnime)            
-val sortedEpisodes = if (res[0].episode_number == -1f) {                // Find the number in the string and sort by that number
+val sortedEpisodes = if (res[0].episode_number == -1f) {                
+        /
 val sortedByStringNumber = res.sortedBy {
     val matchResult = MediaNameAdapter.findEpisodeNumber(it.name)                    
 val number = matchResult ?: Float.MAX_VALUE                    it.episode_number = number  // Store the found number in episode_number                    number                }
@@ -66,7 +76,8 @@ it                }
 } else if (episodesAreIncrementing(res)) {                res.sortedBy { it.episode_number }
 } else {
     var episodeCounter = 1f                // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
-val seasonGroups =                    res.groupBy { MediaNameAdapter.findSeasonNumber(it.name) ?: 0 }
+val seasonGroups =                    res.groupBy { 
+        M
 seasonGroups.keys.sortedBy { it}
 .flatMap { season ->                        seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
 if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
@@ -81,7 +92,8 @@ return sortedEpisodes.map { sEpisodeToEpisode(it) }
 return emptyList()    }
 
 private fun episodesAreIncrementing(episodes: List<SEpisode>): Boolean {
-    val sortedEpisodes = episodes.sortedBy { it.episode_number }
+    val sortedEpisodes = episodes.sortedBy { 
+        i
 
 val takenNumbers = mutableListOf<Float>()        sortedEpisodes.forEach {
 if (it.episode_number !in takenNumbers) {                takenNumbers.add(it.episode_number)
@@ -92,30 +104,38 @@ return true    }
 
 override suspend 
 fun loadVideoServers(        episodeLink: String,        extra: Map<String, String>?,        sEpisode: SEpisode    ): List<VideoServer> {
-    val source = try {            extension.sources[sourceLanguage]        } catch (e: Exception) {            sourceLanguage = 0            extension.sources[sourceLanguage]        } as? AnimeHttpSource ?: return emptyList()
+    val source = try {            
+        e
 return try {
-    val videos = getVideoList(source,sEpisode)            videos.map { videoToVideoServer(it) }
-    } catch (e: Exception) {            Logger.log("Exception occurred: ${e.message}")            emptyList()}}
+    val videos = getVideoList(source,sEpisode)            videos.map { 
+        v
+    } catch (e: Exception) {            Logger.log("Exception occurred: ${e.message}")
+        emptyList()}}
     suspend
 fun getVideoList(        source: AnimeHttpSource,        episode: SEpisode    ): List<Video> {
     val hasHosters = checkHasHosters(source)        
-val directVideos = if (!hasHosters) {            runCatching {                source.getVideoList(episode)            }.getOrElse { emptyList() }
+val directVideos = if (!hasHosters) {            
+        r
 } else {            emptyList()        }
 
 val hosterVideos = if (hasHosters) {
-    val hosters = runCatching {                source.getHosterList(episode)            }.getOrElse { emptyList() }
+    val hosters = runCatching {                
+        s
     coroutineScope {                hosters.map { hoster ->                    async(Dispatchers.IO) {
-    val videos = when {                            !hoster.videoList.isNullOrEmpty() -> hoster.videoList
+    val videos = when {                            
+        !
 else -> runCatching {                                source.getVideoList(hoster)                            }.getOrElse { emptyList() }}
 videos.map { video ->
 val resolved = resolveVideo(source, video)                            
-val title = if (                                hoster.hosterName.isBlank() ||                                hoster.hosterName == NO_HOSTER_LIST                            ) {                                resolved.videoTitle
+val title = if (                                hoster.hosterName.isBlank() ||                                hoster.hosterName == NO_HOSTER_LIST                            ) {                                
+        r
 } else {                                "${hoster.hosterName} - ${resolved.videoTitle}"                            }
 resolved.copy(                                videoTitle = title,                                initialized = true                            )}}
 }.awaitAll().flatten()            }
 } else {            emptyList()        }
 
-val resolvedDirect = coroutineScope {            directVideos.map {                async(Dispatchers.IO) {                    resolveVideo(source, it)                }
+val resolvedDirect = coroutineScope {            
+        d
 }.awaitAll()        }
 return source.run {            (resolvedDirect + hosterVideos)                .distinctBy { it.videoUrl }
 .filter { it.videoUrl.isNotEmpty() && it.videoUrl != "null"}
@@ -139,10 +159,12 @@ fun resolveVideo(        source: AnimeHttpSource,        video: Video    ): Vide
 if (video.initialized && video.videoUrl.isNotEmpty() && video.videoUrl != "null") {
 return video        }
 
-val resolved = runCatching {            source.resolveVideo(video)        }.getOrNull()
+val resolved = runCatching {            
+        s
 if (resolved != null) return resolved
 if (video.videoUrl == "null" || video.videoUrl.isEmpty()) {
-    val newUrl = runCatching {                source.getVideoUrl(video)            }.getOrNull()
+    val newUrl = runCatching {                
+        s
 return video.copy(videoUrl = newUrl ?: video.videoUrl)        }
 return video    }
 
@@ -152,12 +174,19 @@ return VideoServerPassthrough(server)    }
 
 override suspend 
 fun search(query: String): List<ShowResponse> {
-    val source = try {            extension.sources[sourceLanguage]        } catch (e: Exception) {            sourceLanguage = 0            extension.sources[sourceLanguage]        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource            ?: return emptyList())
+    val source = try {            
+        e
 return try {
-    val res = source.getSearchAnime(1, query, source.getFilterList())            Logger.log("query: $query")            convertAnimesPageToShowResponse(res)
-        } catch (e: CloudflareBypassException) {            Logger.log("Exception in search: $e")            Logger.log(e)            withContext(Dispatchers.Main) {
+    val res = source.getSearchAnime(1, query, source.getFilterList())
+        Logger.log("query: $query")
+        convertAnimesPageToShowResponse(res)
+        } catch (e: CloudflareBypassException) {            Logger.log("Exception in search: $e")
+        Logger.log(e)
+        withContext(Dispatchers.Main) {
                 snackString("Failed to bypass Cloudflare")            }
-    emptyList()        } catch (e: Exception) {            Logger.log("General exception in search: $e")            Logger.log(e)            emptyList()}
+    emptyList()        } catch (e: Exception) {            Logger.log("General exception in search: $e")
+        Logger.log(e)
+        emptyList()}
     }
 
 private fun convertAnimesPageToShowResponse(animesPage: AnimesPage): List<ShowResponse> {
@@ -167,7 +196,8 @@ val link = sAnime.url
 val coverUrl = sAnime.thumbnail_url ?: ""            // Create a new ShowResponse            ShowResponse(name, link, coverUrl, sAnime)        }
 }
 
-private fun sEpisodeToEpisode(sEpisode: SEpisode): Episode {        //if the float episode number is a whole number, convert it to an int
+private fun sEpisodeToEpisode(sEpisode: SEpisode): Episode {        
+        /
 val episodeNumberInt =
 if (sEpisode.episode_number % 1 == 0f) {                sEpisode.episode_number.toInt()
 } else {                sEpisode.episode_number            }
@@ -184,7 +214,8 @@ return if (vidList.isNotEmpty()) {            VideoContainer(vidList, subList, a
 throw Exception("No videos found")        }
 }
 
-private fun aniVideoToSaiVideo(aniVideo: Video): com.sanin.tv.parsers.Video {        // Find the number value from the .quality string
+private fun aniVideoToSaiVideo(aniVideo: Video): com.sanin.tv.parsers.Video {        
+        /
 val number = Regex("""\d+""").find(aniVideo.quality)?.value?.toInt() ?: 0        // Check for null video URL
 val videoUrl = aniVideo.videoUrl ?: throw Exception("Video URL is null")        
 var format: VideoType?
@@ -196,30 +227,37 @@ if (format == null && query != null) {
     val queryPairs: List<Pair<String, String>> = query.split("&").map {
     val idx = it.indexOf("=")                    
 val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")                    
-val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")                    Pair(key, value)                }
+val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
+        Pair(key, value)                }
 // Assume the file is named under the "file" query parameter
-val fileName = queryPairs.find { it.first == "file" }?.second ?: ""                format = getVideoType(fileName)                // this solves a problem no one has, so I'm commenting it out for now                //if (format == null) {                //    
+val fileName = queryPairs.find { 
+        i
 val networkHelper = Injekt.get<NetworkHelper>()                //    format = headRequest(videoUrl, networkHelper)                //}}
 // If the format is still undetermined, log an error
-if (format == null) {                Logger.log("Unknown video format: $videoUrl")                format = VideoType.CONTAINER
+if (format == null) {                Logger.log("Unknown video format: $videoUrl");
+        format = VideoType.CONTAINER
             }
 } catch (malformed: MalformedURLException) {
-if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent"))                format = VideoType.CONTAINER
+if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent"));
+        format = VideoType.CONTAINER
 else
 throw malformed        }
 
-val headersMap: Map<String, String> =            aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
+val headersMap: Map<String, String> =            aniVideo.headers?.toMultimap()?.mapValues { 
+        i
 return Video(            number,            format!!,            FileUrl(videoUrl, headersMap),            null        )    }
 
 private fun getVideoType(fileName: String): VideoType? {
-    val type = when {            fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(                ".mkv",                ignoreCase = true            ) -> VideoType.CONTAINER            fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8            fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
+    val type = when {            
+        f
 else -> null        }
 return type    }
 
 @Suppress("unused")    
 private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoType? {
 return try {            Logger.log("attempting head request for $fileName")            
-val request = Request.Builder()                .url(fileName)                .head()                .build()            networkHelper.client.newCall(request).execute().use { response ->
+val request = Request.Builder()                .url(fileName)                .head()                .build()
+        networkHelper.client.newCall(request).execute().use { response ->
                 
 val contentType = response.header("Content-Type")                
 val contentDisposition = response.header("Content-Disposition")

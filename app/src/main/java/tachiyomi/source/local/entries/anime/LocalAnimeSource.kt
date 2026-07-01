@@ -30,7 +30,8 @@ class LocalAnimeSource(
     private val context: Context,
 ) : AnimeCatalogueSource, UnmeteredSource {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json { 
+        i
 
     private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular())
     private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest())
@@ -106,7 +107,8 @@ class LocalAnimeSource(
             }
         }
 
-        val animes = animeDirs.map { animeDir ->
+        val animes = animeDirs.map { 
+        a
             SAnime.create().apply {
                 title = animeDir.name.orEmpty()
                 url = animeDir.name.orEmpty()
@@ -115,7 +117,8 @@ class LocalAnimeSource(
                 if (coverFile != null) {
                     thumbnail_url = coverFile.uri.toString()
                 } else {
-                    val firstVideo = animeDir.listFiles().firstOrNull { !it.name.orEmpty().startsWith('.') && isSupportedVideo(it) }
+                    val firstVideo = animeDir.listFiles().firstOrNull { 
+        !
                     if (firstVideo != null) {
                         thumbnail_url = firstVideo.uri.toString()
                     }
@@ -151,7 +154,8 @@ class LocalAnimeSource(
         if (coverFile != null) {
             anime.thumbnail_url = coverFile.uri.toString()
         } else {
-            val firstVideo = animeDir.listFiles().firstOrNull { !it.name.orEmpty().startsWith('.') && isSupportedVideo(it) }
+            val firstVideo = animeDir.listFiles().firstOrNull { 
+        !
             if (firstVideo != null) {
                 anime.thumbnail_url = firstVideo.uri.toString()
             }

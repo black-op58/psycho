@@ -20,7 +20,8 @@ return type    }
 
 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     val ep = arr[position]        
-val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {            ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
+val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {            
+        e
 } else {            ep.number        } ?: ""
 when (holder) {            is EpisodeListViewHolder -> {
     val binding = holder.binding                setAnimation(fragment.requireContext(), holder.binding.root)                
@@ -64,4 +65,5 @@ private fun isRotationCoroutineRunningFor(episodeNumber: String): Boolean {
 return episodeNumber in activeCoroutines        }
 }
 
-fun updateType(t: Int) {        type = t    }}
+fun updateType(t: Int) {        
+        t

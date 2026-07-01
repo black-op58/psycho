@@ -20,16 +20,20 @@ private var isMonetEnabled = false
 private var onClickListener = View.OnClickListener {
     val context = this
 @ProfileStatsConfigure        // It is the responsibility of the configuration activity to update the app widget
-val appWidgetManager = AppWidgetManager.getInstance(context)        //updateAppWidget(context, appWidgetManager, appWidgetId)        ProfileStatsWidget.updateAppWidget(            context,            appWidgetManager,            appWidgetId        )        // Make sure we pass back the original appWidgetId
-val resultValue = Intent()        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+val appWidgetManager = AppWidgetManager.getInstance(context)        //updateAppWidget(context, appWidgetManager, appWidgetId)
+        ProfileStatsWidget.updateAppWidget(            context,            appWidgetManager,            appWidgetId        )        // Make sure we pass back the original appWidgetId
+val resultValue = Intent()
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_OK, resultValue)
         finish()
     }
 
 private lateinit var binding: StatisticsWidgetConfigureBinding    
 public override 
-fun onCreate(icicle: Bundle?) {        ThemeManager(this).applyTheme()        super.onCreate(icicle)
-        // Set the result to CANCELED.  This will cause the widget host to cancel        // out of the widget placement if the user presses the back button.        setResult(RESULT_CANCELED)        binding = StatisticsWidgetConfigureBinding.inflate(layoutInflater)
+fun onCreate(icicle: Bundle?) {        
+        T
+        // Set the result to CANCELED.  This will cause the widget host to cancel        // out of the widget placement if the user presses the back button.        setResult(RESULT_CANCELED);
+        binding = StatisticsWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
         appWidgetId = intent.getIntExtra(
             AppWidgetManager.EXTRA_APPWIDGET_ID,            AppWidgetManager.INVALID_APPWIDGET_ID        )        
@@ -60,8 +64,10 @@ return        }
 private fun themeColors() {
     val backgroundColor = getThemeColor(com.google.android.material.R.attr.colorSurface)        
 val textColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)        
-val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)        getSharedPreferences(
-            ProfileStatsWidget.getPrefsName(appWidgetId),            Context.MODE_PRIVATE        ).edit().apply {            putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)            putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
+val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
+        getSharedPreferences(
+            ProfileStatsWidget.getPrefsName(appWidgetId),            Context.MODE_PRIVATE        ).edit().apply {            putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)
+        putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
             putInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, textColor)
             putInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, subTextColor)
             apply()

@@ -16,18 +16,22 @@ import androidx.core.graphics.drawable.toBitmap
 import com.sanin.tv.MainActivity
 import com.sanin.tv.R
 class UpcomingWidget : AppWidgetProvider() {
-    override fun onReceive(context: Context, intent: Intent) {        super.onReceive(context, intent)
+    override fun onReceive(context: Context, intent: Intent) {        
+        s
 if (intent.action == ACTION_REFRESH) {
     val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
 if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()                    .putLong(LAST_UPDATE, 0)                    .putString(PREF_SERIALIZED_MEDIA, "")                    .apply()                
 val appWidgetManager = AppWidgetManager.getInstance(context)                
-val views = updateAppWidget(context, appWidgetId)                appWidgetManager.updateAppWidget(appWidgetId, views)
+val views = updateAppWidget(context, appWidgetId)
+        appWidgetManager.updateAppWidget(appWidgetId, views)
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
             }}
 }
 
-override fun onUpdate(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetIds: IntArray    ) {        appWidgetIds.forEach { appWidgetId ->            
-val rv = updateAppWidget(context, appWidgetId)            appWidgetManager.updateAppWidget(appWidgetId, rv)
+override fun onUpdate(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetIds: IntArray    ) {        
+        a
+val rv = updateAppWidget(context, appWidgetId)
+        appWidgetManager.updateAppWidget(appWidgetId, rv)
         }
 super.onUpdate(context, appWidgetManager, appWidgetIds)    }
 
@@ -35,13 +39,17 @@ override fun onDeleted(context: Context, appWidgetIds: IntArray) {
 for (appWidgetId in appWidgetIds) {            context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply()        }
 super.onDeleted(context, appWidgetIds)    }
 
-override fun onEnabled(context: Context) {        super.onEnabled(context)    }
+override fun onEnabled(context: Context) {        
+        s
 
-override fun onDisabled(context: Context) {        super.onDisabled(context)    }
+override fun onDisabled(context: Context) {        
+        s
 
-override fun onAppWidgetOptionsChanged(        context: Context?,        appWidgetManager: AppWidgetManager?,        appWidgetId: Int,        newOptions: Bundle?    ) {        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+override fun onAppWidgetOptionsChanged(        context: Context?,        appWidgetManager: AppWidgetManager?,        appWidgetId: Int,        newOptions: Bundle?    ) {        
+        s
 if (context != null && appWidgetManager != null) {
-    val views = updateAppWidget(context, appWidgetId)            appWidgetManager.updateAppWidget(appWidgetId, views)
+    val views = updateAppWidget(context, appWidgetId)
+        appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 
@@ -52,17 +60,21 @@ val backgroundColor = prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#800
 val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))            
 val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)            
 val countdownTextColor = prefs.getInt(PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)            
-val intent = Intent(context, UpcomingRemoteViewsService::class.java).apply {                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+val intent = Intent(context, UpcomingRemoteViewsService::class.java).apply {                
+        p
 data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))            }
 
-val intentTemplate = Intent(context, MainActivity::class.java).apply {                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK                putExtra("fromWidget", true)            }
+val intentTemplate = Intent(context, MainActivity::class.java).apply {                
+        f
 
-val refreshIntent = Intent(context, UpcomingWidget::class.java).apply {                action = ACTION_REFRESH                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)            }
+val refreshIntent = Intent(context, UpcomingWidget::class.java).apply {                
+        a
 
 val refreshPendingIntent = PendingIntent.getBroadcast(                context, appWidgetId, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE            )            
 val gradientDrawable = ResourcesCompat.getDrawable(                context.resources,                R.drawable.linear_gradient_black,                null            ) as GradientDrawable            gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)            gradientDrawable.cornerRadius = 0f
 val backgroundBitmap = gradientDrawable.toBitmap(720, 360)            
-fun buildViews(): RemoteViews = RemoteViews(context.packageName, R.layout.upcoming_widget).apply {                setImageViewBitmap(R.id.backgroundView, backgroundBitmap)                setTextColor(R.id.text_show_title, titleTextColor)
+fun buildViews(): RemoteViews = RemoteViews(context.packageName, R.layout.upcoming_widget).apply {                
+        s
                 setTextColor(R.id.text_show_countdown, countdownTextColor)
                 setTextColor(R.id.widgetTitle, titleTextColor)
                 setInt(R.id.refreshButton, "setColorFilter", titleTextColor)
@@ -70,7 +82,8 @@ fun buildViews(): RemoteViews = RemoteViews(context.packageName, R.layout.upcomi
                 setRemoteAdapter(R.id.widgetListView, intent)
                 setEmptyView(R.id.widgetListView, R.id.empty_view)
                 setPendingIntentTemplate(
-                    R.id.widgetListView,                    PendingIntent.getActivity(                        context,                        0,                        intentTemplate,                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE                    )                )                setOnClickPendingIntent(
+                    R.id.widgetListView,                    PendingIntent.getActivity(                        context,                        0,                        intentTemplate,                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE                    )                )
+        setOnClickPendingIntent(
                     R.id.logoView,                    PendingIntent.getActivity(                        context,                        1,                        Intent(context, UpcomingWidgetConfigure::class.java).apply {                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)                        },                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE                    )                )            }
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {                RemoteViews(                    mapOf(                        SizeF(0f, 0f) to buildViews(),                        SizeF(200f, 100f) to buildViews()                    )                )
 } else {                buildViews()            }}

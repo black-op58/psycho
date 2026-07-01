@@ -199,7 +199,8 @@ fun NavigationPill(
         "comments" -> R.drawable.ic_round_comment_24
         else -> R.drawable.ic_round_home_24
     }
-    var isFocused by remember { mutableStateOf(false) }
+    var isFocused by remember { 
+        m
 
     val pillWidth by animateDpAsState(
         targetValue = if (isExpanded) 88.dp else 48.dp,

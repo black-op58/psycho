@@ -76,7 +76,8 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
         }
         layout.addView(editText)
 
-        val saveBtn = Button(ctx).apply { text = "Save Note" }
+        val saveBtn = Button(ctx).apply { 
+        t
         layout.addView(saveBtn)
 
         val deleteBtn = Button(ctx).apply {

@@ -7,5 +7,6 @@ import com.sanin.tv.INCOGNITO_CHANNEL_ID
 import com.sanin.tv.settings.saving.PrefManager
 import com.sanin.tv.settings.saving.PrefName
 class IncognitoNotificationClickReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {        PrefManager.setVal(PrefName.Incognito, false)        
+    override fun onReceive(context: Context, intent: Intent?) {        
+        P
 val notificationManager =            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager        notificationManager.cancel(INCOGNITO_CHANNEL_ID)    }}

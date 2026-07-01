@@ -3,7 +3,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import com.sanin.tv.util.Logger
 object DeviceUtil {
-    val isMiui by lazy {        getSystemProperty("ro.miui.ui.version.name")?.isNotEmpty() ?: false    }
+    val isMiui by lazy {        
+        g
     /**     * Extracts the MIUI major version code from a string like "V12.5.3.0.QFGMIXM".     *     * @return MIUI major version code (e.g., 13) or null if can't be parsed.     */
 val miuiMajorVersion by lazy {
 if (!isMiui) return@lazy null        Build.VERSION.INCREMENTAL            .substringBefore('.')            .trimStart('V')            .toIntOrNull()    }
@@ -16,7 +17,8 @@ return true        }
 return try {            Class.forName("android.miui.AppOpsUtils")                .getDeclaredMethod("isXOptMode")                .invoke(null) as Boolean        } catch (e: Exception) {            false        }
 }
 
-val isSamsung by lazy {        Build.MANUFACTURER.equals("samsung", ignoreCase = true)    }
+val isSamsung by lazy {        
+        B
 
 val oneUiVersion by lazy {
 try {

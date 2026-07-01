@@ -28,7 +28,8 @@ val whitespace = "${if (character.role.lowercase() == "null") "" else character.
 
 override fun getItemCount(): Int = characterList.size    inner 
 class CharacterViewHolder(
-val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {
+val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
 if (!clickEnabled) return@setOnClickListener
 val char = characterList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        CharacterDetailsActivity::class.java                    ).putExtra("character", char as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )            }
 itemView.setOnLongClickListener {                copyToClipboard(                    characterList[bindingAdapterPosition].name ?: ""                )

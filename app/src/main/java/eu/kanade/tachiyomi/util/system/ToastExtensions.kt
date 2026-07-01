@@ -13,5 +13,6 @@ return toast(getString(resource), duration, block)}
 
 fun Context.toast(    text: String?,    duration: Int = Toast.LENGTH_SHORT,    block: (Toast) -> Unit = {}): Toast {
 return Toast.makeText(applicationContext, text.orEmpty(), duration).also {
-    block(it)        it.show()
+    block(it)
+        it.show()
 }}

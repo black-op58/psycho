@@ -14,9 +14,12 @@ import java.io.InputStream
 @GlideModule
 class SaninTVGlideApp : AppGlideModule() {    
 @SuppressLint("CheckResult")    
-override fun applyOptions(context: Context, builder: GlideBuilder) {        super.applyOptions(context, builder)        
-val diskCacheSizeBytes = 1024 * 1024 * 100 // 100 MiB        builder.apply {            setDiskCache(InternalCacheDiskCacheFactory(context, "img", diskCacheSizeBytes.toLong()))        }
+override fun applyOptions(context: Context, builder: GlideBuilder) {        
+        s
+val diskCacheSizeBytes = 1024 * 1024 * 100 // 100 MiB        builder.apply {            
+        s
 }
 
-override fun registerComponents(context: Context, glide: Glide, registry: Registry) {        registry.replace(            GlideUrl::class.java,            InputStream::class.java,            OkHttpUrlLoader.Factory(okHttpClient)        )        super.registerComponents(context, glide, registry)    }}
+override fun registerComponents(context: Context, glide: Glide, registry: Registry) {        
+        r
 }

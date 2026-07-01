@@ -7,9 +7,11 @@ import com.sanin.tv.loadImage
 import com.sanin.tv.openLinkInBrowser
 import com.sanin.tv.setAnimation
 class DevelopersAdapter(
-private val developers: Array<Developer>) :    RecyclerView.Adapter<DevelopersAdapter.DeveloperViewHolder>() {    inner 
+private val developers: Array<Developer>) :    RecyclerView.Adapter<DevelopersAdapter.DeveloperViewHolder>() {    
+        i
 class DeveloperViewHolder(
-val binding: ItemDeveloperBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {                openLinkInBrowser(developers[bindingAdapterPosition].url)            }}
+val binding: ItemDeveloperBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
 }
 
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeveloperViewHolder {

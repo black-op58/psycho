@@ -158,7 +158,8 @@ class ExtensionHealthFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
 
         pingJob = viewLifecycleOwner.lifecycleScope.launch {
-            val updated = sources.map { src ->
+            val updated = sources.map { 
+        s
                 async(Dispatchers.IO) {
                     pingSource(src)
                 }

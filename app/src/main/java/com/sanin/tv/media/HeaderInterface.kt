@@ -19,11 +19,13 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHeaderV
 return SearchHeaderViewHolder(binding)    }
 
 fun setHistoryVisibility(visible: Boolean) {
-if (visible) {            binding.searchResultLayout.startAnimation(fadeOutAnimation())            binding.searchHistoryList.startAnimation(fadeInAnimation())
+if (visible) {            binding.searchResultLayout.startAnimation(fadeOutAnimation())
+        binding.searchHistoryList.startAnimation(fadeInAnimation())
             binding.searchResultLayout.visibility = View.GONE
             binding.searchHistoryList.visibility = View.VISIBLE            binding.searchByImage.visibility = View.VISIBLE            updateClearHistoryVisibility()
 } else {
-if (binding.searchResultLayout.visibility != View.VISIBLE) {                binding.searchResultLayout.startAnimation(fadeInAnimation())                binding.searchHistoryList.startAnimation(fadeOutAnimation())
+if (binding.searchResultLayout.visibility != View.VISIBLE) {                binding.searchResultLayout.startAnimation(fadeInAnimation())
+        binding.searchHistoryList.startAnimation(fadeOutAnimation())
             }
 binding.searchResultLayout.visibility = View.VISIBLE            binding.clearHistory.visibility = View.GONE            binding.searchHistoryList.visibility = View.GONE            binding.searchByImage.visibility = View.GONE}
 }

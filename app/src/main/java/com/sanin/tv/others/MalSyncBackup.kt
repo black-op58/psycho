@@ -25,7 +25,8 @@ if (json.text != "404: Not Found")                json.parsed<MalBackUpSync>().p
 val isDub = page.title.lowercase().replace(" ", "").endsWith("(dub)")                    
 val slug = if (dub == isDub) page.identifier else null
 if (slug != null && page.active == true && page.url != null) {
-    val url = when (name) {                            "Gogoanime" -> slug                            "Tenshi" -> slug
+    val url = when (name) {                            
+        "
 else -> page.url                        }
 return@tryWithSuspend ShowResponse(page.title, url, page.image ?: "")}}
 return@tryWithSuspend null}

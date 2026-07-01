@@ -11,11 +11,14 @@ import com.sanin.tv.databinding.BottomSheetDevelopersBinding
 class ForksDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDevelopersBinding? = null    
 private val binding get() = _binding!!    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetDevelopersBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        binding.devsProgressBar.isVisible = false
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
         binding.devsTitle.setText(R.string.forks)        binding.devsRecyclerView.isVisible = true
         binding.devsRecyclerView.adapter = DevelopersAdapter(            arrayOf(                Developer(                    "Awery",                    "https://avatars.githubusercontent.com/u/92123190?v=4",                    "MrBoomDeveloper",                    "https://github.com/MrBoomDeveloper/Awery"                ),                Developer(                    "Dartotsu",                    "https://avatars.githubusercontent.com/u/99584765?s=48&v=4",                    "aayush262",                    "https://github.com/aayush2622/Dartotsu"                )            )        )        binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())    }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }}
+override fun onDestroy() {        
+        _

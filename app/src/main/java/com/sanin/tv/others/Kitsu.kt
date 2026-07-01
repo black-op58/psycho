@@ -9,15 +9,20 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.net.URLEncoder
 object Kitsu {    suspend 
-fun getKitsuEpisodesDetails(media: Media): Map<String, Episode>? {        Logger.log("Kitsu : title=${media.mainName()}")
+fun getKitsuEpisodesDetails(media: Media): Map<String, Episode>? {        
+        L
 return try {            tryWithSuspend {                // 1. Try GraphQL Method (Primary Priority)                
 var returnedEpisodes: Map<String, Episode>? = null
 try {
-    val query =                        """                        query {                          lookupMapping(externalId: ${media.id}, externalSite: ANILIST_ANIME) {                            __typename                            ... on Anime {                              id                              episodes(first: 2000) {                                nodes {                                  number                                  titles {                                    canonical                                  }                                  description(locales: ["en", "en-us"])                                  thumbnail {
+    val query =                        """                        query {                          
+        l
                                     original {                                      url                                    }
-        }                                }
-        }                            }
-        }                        }""".trimIndent()
+        }
+    }
+        }
+    }
+        }
+    }""".trimIndent()
                     
 val headers = mapOf(                        "Content-Type" to "application/json",                        "Accept" to "application/json",                    )                                        
 val graphqlRes = client.post(                        "https://kitsu.io/api/graphql",                        headers,
@@ -40,9 +45,11 @@ val limit = 20
 while (true) {
     val episodesUrl = "https://kitsu.io/api/edge/anime/$animeId/episodes?page[limit]=$limit&page[offset]=$offset&sort=number"                    
 val episodesRes = client.get(episodesUrl).parsed<KitsuEpisodes>()                                        
-val pageEpisodes = episodesRes.data?.associate { ep ->                        
+val pageEpisodes = episodesRes.data?.associate { 
+        e
 val num = ep.attributes?.number?.toString() ?: return@associate null to null
-val epNum = if (num.endsWith(".0")) num.substringBefore(".") else num                        epNum to Episode(                            number = epNum,                            title = ep.attributes.canonicalTitle,                            desc = (ep.attributes.synopsis ?: ep.attributes.description)?.replace(                                Regex("\\(Source:.*\\)"),                                ""                            )?.trim(),                            thumb = FileUrl[ep.attributes.thumbnail?.original],                            extra = mapOf(                                "season" to ep.attributes.seasonNumber.toString(),                                "airDate" to ep.attributes.airdate.toString(),                                "length" to ep.attributes.length.toString()                            )                        )                    }?.filterKeys { it != null }?.mapKeys { it.key!! }?.filterValues { it != null }?.mapValues { it.value!! }
+val epNum = if (num.endsWith(".0")) num.substringBefore(".") else num                        epNum to Episode(                            number = epNum,                            title = ep.attributes.canonicalTitle,                            desc = (ep.attributes.synopsis ?: ep.attributes.description)?.replace(                                Regex("\\(Source:.*\\)"),                                ""                            )?.trim(),                            thumb = FileUrl[ep.attributes.thumbnail?.original],                            extra = mapOf(                                "season" to ep.attributes.seasonNumber.toString(),                                "airDate" to ep.attributes.airdate.toString(),                                "length" to ep.attributes.length.toString()                            )                        )                    }?.filterKeys { 
+        i
 if (pageEpisodes != null) {                        allEpisodes.putAll(pageEpisodes)                    }
 if (episodesRes.links?.next == null || pageEpisodes.isNullOrEmpty()) {                        break                    }
 offset += limit}

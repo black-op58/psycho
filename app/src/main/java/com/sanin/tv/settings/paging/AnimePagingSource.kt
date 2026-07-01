@@ -44,13 +44,17 @@ return AnimeExtensionsViewModel(animeExtensionManager) as T    }}
 class AnimeExtensionsViewModel(    animeExtensionManager: AnimeExtensionManager) : ViewModel() {
     private val searchQuery = MutableStateFlow("")    
 private var currentPagingSource: AnimeExtensionPagingSource? = null
-fun setSearchQuery(query: String) {        searchQuery.value = query    }
+fun setSearchQuery(query: String) {        
+        s
 
-fun invalidatePager() {        currentPagingSource?.invalidate()    }
+fun invalidatePager() {        
+        c
 
 @OptIn(ExperimentalCoroutinesApi::class)    
-val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = combine(        animeExtensionManager.availableExtensionsFlow,        animeExtensionManager.installedExtensionsFlow,        searchQuery    ) { available, installed, query ->        Triple(available, installed, query)    }.flatMapLatest { (available, installed, query) ->        Pager(            PagingConfig(                pageSize = 15,                initialLoadSize = 15,                prefetchDistance = 15            )        ) {
-    val aEPS = AnimeExtensionPagingSource(available, installed, query)            currentPagingSource = aEPS
+val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = combine(        animeExtensionManager.availableExtensionsFlow,        animeExtensionManager.installedExtensionsFlow,        searchQuery    ) { 
+        a
+    val aEPS = AnimeExtensionPagingSource(available, installed, query);
+        currentPagingSource = aEPS
             aEPS        }.flow    }.cachedIn(viewModelScope)}
 
 class AnimeExtensionPagingSource(    
@@ -60,21 +64,26 @@ private val searchQuery: String) : PagingSource<Int, AnimeExtension.Available>()
     override suspend 
 fun load(params: LoadParams<Int>): LoadResult<Int, AnimeExtension.Available> {
     val position = params.key ?: 0
-val installedExtensions = installedExtensionsFlow.map { it.pkgName }.toSet()        
-val availableExtensions =            availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
+val installedExtensions = installedExtensionsFlow.map { 
+        i
+val availableExtensions =            availableExtensionsFlow.filterNot { 
+        i
 
 val query = searchQuery
 val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)        
-val filteredExtensions = if (query.isEmpty()) {            availableExtensions
+val filteredExtensions = if (query.isEmpty()) {            
+        a
 } else {            availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
 }
 
 val lang: String = PrefManager.getVal(PrefName.LangSort)        
 val langFilter =
 if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
-val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { it.isNsfw }
+val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { 
+        i
 return try {
-    val sublist = filternfsw.subList(                fromIndex = position,                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)            )            LoadResult.Page(
+    val sublist = filternfsw.subList(                fromIndex = position,                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)            )
+        LoadResult.Page(
 data = sublist,                prevKey = if (position == 0) null else position - params.loadSize,                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize            )        } catch (e: Exception) {            LoadResult.Error(e)        }
 }
 
@@ -87,10 +96,12 @@ private val clickListener: OnAnimeInstallClickListener) :    PagingDataAdapter<A
 companion object {
     private val DIFF_CALLBACK = 
 object : DiffUtil.ItemCallback<AnimeExtension.Available>() {
-    override fun areItemsTheSame(                oldItem: AnimeExtension.Available,                newItem: AnimeExtension.Available            ): Boolean {                // Your logic here
+    override fun areItemsTheSame(                oldItem: AnimeExtension.Available,                newItem: AnimeExtension.Available            ): Boolean {                
+        /
 return oldItem.pkgName == newItem.pkgName            }
 
-override fun areContentsTheSame(                oldItem: AnimeExtension.Available,                newItem: AnimeExtension.Available            ): Boolean {                // Your logic here
+override fun areContentsTheSame(                oldItem: AnimeExtension.Available,                newItem: AnimeExtension.Available            ): Boolean {                
+        /
 return oldItem == newItem            }}
 }
 
@@ -111,7 +122,8 @@ private val scope = CoroutineScope(Dispatchers.Main + job)        init {
             binding.closeTextView.setOnClickListener {
 if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
 val extension = getItem(bindingAdapterPosition)
-if (extension != null) {                    clickListener.onInstallClick(extension)                    binding.closeTextView.setImageResource(R.drawable.ic_sync)
+if (extension != null) {                    clickListener.onInstallClick(extension)
+        binding.closeTextView.setImageResource(R.drawable.ic_sync)
                     scope.launch {
 while (isActive) {                            withContext(Dispatchers.Main) {                                binding.closeTextView.animate()                                    .rotationBy(360f)                                    .setDuration(1000)                                    .setInterpolator(LinearInterpolator())                                    .start()                            }
 delay(1000)}}}}
@@ -123,10 +135,12 @@ fun bind(extension: AnimeExtension.Available) {
 val lang = LanguageMapper.getLanguageName(extension.lang)            binding.extensionNameTextView.text = extension.name
 val versionText = "$lang ${extension.versionName} $nsfw"            binding.extensionVersionTextView.text = versionText        }
 
-fun clear() {            job.cancel() // Cancel the coroutine when the view is recycled        }
+fun clear() {            
+        j
 }
 
-override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        super.onViewRecycled(holder)        holder.clear()
+override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        
+        s
     }}
 interface OnAnimeInstallClickListener {
     fun onInstallClick(pkg: AnimeExtension.Available)}

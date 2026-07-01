@@ -30,8 +30,11 @@ final
 override fun shouldInterceptRequest(        view: WebView,        url: String,    ): WebResourceResponse? {
 return shouldInterceptRequestCompat(view, url)    }    
 final 
-override fun onReceivedError(        view: WebView,        request: WebResourceRequest,        error: WebResourceError,    ) {        onReceivedErrorCompat(            view,            error.errorCode,            error.description?.toString(),            request.url.toString(),            request.isForMainFrame,        )    }    
+override fun onReceivedError(        view: WebView,        request: WebResourceRequest,        error: WebResourceError,    ) {        
+        o
 final 
-override fun onReceivedError(        view: WebView,        errorCode: Int,        description: String?,        failingUrl: String,    ) {        onReceivedErrorCompat(view, errorCode, description, failingUrl, failingUrl == view.url)    }    
+override fun onReceivedError(        view: WebView,        errorCode: Int,        description: String?,        failingUrl: String,    ) {        
+        o
 final 
-override fun onReceivedHttpError(        view: WebView,        request: WebResourceRequest,        error: WebResourceResponse,    ) {        onReceivedErrorCompat(            view,            error.statusCode,            error.reasonPhrase,            request.url                .toString(),            request.isForMainFrame,        )    }}
+override fun onReceivedHttpError(        view: WebView,        request: WebResourceRequest,        error: WebResourceResponse,    ) {        
+        o

@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 class SettingsCommonActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        binding = ActivitySettingsBinding.inflate(layoutInflater)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         setContentView(binding.root)
         binding.apply {
             settingsContainer.updatePadding(top = statusBarHeight, bottom = navBarHeight)            
@@ -35,11 +36,15 @@ val canAuthenticate =                            biometricManager.canAuthenticat
 if (canAuthenticate) {                            PrefManager.setVal(                                PrefName.Biometrics,                                !PrefManager.getVal<Boolean>(PrefName.Biometrics)                            )
 } else {                            snackString(getString(R.string.biometrics_not_available))                        }}
 ),                Settings(                    type  = 2,                    name  = getString(R.string.skip_loading_images),                    desc  = getString(R.string.skip_loading_images_desc),                    icon  = R.drawable.ic_round_hide_image_24,                    pref  = PrefName.SkipLoadImages                ),                Settings(                    type  = 2,                    name  = getString(R.string.use_source_media_titles),                    desc  = getString(R.string.use_source_media_titles_desc),                    icon  = R.drawable.ic_round_title_24,                    pref  = PrefName.UseSourceTitle                ),                Settings(                    type  = 1,                    name  = getString(R.string.user_agent),                    desc  = getString(R.string.user_agent_desc),                    icon  = R.drawable.ic_round_dns_24,                    onClick = {
-    val dialogBinding = DialogUserAgentBinding.inflate(layoutInflater)                        dialogBinding.userAgentTextBox.setText(
-                            PrefManager.getVal(PrefName.DefaultUserAgent)                        )                        customAlertDialog().apply {                            setTitle(R.string.user_agent)                            setCustomView(dialogBinding.root)
+    val dialogBinding = DialogUserAgentBinding.inflate(layoutInflater)
+        dialogBinding.userAgentTextBox.setText(
+                            PrefManager.getVal(PrefName.DefaultUserAgent)                        )
+        customAlertDialog().apply {                            setTitle(R.string.user_agent)
+        setCustomView(dialogBinding.root)
                             setPosButton(R.string.ok) {
                                 PrefManager.setVal(                                    PrefName.DefaultUserAgent,                                    dialogBinding.userAgentTextBox.text.toString()                                )                            }
-    setNegButton(R.string.cancel)                            show()}}
+    setNegButton(R.string.cancel)
+        show()}}
     ),                Settings(                    type  = 1,                    name  = getString(R.string.password),                    desc  = getString(R.string.password_desc),                    icon  = R.drawable.ic_round_lock_24,                    onClick = { passwordAlertDialog()}
     ),                Settings(                    type  = 2,                    name  = getString(R.string.share_username),                    desc  = getString(R.string.share_username_desc),                    icon  = R.drawable.ic_round_share_24,                    pref  = PrefName.SharedUserID                ),                Settings(                    type  = 2,                    name  = getString(R.string.open_dub_content_on_launch),                    desc  = getString(R.string.open_dub_content_on_launch_desc),                    icon  = R.drawable.ic_round_queue_music_24,                    pref  = PrefName.SubscribedAnime                ),                Settings(                    type  = 2,                    name  = getString(R.string.show_sub),                    desc  = getString(R.string.show_sub_desc),                    icon  = R.drawable.ic_round_subtitles_24,                    pref  = PrefName.ShowSub                ),                Settings(                    type  = 2,                    name  = getString(R.string.show_dub),                    desc  = getString(R.string.show_dub_desc),                    icon  = R.drawable.ic_round_record_voice_over_24,                    pref  = PrefName.ShowDub                ),                Settings(                    type  = 2,                    name  = getString(R.string.prefer_dub),                    desc  = getString(R.string.prefer_dub_desc),                    icon  = R.drawable.ic_round_audiotrack_24,                    isChecked = PrefManager.getVal(PrefName.PreferDub),                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.PreferDub, isChecked)}
     ),                Settings(                    type  = 2,                    name  = getString(R.string.incognito),                    desc  = getString(R.string.incognito_desc),                    icon  = R.drawable.ic_round_lock_24,                    isChecked = PrefManager.getVal(PrefName.Incognito),                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Incognito, isChecked)}
@@ -48,8 +53,10 @@ if (canAuthenticate) {                            PrefManager.setVal(           
     ),                Settings(                    type  = 1,                    name  = getString(R.string.default_startup_tab),                    desc  = listOf(getString(R.string.tab_home),getString(R.string.tab_anime),getString(R.string.tab_search),getString(R.string.tab_library),getString(R.string.tab_profile)).getOrElse(PrefManager.getVal<Int>(PrefName.DefaultStartUpTab)){getString(R.string.tab_home)},                    icon  = R.drawable.ic_round_star_24,                    onClick = { b -> val opts = arrayOf(getString(R.string.tab_home),getString(R.string.tab_anime),getString(R.string.tab_search),getString(R.string.tab_library),getString(R.string.tab_profile)); val cur = PrefManager.getVal<Int>(PrefName.DefaultStartUpTab); customAlertDialog().apply { setTitle(R.string.default_startup_tab); singleChoiceItems(opts, cur) { idx -> PrefManager.setVal(PrefName.DefaultStartUpTab, idx); b.settingsDesc.text = opts.getOrElse(idx){opts[0]} }; setNegButton(R.string.cancel); show() }}
     ),                Settings(                    type  = 1,                    name  = getString(R.string.selected_dns),                    desc  = listOf(getString(R.string.dns_cloudflare),getString(R.string.dns_google),getString(R.string.dns_quad9),getString(R.string.dns_adguard),getString(R.string.dns_custom)).getOrElse(PrefManager.getVal<Int>(PrefName.SelectedDNS)){getString(R.string.dns_cloudflare)},                    icon  = R.drawable.ic_round_dns_24,                    onClick = { b -> val opts = arrayOf(getString(R.string.dns_cloudflare),getString(R.string.dns_google),getString(R.string.dns_quad9),getString(R.string.dns_adguard),getString(R.string.dns_custom)); val cur = PrefManager.getVal<Int>(PrefName.SelectedDNS); customAlertDialog().apply { setTitle(R.string.selected_dns); singleChoiceItems(opts, cur) { idx -> PrefManager.setVal(PrefName.SelectedDNS, idx); b.settingsDesc.text = opts.getOrElse(idx){opts[0]} }; setNegButton(R.string.cancel); show() }}
     ),                Settings(                    type  = 1,                    name  = getString(R.string.custom_dns_ip),                    desc  = PrefManager.getVal<String>(PrefName.CustomDnsIP).ifBlank { getString(R.string.custom_dns_ip_desc) },                    icon  = R.drawable.ic_round_dns_24,                    isVisible = PrefManager.getVal<Int>(PrefName.SelectedDNS) == 4,                    onClick = { b -> val dialogBinding = com.sanin.tv.databinding.DialogUserAgentBinding.inflate(layoutInflater); dialogBinding.userAgentTextBox.hint = getString(R.string.custom_dns_hint); dialogBinding.userAgentTextBox.setText(PrefManager.getVal<String>(PrefName.CustomDnsIP)); customAlertDialog().apply { setTitle(R.string.custom_dns_ip); setCustomView(dialogBinding.root); setPosButton(R.string.ok) { PrefManager.setVal(PrefName.CustomDnsIP, dialogBinding.userAgentTextBox.text.toString()); b.settingsDesc.text = dialogBinding.userAgentTextBox.text.toString() }; setNegButton(R.string.cancel); show() }}
-    ),            )            settingsRecyclerView.apply {                adapter = SettingsAdapter(settingsList)                layoutManager = LinearLayoutManager(this
-@SettingsCommonActivity)                isFocusable = true
+    ),            )            settingsRecyclerView.apply {                adapter = SettingsAdapter(settingsList);
+        layoutManager = LinearLayoutManager(this
+@SettingsCommonActivity);
+        isFocusable = true
                 isFocusableInTouchMode = false                setOnKeyListener { _, keyCode, event ->
 if (event.action == KeyEvent.ACTION_DOWN &&                        keyCode == KeyEvent.KEYCODE_BACK) {                        finish()
 true
@@ -62,11 +69,14 @@ private fun passwordAlertDialog() {
         
 val currentPassword: String? = PrefManager.getNullableVal(PrefName.Password, null)
 if (!currentPassword.isNullOrBlank()) {            dialogBinding.userAgentTextBox.setText(currentPassword)        }
-customAlertDialog().apply {            setTitle(R.string.password)            setCustomView(dialogBinding.root)
+customAlertDialog().apply {            setTitle(R.string.password)
+        setCustomView(dialogBinding.root)
             setPosButton(R.string.ok) {
     val newPassword = dialogBinding.userAgentTextBox.text.toString()
-if (newPassword.isBlank()) {                    PrefManager.removeVal(PrefName.Password)                    snackString(getString(R.string.password_removed))
+if (newPassword.isBlank()) {                    PrefManager.removeVal(PrefName.Password)
+        snackString(getString(R.string.password_removed))
 } else {                    lifecycleScope.launch {                        withContext(Dispatchers.IO) {                            PrefManager.setVal(PrefName.Password, newPassword)                        }
 snackString(getString(R.string.password_changed))}}}
-setNegButton(R.string.cancel)            show()}
+setNegButton(R.string.cancel)
+        show()}
 }}

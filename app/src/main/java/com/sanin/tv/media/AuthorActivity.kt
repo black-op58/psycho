@@ -50,7 +50,8 @@ private var screenWidth: Float = 0f
 private val percent = 30    
 private var mMaxScrollSize = 0    
 private var isCollapsed = false    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCharacterBinding.inflate(layoutInflater)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         setContentView(binding.root)
         initActivity(this)
         screenWidth = resources.displayMetrics.run { widthPixels / density }
@@ -62,14 +63,17 @@ binding.characterCollapsing.minimumHeight = statusBarHeight        binding.chara
 binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true
         binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()}
-author = intent.getSerialized("author") ?: return        binding.characterTitle.text = author.name        binding.characterCoverImage.loadImage(author.image)        binding.characterFav.setImageResource(
+author = intent.getSerialized("author") ?: return        binding.characterTitle.text = author.name        binding.characterCoverImage.loadImage(author.image)
+        binding.characterFav.setImageResource(
 if (author.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {            ImageViewDialog.newInstance(                this,                author.name,                author.image            )        }
 
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        
-val link = if (rescueMode) {            "https://myanimelist.net/people/${author.id}"
+val link = if (rescueMode) {            
+        "
 } else {            "https://anilist.co/staff/${author.id}"        }
 binding.characterShare.setOnClickListener {
-    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, author.name))
+    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)
+        startActivity(Intent.createChooser(i, author.name))
         }
     binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true
         }
@@ -101,7 +105,8 @@ else -> 1                        }}
 
 val desc = createDesc(author)
 if (desc.isNotBlank()) {                    binding.authorCharacterDesc.visibility = View.VISIBLE
-val markWon = Markwon.builder(this).usePlugin(SoftBreakAddsNewLinePlugin.create())                        .usePlugin(SpoilerPlugin()).build()                    markWon.setMarkdown(binding.authorCharacterDesc, desc)
+val markWon = Markwon.builder(this).usePlugin(SoftBreakAddsNewLinePlugin.create())                        .usePlugin(SpoilerPlugin()).build()
+        markWon.setMarkdown(binding.authorCharacterDesc, desc)
 } else {                    binding.authorCharacterDesc.visibility = View.GONE                }
 for (i in keys.indices) {
     val medias = map[keys[i]]!!                    
@@ -115,7 +120,8 @@ binding.characterRecyclerView.adapter = concatAdapter                binding.cha
 if (author.character.isNullOrEmpty()) {                    binding.authorCharactersRecycler.visibility = View.GONE                    binding.AuthorCharactersText.visibility = View.GONE                }}
 }
 
-val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
+val live = Refresh.activity.getOrPut(this.hashCode()) { 
+        M
 live.observe(this) {
 if (it) {                scope.launch {                    withContext(Dispatchers.IO) { model.loadAuthor(author) }
 live.postValue(false)}}}
@@ -132,7 +138,8 @@ if (author.homeTown != null) "**${getString(R.string.hometown)}** ${author.homeT
 val dod =
 if (author.dateOfDeath != null) "**${getString(R.string.date_of_death)}** ${author.dateOfDeath}" else ""        
 val about = author.about ?: ""        
-val infoLine = listOf(age, yearsActive, dob, homeTown, dod)            .filter { it.isNotBlank() }
+val infoLine = listOf(age, yearsActive, dob, homeTown, dod)            .filter { 
+        i
 .joinToString("  \n")
 return if (about.isNotBlank()) {
 if (infoLine.isNotBlank()) "$infoLine\n\n$about" else about
@@ -143,7 +150,8 @@ override fun onDestroy() {
 if (Refresh.activity.containsKey(this.hashCode())) {            Refresh.activity.remove(this.hashCode())        }
 super.onDestroy()    }
 
-override fun onResume() {        binding.characterProgress.visibility = if (!loaded) View.VISIBLE else View.GONE        super.onResume()    }
+override fun onResume() {        
+        b
 
 override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
 if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange

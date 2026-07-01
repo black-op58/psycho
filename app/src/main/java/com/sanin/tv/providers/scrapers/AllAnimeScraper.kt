@@ -37,7 +37,8 @@ object AllAnimeScraper {
 
     private suspend fun searchShow(apiUrl: String, title: String): String? {
         return try {
-            val gql = """{ shows(search:{query:"${esc(title)}"}, limit:5, page:1) { edges { _id name } } }"""
+            val gql = """{ 
+        s
             val encoded = URLEncoder.encode(gql, "UTF-8")
             val resp = client.get("$apiUrl?query=$encoded")
             if (resp.statusCode != 200) return null
@@ -58,7 +59,8 @@ object AllAnimeScraper {
         lang: String
     ): StreamFetcher.StreamResult? {
         return try {
-            val gql = """{ episode(showId:"${esc(showId)}", translationType:"$lang", episodeString:"$episodeStr") { sourceUrls } }"""
+            val gql = """{ 
+        e
             val encoded = URLEncoder.encode(gql, "UTF-8")
             val resp = client.get("$apiUrl?query=$encoded")
             if (resp.statusCode != 200) return null
@@ -82,7 +84,8 @@ object AllAnimeScraper {
     private fun resolveSourceUrl(sources: List<AllAnimeSourceUrl>): String? {
         val preferred = listOf("Aw-", "S-mp4", "Luf-mp4", "Kir", "Ok", "Fla")
         for (pref in preferred) {
-            val src = sources.find { it.sourceName?.startsWith(pref) == true } ?: continue
+            val src = sources.find { 
+        i
             val url = decodeUrl(src.sourceUrl ?: continue) ?: continue
             return url
         }

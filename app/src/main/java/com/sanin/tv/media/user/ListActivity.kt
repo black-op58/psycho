@@ -31,32 +31,39 @@ class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding    
 private val scope = lifecycleScope    
 private var selectedTabIdx = 0    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)            
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
 override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
 override fun onTabReselected(tab: TabLayout.Tab?) {}
 })
-val model: ListViewModel by viewModels()        model.getLists().observe(this) {
+val model: ListViewModel by viewModels()
+        model.getLists().observe(this) {
     val defaultKeys = listOf(                "Reading",                "Watching",                "Completed",                "Paused",                "Dropped",                "Planning",                "Favourites",                "Rewatching",                "Rereading",                "All"            )            
 val userKeys: Array<String> = resources.getStringArray(R.array.keys)
 if (it != null) {                binding.listProgressBar.visibility = View.GONE                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, false, this)                
-val keys = it.keys.toList()                    .map { key -> userKeys.getOrNull(defaultKeys.indexOf(key)) ?: key }
+val keys = it.keys.toList()                    .map { 
+        k
 
 val values = it.values.toList()                
-val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { tab, position ->                    tab.text = "${keys[position]} (${values[position].size})"                }.attach()                binding.listViewPager.setCurrentItem(savedTab, false)
+val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { 
+        t
             }
 }
 
-val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
+val live = Refresh.activity.getOrPut(this.hashCode()) { 
+        M
 live.observe(this) {
 if (it) {                scope.launch {                    withContext(Dispatchers.IO) {                        model.loadLists(            popup.show()        }
 binding.filter.setOnClickListener {
     val genres =                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()            
-val popup = PopupMenu(this, it)            popup.menu.add("All")
+val popup = PopupMenu(this, it)
+        popup.menu.add("All")
             genres.forEach { genre ->
                 popup.menu.add(genre)            }
 popup.setOnMenuItemClickListener { menuItem ->
-val selectedGenre = menuItem.title.toString()                model.filterLists(selectedGenre)
+val selectedGenre = menuItem.title.toString()
+        model.filterLists(selectedGenre)
                 true
             }
 popup.show()}

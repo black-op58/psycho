@@ -12,7 +12,8 @@ import kotlinx.serialization.json.*
 object IdMappers {    // Your Working Vercel URL    
 private const val MAPPER_API_URL = "https://Isagi2025-idmapper.hf.space/api/mapper"    // Simple RAM cache to prevent fetching the same ID multiple times    
 private val cache = HashMap<Int, AnimeId>()    /**     * Fetches IDs from your Vercel API.     * NOTE: I removed "private" so MediaDetailsActivity can call this directly.     */    suspend 
-fun getIds(anilistId: Int): AnimeId? {        // 1. Check if we already have this ID in memory
+fun getIds(anilistId: Int): AnimeId? {        
+        /
 if (cache.containsKey(anilistId)) {
 return cache[anilistId]        }
 return withContext(Dispatchers.IO) {
@@ -27,7 +28,8 @@ throw e            } catch (e: Exception) {                // If 404 or no inter
 fun getSimklId(anilistId: Int): Int? {
 return getIds(anilistId)?.simklId    }
 suspend
-fun getImdbId(anilistId: Int): String? {        // First try the main mapper
+fun getImdbId(anilistId: Int): String? {        
+        /
 val mainId = getIds(anilistId)?.imdbId
 if (mainId != null) return mainId        // Fallback to ani.zip
 return getAniZipId(anilistId)    }
@@ -86,11 +88,13 @@ val tmdbMappings: Map<String, String>? = null,
 @SerialName("tvdb_mappings") 
 val tvdbMappings: Map<String, String>? = null) {
     val malId: Int?        get() = when (
-val el = malIdElement) {            is JsonPrimitive -> el.intOrNull            is JsonArray -> el.firstOrNull()?.jsonPrimitive?.intOrNull
+val el = malIdElement) {            
+        i
 else -> null        }
 
 val imdbId: String?        get() = when (
-val el = imdbIdElement) {            is JsonPrimitive -> el.contentOrNull            is JsonArray -> el.firstOrNull()?.jsonPrimitive?.contentOrNull
+val el = imdbIdElement) {            
+        i
 else -> null        }}
 
 @Serializable

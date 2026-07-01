@@ -20,13 +20,17 @@ import kotlinx.coroutines.withContext
 class ReviewAdapter(    
 private var review: Query.Review,) : BindableItem<ItemReviewsBinding>() {
     private lateinit var binding: ItemReviewsBinding    
-override fun bind(viewBinding: ItemReviewsBinding, position: Int) {        binding = viewBinding
+override fun bind(viewBinding: ItemReviewsBinding, position: Int) {        
+        b
 val context = binding.root.context        binding.reviewUserName.text = review.user?.name        binding.reviewUserAvatar.loadImage(review.user?.avatar?.medium)        binding.reviewText.text = review.summary
         binding.reviewPostTime.text = ActivityItemBuilder.getDateTime(review.createdAt)        
-val text = "[${review.score / 10.0f}]"        binding.reviewTag.text = text        binding.root.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ReviewViewActivity::class.java)                    .putExtra("review", review),                null            )        }
+val text = "[${review.score / 10.0f}]"        binding.reviewTag.text = text        binding.root.setOnClickListener {            
+        C
 binding.reviewUserName.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id),                null            )}
 binding.reviewUserAvatar.setOnClickListener {            ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id),                null            )}
-binding.reviewUserAvatar.openImage(            context.getString(                R.string.avatar,                review.user?.name            ),            review.user?.avatar?.medium ?: ""        )        userVote(review.userRating)        enableVote()
+binding.reviewUserAvatar.openImage(            context.getString(                R.string.avatar,                review.user?.name            ),            review.user?.avatar?.medium ?: ""        )
+        userVote(review.userRating)
+        enableVote()
         binding.reviewTotalVotes.text = review.rating.toString()
     }
 
@@ -37,18 +41,22 @@ override fun initializeViewBinding(view: View): ItemReviewsBinding {
 return ItemReviewsBinding.bind(view)    }
 
 private fun userVote(type: String) {
-when (type) {            "NO_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)                binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+when (type) {            "NO_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+        binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
                 binding.reviewUpVote.alpha = 0.6f
                 binding.reviewDownVote.alpha = 0.6f            }
-"UP_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)                binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+"UP_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)
+        binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
                 binding.reviewUpVote.alpha = 1f
                 binding.reviewDownVote.alpha = 0.6f}
-"DOWN_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)                binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
+"DOWN_VOTE" -> {                binding.reviewUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+        binding.reviewDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
                 binding.reviewDownVote.alpha = 1f
                 binding.reviewUpVote.alpha = 0.6f}}
 }
 
-private fun rateReview(rating: String) {        disableVote()        
+private fun rateReview(rating: String) {        
+        d
 val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())        scope.launch {
     val result = Anilist.mutation.rateReview(review.id, rating)
 if (result != null) {                withContext(Dispatchers.Main) {
@@ -56,14 +64,17 @@ if (result != null) {                withContext(Dispatchers.Main) {
                     userVote(review.userRating)
                     enableVote()
                 }
-} else {                withContext(Dispatchers.Main) {                    toast(                        binding.root.context.getString(R.string.error_message, "response is null")                    )                    enableVote()                }}}
+} else {                withContext(Dispatchers.Main) {                    toast(                        binding.root.context.getString(R.string.error_message, "response is null")                    )
+        enableVote()                }}}
 }
 
-private fun disableVote() {        binding.reviewUpVote.setOnClickListener(null)        binding.reviewDownVote.setOnClickListener(null)
+private fun disableVote() {        
+        b
         binding.reviewUpVote.isEnabled = false
         binding.reviewDownVote.isEnabled = false    }
 
-private fun enableVote() {        binding.reviewUpVote.setOnClickListener {
+private fun enableVote() {        
+        b
 if (review.userRating == "UP_VOTE") {                rateReview("NO_VOTE")
 } else {                rateReview("UP_VOTE")            }
 disableVote()}

@@ -9,7 +9,8 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.util.Logger
 import kotlinx.coroutines.runBlocking
 class SubscriptionNotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {        Logger.log("SubscriptionNotificationReceiver: onReceive")        runBlocking(Dispatchers.IO) {
+    override fun onReceive(context: Context, intent: Intent?) {        
+        L
             SubscriptionNotificationTask().execute(context)        }
 
 val subscriptionInter

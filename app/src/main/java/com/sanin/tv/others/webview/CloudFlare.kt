@@ -13,7 +13,8 @@ object : WebViewClient() {
     val cookie = cookies?.getCookie(url.toString())
 if (cookie?.contains(cfTag) == true) {
     val clearance = cookie.substringAfter("$cfTag=").substringBefore("
-")                privateCallback.invoke(mapOf(cfTag to clearance))
+")
+        privateCallback.invoke(mapOf(cfTag to clearance))
             }
 super.onPageStarted(view, url, favicon)}
 }

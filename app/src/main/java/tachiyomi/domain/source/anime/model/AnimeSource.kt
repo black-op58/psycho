@@ -7,7 +7,8 @@ val supportsLatest: Boolean,
 val isStub: Boolean,    
 val pin: Pins = Pins.unpinned,    
 val isUsedLast: Boolean = false,) {
-    val visualName: String        get() = when {            lang.isEmpty() -> name
+    val visualName: String        get() = when {            
+        l
 else -> "$name (${lang.uppercase()})"        }
 
 val key: () -> String = {

@@ -25,10 +25,12 @@ private var type:
 private var overrideTrackNames: List<Pair<String, String>>? = null) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSubtitlesBinding? = null    
 private val binding get() = _binding!!    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetSubtitlesBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
 if (type == TRACK_TYPE_AUDIO) binding.selectionTitle.text = getString(R.string.audio_tracks)        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.subtitlesRecycler.adapter = TrackGroupAdapter()
     }
@@ -40,11 +42,13 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamViewHol
 @SuppressLint("SetTextI18n")        
 @OptIn(UnstableApi::class)        
 override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
-    val binding = holder.binding            trackGroups[position].let { trackGroup ->
+    val binding = holder.binding            trackGroups[position].let { 
+        t
 if (overrideTrackNames?.getOrNull(                        position - (trackGroups.size - (overrideTrackNames?.size ?: 0))                    ) != null                ) {
     val pair =                        overrideTrackNames!![position - (trackGroups.size - overrideTrackNames!!.size)]                    binding.subtitleTitle.text =                        "[${pair.second}] ${pair.first}"
 } else when (
-val language = trackGroup.getTrackFormat(0).language?.lowercase()) {                    null -> {
+val language = trackGroup.getTrackFormat(0).language?.lowercase()) {                    
+        n
     val label = trackGroup.getTrackFormat(0).label                        binding.subtitleTitle.text =
 if (!label.isNullOrBlank()) label else getString(R.string.unknown_track, "Track $position")                    }
 "none" -> {                        binding.subtitleTitle.text = getString(R.string.disabled_track)
@@ -66,9 +70,11 @@ if (!label.isNullOrBlank()) label else getString(R.string.unknown_track, languag
 }
 if (trackGroup.isSelected) {
     val selected = "✔ ${binding.subtitleTitle.text}"                    binding.subtitleTitle.text = selected                }
-    binding.root.setOnClickListener {                    dismiss()                    instance.onSetTrackGroupOverride(trackGroup, type)}}
+    binding.root.setOnClickListener {                    dismiss()
+        instance.onSetTrackGroupOverride(trackGroup, type)}}
     }
 
 override fun getItemCount(): Int = trackGroups.size    }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }}
+override fun onDestroy() {        
+        _

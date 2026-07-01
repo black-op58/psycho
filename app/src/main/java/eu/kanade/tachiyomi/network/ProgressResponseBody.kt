@@ -10,7 +10,8 @@ import java.io.IOException
 class ProgressResponseBody(    
 private val responseBody: ResponseBody,    
 private val progressListener: ProgressListener) : ResponseBody() {
-    private val bufferedSource: BufferedSource by lazy {        source(responseBody.source()).buffer()    }
+    private val bufferedSource: BufferedSource by lazy {        
+        s
 
 override fun contentType(): MediaType? {
 return responseBody.contentType()    }

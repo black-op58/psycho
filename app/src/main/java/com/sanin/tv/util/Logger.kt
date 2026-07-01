@@ -31,7 +31,8 @@ if (file!!.length() > 1024 * 1024 * 5) { // 5 MB                    file?.delete
                 }
 } else {                file?.createNewFile()            }
 file?.appendText("log started\n")            file?.appendText(getDeviceAndAppInfo(context))
-        } catch (e: Exception) {            Injekt.get<CrashlyticsInterface>().logException(e)            file = null}
+        } catch (e: Exception) {            Injekt.get<CrashlyticsInterface>().logException(e);
+        file = null}
 }
 
 fun log(message: String) {
@@ -54,19 +55,22 @@ val lineNumber = trace.lineNumber                file?.appendText("date/time: ${
             }}
 }
 
-fun log(e: Exception) {        loggerExecutor.execute {
+fun log(e: Exception) {        
+        l
 if (file == null) e.printStackTrace() else {                file?.appendText("---------------------------Exception---------------------------\n")                file?.appendText("date/time: ${Date()} |  ${e.message}\n")
                 file?.appendText("trace: ${e.stackTraceToString()}\n")
             }}
 }
 
-fun log(e: Throwable) {        loggerExecutor.execute {
+fun log(e: Throwable) {        
+        l
 if (file == null) e.printStackTrace() else {                file?.appendText("---------------------------Exception---------------------------\n")                file?.appendText("date/time: ${Date()} |  ${e.message}\n")
                 file?.appendText("trace: ${e.stackTraceToString()}\n")
             }}
 }
 
-fun uncaughtException(t: Thread, e: Throwable) {        loggerExecutor.execute {
+fun uncaughtException(t: Thread, e: Throwable) {        
+        l
 if (file == null) e.printStackTrace() else {                file?.appendText("---------------------------Uncaught Exception---------------------------\n")                file?.appendText("thread: ${t.name}\n")
                 file?.appendText("date/time: ${Date()} |  ${e.message}\n")
                 file?.appendText("trace: ${e.stackTraceToString()}\n")
@@ -78,24 +82,28 @@ if (file == null) {            snackString("No log file found")
 return        }
 
 val shareIntent = Intent(Intent.ACTION_SEND)        shareIntent.type = "text/plain"
-        shareIntent.putExtra(            Intent.EXTRA_STREAM,            FileProvider.getUriForFile(                context,                "${BuildConfig.APPLICATION_ID}.provider",                file!!            )        )        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Log file")
+        shareIntent.putExtra(            Intent.EXTRA_STREAM,            FileProvider.getUriForFile(                context,                "${BuildConfig.APPLICATION_ID}.provider",                file!!            )        )
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Log file")
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Log file")
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context.startActivity(Intent.createChooser(shareIntent, "Share log file"))
     }
 
-fun clearLog() {        file?.delete()        file = null
+fun clearLog() {        
+        f
     }
 
 fun getDeviceAndAppInfo(context: Context): String {
     val pm = context.packageManager
 val pkgInfo = pm.getPackageInfo(context.packageName, 0)        
 val versionName = pkgInfo.versionName
-val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {            pkgInfo.longVersionCode
+val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {            
+        p
 } else {            
 @Suppress("DEPRECATION")            pkgInfo.versionCode
         }
-return buildString {            append("Date/time: ${Date()}\n")            append("Device: ${Build.MODEL}\n")
+return buildString {            append("Date/time: ${Date()}\n")
+        append("Device: ${Build.MODEL}\n")
             append("OS version: ${Build.VERSION.RELEASE}\n")
             append("App version: $versionName\n")
             append("App version code: $versionCode\n")
@@ -127,7 +135,8 @@ return try {
     val pid = android.os.Process.myPid()            // -d  → dump and exit (non-blocking)            // --pid → only lines from our process (API 24+, falls back gracefully on older)            
 val process = Runtime.getRuntime().exec(                arrayOf("logcat", "-d", "--pid=$pid", "-v", "time")            )            
 val reader = BufferedReader(InputStreamReader(process.inputStream))            
-val lines = reader.readLines()            reader.close()
+val lines = reader.readLines()
+        reader.close()
             process.destroy()
             // Keep the tail so we get the lines closest to the crash            lines.takeLast(maxLines).joinToString("\n")        } catch (e: Exception) {            "Failed to read logcat: ${e.message}"        }
 }}
@@ -139,23 +148,30 @@ override fun uncaughtException(t: Thread, e: Throwable) {
     val stackTraceString = Log.getStackTraceString(e)        Injekt.get<CrashlyticsInterface>().logException(e)
 if (App.instance?.applicationContext != null) {            App.instance?.applicationContext?.let { ctx ->                
 val lastLoadedActivity = App.instance?.mFTActivityLifecycleCallbacks?.lastActivity                // --- crash report (same as before) ---                
-val report = StringBuilder()                report.append(getDeviceAndAppInfo(ctx))
+val report = StringBuilder()
+        report.append(getDeviceAndAppInfo(ctx))
                 report.append("Thread: ${t.name}\n")
                 report.append("Activity: ${lastLoadedActivity}\n")
                 report.append("Exception: ${e.message}\n")
                 report.append("Stack trace:\n")
                 report.append(stackTraceString)
                 
-val reportString = report.toString()                Logger.uncaughtException(t, Error(reportString))                // --- logcat snapshot taken at crash time ---                
+val reportString = report.toString()
+        Logger.uncaughtException(t, Error(reportString))                // --- logcat snapshot taken at crash time ---                
 val logcatString = Logger.readLogcat()                
 val intent = Intent(ctx, CrashActivity::class.java)                
-val trimmedReport = if (reportString.length > MAX_STACK_TRACE_SIZE)                    reportString.substring(0, MAX_STACK_TRACE_SIZE)
+val trimmedReport = if (reportString.length > MAX_STACK_TRACE_SIZE)
+        reportString.substring(0, MAX_STACK_TRACE_SIZE)
 else reportString                // Logcat gets its own size budget so it never crowds out the stack trace
-val trimmedLogcat = if (logcatString.length > MAX_STACK_TRACE_SIZE)                    logcatString.substring(logcatString.length - MAX_STACK_TRACE_SIZE)
-else logcatString                intent.putExtra("stackTrace", trimmedReport)                intent.putExtra("logcat", trimmedLogcat)
+val trimmedLogcat = if (logcatString.length > MAX_STACK_TRACE_SIZE)
+        logcatString.substring(logcatString.length - MAX_STACK_TRACE_SIZE)
+else logcatString                intent.putExtra("stackTrace", trimmedReport)
+        intent.putExtra("logcat", trimmedLogcat)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 ctx.startActivity(intent)            }
-} else {            Logger.log("App context is null")            Logger.uncaughtException(t, e)        }
-defaultUEH?.uncaughtException(t, e)        android.os.Process.killProcess(android.os.Process.myPid())
+} else {            Logger.log("App context is null")
+        Logger.uncaughtException(t, e)        }
+defaultUEH?.uncaughtException(t, e)
+        android.os.Process.killProcess(android.os.Process.myPid())
         exitProcess(10)
     }}

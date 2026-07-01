@@ -7,7 +7,8 @@ import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.tag.SimpleTagHandler
 class AlignTagHandler : SimpleTagHandler() {
     override fun getSpans(        configuration: MarkwonConfiguration,        renderProps: RenderProps,        tag: HtmlTag    ): Any {
-    val alignment: Layout.Alignment = if (tag.attributes().containsKey("center")) {            Layout.Alignment.ALIGN_CENTER
+    val alignment: Layout.Alignment = if (tag.attributes().containsKey("center")) {            
+        L
 } else if (tag.attributes().containsKey("end")) {            Layout.Alignment.ALIGN_OPPOSITE
 } else {            Layout.Alignment.ALIGN_NORMAL        }
 return AlignmentSpan.Standard(alignment)    }

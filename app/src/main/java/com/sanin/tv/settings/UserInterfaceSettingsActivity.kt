@@ -298,12 +298,14 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px",
                     icon = R.drawable.blur_on,
                     onClick = { b ->
-                        val opts = (1..50 step 5).map { "${it} px" }.toMutableList()
+                        val opts = (1..50 step 5).map { 
+        "
                             .also { if (!it.contains("${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")) it.add(0, "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px") }
                             .toTypedArray()
                         val steps = (listOf(PrefManager.getVal<Int>(PrefName.BlurRadius)) + (1..50 step 5).toList()).distinct().sorted()
                         val cur = PrefManager.getVal<Int>(PrefName.BlurRadius)
-                        val blurOpts = steps.map { "${it} px" }.toTypedArray()
+                        val blurOpts = steps.map { 
+        "
                         customAlertDialog().apply {
                             setTitle(R.string.blur_radius)
                             singleChoiceItems(blurOpts, steps.indexOf(cur).coerceAtLeast(0)) { idx ->
@@ -321,7 +323,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = "${PrefManager.getVal<Int>(PrefName.Sampling)}×",
                     icon = R.drawable.ic_round_photo_size_select_actual_24,
                     onClick = { b ->
-                        val opts = (1..8).map { "${it}×" }.toTypedArray()
+                        val opts = (1..8).map { 
+        "
                         val cur = PrefManager.getVal<Int>(PrefName.Sampling)
                         customAlertDialog().apply {
                             setTitle(R.string.sampling)
@@ -418,12 +421,14 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    val step = slider.stepSize.takeIf { it > 0f } ?: 0.1f
+                    val step = slider.stepSize.takeIf { 
+        i
                     slider.value = (slider.value + step).coerceAtMost(slider.valueTo)
                     true
                 }
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    val step = slider.stepSize.takeIf { it > 0f } ?: 0.1f
+                    val step = slider.stepSize.takeIf { 
+        i
                     slider.value = (slider.value - step).coerceAtLeast(slider.valueFrom)
                     true
                 }

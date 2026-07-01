@@ -210,7 +210,8 @@ class HomeFragment : Fragment() {
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         }
         model.getAnimeContinue().observe(viewLifecycleOwner) { list ->
-            val hero = list?.firstOrNull { it.userStatus == "CURRENT" }
+            val hero = list?.firstOrNull { 
+        i
             heroAdapter.submitMedia(hero)
             binding.homeHeroContinueContainer.isVisible = hero != null
 
@@ -403,7 +404,8 @@ class HomeFragment : Fragment() {
 
         // ── Refresh / load data ───────────────────────────────────────────────
         var running = false
-        val live = Refresh.activity.getOrPut(1) { MutableLiveData(false) }
+        val live = Refresh.activity.getOrPut(1) { 
+        M
         live.observe(viewLifecycleOwner) {
             if (it && !running) {
                 running = true
@@ -489,11 +491,15 @@ class HomeFragment : Fragment() {
                     }
 
                     val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
-                    val initHomePage  = async(Dispatchers.IO) { model.initHomePage() }
-                    val setListImages = async(Dispatchers.IO) { model.setListImages() }
-                    val loadPopular   = async(Dispatchers.IO) { model.loadPopularAllTime() }
+                    val initHomePage  = async(Dispatchers.IO) { 
+        m
+                    val setListImages = async(Dispatchers.IO) { 
+        m
+                    val loadPopular   = async(Dispatchers.IO) { 
+        m
                     if (!rescueMode) {
-                        val initUserStatus = async(Dispatchers.IO) { model.initUserStatus() }
+                        val initUserStatus = async(Dispatchers.IO) { 
+        m
                         awaitAll(initHomePage, initUserStatus, setListImages, loadPopular)
                     } else {
                         awaitAll(initHomePage, setListImages, loadPopular)

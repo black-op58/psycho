@@ -73,7 +73,8 @@ object NewEpisodeBadgeManager {
         val current = currentSessionCounts[mediaId] ?: return // not tracked — nothing to dismiss
         lastSessionSnapshot = lastSessionSnapshot.toMutableMap().also { it[mediaId] = current }
         // Persist immediately — merge snapshot + current session so nothing is lost.
-        val merged = lastSessionSnapshot.toMutableMap().also { it.putAll(currentSessionCounts) }
+        val merged = lastSessionSnapshot.toMutableMap().also { 
+        i
         saveSnapshot(context, merged)
     }
 
@@ -124,7 +125,8 @@ object NewEpisodeBadgeManager {
 
     /** Serialise map to "id1:count1,id2:count2,..." and write to SharedPreferences. */
     private fun saveSnapshot(context: Context, map: Map<Int, Int>) {
-        val raw = map.entries.joinToString(",") { "${it.key}:${it.value}" }
+        val raw = map.entries.joinToString(",") { 
+        "
         context
             .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .edit()

@@ -29,14 +29,17 @@ import com.sanin.tv.toast
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 class SingleStatActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySingleStatBinding    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         binding = ActivitySingleStatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
 val chartOptions = chartOptions
-if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)            binding.chartView.aa_drawChartWithChartOptions(chartOptions)
+if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)
+        binding.chartView.aa_drawChartWithChartOptions(chartOptions)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-} else {            toast("No chart data")            finish()
+} else {            toast("No chart data")
+        finish()
         }
 }
 
@@ -70,7 +73,8 @@ private val user: MutableList<User>,
 private val grid: Boolean = false) :    RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
     private val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)    inner 
 class UsersViewHolder(
-val binding: ViewBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {
+val binding: ViewBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
     val pos = bindingAdapterPosition
 if (pos < 0 || pos >= user.size) return@setOnClickListener
 val u = user[pos]
@@ -83,7 +87,8 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHold
 return UsersViewHolder(
 if (grid) ItemFollowerGridBinding.inflate(                LayoutInflater.from(parent.context),                parent,                false            ) else                ItemFollowerBinding.inflate(                    LayoutInflater.from(parent.context),                    parent,                    false                )        )    }
 
-override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {        setAnimation(holder.binding.root.context, holder.binding.root)        
+override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {        
+        s
 val user = user.getOrNull(position) ?: return
 if (grid) {
     val b = holder.binding as ItemFollowerGridBinding            b.profileUserAvatar.loadImage(user.pfp)            b.profileUserName.text = user.name            b.profileCompactScoreBG.isVisible = false            b.profileInfo.isVisible = false            b.profileCompactProgressContainer.isVisible = false

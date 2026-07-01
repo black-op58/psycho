@@ -3,7 +3,8 @@ import androidx.core.os.LocaleListCompat
 import java.util.Locale/** * Utility 
 class to change the application's language in runtime. */
 object LocaleHelper {
-    val comparator = compareBy<String>(        { getDisplayName(it) },        { it == "all" },    )    /**     * Returns display name of a string language code.     */    
+    val comparator = compareBy<String>(        { 
+        g
 fun getSourceDisplayName(lang: String?): String {
 return when (lang) {            LAST_USED_KEY -> "Last used"            PINNED_KEY -> "Pinned"            "other" -> "Other"            "all" -> "Multi"
 else -> getDisplayName(lang)        }}
@@ -12,7 +13,8 @@ fun getDisplayName(lang: String?): String {
 if (lang == null) {
 return ""        }
 
-val locale = when (lang) {            "" -> LocaleListCompat.getAdjustedDefault()[0]            "zh-CN" -> Locale.forLanguageTag("zh-Hans")            "zh-TW" -> Locale.forLanguageTag("zh-Hant")
+val locale = when (lang) {            
+        "
 else -> Locale.forLanguageTag(lang)        }
 return locale!!.getDisplayName(locale).replaceFirstChar { it.uppercase(locale) }}
 /**     * Return the default languages enabled for the sources.     */

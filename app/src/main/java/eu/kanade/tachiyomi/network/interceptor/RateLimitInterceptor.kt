@@ -30,14 +30,16 @@ try {            synchronized(requestQueue) {
 while (requestQueue.size >= permits) { // queue is full, remove expired entries
 val periodStart = SystemClock.elapsedRealtime() - rateLimitMillis
 var hasRemovedExpired = false
-while (requestQueue.isEmpty().not() && requestQueue.first <= periodStart) {                        requestQueue.removeFirst()                        hasRemovedExpired = true
+while (requestQueue.isEmpty().not() && requestQueue.first <= periodStart) {                        requestQueue.removeFirst();
+        hasRemovedExpired = true
                     }
 if (call.isCanceled()) {
 throw IOException("Canceled")
 } else if (hasRemovedExpired) {                        break
 } else {
 try { // wait for the first entry to expire, or notified by cached response                            (requestQueue as Object).wait(requestQueue.first - periodStart)                        } catch (_: InterruptedException) {                            continue                        }}}
-// add request to queue                timestamp = SystemClock.elapsedRealtime()                requestQueue.addLast(timestamp)}
+// add request to queue                timestamp = SystemClock.elapsedRealtime()
+        requestQueue.addLast(timestamp)}
 } finally {            fairLock.release()        }
 
 val response = chain.proceed(request)

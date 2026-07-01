@@ -24,28 +24,35 @@ import uy.kohesive.injekt.api.get
 class AnimeExtensionsFragment : Fragment(),    SearchQueryHandler, OnAnimeInstallClickListener {
     private var _binding: FragmentExtensionsBinding? = null    
 private val binding get() = _binding!!    
-private val viewModel: AnimeExtensionsViewModel by viewModels {        AnimeExtensionsViewModelFactory(animeExtensionManager)    }
+private val viewModel: AnimeExtensionsViewModel by viewModels {        
+        A
 
-private val adapter by lazy {        AnimeExtensionAdapter(this)    }
+private val adapter by lazy {        
+        A
 
 private val animeExtensionManager: AnimeExtensionManager = Injekt.get()    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = FragmentExtensionsBinding.inflate(inflater, container, false)        binding.allExtensionsRecyclerView.isNestedScrollingEnabled = false
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
         binding.allExtensionsRecyclerView.adapter = adapter        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =            true        lifecycleScope.launch {            viewModel.pagerFlow.collectLatest { it ->                binding.allExtensionsRecyclerView.post {                    lifecycleScope.launch {                        adapter.submitData(it)                    }}}}
 viewModel.invalidatePager() // Force a refresh of the pager
 return binding.root    }
 
-override fun updateContentBasedOnQuery(query: String?) {        viewModel.setSearchQuery(query ?: "")    }
+override fun updateContentBasedOnQuery(query: String?) {        
+        v
 
-override fun notifyDataChanged() {        viewModel.invalidatePager()    }
+override fun notifyDataChanged() {        
+        v
 
 override fun onInstallClick(pkg: AnimeExtension.Available) {
     val context = requireContext()
 if (isAdded) {
     val notificationManager =                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-val installerSteps = InstallerSteps(notificationManager, context)            // Start the installation process            animeExtensionManager.installExtension(pkg)                .observeOn(AndroidSchedulers.mainThread())                .subscribe(                    { installStep -> installerSteps.onInstallStep(installStep) {} },                    { error -> installerSteps.onError(error) {} },                    { installerSteps.onComplete { viewModel.invalidatePager() } }
+val installerSteps = InstallerSteps(notificationManager, context)            // Start the installation process            animeExtensionManager.installExtension(pkg)                .observeOn(AndroidSchedulers.mainThread())                .subscribe(                    { 
+        i
 )}
 }
 
-override fun onDestroyView() {        super.onDestroyView()
+override fun onDestroyView() {        
+        s
 _binding = null    }}
 }}

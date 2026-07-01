@@ -42,46 +42,53 @@ val request = requestBuilder()        tag?.let {
             url += "?tag=$it"        }
 sort?.let {            url += if (tag != null) "&sort=$it" else "?sort=$it"        }
 
-val json = try {            request.get(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to fetch comments")
+val json = try {            
+        r
 return null        }
 if (!json.text.startsWith("{")) return null
 val res = json.code == 200
 if (!res && json.code != 404) {            errorReason(json.code, json.text)        }
 
-val parsed = try {            Json.decodeFromString<CommentResponse>(json.text)        } catch (e: Exception) {
+val parsed = try {            
+        J
 return null        }
 return parsed    }
 suspend
 fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
     val url = "$ADDRESS/comments/parent/$id/$page"        
 val request = requestBuilder()        
-val json = try {            request.get(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to fetch comments")
+val json = try {            
+        r
 return null        }
 if (!json.text.startsWith("{")) return null
 val res = json.code == 200
 if (!res && json.code != 404) {            errorReason(json.code, json.text)        }
 
-val parsed = try {            Json.decodeFromString<CommentResponse>(json.text)        } catch (e: Exception) {
+val parsed = try {            
+        J
 return null        }
 return parsed    }
 suspend
 fun getSingleComment(id: Int): Comment? {
     val url = "$ADDRESS/comments/$id"        
 val request = requestBuilder()        
-val json = try {            request.get(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to fetch comment")
+val json = try {            
+        r
 return null        }
 if (!json.text.startsWith("{")) return null
 val res = json.code == 200
 if (!res && json.code != 404) {            errorReason(json.code, json.text)        }
 
-val parsed = try {            Json.decodeFromString<Comment>(json.text)        } catch (e: Exception) {
+val parsed = try {            
+        J
 return null        }
 return parsed    }
 suspend
 fun vote(commentId: Int, voteType: Int): Boolean {
     val url = "$ADDRESS/comments/vote/$commentId/$voteType"        
 val request = requestBuilder()        
-val json = try {            request.post(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to vote")
+val json = try {            
+        r
 return false        }
 
 val res = json.code == 200
@@ -95,21 +102,24 @@ if (tag != null) {            body.add("tag", tag.toString())        }
 parentCommentId?.let {            body.add("parent_comment_id", it.toString())        }
 
 val request = requestBuilder()        
-val json = try {            request.post(url, requestBody = body.build())        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to comment")
+val json = try {            
+        r
 return null        }
 
 val res = json.code == 200
 if (!res) {            errorReason(json.code, json.text)
 return null        }
 
-val parsed = try {            Json.decodeFromString<ReturnedComment>(json.text)        } catch (e: Exception) {            Logger.log(e)            errorMessage("Failed to parse comment")
+val parsed = try {            
+        J
 return null        }
 return Comment(            parsed.id,            parsed.userId,            parsed.mediaId,            parsed.parentCommentId,            parsed.content,            parsed.timestamp,            parsed.deleted,            parsed.tag,            0,            0,            null,            Anilist.username ?: "",            Anilist.avatar,            totalVotes = totalVotes        )    }
 suspend
 fun deleteComment(commentId: Int): Boolean {
     val url = "$ADDRESS/comments/$commentId"        
 val request = requestBuilder()        
-val json = try {            request.delete(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to delete comment")
+val json = try {            
+        r
 return false        }
 
 val res = json.code == 200
@@ -120,7 +130,8 @@ fun editComment(commentId: Int, content: String): Boolean {
     val url = "$ADDRESS/comments/$commentId"        
 val body = FormBody.Builder()            .add("content", content)            .build()        
 val request = requestBuilder()        
-val json = try {            request.put(url, requestBody = body)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to edit comment")
+val json = try {            
+        r
 return false        }
 
 val res = json.code == 200
@@ -130,7 +141,8 @@ suspend
 fun banUser(userId: String): Boolean {
     val url = "$ADDRESS/ban/$userId"        
 val request = requestBuilder()        
-val json = try {            request.post(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to ban user")
+val json = try {            
+        r
 return false        }
 
 val res = json.code == 200
@@ -141,7 +153,8 @@ fun reportComment(        commentId: Int,        username: String,        mediaT
     val url = "$ADDRESS/report/$commentId"        
 val body = FormBody.Builder()            .add("username", username)            .add("mediaName", mediaTitle)            .add("reporter", Anilist.username ?: "unknown")            .add("reportedId", reportedId)            .build()        
 val request = requestBuilder()        
-val json = try {            request.post(url, requestBody = body)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to report comment")
+val json = try {            
+        r
 return false        }
 
 val res = json.code == 200
@@ -151,14 +164,16 @@ suspend
 fun getNotifications(client: OkHttpClient): NotificationResponse? {
     val url = "$ADDRESS/notification/reply"        
 val request = requestBuilder(client)        
-val json = try {            request.get(url)        } catch (e: IOException) {
+val json = try {            
+        r
 return null        }
 if (!json.text.startsWith("{")) return null
 val res = json.code == 200
 if (!res) {
 return null        }
 
-val parsed = try {            Json.decodeFromString<NotificationResponse>(json.text)        } catch (e: Exception) {
+val parsed = try {            
+        J
 return null        }
 return parsed    }
 
@@ -166,16 +181,19 @@ private suspend
 fun getUserDetails(client: OkHttpClient? = null): User? {
     val url = "$ADDRESS/user"        
 val request = if (client != null) requestBuilder(client) else requestBuilder()        
-val json = try {            request.get(url)        } catch (e: IOException) {
+val json = try {            
+        r
 return null        }
 if (json.code == 200) {
-    val parsed = try {                Json.decodeFromString<UserResponse>(json.text)            } catch (e: Exception) {                e.printStackTrace()
+    val parsed = try {                
+        J
 return null            }
 isBanned = parsed.user.isBanned ?: false            isAdmin = parsed.user.isAdmin ?: false            isMod = parsed.user.isMod ?: false            totalVotes = parsed.user.totalVotes
 return parsed.user        }
 return null    }
 suspend
-fun fetchAuthToken(context: Context, client: OkHttpClient? = null) {        isOnline = isOnline(context)
+fun fetchAuthToken(context: Context, client: OkHttpClient? = null) {        
+        i
 if (authToken != null) return
 val MAX_RETRIES = 5
 val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
@@ -192,13 +210,17 @@ try {
     val json = authRequest(token, url, client)
 if (json.code == 200) {
 if (!json.text.startsWith("{")) throw IOException("Invalid response")                    
-val parsed = try {                        Json.decodeFromString<AuthResponse>(json.text)                    } catch (e: Exception) {                        Logger.log(e)                        errorMessage("Failed to login to comments API: ${e.printStackTrace()}")
+val parsed = try {                        
+        J
 return                    }
-PrefManager.setVal(PrefName.CommentAuthResponse, parsed)                    PrefManager.setVal(                        PrefName.CommentTokenExpiry,                        System.currentTimeMillis() + tokenLifetime                    )                    authToken = parsed.authToken                    userId = parsed.user.id                    isBanned = parsed.user.isBanned ?: false                    isAdmin = parsed.user.isAdmin ?: false                    isMod = parsed.user.isMod ?: false                    totalVotes = parsed.user.totalVotes
+PrefManager.setVal(PrefName.CommentAuthResponse, parsed)
+        PrefManager.setVal(                        PrefName.CommentTokenExpiry,                        System.currentTimeMillis() + tokenLifetime                    );
+        authToken = parsed.authToken                    userId = parsed.user.id                    isBanned = parsed.user.isBanned ?: false                    isAdmin = parsed.user.isAdmin ?: false                    isMod = parsed.user.isMod ?: false                    totalVotes = parsed.user.totalVotes
 return
 } else if (json.code != 429) {                    errorReason(json.code, json.text)
 return                }
-} catch (e: IOException) {                Logger.log(e)                errorMessage("Failed to login to comments API")
+} catch (e: IOException) {                Logger.log(e)
+        errorMessage("Failed to login to comments API")
 return            }
 kotlinx.coroutines.delay(60000)}
 errorMessage("Failed to login after multiple attempts")    }
@@ -207,7 +229,8 @@ private fun errorMessage(reason: String) {
 if (commentsEnabled) Logger.log(reason)
 if (isOnline && commentsEnabled) snackString(reason)    }
 
-fun logout() {        PrefManager.removeVal(PrefName.CommentAuthResponse)        PrefManager.removeVal(PrefName.CommentTokenExpiry)        authToken = null
+fun logout() {        
+        P
         userId = null        isBanned = false        isAdmin = false        isMod = false        totalVotes = 0    }
 
 private suspend 
@@ -225,10 +248,12 @@ fun requestBuilder(client: OkHttpClient = Injekt.get<NetworkHelper>().client): R
 return Requests(            client,            headerBuilder()        )    }
 
 private fun errorReason(code: Int, reason: String? = null) {
-    val error = when (code) {            429 -> "Rate limited. :("
+    val error = when (code) {            
+        4
 else -> "Failed to connect"        }
 
-val parsed = try {            Json.decodeFromString<ErrorResponse>(reason!!)        } catch (e: Exception) {            null        }
+val parsed = try {            
+        J
 
 val message = parsed?.message ?: reason ?: error
 val fullMessage = if (code == 500) message else "$code: $message"        toast(fullMessage)    }}
@@ -360,7 +385,8 @@ val deleted: Boolean?,
 val tag: Int? = null,)
 object NumericBooleanSerializer : KSerializer<Boolean> {
     override val descriptor: SerialDescriptor =        PrimitiveSerialDescriptor("NumericBoolean", PrimitiveKind.INT)    
-override fun serialize(encoder: Encoder, value: Boolean) {        encoder.encodeInt(if (value) 1 else 0)    }
+override fun serialize(encoder: Encoder, value: Boolean) {        
+        e
 
 override fun deserialize(decoder: Decoder): Boolean {
 return decoder.decodeInt() != 0    }}

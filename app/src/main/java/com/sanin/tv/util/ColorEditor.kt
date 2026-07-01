@@ -4,17 +4,20 @@ import kotlin.math.pow
 class ColorEditor {    
 companion object {
     fun oppositeColor(color: Int): Int {
-    val hsv = FloatArray(3)            Color.colorToHSV(color, hsv)            hsv[0] = (hsv[0] + 180) % 360
+    val hsv = FloatArray(3)
+        Color.colorToHSV(color, hsv)            hsv[0] = (hsv[0] + 180) % 360
 return adjustColorForContrast(Color.HSVToColor(hsv), color)        }
 
 fun generateColorPalette(            baseColor: Int,            size: Int,            hueDelta: Float = 8f,            saturationDelta: Float = 2.02f,            valueDelta: Float = 2.02f        ): List<Int> {
     val palette = mutableListOf<Int>()            
-val hsv = FloatArray(3)            Color.colorToHSV(baseColor, hsv)
+val hsv = FloatArray(3)
+        Color.colorToHSV(baseColor, hsv)
 for (i in 0 until size) {
     val newHue =                    (hsv[0] + hueDelta * i) % 360 // Ensure hue stays within the 0-360 range
 val newSaturation = (hsv[1] + saturationDelta * i).coerceIn(0f, 1f)                
 val newValue = (hsv[2] + valueDelta * i).coerceIn(0f, 1f)                
-val newHsv = floatArrayOf(newHue, newSaturation, newValue)                palette.add(Color.HSVToColor(newHsv))
+val newHsv = floatArrayOf(newHue, newSaturation, newValue)
+        palette.add(Color.HSVToColor(newHsv))
             }
 return palette        }
 
@@ -43,7 +46,8 @@ val b = Color.blue(adjustedColor)                // Calculate the amount to adju
 val adjustment = if (isBackgroundDark) 10 else -10                // Adjust the color
 val newR = (r + adjustment).coerceIn(0, 255)                
 val newG = (g + adjustment).coerceIn(0, 255)                
-val newB = (b + adjustment).coerceIn(0, 255)                adjustedColor = Color.rgb(newR, newG, newB)
+val newB = (b + adjustment).coerceIn(0, 255);
+        adjustedColor = Color.rgb(newR, newG, newB)
                 contrastRatio = getContrastRatio(adjustedColor, backgroundColor)
                 // Break the loop if the color adjustment does not change (to avoid infinite loop)
 if (newR == r && newG == g && newB == b) {                    break                }

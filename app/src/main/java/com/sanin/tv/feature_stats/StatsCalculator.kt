@@ -20,20 +20,27 @@ object StatsCalculator {
     fun compute(mediaList: List<Media>): WatchStats {
         Logger.log("$TAG: Computing stats for ${mediaList.size} titles")
 
-        val completed = mediaList.filter { it.userStatus == "COMPLETED" }
-        val dropped = mediaList.filter { it.userStatus == "DROPPED" }
-        val planning = mediaList.filter { it.userStatus == "PLANNING" }
-        val watching = mediaList.filter { it.userStatus == "CURRENT" }
+        val completed = mediaList.filter { 
+        i
+        val dropped = mediaList.filter { 
+        i
+        val planning = mediaList.filter { 
+        i
+        val watching = mediaList.filter { 
+        i
 
-        val totalEpisodes = mediaList.sumOf { it.userProgress ?: 0 }
+        val totalEpisodes = mediaList.sumOf { 
+        i
 
-        val totalMinutes = mediaList.sumOf { media ->
+        val totalMinutes = mediaList.sumOf { 
+        m
             val eps = media.userProgress ?: 0
             val duration = media.anime?.episodeDuration ?: AVG_EPISODE_DURATION_MINS
             (eps * duration).toLong()
         }
 
-        val scores = mediaList.mapNotNull { it.userScore?.takeIf { s -> s > 0 }?.toFloat() }
+        val scores = mediaList.mapNotNull { 
+        i
         val avgScore = if (scores.isEmpty()) 0f else scores.average().toFloat()
 
         // Genre breakdown
@@ -43,7 +50,8 @@ object StatsCalculator {
                 genreMap[genre] = (genreMap[genre] ?: 0) + 1
             }
         }
-        val topGenres = genreMap.entries.sortedByDescending { it.value }.take(8).map { it.key }
+        val topGenres = genreMap.entries.sortedByDescending { 
+        i
 
         // Year breakdown based on when episodes were updated
         val yearMap = mutableMapOf<Int, Int>()
@@ -59,7 +67,8 @@ object StatsCalculator {
         // Streak calculation using updatedAt timestamps
         val (longestStreak, currentStreak) = calculateStreaks(mediaList)
 
-        val lastWatched = mediaList.mapNotNull { it.userUpdatedAt }.maxOrNull()
+        val lastWatched = mediaList.mapNotNull { 
+        i
 
         val stats = WatchStats(
             totalEpisodes = totalEpisodes,

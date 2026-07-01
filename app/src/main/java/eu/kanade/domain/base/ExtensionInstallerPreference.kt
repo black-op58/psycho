@@ -16,7 +16,8 @@ if (context.hasMiuiPackageInstaller) {                filter { it != ExtensionIn
 } else {                toList()            }
 }
 
-override fun defaultValue() = if (context.hasMiuiPackageInstaller) {        ExtensionInstaller.LEGACY
+override fun defaultValue() = if (context.hasMiuiPackageInstaller) {        
+        E
 } else {        ExtensionInstaller.PACKAGEINSTALLER    }
 
 private fun check(value: ExtensionInstaller): ExtensionInstaller {
@@ -35,7 +36,8 @@ val checkedValue = check(value)
 if (value != checkedValue) {            basePref.set(checkedValue)        }
 return checkedValue    }
 
-override fun set(value: ExtensionInstaller) {        basePref.set(check(value))    }
+override fun set(value: ExtensionInstaller) {        
+        b
 
 override fun isSet() = basePref.isSet()    
 override fun delete() = basePref.delete()    

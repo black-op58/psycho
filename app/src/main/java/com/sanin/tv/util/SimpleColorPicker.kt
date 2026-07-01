@@ -93,7 +93,8 @@ object SimpleColorPicker {
                 }
                 background = drawable
                 setOnClickListener {
-                    val result = Bundle().apply { putInt(COLOR, color) }
+                    val result = Bundle().apply { 
+        p
                     if (activity is OnDialogResultListener) {
                         activity.onDialogResult(dialogTag, BUTTON_POSITIVE, result)
                     }

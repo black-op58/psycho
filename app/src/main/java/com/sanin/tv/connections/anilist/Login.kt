@@ -8,6 +8,7 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.startMainActivity
 import com.sanin.tv.themes.ThemeManager
 class Login : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        
+    override fun onCreate(savedInstanceState: Bundle?) {        
+        s
 val data: Uri? = intent?.data
-try {            Anilist.token =                Regex("""(?<=access_token=).+(?=&token_type)""").find(data.toString())!!.value            PrefManager.setVal(PrefName.AnilistToken, Anilist.token ?: "")        } catch (e: Exception) {            logError(e)        }        startMainActivity(this)    }}
+try {            Anilist.token =                Regex("""(?<=access_token=).+(?=&token_type)""").find(data.toString())!!.value            PrefManager.setVal(PrefName.AnilistToken, Anilist.token ?: "")        } catch (e: Exception) {            logError(e)        };startMainActivity(this)    }}

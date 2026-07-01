@@ -184,9 +184,11 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     },
                     onClick = { b ->
                         val options = SourceMemoryManager.EXPIRY_OPTIONS
-                        val labels  = options.map { it.label }.toTypedArray()
+                        val labels  = options.map { 
+        i
                         val current = PrefManager.getVal<Int>(PrefName.SourceMemoryExpiryHours)
-                        val idx     = options.indexOfFirst { it.hours == current }.coerceAtLeast(0)
+                        val idx     = options.indexOfFirst { 
+        i
 
                         customAlertDialog().apply {
                             setTitle(R.string.source_memory_expiry)

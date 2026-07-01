@@ -10,7 +10,8 @@ var audioTracks: List<Track> = listOf()    /**     * Extracts videos & subtitles
 abstract suspend 
 fun extract(): VideoContainer    /**     * Loads videos & subtitles from a given Url     *     * & returns itself with the data loaded     * **/    
 open suspend 
-fun load(): VideoExtractor {        extract().also {            videos = it.videos            subtitles = it.subtitles            audioTracks = it.audioTracks
+fun load(): VideoExtractor {        
+        e
 return this        }}
 /**     * Gets called when a Video from this extractor starts playing     *     * Useful for Extractor that require Polling     * **/
 open suspend 
@@ -24,7 +25,8 @@ val name: String,
 val embed: FileUrl,    
 val extraData: Map<String, String>? = null,    
 val video: eu.kanade.tachiyomi.animesource.model.Video? = null,    
-val offline: Boolean = false) : Serializable {    constructor(name: String, embedUrl: String, extraData: Map<String, String>? = null)            : this(name, FileUrl(embedUrl), extraData)    constructor(name: String, offline: Boolean, extraData: Map<String, String>?)            : this(name, FileUrl(""), extraData, null, offline)    constructor(        name: String,        embedUrl: String,        extraData: Map<String, String>? = null,        video: eu.kanade.tachiyomi.animesource.model.Video?    )            : this(name, FileUrl(embedUrl), extraData, video)}/** * A Container for keeping video & subtitles, so you dont need to check backend * **/
+val offline: Boolean = false) : Serializable {    
+        c
 data class VideoContainer(    
 val videos: List<Video>,    
 val subtitles: List<Subtitle> = listOf(),    
@@ -34,11 +36,13 @@ val quality: Int?,    /**     * Mime type / Format of the video,     *     * If 
 val format: VideoType,    /**     * The direct url to the Video     *     * Supports mp4, mkv, dash & m3u8, afaik     * **/    
 val file: FileUrl,    /**     * use getSize(url) to get this size,     *     * no need to set it on M3U8 links     * **/    
 val size: Double? = null,    /**     * In case, you want to show some extra notes to the User     *     * Ex: "Backup" which could be used if the site provides some     * **/    
-val extraNote: String? = null,) : Serializable {    constructor(        quality: Int? = null,        videoType: VideoType,        url: String,        size: Double?,        extraNote: String? = null    )            : this(quality, videoType, FileUrl(url), size, extraNote)    constructor(quality: Int? = null, videoType: VideoType, url: String, size: Double?)            : this(quality, videoType, FileUrl(url), size)    constructor(quality: Int? = null, videoType: VideoType, url: String)            : this(quality, videoType, FileUrl(url))}/** * The Class which contains the link to a subtitle file of a specific language * **/
+val extraNote: String? = null,) : Serializable {    
+        c
 data class Subtitle(    /**     * Language of the Subtitle     *     * for now app will directly try to select "English".     * Probably in rework we can add more subtitles support     * **/    
 val language: String,    /**     * The direct url to the Subtitle     * **/    
 val file: FileUrl,    /**     * format of the Subtitle     *     * Supports VTT, SRT & ASS     * **/    
-val type: SubtitleType = SubtitleType.VTT,) : Serializable {    constructor(language: String, url: String, type: SubtitleType = SubtitleType.VTT) : this(        language,        FileUrl(url),        type    )}
+val type: SubtitleType = SubtitleType.VTT,) : Serializable {    
+        c
 
 enum class VideoType {    CONTAINER, M3U8, DASH}
 

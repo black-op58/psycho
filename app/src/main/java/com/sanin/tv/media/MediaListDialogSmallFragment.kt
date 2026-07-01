@@ -31,21 +31,26 @@ import java.io.Serializable
 class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
     private lateinit var media: Media    
 companion object {
-    fun newInstance(m: Media): MediaListDialogSmallFragment =            MediaListDialogSmallFragment().apply {                arguments = Bundle().apply {                    putSerializable("media", m as Serializable)                }}
+    fun newInstance(m: Media): MediaListDialogSmallFragment =            MediaListDialogSmallFragment().apply {                
+        a
     }
 
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        arguments?.let {
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
             media = it.getSerialized("media")!!        }
 }
 
 private var _binding: BottomSheetMediaListSmallBinding? = null    
 private val binding get() = _binding!!    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetMediaListSmallBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        b
 
-val scope = viewLifecycleOwner.lifecycleScope        binding.mediaListDelete.setOnClickListener {            scope.launch {                media.deleteFromList(scope, onSuccess = {                    Refresh.all()                    snackString(getString(R.string.deleted_from_list))
+val scope = viewLifecycleOwner.lifecycleScope        binding.mediaListDelete.setOnClickListener {            
+        s
                     dismissAllowingStateLoss()
                 }, onError = { e ->                    withContext(Dispatchers.Main) {                        snackString(                            getString(                                R.string.delete_fail_reason, e.message                    InputFilterMinMax(0.0, total.toDouble(), binding.mediaListStatus),                    LengthFilter(total.toString().length)                )        }
 binding.mediaListProgressLayout.suffixText = " / ${total ?: '?'}"        binding.mediaListProgressLayout.suffixTextView.updateLayoutParams {            height = ViewGroup.LayoutParams.MATCH_PARENT}
@@ -67,7 +72,8 @@ if (isRescueMode) {            binding.mediaListPrivate.apply { (parent as? View
 binding.mediaListPrivate.isChecked = media.isListPrivate        binding.mediaListPrivate.setOnCheckedChangeListener { _, checked ->            media.isListPrivate = checked        }
 
 val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())        
-var remove: Boolean? = null        binding.mediaListShow.isChecked = media.id in removeList        binding.mediaListShow.setOnCheckedChangeListener { _, checked ->            remove = checked        }
+var remove: Boolean? = null        binding.mediaListShow.isChecked = media.id in removeList        binding.mediaListShow.setOnCheckedChangeListener { 
+        _
 binding.mediaListSave.setOnClickListener {
     val progressText = binding.mediaListProgress.text.toString()            
 val scoreText = binding.mediaListScore.text.toString()            
@@ -84,16 +90,19 @@ val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
 if (rescueMode) {
     val pending = PendingProgressUpdate(                            mediaId = media.id,                            idMAL = media.idMAL,                            isAnime = media.anime != null,                            progress = progress ?: 0,                            status = status,                            score = score,                            isPrivate = media.isListPrivate,                        )                        
 val existing: List<PendingProgressUpdate> =                            PrefManager.getVal(PrefName.PendingProgressUpdates, listOf())                        
-val updated = existing.filterNot { it.mediaId == media.id } + pending                        PrefManager.setVal(PrefName.PendingProgressUpdates, updated)
+val updated = existing.filterNot { 
+        i
 } else {                        Anilist.mutation.editList(                            mediaID = media.id,                            progress = progress,                            progressVolumes = progressVolumes,                            score = score,                            status = status,                            
 private = media.isListPrivate,                            startedAt = startD,                            completedAt = endD                        )                    }
 MAL.query.editList(                        media.idMAL,                        media.anime != null,                        progress,                        score,                        status,                        start = startD,                        end = endD                    )                }
 if (remove == true) {                    PrefManager.setCustomVal("removeList", removeList.plus(media.id))
 } else if (remove == false) {                    PrefManager.setCustomVal("removeList", removeList.minus(media.id))                }
-Refresh.all()                snackString(getString(R.string.list_updated))
+Refresh.all()
+        snackString(getString(R.string.list_updated))
                 dismissAllowingStateLoss()}}
 }
 
-override fun onDestroyView() {        super.onDestroyView()        _binding = null
+override fun onDestroyView() {        
+        s
     }}
 }}}))

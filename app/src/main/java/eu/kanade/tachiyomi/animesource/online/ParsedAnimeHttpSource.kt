@@ -12,9 +12,11 @@ import org.jsoup.nodes.Element/** * A simple implementation for sources from a w
 abstract class ParsedAnimeHttpSource : AnimeHttpSource() {    /**     * Parses the response from the site and returns a [AnimesPage] object.     *     * @param response the response from the site.     */    
 override fun popularAnimeParse(response: Response): AnimesPage {
     val document = response.asJsoup()        
-val animes = document.select(popularAnimeSelector()).map { element ->            popularAnimeFromElement(element)        }
+val animes = document.select(popularAnimeSelector()).map { 
+        e
 
-val hasNextPage = popularAnimeNextPageSelector()?.let { selector ->            document.select(selector).first()        } != null
+val hasNextPage = popularAnimeNextPageSelector()?.let { 
+        s
 return AnimesPage(animes, hasNextPage)    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.     */
 protected abstract 
@@ -25,9 +27,11 @@ protected abstract
 fun popularAnimeNextPageSelector(): String?    /**     * Parses the response from the site and returns a [AnimesPage] object.     *     * @param response the response from the site.     */    
 override fun searchAnimeParse(response: Response): AnimesPage {
     val document = response.asJsoup()        
-val animes = document.select(searchAnimeSelector()).map { element ->            searchAnimeFromElement(element)        }
+val animes = document.select(searchAnimeSelector()).map { 
+        e
 
-val hasNextPage = searchAnimeNextPageSelector()?.let { selector ->            document.select(selector).first()        } != null
+val hasNextPage = searchAnimeNextPageSelector()?.let { 
+        s
 return AnimesPage(animes, hasNextPage)    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.     */
 protected abstract 
@@ -38,9 +42,11 @@ protected abstract
 fun searchAnimeNextPageSelector(): String?    /**     * Parses the response from the site and returns a [AnimesPage] object.     *     * @param response the response from the site.     */    
 override fun latestUpdatesParse(response: Response): AnimesPage {
     val document = response.asJsoup()        
-val animes = document.select(latestUpdatesSelector()).map { element ->            latestUpdatesFromElement(element)        }
+val animes = document.select(latestUpdatesSelector()).map { 
+        e
 
-val hasNextPage = latestUpdatesNextPageSelector()?.let { selector ->            document.select(selector).first()        } != null
+val hasNextPage = latestUpdatesNextPageSelector()?.let { 
+        s
 return AnimesPage(animes, hasNextPage)    }
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.     */
 protected abstract 

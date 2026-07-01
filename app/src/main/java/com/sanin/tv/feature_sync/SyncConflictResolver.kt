@@ -21,7 +21,8 @@ object SyncConflictResolver {
         malList: List<MALEntry>
     ): List<SyncConflict> {
     val conflicts = mutableListOf<SyncConflict>()
-        val malMap = malList.associateBy { it.malId }
+        val malMap = malList.associateBy { 
+        i
 
         for (aniEntry in anilistList) {
     val malId = aniEntry.malId ?: continue

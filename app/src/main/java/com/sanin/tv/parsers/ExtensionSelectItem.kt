@@ -12,7 +12,8 @@ private val iconUrl: String?,
 private var isSelected: Boolean,    
 val selectCallback: (String, Boolean) -> Unit) : BindableItem<ItemExtensionSelectBinding>() {
     private lateinit var binding: ItemExtensionSelectBinding    
-override fun bind(viewBinding: ItemExtensionSelectBinding, position: Int) {        binding = viewBinding        binding.extensionNameTextView.text = name        Glide.with(binding.root.context).clear(binding.extensionIconImageView)        binding.extensionIconImageView.setImageDrawable(null)
+override fun bind(viewBinding: ItemExtensionSelectBinding, position: Int) {        
+        b
 if (image != null) {            binding.extensionIconImageView.setImageDrawable(image)
 } else if (iconUrl != null) {            Glide.with(binding.root.context)                .load(iconUrl)                .into(binding.extensionIconImageView)        }
 binding.extensionCheckBox.setOnCheckedChangeListener(null)        binding.extensionCheckBox.isChecked = isSelected

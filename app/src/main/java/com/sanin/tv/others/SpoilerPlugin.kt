@@ -24,10 +24,12 @@ if (!revealed) {                // use the same text color                tp.bgC
 } else {                // for example keep a bit of black background to remind that it is a spoiler                tp.bgColor = ColorUtils.applyAlpha(Color.DKGRAY, 25)            }
 }
 
-fun setRevealed(revealed: Boolean) {            this.revealed = revealed        }}
+fun setRevealed(revealed: Boolean) {            
+        t
 // we also could make text size smaller (but then MetricAffectingSpan should be used)
 private class HideSpoilerSyntaxSpan : CharacterStyle() {
-    override fun updateDrawState(tp: TextPaint) {            // set transparent color            tp.color = 0        }
+    override fun updateDrawState(tp: TextPaint) {            
+        /
     }
 
 companion object {
@@ -40,14 +42,18 @@ while (matcher.find()) {
     val spoilerSpan = RedditSpoilerSpan()                
 val clickableSpan: ClickableSpan = 
 object : ClickableSpan() {
-    override fun onClick(widget: View) {                        spoilerSpan.setRevealed(true)                        widget.postInvalidateOnAnimation()
+    override fun onClick(widget: View) {                        
+        s
                     }
 
-override fun updateDrawState(ds: TextPaint) {                        // no op                    }
+override fun updateDrawState(ds: TextPaint) {                        
+        /
 }
 
 val s = matcher.start()                
-val e = matcher.end()                spannable.setSpan(spoilerSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+val e = matcher.end()
+        spannable.setSpan(spoilerSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 spannable.setSpan(clickableSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
+                // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )
+        spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
 }}

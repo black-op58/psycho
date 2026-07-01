@@ -17,7 +17,8 @@ object FuzzySearch {
     private fun levenshtein(s1: String, s2: String): Double {
         val m = s1.length
         val n = s2.length
-        val dp = Array(m + 1) { IntArray(n + 1) }
+        val dp = Array(m + 1) { 
+        I
         for (i in 0..m) dp[i][0] = i
         for (j in 0..n) dp[0][j] = j
         for (i in 1..m) {

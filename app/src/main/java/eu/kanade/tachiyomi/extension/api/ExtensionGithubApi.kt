@@ -8,10 +8,12 @@ fun findAnimeExtensions(): List<AnimeExtension.Available> {
 return withIOContext {
     val extensions: ArrayList<AnimeExtension.Available> = arrayListOf()            
 val repos =                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()            repos.asyncMap {
-    val repoUrl = if (it.contains("index.min.json")) {                    it
+    val repoUrl = if (it.contains("index.min.json")) {                    
+        i
 } else {                    "$it${if (it.endsWith('/')) "" else "/"}index.min.json"                }
 try {
-    val githubResponse = try {                        networkService.client                            .newCall(GET(repoUrl))    }
+    val githubResponse = try {                        
+        n
 
 private fun fallbackRepoUrl(repoUrl: String): String? {
     var fallbackRepoUrl = "https://gcore.jsdelivr.net/gh/"        
@@ -22,7 +24,8 @@ return null        }
 
 val repoOwner = repoUrlParts[1]        
 val repoName = repoUrlParts[2]        fallbackRepoUrl += "$repoOwner/$repoName"        
-val repoBranch = if (repoUrlParts.size > 3) {            repoUrlParts[3]
+val repoBranch = if (repoUrlParts.size > 3) {            
+        r
 } else {            "main"        }
 fallbackRepoUrl += "@$repoBranch"
 return fallbackRepoUrl    }}

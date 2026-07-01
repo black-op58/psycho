@@ -25,13 +25,17 @@ protected var privateCallback: ((Map<String, String>) -> Unit) = {        callba
     }
 
 val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager    //CookieManager.getInstance()    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetWebviewBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
 @SuppressLint("SetJavaScriptEnabled")    
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.webViewTitle.text = title        binding.webView.settings.apply {            javaScriptEnabled = true            userAgentString = defaultHeaders["User-Agent"]        }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        b
 cookies?.setAcceptThirdPartyCookies(binding.webView, true)        binding.webView.webViewClient = webViewClient
-        binding.webView.loadUrl(location.url, location.headers)        this.dismiss()
+        binding.webView.loadUrl(location.url, location.headers)
+        this.dismiss()
     }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }}
+override fun onDestroy() {        
+        _

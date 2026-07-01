@@ -130,7 +130,8 @@ class AnimeWatchAdapter(
             }
         }
 
-        val displayNames = watchSources.names.filter { it != "Local" }
+        val displayNames = watchSources.names.filter { 
+        i
         binding.mediaSource.setAdapter(
             ArrayAdapter(
                 fragment.requireContext(),
@@ -411,7 +412,8 @@ class AnimeWatchAdapter(
                     }
                     val ep = media.anime.episodes!![continueEp]!!
 
-                    val cleanedTitle = ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
+                    val cleanedTitle = ep.title?.let { 
+        M
 
                     binding.itemMediaImage.loadImage(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0

@@ -28,44 +28,55 @@ private val replies: MutableList<ActivityReply> = mutableListOf()
 private var activityId: Int = -1    
 private var didNotifyClose = false
 var onDialogClosed: (() -> Unit)? = null    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View? {        _binding = BottomSheetRecyclerBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View? {        
+        _
 return _binding?.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.repliesRecyclerView.adapter = adapter        binding.repliesRecyclerView.layoutManager = LinearLayoutManager(            context,            LinearLayoutManager.VERTICAL,            false        )        
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        b
 val context = requireContext()        binding.replyButton.setOnClickListener {
             ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", activityId),                null            )        }
-activityId = requireArguments().getInt("activityId")        loading(true)
+activityId = requireArguments().getInt("activityId")
+        loading(true)
         lifecycleScope.launch(Dispatchers.IO) {
             loadData()}
 }
 
 private suspend 
 fun loadData() {
-    val response = Anilist.query.getReplies(activityId)        withContext(Dispatchers.Main) {
+    val response = Anilist.query.getReplies(activityId)
+        withContext(Dispatchers.Main) {
             loading(false)
-if (response != null) {                replies.clear()                replies.addAll(response.data.page.activityReplies)
+if (response != null) {                replies.clear()
+        replies.addAll(response.data.page.activityReplies)
                 adapter.update(
                     replies.map {                        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) { i, _ ->                            onClick(i)                        }}
 )
 } else {                snackString("Failed to load replies")            }}
 }
 
-private fun onClick(int: Int) {        ContextCompat.startActivity(            requireContext(),            Intent(requireContext(), ProfileActivity::class.java).putExtra("userId", int),            null        )    }
+private fun onClick(int: Int) {        
+        C
 
-private fun loading(load: Boolean) {        binding.repliesRefresh.isVisible = load        binding.repliesRecyclerView.isVisible = !load    }
+private fun loading(load: Boolean) {        
+        b
 
-override fun onDestroyView() {        _binding = null        super.onDestroyView()    }
+override fun onDestroyView() {        
+        _
 
-override fun onDismiss(dialog: DialogInterface) {        super.onDismiss(dialog)        notifyDialogClosed()
+override fun onDismiss(dialog: DialogInterface) {        
+        s
     }
 
 private fun notifyDialogClosed() {
 if (didNotifyClose) {
 return        }
-didNotifyClose = true        onDialogClosed?.invoke()        onDialogClosed = null
+didNotifyClose = true        onDialogClosed?.invoke();
+        onDialogClosed = null
     }
 
-override fun onResume() {        super.onResume()        loading(true)
+override fun onResume() {        
+        s
         lifecycleScope.launch(Dispatchers.IO) {
             loadData()        }
 }

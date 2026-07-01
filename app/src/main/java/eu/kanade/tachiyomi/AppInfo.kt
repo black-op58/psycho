@@ -13,4 +13,5 @@ fun getVersionCode(): Int = com.sanin.tv.BuildConfig.VERSION_CODE
 fun getVersionName(): String = com.sanin.tv.BuildConfig.VERSION_NAME    
 /**     * A list of supported image MIME types by the reader.     * e.g. ["image/jpeg", "image/png", ...]     *     * @since extension-lib 1.5     */
     
-fun getSupportedImageMimeTypes(): List<String> = ImageUtil.ImageType.values().map { it.mime }}
+fun getSupportedImageMimeTypes(): List<String> = ImageUtil.ImageType.values().map { 
+        i

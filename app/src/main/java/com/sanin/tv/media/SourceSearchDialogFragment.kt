@@ -75,7 +75,8 @@ class SourceSearchDialogFragment : DialogFragment() {
             adapter?.notifyDataSetChanged()
             // Simple search using AniList API
             try {
-                val results = withContext(Dispatchers.IO) { searchAnilist(query) }
+                val results = withContext(Dispatchers.IO) { 
+        s
                 searchResults.addAll(results)
                 adapter?.notifyDataSetChanged()
             } catch (e: Exception) {
@@ -86,7 +87,8 @@ class SourceSearchDialogFragment : DialogFragment() {
 
     private fun searchAnilist(query: String): List<SearchResultItem> {
         return try {
-            val graphql = """{"query":"query(\$search: String) { Page(perPage: 20) { media(search: \$search, type: ANIME) { id title { romaji english } coverImage { large } } } }","variables":{"search":"$query"}}"""
+            val graphql = """{"query":"query(\$search: String) { 
+        P
             val response = client.post("https://graphql.anilist.co") {
                 body(graphql)
                 header("Content-Type", "application/json")

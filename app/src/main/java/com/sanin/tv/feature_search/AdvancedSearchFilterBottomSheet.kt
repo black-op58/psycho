@@ -47,7 +47,8 @@ class AdvancedSearchFilterBottomSheet : BottomSheetDialogFragment() {
 
         // Year spinner
         root.addView(TextView(ctx).apply { text = "Season Year"; textSize = 13f; setPadding(0, 16, 0, 0) })
-        val yearLabels = listOf("Any") + AdvancedSearchFilter.YEARS.map { it.toString() }
+        val yearLabels = listOf("Any") + AdvancedSearchFilter.YEARS.map { 
+        i
         val yearSpinner = Spinner(ctx).also {
             it.adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, yearLabels)
             val current = currentFilter.seasonYear

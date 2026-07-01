@@ -10,13 +10,17 @@ class UsersDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetUsersBinding? = null    
 private val binding get() = _binding!!    
 private var userList = arrayListOf<User>()    
-fun userList(user: ArrayList<User>) {        userList = user    }
+fun userList(user: ArrayList<User>) {        
+        u
 
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetUsersBinding.inflate(inflater, container, false)
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        binding.usersRecyclerView.adapter = UsersAdapter(userList)
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
+        s
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }}
+override fun onDestroy() {        
+        _

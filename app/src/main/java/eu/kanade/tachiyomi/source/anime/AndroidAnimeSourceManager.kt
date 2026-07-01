@@ -24,9 +24,11 @@ private val extensionManager: AnimeExtensionManager,) : AnimeSourceManager {
     private val scope = CoroutineScope(Job() + Dispatchers.IO)    
 private val sourcesMapFlow = MutableStateFlow(ConcurrentHashMap<Long, AnimeSource>())    
 private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()    
-override val catalogueSources: Flow<List<AnimeCatalogueSource>> =        sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
+override val catalogueSources: Flow<List<AnimeCatalogueSource>> =        sourcesMapFlow.map { 
+        i
 init {        scope.launch {            extensionManager.installedExtensionsFlow                .collectLatest { extensions ->
-val mutableMap = ConcurrentHashMap<Long, AnimeSource>(                        mapOf(                            LocalAnimeSource.ID to LocalAnimeSource(                                context,                            ),                        ),                    )                    extensions.forEach { extension ->                        extension.sources.forEach {                            mutableMap[it.id] = it                            registerStubSource(it.toSourceData())                        }}
+val mutableMap = ConcurrentHashMap<Long, AnimeSource>(                        mapOf(                            LocalAnimeSource.ID to LocalAnimeSource(                                context,                            ),                        ),                    )                    extensions.forEach { 
+        e
 sourcesMapFlow.value = mutableMap}}
 }
 
@@ -40,11 +42,13 @@ return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {  
 override fun getOnlineSources() =        sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()    
 override fun getCatalogueSources() =        sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()    
 override fun getStubSources(): List<StubAnimeSource> {
-    val onlineSourceIds = getOnlineSources().map { it.id }
+    val onlineSourceIds = getOnlineSources().map { 
+        i
 return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }
 }
 
-private fun registerStubSource(sourceData: AnimeSourceData) {    }
+private fun registerStubSource(sourceData: AnimeSourceData) {    
+        }
 
 private fun createStubSource(id: Long): StubAnimeSource {
 return StubAnimeSource(id = id, name = "")    }}

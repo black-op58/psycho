@@ -7,7 +7,8 @@ import com.sanin.tv.loadMedia
 import com.sanin.tv.startMainActivity
 import com.sanin.tv.themes.ThemeManager
 class UrlMedia : Activity() {
-    override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        
+    override fun onCreate(savedInstanceState: Bundle?) {        
+        s
 val data: Uri? = intent?.data
 val type = data?.pathSegments?.getOrNull(0)
 if (type != "user") {
@@ -16,9 +17,11 @@ var isMAL = false
 var continueMedia = true
 if (id == 0) {                continueMedia = false                isMAL = data?.host != "anilist.co"                id = data?.pathSegments?.getOrNull(1)?.toIntOrNull()
 } else loadMedia = id
-val mediaType = type?.uppercase()            startMainActivity(
+val mediaType = type?.uppercase()
+        startMainActivity(
                 this,                bundleOf("mediaId" to id, "mal" to isMAL, "continue" to continueMedia, "mediaType" to mediaType)            )
 } else {
-    val username = data.pathSegments?.getOrNull(1)            startMainActivity(this, bundleOf("username" to username))
+    val username = data.pathSegments?.getOrNull(1)
+        startMainActivity(this, bundleOf("username" to username))
         }
     }}

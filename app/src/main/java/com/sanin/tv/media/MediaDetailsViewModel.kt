@@ -27,13 +27,16 @@ anime.seasonYear?.let { media.anime?.seasonYear = it }
 if (media.anime?.nextAiringEpisodeTime == null && anime.nextAiringEpisodeTime != null) {                            media.anime?.nextAiringEpisodeTime = anime.nextAiringEpisodeTime                }
 }
 
-val mappedCharacters = charactersDeferred.await()                .mapNotNull { jChar ->                    
-val character = jChar.character ?: return@mapNotNull null                    Character(                        id = character.malId,                        name = character.name,                        image = character.images?.jpg?.largeImageUrl ?: character.images?.jpg?.imageUrl,                        banner = media.banner ?: media.cover,                        role = jChar.role ?: "",                        isFav = false,                        voiceActor = jChar.voiceActors                            ?.mapNotNull { va ->                                va.person?.let { person ->                                    Author(                                        id = person.malId,                                        name = person.name,                                        image = person.images?.jpg?.largeImageUrl ?: person.images?.jpg?.imageUrl,                                        role = va.language                                    )                                }}
+val mappedCharacters = charactersDeferred.await()                .mapNotNull { 
+        j
+val character = jChar.character ?: return@mapNotNull null                    Character(                        id = character.malId,                        name = character.name,                        image = character.images?.jpg?.largeImageUrl ?: character.images?.jpg?.imageUrl,                        banner = media.banner ?: media.cover,                        role = jChar.role ?: "",                        isFav = false,                        voiceActor = jChar.voiceActors                            ?.mapNotNull { 
+        v
 ?.let { ArrayList(it)}
 )                }
 if (mappedCharacters.isNotEmpty()) {                media.characters = ArrayList(mappedCharacters.distinctBy { it.id })            }
 
-val mappedStaff = staffDeferred.await()                .mapNotNull { staff ->                    
+val mappedStaff = staffDeferred.await()                .mapNotNull { 
+        s
 val person = staff.person ?: return@mapNotNull null                    Author(                        id = person.malId,                        name = person.name,                        image = person.images?.jpg?.largeImageUrl ?: person.images?.jpg?.imageUrl,                        role = staff.positions?.joinToString(", ")                    )                                }
 }
 if (resolvedFmt != null) {                                rel.format = resolvedFmt
@@ -42,7 +45,8 @@ if (rawRelation.isNotEmpty()) {                                    rel.relation 
 } catch (_: Exception) {}
 deferreds.forEach { it.await() }
 
-fun setMedia(m: Media) {        media.postValue(m)
+fun setMedia(m: Media) {        
+        m
 if (!PrefManager.getVal<Boolean>(PrefName.RescueMode)) {            viewModelScope.launch(Dispatchers.IO) {
 try {
 if (m.idIMDB == null) {                        m.idIMDB = com.sanin.tv.others.IdMappers.getImdbId(m.id)                    }
@@ -52,19 +56,22 @@ if (m.idIMDB == null) {                        m.idIMDB = com.sanin.tv.others.Id
 val responses = MutableLiveData<List<ShowResponse>?>(null)    //Anime    
 private val kitsuEpisodes: MutableLiveData<Map<String, Episode>> =        MutableLiveData<Map<String, Episode>>(null)    
 fun getKitsuEpisodes(): LiveData<Map<String, Episode>> = kitsuEpisodes    suspend 
-fun loadKitsuEpisodes(s: Media) {        tryWithSuspend {
+fun loadKitsuEpisodes(s: Media) {        
+        t
 if (kitsuEpisodes.value == null) kitsuEpisodes.postValue(Kitsu.getKitsuEpisodesDetails(s))        }
 }
 
 private val anifyEpisodes: MutableLiveData<Map<String, Episode>> =        MutableLiveData<Map<String, Episode>>(null)    
 fun getAnifyEpisodes(): LiveData<Map<String, Episode>> = anifyEpisodes    suspend 
-fun loadAnifyEpisodes(s: Int) {        tryWithSuspend {
+fun loadAnifyEpisodes(s: Int) {        
+        t
 if (anifyEpisodes.value == null) anifyEpisodes.postValue(Anify.fetchAndParseMetadata(s))        }
 }
 
 private val fillerEpisodes: MutableLiveData<Map<String, Episode>> =        MutableLiveData<Map<String, Episode>>(null)    
 fun getFillerEpisodes(): LiveData<Map<String, Episode>> = fillerEpisodes    suspend 
-fun loadFillerEpisodes(s: Media) {        tryWithSuspend {
+fun loadFillerEpisodes(s: Media) {        
+        t
 if (fillerEpisodes.value == null) fillerEpisodes.postValue(                Jikan.getEpisodes(                    s.idMAL ?: return@tryWithSuspend                )            )        }
 }
 
@@ -76,9 +83,11 @@ fun loadEpisodes(media: Media, i: Int, invalidate: Boolean = false) {
 if (!epsLoaded.containsKey(i) || invalidate) {            epsLoaded[i] = watchSources?.loadEpisodesFromMedia(i, media) ?: return        }
 episodes.postValue(epsLoaded)}
 suspend
-fun forceLoadEpisode(media: Media, i: Int) {        epsLoaded[i] = watchSources?.loadEpisodesFromMedia(i, media) ?: return        episodes.postValue(epsLoaded)    }
+fun forceLoadEpisode(media: Media, i: Int) {        
+        e
 suspend
-fun overrideEpisodes(i: Int, source: ShowResponse, id: Int) {        watchSources?.saveResponse(i, id, source)        epsLoaded[i] =
+fun overrideEpisodes(i: Int, source: ShowResponse, id: Int) {        
+        w
             watchSources?.loadEpisodes(i, source.link, source.extra, source.sAnime) ?: return        episodes.postValue(epsLoaded)    }
 
 private var episode = MutableLiveData<Episode?>(null)    
@@ -97,17 +106,20 @@ if (list.isNotEmpty())                    ep.allStreams = true
 else if (existingExtractors.isNotEmpty())                    ep.extractors = existingExtractors
             }
 }
-if (post) {            episode.postValue(ep)            MainScope().launch(Dispatchers.Main) {                episode.value = null            }}
+if (post) {            episode.postValue(ep)
+        MainScope().launch(Dispatchers.Main) {                episode.value = null            }}
 }
 
 val timeStamps = MutableLiveData<List<AniSkip.Stamp>?>()    
 private val timeStampsMap: MutableMap<Int, List<AniSkip.Stamp>?> = mutableMapOf()
 suspend 
-fun loadTimeStamps(        malId: Int?,        episodeNum: Int?,        duration: Long,        useProxyForTimeStamps: Boolean,        extensionTimestamps: List<eu.kanade.tachiyomi.animesource.model.TimeStamp> = emptyList()    ) {        episodeNum ?: return
+fun loadTimeStamps(        malId: Int?,        episodeNum: Int?,        duration: Long,        useProxyForTimeStamps: Boolean,        extensionTimestamps: List<eu.kanade.tachiyomi.animesource.model.TimeStamp> = emptyList()    ) {        
+        e
 if (timeStampsMap.containsKey(episodeNum))
 return timeStamps.postValue(timeStampsMap[episodeNum])        // Extension timestamps take priority
 // fall back to AniSkip when the extension has none
-val result: List<AniSkip.Stamp>? = if (extensionTimestamps.isNotEmpty()) {            extensionTimestamps.map { it.toAniSkipStamp() }
+val result: List<AniSkip.Stamp>? = if (extensionTimestamps.isNotEmpty()) {            
+        e
 } else if (malId != null) {            AniSkip.getResult(malId, episodeNum, duration, useProxyForTimeStamps)
 } else {            null        }
 timeStampsMap[episodeNum] = result        timeStamps.postValue(result)    }
@@ -151,22 +163,26 @@ val book = source.loadBook(novelResponse.link, novelResponse.extra)
 if (book == null || book.links.isEmpty()) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend
                 }
 
-val chapterResponses = book.links.mapIndexed { index, fileUrl ->                    
+val chapterResponses = book.links.mapIndexed { 
+        i
 val chapterName = fileUrl.headers?.get("X-Chapter-Name") ?: "Chapter ${index + 1}"                    
 val releaseTime = fileUrl.headers?.get("X-Release-Time")                    
-val chapterNumber = fileUrl.headers?.get("X-Chapter-Number")                    ShowResponse(                        name = chapterName,                        link = fileUrl.url,                        coverUrl = novelResponse.coverUrl,                        extra = mutableMapOf<String, String>().apply {                            releaseTime?.let { put("releaseTime", it) }
+val chapterNumber = fileUrl.headers?.get("X-Chapter-Number")
+        ShowResponse(                        name = chapterName,                        link = fileUrl.url,                        coverUrl = novelResponse.coverUrl,                        extra = mutableMapOf<String, String>().apply {                            releaseTime?.let { put("releaseTime", it) }
 chapterNumber?.let { put("chapterNumber", it)}
 put("sourceName", source.name)}
 )}
 novelLoaded[i] = chapterResponses}}
 novelChapters.postValue(novelLoaded)}
 suspend
-fun overrideNovelChapters(i: Int, source: ShowResponse, mediaId: Int) {        novelSources.saveResponse(i, mediaId, source)        novelLoaded.remove(i)
+fun overrideNovelChapters(i: Int, source: ShowResponse, mediaId: Int) {        
+        n
     }
 
 val book: MutableLiveData<Book> = MutableLiveData(null)
 suspend 
-fun loadBook(novel: ShowResponse, i: Int) {        tryWithSuspend {            book.postValue(                novelSources[i]?.loadBook(novel.link, novel.extra) ?: return@tryWithSuspend            )        }
+fun loadBook(novel: ShowResponse, i: Int) {        
+        t
 }
 
 private val fetchedOnlineSubtitles = mutableMapOf<String, List<Any>>()

@@ -26,7 +26,8 @@ private val colorBW = if (colorBWEnabled) "1" else "0"
 override fun compress(imageUrl: String): String {
 return if (dataSavedServer.isNotBlank() && !imageUrl.contains(dataSavedServer)) {
 when {                imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) ->
-if (ignoreJpg) imageUrl else getUrl(imageUrl)                imageUrl.contains(".gif", true) ->
+if (ignoreJpg) imageUrl else getUrl(imageUrl)
+        imageUrl.contains(".gif", true) ->
 if (ignoreGif) imageUrl else getUrl(imageUrl)
 else -> getUrl(imageUrl)            }
 } else {            imageUrl        }
@@ -42,7 +43,8 @@ private val format: Boolean = PrefManager.getVal<Boolean>(PrefName.DataSaverImag
 private val quality: Int = PrefManager.getVal<Int>(PrefName.DataSaverImageQuality)    
 override fun compress(imageUrl: String): String {
 return when {            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) ->
-if (ignoreJpg) imageUrl else getUrl(imageUrl)            imageUrl.contains(".gif", true) ->
+if (ignoreJpg) imageUrl else getUrl(imageUrl)
+        imageUrl.contains(".gif", true) ->
 if (ignoreGif) imageUrl else getUrl(imageUrl)
 else -> getUrl(imageUrl)        }
 }

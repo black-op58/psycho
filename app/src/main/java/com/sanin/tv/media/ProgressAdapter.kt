@@ -27,18 +27,21 @@ override fun onBindViewHolder(holder: ProgressViewHolder, position: Int) {
     val progressBar = holder.binding.root        bar = progressBar
 val doubleClickDetector = GestureDetector(progressBar.context, 
 object : GesturesListener() {
-    override fun onDoubleClick(event: MotionEvent) {                snackString(currContext()?.getString(R.string.cant_wait))                ObjectAnimator.ofFloat(                    progressBar,                    "translationX",                    progressBar.translationX,                    progressBar.translationX + 100f                )                    .setDuration(300).start()            }
+    override fun onDoubleClick(event: MotionEvent) {                
+        s
 
 override fun onScrollYClick(y: Float) {}
 
 override fun onSingleClick(event: MotionEvent) {}
 })        progressBar.setOnTouchListener { v, event ->
-            doubleClickDetector.onTouchEvent(event)            v.performClick()            true
+            doubleClickDetector.onTouchEvent(event)
+        v.performClick()            true
         }
 if (ready.value == false) {            ready.postValue(true)        }
 }
 
 override fun getItemCount(): Int = 1    inner 
 class ProgressViewHolder(
-val binding: ItemProgressbarBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.updateLayoutParams { if (horizontal) width = -1 else height = -1 }}
+val binding: ItemProgressbarBinding) :        RecyclerView.ViewHolder(binding.root) {        
+        i
 }}

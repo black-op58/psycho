@@ -20,7 +20,8 @@ private val _statusFlow = MutableStateFlow(State.QUEUE)
 @kotlin.jvm.Transient    
 @KotlinxTransient
 val statusFlow = _statusFlow.asStateFlow()    
-var status: State        get() = _statusFlow.value        set(value) {            _statusFlow.value = value        }
+var status: State        get() = _statusFlow.value        set(value) {            
+        _
 @kotlin.jvm.Transient    
 @KotlinxTransient    
 private val _progressFlow = MutableStateFlow(0)

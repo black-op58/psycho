@@ -120,7 +120,8 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
         }
 
         saveBtn.setOnClickListener {
-    val name = nameField.text.toString().trim().ifEmpty { "My Theme" }
+    val name = nameField.text.toString().trim().ifEmpty { 
+        "
             val theme = CustomTheme(
                 id = editingTheme?.id ?: java.util.UUID.randomUUID().toString(),
                 name = name,

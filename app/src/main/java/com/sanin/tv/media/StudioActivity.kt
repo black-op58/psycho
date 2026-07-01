@@ -31,12 +31,14 @@ private val scope = lifecycleScope
 private val model: OtherDetailsViewModel by viewModels()    
 private var studio: Studio? = null    
 private var loaded = false    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityStudioBinding.inflate(layoutInflater)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         setContentView(binding.root)
         initActivity(this)
         this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg)
         
-val screenWidth = resources.displayMetrics.run { widthPixels / density }
+val screenWidth = resources.displayMetrics.run { 
+        w
 binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
 binding.studioRecycler.updatePadding(bottom = 64f.px + navBarHeight)        binding.studioTitle.isSelected = true
         studio = intent.getSerialized("studio")        binding.studioTitle.text = studio?.name
@@ -65,10 +67,12 @@ val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size          
 binding.studioRecycler.adapter = concatAdapter                binding.studioRecycler.layoutManager = gridLayoutManager}
 }
 
-val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
+val live = Refresh.activity.getOrPut(this.hashCode()) { 
+        M
 live.observe(this) {
 if (it) {                scope.launch {
-if (studio != null)                        withContext(Dispatchers.IO) { model.loadStudio(studio!!) }
+if (studio != null)
+        withContext(Dispatchers.IO) { model.loadStudio(studio!!) }
 live.postValue(false)}}}
 }
 
@@ -76,4 +80,5 @@ override fun onDestroy() {
 if (Refresh.activity.containsKey(this.hashCode())) {            Refresh.activity.remove(this.hashCode())        }
 super.onDestroy()    }
 
-override fun onResume() {        binding.studioProgressBar.isGone = loaded        super.onResume()    }}
+override fun onResume() {        
+        b

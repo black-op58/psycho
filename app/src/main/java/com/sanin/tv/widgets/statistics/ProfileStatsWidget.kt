@@ -3,11 +3,14 @@ package com.sanin.tv.widgets.statistics
 appWidgetIds.forEach { appWidgetId ->            context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().clear().apply()        }
 super.onDeleted(context, appWidgetIds)    }
 
-override fun onEnabled(context: Context) {        super.onEnabled(context)    }
+override fun onEnabled(context: Context) {        
+        s
 
-override fun onDisabled(context: Context) {        super.onDisabled(context)    }
+override fun onDisabled(context: Context) {        
+        s
 
-override fun onAppWidgetOptionsChanged(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetId: Int,        newOptions: android.os.Bundle?    ) {        updateAppWidget(context, appWidgetManager, appWidgetId)        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+override fun onAppWidgetOptionsChanged(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetId: Int,        newOptions: android.os.Bundle?    ) {        
+        u
     }
 
 companion object {        
@@ -18,8 +21,10 @@ val backgroundColor = prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#800
 val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))            
 val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)            
 val statsTextColor = prefs.getInt(PREF_STATS_TEXT_COLOR, Color.WHITE)            
-val gradientDrawable = ResourcesCompat.getDrawable(                context.resources,                R.drawable.linear_gradient_black,        ) {            withContext(Dispatchers.Main) {
-    val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {                    setImageViewBitmap(R.id.backgroundView, backgroundBitmap)                    setTextViewText(R.id.topLeftItem, "")
+val gradientDrawable = ResourcesCompat.getDrawable(                context.resources,                R.drawable.linear_gradient_black,        ) {            
+        w
+    val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {                    
+        s
                     setTextViewText(R.id.topLeftLabel, context.getString(R.string.please))
                     setTextViewText(R.id.topRightItem, "")
                     setTextViewText(R.id.topRightLabel, context.getString(R.string.log_in))
@@ -29,7 +34,8 @@ val gradientDrawable = ResourcesCompat.getDrawable(                context.resou
                     setTextViewText(R.id.bottomRightLabel, "")
                     
 val intent = Intent(context, MainActivity::class.java)                    
-val pendingIntent = PendingIntent.getActivity(                        context, 0, intent, PendingIntent.FLAG_IMMUTABLE                    )                    setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)                }
+val pendingIntent = PendingIntent.getActivity(                        context, 0, intent, PendingIntent.FLAG_IMMUTABLE                    )
+        setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)                }
 appWidgetManager.updateAppWidget(appWidgetId, views)}
 }
 

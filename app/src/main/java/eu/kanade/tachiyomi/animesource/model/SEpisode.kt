@@ -10,7 +10,8 @@ var fillermark: Boolean
 var scanlator: String?    
 var summary: String?    
 var preview_url: String?    
-fun copyFrom(other: SEpisode) {        name = other.name        url = other.url        date_upload = other.date_upload        episode_number = other.episode_number        fillermark = other.fillermark        scanlator = other.scanlator        summary = other.summary        preview_url = other.preview_url    }
+fun copyFrom(other: SEpisode) {        
+        n
 
 companion object {
     fun create(): SEpisode {

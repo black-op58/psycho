@@ -16,7 +16,8 @@ class ParserTestActivity : AppCompatActivity() {
     private lateinit var binding: ActivityParserTestBinding
 val adapter = GroupieAdapter()    
 val extensionsToTest: MutableList<ExtensionTestItem> = mutableListOf()    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+override fun onCreate(savedInstanceState: Bundle?) {        
+        s
         binding = ActivityParserTestBinding.inflate(layoutInflater)
         binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight        }

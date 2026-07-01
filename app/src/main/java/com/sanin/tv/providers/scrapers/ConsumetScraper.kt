@@ -86,7 +86,8 @@ object ConsumetScraper {
             val resp = client.get(infoUrl)
             if (resp.statusCode != 200) return null
             val episodes = Mapper.json.decodeFromString<ConsumetInfoResp>(resp.text).episodes
-            val pool = if (isDub) episodes.filter { it.isDub == true }.takeIf { it.isNotEmpty() } ?: episodes else episodes
+            val pool = if (isDub) episodes.filter { 
+        i
             pool.find { it.number == episodeNumber }?.id
                 ?: episodes.getOrNull(episodeNumber - 1)?.id
         } catch (e: CancellationException) { throw e }
@@ -101,7 +102,8 @@ object ConsumetScraper {
             val resp = client.get(watchUrl)
             if (resp.statusCode != 200) return null
             val body = Mapper.json.decodeFromString<ConsumetWatchResp>(resp.text)
-            val best = body.sources.maxByOrNull { qualityScore(it.quality) } ?: return null
+            val best = body.sources.maxByOrNull { 
+        q
             StreamFetcher.StreamResult(
                 url          = best.url,
                 quality      = best.quality ?: "auto",

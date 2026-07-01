@@ -28,7 +28,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSearchFilterBinding? = null    
 private val binding get() = _binding!!    
 private lateinit var activity: SearchActivity    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetSearchFilterBinding.inflate(inflater, container, false)        RecyclerView.Adapter<FilterChipAdapter.SearchChipViewHolder>() {        inner 
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
+        _
 class SearchChipViewHolder(
 val binding: ItemChipBinding) :            RecyclerView.ViewHolder(binding.root)        
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchChipViewHolder {
@@ -42,7 +43,8 @@ override fun onBindViewHolder(holder: SearchChipViewHolder, position: Int) {
 
 override fun getItemCount(): Int = list.size    }
 
-override fun onDestroy() {        _binding = null        super.onDestroy()    }
+override fun onDestroy() {        
+        _
 
 companion object {
     fun newInstance() = SearchFilterBottomDialog()    }}

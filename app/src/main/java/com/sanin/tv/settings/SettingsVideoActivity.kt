@@ -78,7 +78,8 @@ class SettingsVideoActivity : AppCompatActivity() {
                     icon = R.drawable.ic_round_fast_forward_24,
                     onClick = { b ->
                         val cur = PrefManager.getVal<Int>(PrefName.AutoHideTimeout)
-                        val options = (2..10).map { "${it}s" }.toTypedArray()
+                        val options = (2..10).map { 
+        "
                         customAlertDialog().apply {
                             setTitle(R.string.auto_hide_timeout)
                             singleChoiceItems(options, cur - 2) { idx ->
@@ -98,7 +99,8 @@ class SettingsVideoActivity : AppCompatActivity() {
                     icon = R.drawable.ic_round_area_chart_24,
                     onClick = { b ->
                         val cur = PrefManager.getVal<Int>(PrefName.BufferSize)
-                        val options = listOf(16, 24, 32, 48, 64, 96, 128).map { "${it} MB" }.toTypedArray()
+                        val options = listOf(16, 24, 32, 48, 64, 96, 128).map { 
+        "
                         val sizes  = listOf(16, 24, 32, 48, 64, 96, 128)
                         customAlertDialog().apply {
                             setTitle(R.string.buffer_size)

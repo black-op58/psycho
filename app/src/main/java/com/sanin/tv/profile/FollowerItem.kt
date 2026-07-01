@@ -25,11 +25,14 @@ val clickCallback: (Int) -> Unit) : BindableItem<ViewBinding>() {
     override fun bind(viewBinding: ViewBinding, position: Int) {
     val username = SpannableString(user.name ?: "Unknown")
 if (grid) {
-    val binding = viewBinding as ItemFollowerGridBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }
+    val binding = viewBinding as ItemFollowerGridBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { 
+        b
     //setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id) }
 } else {
-    val binding = viewBinding as ItemFollowerBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }
-    blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)            setupFollowButton(binding.followStatusChip)
+    val binding = viewBinding as ItemFollowerBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { 
+        b
+    blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)
+        setupFollowButton(binding.followStatusChip)
             binding.root.setOnClickListener { clickCallback(user.id)}}
     }
 

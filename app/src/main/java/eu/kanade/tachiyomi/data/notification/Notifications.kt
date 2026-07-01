@@ -18,20 +18,27 @@ private const val GROUP_COMMENTS = "group_comments"    const val CHANNEL_COMMENT
     const val GROUP_SUBSCRIPTION_CHECK = "group_subscription_check"    const val CHANNEL_SUBSCRIPTION_CHECK = "subscription_check_channel"    const val CHANNEL_SUBSCRIPTION_CHECK_PROGRESS = "subscription_check_progress_channel"    const val ID_SUBSCRIPTION_CHECK = -1001    const val ID_SUBSCRIPTION_CHECK_PROGRESS = -1002                    setName("Incognito Mode")
 }
 buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
-    setName("Comments")                    setGroup(GROUP_COMMENTS)
+    setName("Comments")
+        setGroup(GROUP_COMMENTS)
 },                buildNotificationChannel(CHANNEL_COMMENT_WARING, IMPORTANCE_HIGH) {
-    setName("Comment Warnings")                    setGroup(GROUP_COMMENTS)
+    setName("Comment Warnings")
+        setGroup(GROUP_COMMENTS)
 },                buildNotificationChannel(CHANNEL_ANILIST, IMPORTANCE_DEFAULT) {
-    setName("Anilist")                    setGroup(GROUP_ANILIST)
+    setName("Anilist")
+        setGroup(GROUP_ANILIST)
 },                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK, IMPORTANCE_LOW) {
-    setName("Subscription Checks")                    setGroup(GROUP_SUBSCRIPTION_CHECK)
+    setName("Subscription Checks")
+        setGroup(GROUP_SUBSCRIPTION_CHECK)
 },                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK_PROGRESS, IMPORTANCE_DEFAULT) {
-    setName("Subscription Checks Progress")                    setGroup(GROUP_SUBSCRIPTION_CHECK)
+    setName("Subscription Checks Progress")
+        setGroup(GROUP_SUBSCRIPTION_CHECK)
 },                buildNotificationChannel(CHANNEL_APP_GLOBAL, IMPORTANCE_HIGH) {
     setName("Global Updates")
 },                buildNotificationChannel(CHANNEL_APP_UPDATE, IMPORTANCE_DEFAULT) {
-    setGroup(GROUP_APK_UPDATES)                    setName("App Updates")
+    setGroup(GROUP_APK_UPDATES)
+        setName("App Updates")
 },                buildNotificationChannel(CHANNEL_EXTENSIONS_UPDATE, IMPORTANCE_DEFAULT) {
-    setGroup(GROUP_APK_UPDATES)                    setName("Extension Updates")
+    setGroup(GROUP_APK_UPDATES)
+        setName("Extension Updates")
 },            ),        
 }

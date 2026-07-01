@@ -90,7 +90,8 @@ class AnilistMutations {
         customLists: List<String>? = null,
         advancedScores: List<Double>? = null,
     ) {
-        val scoreRaw = score?.let { (it * 10).toInt() }
+        val scoreRaw = score?.let { 
+        (
         val startArg = if (startedAt != null) "=" + startedAt.toVariableString() else ""
         val completedArg = if (completedAt != null) "=" + completedAt.toVariableString() else ""
         val query = """
@@ -132,9 +133,12 @@ class AnilistMutations {
             if (progress != null)      append(""","progress":$progress""")
             if (progressVolumes != null) append(""","progressVolumes":$progressVolumes""")
             if (scoreRaw != null)      append(""","scoreRaw":$scoreRaw""")
-            if (repeat != null)        append(""","repeat":$repeat""")
-            if (notes != null)         append(""","notes":"${notes.replace("\n", "\\n")}"""")
-            if (status != null)        append(""","status":"$status"""")
+            if (repeat != null)
+        append(""","repeat":$repeat""")
+            if (notes != null)
+        append(""","notes":"${notes.replace("\n", "\\n")}"""")
+            if (status != null)
+        append(""","status":"$status"""")
             if (customLists != null)   append(""","customLists":[${customLists.joinToString { "\"$it\"" }}]""")
             append("}")
         }

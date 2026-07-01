@@ -28,61 +28,80 @@ private var onDismiss: (() -> Unit)? = null
 private var onCancel: (() -> Unit)? = null    
 private var cancelable: Boolean = true    
 private var dismissOnSelect: Boolean = true
-fun setCancelable(cancelable: Boolean): AlertDialogBuilder {        this.cancelable = cancelable
+fun setCancelable(cancelable: Boolean): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setOnShowListener(onShow: () -> Unit): AlertDialogBuilder {        this.onShow = onShow
+fun setOnShowListener(onShow: () -> Unit): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setOnCancelListener(onCancel: () -> Unit): AlertDialogBuilder {        this.onCancel = onCancel
+fun setOnCancelListener(onCancel: () -> Unit): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setTitle(title: String?): AlertDialogBuilder {        this.title = title
+fun setTitle(title: String?): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setTitle(int: Int, formatArgs: Int? = null): AlertDialogBuilder {        this.title = context.getString(int, formatArgs)
+fun setTitle(int: Int, formatArgs: Int? = null): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setMessage(message: String?): AlertDialogBuilder {        this.message = message
+fun setMessage(message: String?): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setMessage(stringInt: Int, vararg formatArgs: Any): AlertDialogBuilder {        this.message = context.getString(stringInt, *formatArgs)
+fun setMessage(stringInt: Int, vararg formatArgs: Any): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setCustomView(view: View): AlertDialogBuilder {        this.customView = view
+fun setCustomView(view: View): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setCustomView(layoutResId: Int): AlertDialogBuilder {        this.customView = View.inflate(context, layoutResId, null)
+fun setCustomView(layoutResId: Int): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setPosButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {        this.posButtonTitle = title        this.onPositiveButtonClick = onClick
+fun setPosButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setPosButton(        int: Int,        formatArgs: Int? = null,        onClick: (() -> Unit)? = null    ): AlertDialogBuilder {        this.posButtonTitle = context.getString(int, formatArgs)        this.onPositiveButtonClick = onClick
+fun setPosButton(        int: Int,        formatArgs: Int? = null,        onClick: (() -> Unit)? = null    ): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setNegButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {        this.negButtonTitle = title        this.onNegativeButtonClick = onClick
+fun setNegButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setNegButton(        int: Int,        formatArgs: Int? = null,        onClick: (() -> Unit)? = null    ): AlertDialogBuilder {        this.negButtonTitle = context.getString(int, formatArgs)        this.onNegativeButtonClick = onClick
+fun setNegButton(        int: Int,        formatArgs: Int? = null,        onClick: (() -> Unit)? = null    ): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setNeutralButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {        this.neutralButtonTitle = title        this.onNeutralButtonClick = onClick
+fun setNeutralButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {        
+        t
 return this    }
 
-fun setNeutralButton(        int: Int,        formatArgs: Int? = null,        onClick: (() -> Unit)? = null    ): AlertDialogBuilder {        this.neutralButtonTitle = context.getString(int, formatArgs)        this.onNeutralButtonClick = onClick
+fun setNeutralButton(        int: Int,        formatArgs: Int? = null,        onClick: (() -> Unit)? = null    ): AlertDialogBuilder {        
+        t
 return this    }
 
-fun attach(attach: ((dialog: AlertDialog) -> Unit)?): AlertDialogBuilder {        this.attach = attach
+fun attach(attach: ((dialog: AlertDialog) -> Unit)?): AlertDialogBuilder {        
+        t
 return this    }
 
-fun onDismiss(onDismiss: (() -> Unit)? = null): AlertDialogBuilder {        this.onDismiss = onDismiss
+fun onDismiss(onDismiss: (() -> Unit)? = null): AlertDialogBuilder {        
+        t
 return this    }
 
-fun singleChoiceItems(        items: Array<String>,        selectedItemIndex: Int = -1,        dismissOnSelect: Boolean = true,        onItemSelected: (Int) -> Unit,    ): AlertDialogBuilder {        this.items = items        this.selectedItemIndex = selectedItemIndex        this.onItemSelected = onItemSelected        this.dismissOnSelect = dismissOnSelect
+fun singleChoiceItems(        items: Array<String>,        selectedItemIndex: Int = -1,        dismissOnSelect: Boolean = true,        onItemSelected: (Int) -> Unit,    ): AlertDialogBuilder {        
+        t
 return this    }
 
-fun multiChoiceItems(        items: Array<String>,        checkedItems: BooleanArray? = null,        onItemsSelected: (BooleanArray) -> Unit    ): AlertDialogBuilder {        this.items = items        this.checkedItems = checkedItems ?: BooleanArray(items.size) { false }
+fun multiChoiceItems(        items: Array<String>,        checkedItems: BooleanArray? = null,        onItemsSelected: (BooleanArray) -> Unit    ): AlertDialogBuilder {        
+        t
 this.onItemsSelected = onItemsSelected
 return this    }
 
@@ -99,13 +118,16 @@ if (dismissOnSelect) {                        dialog.dismiss()                  
 } else if (checkedItems != null && onItemsSelected != null) {                builder.setMultiChoiceItems(items, checkedItems) { _, which, isChecked ->                    checkedItems?.set(which, isChecked)                    onItemsSelected?.invoke(checkedItems!!)
                 }}
 }
-if (posButtonTitle != null) {            builder.setPositiveButton(posButtonTitle) { dialog, _ ->                onPositiveButtonClick?.invoke()                dialog.dismiss()
+if (posButtonTitle != null) {            builder.setPositiveButton(posButtonTitle) { dialog, _ ->                onPositiveButtonClick?.invoke()
+        dialog.dismiss()
             }
 }
-if (negButtonTitle != null) {            builder.setNegativeButton(negButtonTitle) { dialog, _ ->                onNegativeButtonClick?.invoke()                dialog.dismiss()
+if (negButtonTitle != null) {            builder.setNegativeButton(negButtonTitle) { dialog, _ ->                onNegativeButtonClick?.invoke()
+        dialog.dismiss()
             }
 }
-if (neutralButtonTitle != null) {            builder.setNeutralButton(neutralButtonTitle) { dialog, _ ->                onNeutralButtonClick?.invoke()                dialog.dismiss()
+if (neutralButtonTitle != null) {            builder.setNeutralButton(neutralButtonTitle) { dialog, _ ->                onNeutralButtonClick?.invoke()
+        dialog.dismiss()
             }
 }
 if (onCancel != null) {            builder.setOnCancelListener {                onCancel?.invoke()            }}
@@ -116,7 +138,8 @@ val dialog = builder.create()        attach?.invoke(dialog)
 dialog.setOnShowListener {            onShow?.invoke()}
 dialog.window?.apply {            setDimAmount(0.5f)            attributes.windowAnimations = android.R.style.Animation_Dialog
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-    val params = attributes                params.flags = params.flags or WindowManager.LayoutParams.FLAG_BLUR_BEHIND                params.setBlurBehindRadius(20)                attributes = params
+    val params = attributes                params.flags = params.flags or WindowManager.LayoutParams.FLAG_BLUR_BEHIND                params.setBlurBehindRadius(20);
+        attributes = params
             }}
     dialog.show()    }}
 

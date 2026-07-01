@@ -9,7 +9,8 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.util.Logger
 import kotlinx.coroutines.runBlocking
 class AnilistNotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {        Logger.log("AnilistNotificationReceiver: onReceive")        runBlocking(Dispatchers.IO) {
+    override fun onReceive(context: Context, intent: Intent?) {        
+        L
             AnilistNotificationTask().execute(context)        }
 
 val anilistInter

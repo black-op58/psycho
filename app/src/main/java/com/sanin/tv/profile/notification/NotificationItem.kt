@@ -36,11 +36,13 @@ val type: NotificationFragment.Companion.NotificationType,
 val parentAdapter: GroupieAdapter,    
 val clickCallback: (Int, Int?, NotificationClickType) -> Unit,    ) : BindableItem<ItemNotificationBinding>() {
     private lateinit var binding: ItemNotificationBinding    
-override fun bind(viewBinding: ItemNotificationBinding, position: Int) {        binding = viewBinding        setAnimation(binding.root.context, binding.root)        setBinding()
+override fun bind(viewBinding: ItemNotificationBinding, position: Int) {        
+        b
     }
 
 fun dialog() {
-    val notificationType = NotificationType.entries.find { it.value == notification.notificationType } ?: return
+    val notificationType = NotificationType.entries.find { 
+        i
 val canDeleteLocal = type == COMMENT || type == SUBSCRIPTION
 val canUnsubscribeActivity =            notificationType == NotificationType.ACTIVITY_REPLY_SUBSCRIBED && notification.activityId != null
 if (!canDeleteLocal && !canUnsubscribeActivity) return        binding.root.context.customAlertDialog().apply {
@@ -50,13 +52,17 @@ setMessage(ActivityItemBuilder.getContent(notification))
 if (canDeleteLocal) {                setPosButton(R.string.yes) {
 if (type == COMMENT) {
     val list = PrefManager.getNullableVal<List<CommentStore>>(                            PrefName.CommentNotificationStore,                            null                        ) ?: listOf()                        
-val newList = list.filter { it.commentId != notification.commentId }
-PrefManager.setVal(PrefName.CommentNotificationStore, newList)                        parentAdapter.remove(this
+val newList = list.filter { 
+        i
+PrefManager.setVal(PrefName.CommentNotificationStore, newList)
+        parentAdapter.remove(this
 @NotificationItem)
 } else if (type == SUBSCRIPTION) {
     val list = PrefManager.getNullableVal<List<SubscriptionStore>>(                            PrefName.SubscriptionNotificationStore,                            null                        ) ?: listOf()                        
-val newList =                            list.filter { (it.time / 1000L).toInt() != notification.createdAt }
-PrefManager.setVal(PrefName.SubscriptionNotificationStore, newList)                        parentAdapter.remove(this
+val newList =                            list.filter { 
+        (
+PrefManager.setVal(PrefName.SubscriptionNotificationStore, newList)
+        parentAdapter.remove(this
 @NotificationItem)                    }}
 }
 if (canUnsubscribeActivity) {
@@ -67,13 +73,15 @@ if (activityId == null) {                        snackString(binding.root.contex
     val lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
 if (lifecycleOwner == null) {                            snackString(binding.root.context.getString(R.string.activity_unsubscribe_unavailable))
 } else {                            lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-    val success = runCatching {                                    Anilist.mutation.toggleActivitySubscription(                                        activityId,                                        false                                    )                                }.onFailure {                                    Logger.log("Failed to unsubscribe from activity: ${it.message}")                                }.getOrDefault(false)                                withContext(Dispatchers.Main) {
+    val success = runCatching {                                    
+        A
 if (success) {                                        snackString(binding.root.context.getString(R.string.activity_unsubscribed))
 } else {                                        snackString(binding.root.context.getString(R.string.activity_unsubscribe_failed))                                    }}}}}
 }
 if (canDeleteLocal) {                    setNeutralButton(R.string.unsubscribe) { unsubscribeAction() }
 } else {                    setPosButton(R.string.unsubscribe) { unsubscribeAction() }}}
-setNegButton(R.string.no)            show()}
+setNegButton(R.string.no)
+        show()}
 }
 
 override fun getLayout(): Int {
@@ -107,64 +115,80 @@ private fun setBinding() {
     val notificationType: NotificationType =            NotificationType.valueOf(notification.notificationType)        binding.notificationText.text = ActivityItemBuilder.getContent(notification)
         binding.notificationDate.text = ActivityItemBuilder.getDateTime(notification.createdAt)
         binding.notificationTypeIcon.setImageResource(getNotificationTypeIcon(notificationType))
-when (notificationType) {            NotificationType.ACTIVITY_MESSAGE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+when (notificationType) {            NotificationType.ACTIVITY_MESSAGE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )                }
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY                    )}}
-NotificationType.ACTIVITY_REPLY -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.ACTIVITY_REPLY -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY                    )}}
-NotificationType.FOLLOWING -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.FOLLOWING -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.userId ?: 0, null, NotificationClickType.USER                    )}}
-NotificationType.ACTIVITY_MENTION -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.ACTIVITY_MENTION -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY                    )}}
-NotificationType.THREAD_COMMENT_MENTION -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.THREAD_COMMENT_MENTION -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}}
-NotificationType.THREAD_SUBSCRIBED -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.THREAD_SUBSCRIBED -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}}
-NotificationType.THREAD_COMMENT_REPLY -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.THREAD_COMMENT_REPLY -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}}
-NotificationType.AIRING -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)                image()
+NotificationType.AIRING -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+        image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA                    )}}
-NotificationType.ACTIVITY_LIKE -> {                image(true)                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+NotificationType.ACTIVITY_LIKE -> {                image(true)
+        binding.notificationCover.loadImage(notification.user?.avatar?.large)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY                    )}}
-NotificationType.ACTIVITY_REPLY_LIKE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.ACTIVITY_REPLY_LIKE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY                    )}}
-NotificationType.THREAD_LIKE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.THREAD_LIKE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}}
-NotificationType.THREAD_COMMENT_LIKE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.THREAD_COMMENT_LIKE -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}}
-NotificationType.ACTIVITY_REPLY_SUBSCRIBED -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)                image(true)
+NotificationType.ACTIVITY_REPLY_SUBSCRIBED -> {                binding.notificationCover.loadImage(notification.user?.avatar?.large)
+        image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.user?.id ?: 0, null, NotificationClickType.USER                    )}
 binding.notificationBannerImage.setOnClickListener {                    clickCallback(                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY                    )}}
-NotificationType.RELATED_MEDIA_ADDITION -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)                image()
+NotificationType.RELATED_MEDIA_ADDITION -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+        image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA                    )}}
-NotificationType.MEDIA_DATA_CHANGE -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)                image()
+NotificationType.MEDIA_DATA_CHANGE -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+        image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA                    )}}
-NotificationType.MEDIA_MERGE -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)                image()
+NotificationType.MEDIA_MERGE -> {                binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+        image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA                    )}}
 NotificationType.MEDIA_DELETION -> {                binding.notificationCover.visibility = View.GONE}
