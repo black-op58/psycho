@@ -105,8 +105,8 @@
     <string name="provider_url_hint">URL template</string>
     <string name="provider_url_hint_detail">Use {title} and {episode} as placeholders.\nExample: https://myapi.example.com/stream?title={title}&amp;episode={episode}\nExpected response: JSON with a "url", "stream", or "src" field.</string>
     <string name="provider_testing">Testing %s…</string>
-    <string name="provider_test_ok">%s: stream found (%s)</string>
-    <string name="provider_test_fail">%s: no stream found</string>
+    <string name="provider_test_ok">%1$s: stream found (%2$s)</string>
+    <string name="provider_test_fail">%1$s: no stream found</string>
     <string name="provider_testing_all">Testing all enabled providers…</string>
     <string name="provider_test_all_ok">Found via %s: %s</string>
     <string name="provider_test_all_fail">No stream found — all providers exhausted</string>
