@@ -1,5 +1,7 @@
 package tachiyomi.core.metadata.comicinfo
 
+@Serializable
+data class ComicInfo(
 val coverArtist: CoverArtist?,    
 val translator: Translator?,    
 val genre: Genre?,    
