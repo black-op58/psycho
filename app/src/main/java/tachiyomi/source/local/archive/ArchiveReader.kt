@@ -31,9 +31,9 @@ try {            Os.munmap(address, size)        } catch (e: Exception) {       
 }}
 
 fun DocumentFile.archiveReader(context: Context): ArchiveReader {
-    val pfd = context.contentResolver.openFileDescriptor(uri, "r")        ?: error("Failed to 
-open file descriptor: $uri")
-return pfd.use { ArchiveReader(it) }}
+    val pfd = context.contentResolver.openFileDescriptor(uri, "r") ?: error("Failed to open file descriptor: $uri")
+return pfd.use { ArchiveReader(it) }
+}
 
 class ArchiveEntry(    
 val name: String,    

@@ -20,14 +20,24 @@ return if (oneByteBuffer.hasRemaining()) oneByteBuffer.get().toUByte().toInt() e
 
 override fun read(b: ByteArray, off: Int, len: Int): Int {
     val buffer = ByteBuffer.wrap(b, off, len)        read(buffer)
-return if (buffer.hasRemaining()) buffer.remaining() else -1    }
+return if (buffer.hasRemaining()) buffer.remaining() else -1
+    }
 
-private fun read(buffer: ByteBuffer) {        buffer.clear()        Archive.readData(archive, buffer)        buffer.flip()    }
+private fun read(buffer: ByteBuffer) {
+        buffer.clear()
+        Archive.readData(archive, buffer)
+        buffer.flip()
+    }
 
-override fun close() {        synchronized(lock) {
+override fun close() {
+        synchronized(lock) {
 if (isClosed) return            isClosed = true        }
-Archive.readFree(archive)    }
+Archive.readFree(archive)
+    }
 
-fun getNextEntry() = Archive.readNextHeader(archive).takeUnless { it == 0L }?.let { entry ->        
+fun getNextEntry() = Archive.readNextHeader(archive).takeUnless { it == 0L }?.let { entry ->
 val name = ArchiveEntry.pathnameUtf8(entry) ?: ArchiveEntry.pathname(entry)?.decodeToString() ?: return null
-val isFile = ArchiveEntry.filetype(entry) == ArchiveEntry.AE_IFREG        tachiyomi.source.local.archive.ArchiveEntry(name, isFile)    }}
+val isFile = ArchiveEntry.filetype(entry) == ArchiveEntry.AE_IFREG
+        tachiyomi.source.local.archive.ArchiveEntry(name, isFile)
+    }}
+}
