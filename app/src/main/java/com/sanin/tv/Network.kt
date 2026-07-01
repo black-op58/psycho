@@ -72,9 +72,11 @@ else            toast(e.localizedMessage)    }
 e.printStackTrace()    Logger.log(e)}
 
 fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T): T? {
-return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null    }}
+return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null
+    }}
 suspend fun <T> tryWithSuspend(    post: Boolean = false,    snackbar: Boolean = true,    call: suspend () -> T): T? {
-return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null    } catch (e: CancellationException) {        null    }}/** * A url, which can also have headers * **/
+return try {        call.invoke()    } catch (e: Throwable) {        logError(e, post, snackbar)        null
+    } catch (e: CancellationException) {        null    }}/** * A url, which can also have headers * **/
 data class FileUrl(    
 var url: String,    
 var headers: Map<String, String> = mapOf()) : Serializable {    

@@ -21,7 +21,8 @@ return AuthorViewHolder(binding)    }
 
 override fun onBindViewHolder(holder: AuthorViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
-val author = authorList.getOrNull(position) ?: return        binding.itemCompactRelation.text = author.role        binding.itemCompactImage.loadImage(author.image)        binding.itemCompactTitle.text = author.name    }
+val author = authorList.getOrNull(position) ?: return        binding.itemCompactRelation.text = author.role        binding.itemCompactImage.loadImage(author.image)        binding.itemCompactTitle.text = author.name
+    }
 
 override fun getItemCount(): Int = authorList.size    inner 
 class AuthorViewHolder(

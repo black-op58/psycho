@@ -5,7 +5,8 @@ import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 class AndroidCookieJar : CookieJar {
-    val manager: CookieManager? = try {        CookieManager.getInstance()    } catch (e: Exception) {        snackString("Webview is outdated, please update your webview")        null    }
+    val manager: CookieManager? = try {        CookieManager.getInstance()    } catch (e: Exception) {        snackString("Webview is outdated, please update your webview")        null
+    }
 
 override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
     val urlString = url.toString()        cookies.forEach { manager?.setCookie(urlString, it.toString()) }

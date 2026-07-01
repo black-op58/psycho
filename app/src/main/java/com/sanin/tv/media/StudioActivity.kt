@@ -31,10 +31,16 @@ private val scope = lifecycleScope
 private val model: OtherDetailsViewModel by viewModels()    
 private var studio: Studio? = null    
 private var loaded = false    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityStudioBinding.inflate(layoutInflater)        setContentView(binding.root)        initActivity(this)        this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg)        
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityStudioBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initActivity(this)
+        this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg)
+        
 val screenWidth = resources.displayMetrics.run { widthPixels / density }
 binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.studioRecycler.updatePadding(bottom = 64f.px + navBarHeight)        binding.studioTitle.isSelected = true        studio = intent.getSerialized("studio")        binding.studioTitle.text = studio?.name        binding.studioClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+binding.studioRecycler.updatePadding(bottom = 64f.px + navBarHeight)        binding.studioTitle.isSelected = true
+        studio = intent.getSerialized("studio")        binding.studioTitle.text = studio?.name
+        binding.studioClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
 model.getStudio().observe(this) {
 if (it != null) {                studio = it                loaded = true                binding.studioProgressBar.visibility = View.GONE                binding.studioRecycler.visibility = View.VISIBLE
 val titlePosition = arrayListOf<Int>()                
@@ -51,7 +57,11 @@ else -> 1                        }}
 }
 for (i in keys.indices) {
     val medias = map[keys[i]]!!                    
-val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos)                    pos += (empty + medias.size + 1)                    concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))                    concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))                    concatAdapter.addAdapter(EmptyAdapter(empty))                }
+val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos)                    pos += (empty + medias.size + 1)
+                    concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
+                    concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
+                    concatAdapter.addAdapter(EmptyAdapter(empty))
+                }
 binding.studioRecycler.adapter = concatAdapter                binding.studioRecycler.layoutManager = gridLayoutManager}
 }
 

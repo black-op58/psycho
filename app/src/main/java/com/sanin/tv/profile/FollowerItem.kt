@@ -29,7 +29,8 @@ if (grid) {
     //setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id) }
 } else {
     val binding = viewBinding as ItemFollowerBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { binding.profileUserAvatar.loadImage(it) }
-    blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)            setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id)}}
+    blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)            setupFollowButton(binding.followStatusChip)
+            binding.root.setOnClickListener { clickCallback(user.id)}}
     }
 
 private fun setupFollowButton(followButton: View) {
@@ -39,9 +40,11 @@ return button.context.getString(
 when {                    user.isFollowing == true && user.isFollower == true -> R.string.mutual                    user.isFollowing == true -> R.string.unfollow                    user.isFollower == true -> R.string.follows_you
 else -> R.string.follow                }
 )}
-button.text = followText()        button.setOnClickListener {           scope.launch(Dispatchers.IO) {
+button.text = followText()        button.setOnClickListener {
+        scope.launch(Dispatchers.IO) {
     val res = Anilist.mutation.toggleFollow(user.id)
-if (res?.data?.toggleFollow != null) {                    withContext(Dispatchers.Main) {                        snackString(R.string.success)                        user.isFollowing = res.data.toggleFollow.isFollowing                        button.text = followText()                    }}}}
+if (res?.data?.toggleFollow != null) {                    withContext(Dispatchers.Main) {                        snackString(R.string.success)                        user.isFollowing = res.data.toggleFollow.isFollowing
+                        button.text = followText()                    }}}}
 }
 
 override fun getLayout(): Int {

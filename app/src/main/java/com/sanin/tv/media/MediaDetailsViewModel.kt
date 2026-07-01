@@ -78,7 +78,8 @@ episodes.postValue(epsLoaded)}
 suspend
 fun forceLoadEpisode(media: Media, i: Int) {        epsLoaded[i] = watchSources?.loadEpisodesFromMedia(i, media) ?: return        episodes.postValue(epsLoaded)    }
 suspend
-fun overrideEpisodes(i: Int, source: ShowResponse, id: Int) {        watchSources?.saveResponse(i, id, source)        epsLoaded[i] =            watchSources?.loadEpisodes(i, source.link, source.extra, source.sAnime) ?: return        episodes.postValue(epsLoaded)    }
+fun overrideEpisodes(i: Int, source: ShowResponse, id: Int) {        watchSources?.saveResponse(i, id, source)        epsLoaded[i] =
+            watchSources?.loadEpisodes(i, source.link, source.extra, source.sAnime) ?: return        episodes.postValue(epsLoaded)    }
 
 private var episode = MutableLiveData<Episode?>(null)    
 fun getEpisode(): LiveData<Episode?> = episode    suspend 
@@ -86,12 +87,15 @@ fun loadEpisodeVideos(ep: Episode, i: Int, post: Boolean = true) {
     val link = ep.link ?: return
 if (!ep.allStreams || ep.extractors.isNullOrEmpty()) {
     val existingExtractors = ep.extractors?.toMutableList() ?: mutableListOf()            
-val list = mutableListOf<VideoExtractor>()            ep.extractors = list            watchSources?.get(i)?.apply {
+val list = mutableListOf<VideoExtractor>()            ep.extractors = list
+            watchSources?.get(i)?.apply {
 if (!post && !allowsPreloading) return@apply                ep.sEpisode?.let {                    loadByVideoServers(link, ep.extra, it) { extractor ->
-if (extractor.videos.isNotEmpty()) {                            list.add(extractor)                            ep.extractorCallback?.invoke(extractor)                        }}}
+if (extractor.videos.isNotEmpty()) {                            list.add(extractor)                            ep.extractorCallback?.invoke(extractor)
+                        }}}
 ep.extractorCallback = null
 if (list.isNotEmpty())                    ep.allStreams = true
-else if (existingExtractors.isNotEmpty())                    ep.extractors = existingExtractors            }
+else if (existingExtractors.isNotEmpty())                    ep.extractors = existingExtractors
+            }
 }
 if (post) {            episode.postValue(ep)            MainScope().launch(Dispatchers.Main) {                episode.value = null            }}
 }
@@ -136,13 +140,16 @@ suspend
 fun loadNovelChapters(media: Media, i: Int, invalidate: Boolean = false) {
 if (!novelLoaded.containsKey(i) || invalidate) {            tryWithSuspend {
     val source = novelSources[i]
-if (source == null) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend                }
+if (source == null) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend
+                }
 
 val novelResponse = source.autoSearch(media)
-if (novelResponse == null) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend                }
+if (novelResponse == null) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend
+                }
 
 val book = source.loadBook(novelResponse.link, novelResponse.extra)
-if (book == null || book.links.isEmpty()) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend                }
+if (book == null || book.links.isEmpty()) {                    novelLoaded[i] = emptyList()                    return@tryWithSuspend
+                }
 
 val chapterResponses = book.links.mapIndexed { index, fileUrl ->                    
 val chapterName = fileUrl.headers?.get("X-Chapter-Name") ?: "Chapter ${index + 1}"                    
@@ -154,7 +161,8 @@ put("sourceName", source.name)}
 novelLoaded[i] = chapterResponses}}
 novelChapters.postValue(novelLoaded)}
 suspend
-fun overrideNovelChapters(i: Int, source: ShowResponse, mediaId: Int) {        novelSources.saveResponse(i, mediaId, source)        novelLoaded.remove(i)    }
+fun overrideNovelChapters(i: Int, source: ShowResponse, mediaId: Int) {        novelSources.saveResponse(i, mediaId, source)        novelLoaded.remove(i)
+    }
 
 val book: MutableLiveData<Book> = MutableLiveData(null)
 suspend 

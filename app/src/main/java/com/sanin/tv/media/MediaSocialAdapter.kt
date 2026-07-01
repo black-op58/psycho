@@ -25,10 +25,12 @@ return FollowerGridViewHolder(            ItemFollowerGridBinding.inflate(      
 
 override fun onBindViewHolder(holder: FollowerGridViewHolder, position: Int) {        holder.binding.apply {
     val user = user[position]            
-val score = user.score?.div(10.0) ?: 0.0            setAnimation(root.context, root)            profileUserName.text = user.name            profileInfo.apply {                text = when (user.status) {                    "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(                        R.string.reading                    )
+val score = user.score?.div(10.0) ?: 0.0            setAnimation(root.context, root)            profileUserName.text = user.name
+            profileInfo.apply {                text = when (user.status) {                    "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(                        R.string.reading                    )
 else -> user.status ?: ""                }
 visibility = View.VISIBLE}
-profileCompactUserProgress.text = user.progress.toString()            profileCompactScore.text = score.toString()            " | ${user.totalEpisodes ?: "~"}".also { profileCompactTotal.text = it}
+profileCompactUserProgress.text = user.progress.toString()            profileCompactScore.text = score.toString()
+            " | ${user.totalEpisodes ?: "~"}".also { profileCompactTotal.text = it}
 profileUserAvatar.loadImage(user.pfp)
 val scoreDrawable = if (score == 0.0) R.drawable.score else R.drawable.user_score            profileCompactScoreBG.apply {                visibility = View.VISIBLE                background = ContextCompat.getDrawable(root.context, scoreDrawable)            }
 profileCompactProgressContainer.visibility = View.VISIBLE            profileUserAvatar.setOnClickListener {                ContextCompat.startActivity(                    root.context,                    Intent(root.context, ProfileActivity::class.java)                        .putExtra("userId", user.id),                    null                )}

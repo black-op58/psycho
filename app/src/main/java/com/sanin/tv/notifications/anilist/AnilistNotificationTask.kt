@@ -58,7 +58,8 @@ return false        }
 private fun createNotification(        context: Context,        content: String,        notificationId: Int? = null    ): android.app.Notification {
     val title = "New Anilist Notification"        
 val intent = Intent(context, MainActivity::class.java).apply {            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK            putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
-if (notificationId != null) {                Logger.log("notificationId: $notificationId")                putExtra("activityId", notificationId)            }
+if (notificationId != null) {                Logger.log("notificationId: $notificationId")                putExtra("activityId", notificationId)
+            }
 }
 
 val pendingIntent = PendingIntent.getActivity(            context,            notificationId ?: 0,            intent,            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT        )

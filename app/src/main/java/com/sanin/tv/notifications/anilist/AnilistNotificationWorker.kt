@@ -14,5 +14,6 @@ return if (AnilistNotificationTask().execute(applicationContext)) {            R
 }
 
 companion object {
-    val checkIntervals = arrayOf(0L, 30, 60, 120, 240, 360, 720, 1440)        const val WORK_NAME = "com.sanin.tv.notifications.anilist.AnilistNotificationWorker"        
+    val checkIntervals = arrayOf(0L, 30, 60, 120, 240, 360, 720, 1440)        const val WORK_NAME = "com.sanin.tv.notifications.anilist.AnilistNotificationWorker"
+        
 private var lastCheck = 0L    }}

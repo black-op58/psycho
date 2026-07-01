@@ -15,8 +15,10 @@ fun unpack(decryptedJson: String): Boolean {
 val type = 
 object :                TypeToken<Map<String, Map<String, Map<String, Any>>>>() {}.type  //oh god...            
 val rawPrefsMap: Map<String, Map<String, Map<String, Any>>> =                gson.fromJson(decryptedJson, type)            
-val deserializedMap = mutableMapOf<String, Map<String, Any?>>()            rawPrefsMap.forEach { (prefName, prefValueMap) ->                
-val innerMap = mutableMapOf<String, Any?>()                prefValueMap.forEach { (key, typeValueMap) ->                    
+val deserializedMap = mutableMapOf<String, Map<String, Any?>>()            rawPrefsMap.forEach { (prefName, prefValueMap) ->
+                
+val innerMap = mutableMapOf<String, Any?>()                prefValueMap.forEach { (key, typeValueMap) ->
+                    
 val typeName = typeValueMap["type"] as? String
 val value = typeValueMap["value"]                    innerMap[key] =
 when (typeName) {  //weirdly null sometimes so cast to string                            "kotlin.Int" -> (value as? Double)?.toInt()                            "kotlin.String" -> value.toString()                            "kotlin.Boolean" -> value as? Boolean                            "kotlin.Float" -> value.toString().toFloatOrNull()                            "kotlin.Long" -> (value as? Double)?.toLong()                            "java.util.HashSet" -> value as? ArrayList<*>
@@ -27,7 +29,8 @@ return unpackagePreferences(deserializedMap)        }
 private fun packagePreferences(map: Map<Location, SharedPreferences>): Map<String, Map<String, *>> {
     val result = mutableMapOf<String, Map<String, *>>()
 for ((location, preferences) in map) {
-    val prefMap = mutableMapOf<String, Any>()                preferences.all.forEach { (key, value) ->                    
+    val prefMap = mutableMapOf<String, Any>()                preferences.all.forEach { (key, value) ->
+                    
 val typeValueMap = mapOf(                        "type" to value?.javaClass?.kotlin?.qualifiedName,                        "value" to value                    )                    prefMap[key] = typeValueMap                }
 result[location.name] = prefMap            }
 return result        }
@@ -35,7 +38,8 @@ return result        }
 private fun unpackagePreferences(map: Map<String, Map<String, *>>): Boolean {
     var success = true            map.forEach { (location, prefMap) ->                
 val locationEnum = locationFromString(location)
-if (!PrefManager.importAllPrefs(prefMap, locationEnum))                    success = false            }
+if (!PrefManager.importAllPrefs(prefMap, locationEnum))                    success = false
+            }
 return success        }
 
 private fun locationFromString(location: String): Location {

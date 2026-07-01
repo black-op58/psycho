@@ -31,7 +31,8 @@ override fun request(n: Long) {
 if (n == 0L || !boolean.compareAndSet(expectedValue = false, newValue = true)) return
 try {
     val response = call.execute()
-if (!subscriber.isUnsubscribed) {                        subscriber.onNext(response)                        subscriber.onCompleted()                    }
+if (!subscriber.isUnsubscribed) {                        subscriber.onNext(response)                        subscriber.onCompleted()
+                    }
 } catch (e: Exception) {
 if (!subscriber.isUnsubscribed) {                        subscriber.onError(e)                    }}
 }
@@ -40,7 +41,8 @@ override fun unsubscribe() {                call.cancel()            }
 
 override fun isUnsubscribed(): Boolean {
 return call.isCanceled()            }}
-subscriber.add(requestArbiter)        subscriber.setProducer(requestArbiter)    }}
+subscriber.add(requestArbiter)        subscriber.setProducer(requestArbiter)
+    }}
 
 fun Call.asObservableSuccess(): Observable<Response> {
 return asObservable().doOnNext { response ->
@@ -77,7 +79,8 @@ return response}
 
 fun OkHttpClient.newCachelessCallWithProgress(request: Request, listener: ProgressListener): Call {
     val progressClient = newBuilder()        .cache(null)        .addNetworkInterceptor { chain ->            
-val originalResponse = chain.proceed(chain.request())            originalResponse.newBuilder()                .body(ProgressResponseBody(originalResponse.body, listener))                .build()        }
+val originalResponse = chain.proceed(chain.request())            originalResponse.newBuilder()
+                .body(ProgressResponseBody(originalResponse.body, listener))                .build()        }
 .build()
 return progressClient.newCall(request)}context(_: Json)inline 
 fun <reified T> Response.parseAs(): T {

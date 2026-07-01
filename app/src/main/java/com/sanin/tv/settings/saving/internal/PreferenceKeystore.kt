@@ -12,7 +12,8 @@ import and export
 class PreferenceKeystore {    
 companion object {
     fun generateKey(alias: String) {
-    val keyGenerator =                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")            keyGenerator.init(                KeyGenParameterSpec.Builder(                    alias,                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT                )                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)                    .setRandomizedEncryptionRequired(false)                    .build()            )            keyGenerator.generateKey()        }
+    val keyGenerator =                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")            keyGenerator.init(
+                KeyGenParameterSpec.Builder(                    alias,                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT                )                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)                    .setRandomizedEncryptionRequired(false)                    .build()            )            keyGenerator.generateKey()        }
 
 fun encryptWithPassword(            password: CharArray,            plaintext: String,            salt: ByteArray        ): ByteArray {
     val secretKey = deriveKeyFromPassword(password, salt)            
@@ -21,7 +22,8 @@ return cipher.doFinal(plaintext.toByteArray(Charsets.UTF_8))        }
 
 fun decryptWithPassword(            password: CharArray,            ciphertext: ByteArray,            salt: ByteArray        ): String {
     val secretKey = deriveKeyFromPassword(password, salt)            
-val cipher =                Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_AES}/${KeyProperties.BLOCK_MODE_CBC}/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")            cipher.init(                Cipher.DECRYPT_MODE,                secretKey,                IvParameterSpec(ByteArray(16))            ) // Use the correct IV
+val cipher =                Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_AES}/${KeyProperties.BLOCK_MODE_CBC}/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")            cipher.init(
+                Cipher.DECRYPT_MODE,                secretKey,                IvParameterSpec(ByteArray(16))            ) // Use the correct IV
 return cipher.doFinal(ciphertext).toString(Charsets.UTF_8)        }
 
 fun generateSalt(): ByteArray {

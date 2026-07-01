@@ -31,7 +31,8 @@ while (m.find()) {
 val x = un.unbase(word)                    
 val value = if (x < tabs.size && x >= 0) {                        tabs[x]
 } else null
-if (!value.isNullOrEmpty()) {                        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value)                        replaceOffset += value.length - word.length                    }
+if (!value.isNullOrEmpty()) {                        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value)                        replaceOffset += value.length - word.length
+                    }
 }
 return decoded.toString()            }
 } catch (e: Exception) {            Logger.log(e)        }

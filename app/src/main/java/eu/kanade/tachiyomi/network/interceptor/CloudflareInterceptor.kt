@@ -24,7 +24,8 @@ if (response.request.url.host.contains("anilist.co")) return false
 return response.code in ERROR_CODES && response.header("Server") in SERVER_CHECK    }
 
 override fun intercept(        chain: Interceptor.Chain,        request: Request,        response: Response    ): Response {
-try {            response.close()            cookieManager.remove(request.url, COOKIE_NAMES, 0)            
+try {            response.close()            cookieManager.remove(request.url, COOKIE_NAMES, 0)
+            
 val oldCookie = cookieManager.get(request.url)                .firstOrNull { it.name == "cf_clearance" }
 resolveWithWebView(request, oldCookie)
 return chain.proceed(request)        }
@@ -42,7 +43,8 @@ var challengeFound = false
 var cloudflareBypassed = false
 var isWebViewOutdated = false
 val origRequestUrl = originalRequest.url.toString()        
-val headers = parseHeaders(originalRequest.headers)        executor.execute {            webview = createWebView(originalRequest)            webview?.webViewClient = 
+val headers = parseHeaders(originalRequest.headers)        executor.execute {
+            webview = createWebView(originalRequest)            webview?.webViewClient = 
 object : WebViewClientCompat() {
     override fun onPageFinished(view: WebView, url: String) {
     fun isCloudFlareBypassed(): Boolean {

@@ -30,5 +30,6 @@ if (version < 0) {                1.0
 val invalidDefaultBrowsers = listOf(        "android",        "com.huawei.android.internal.app",        "com.zui.resolver",    )    
 @SuppressLint("PrivateApi")    
 private fun getSystemProperty(key: String?): String? {
-return try {            Class.forName("android.os.SystemProperties")                .getDeclaredMethod("get", String::class.java)                .invoke(null, key) as String        } catch (e: Exception) {            Logger.log("Unable to use SystemProperties.get()")            null        }
+return try {            Class.forName("android.os.SystemProperties")                .getDeclaredMethod("get", String::class.java)                .invoke(null, key) as String        } catch (e: Exception) {            Logger.log("Unable to use SystemProperties.get()")            null
+        }
 }}

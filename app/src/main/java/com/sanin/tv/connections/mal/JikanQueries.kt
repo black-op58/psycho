@@ -29,7 +29,9 @@ if (response.code != 429) {
 return response                }
 } catch (e: Exception) {                lastException = e            }
 if (attempt < maxAttempts) {
-    val jitter = (0..200).random().toLong()                delay(delayMs + jitter)                delayMs *= 2            }
+    val jitter = (0..200).random().toLong()                delay(delayMs + jitter)
+                delayMs *= 2
+            }
     }
 return lastResponse ?: throw (lastException ?: Exception("Request failed after $maxAttempts attempts"))    }
 suspend
@@ -50,7 +52,8 @@ suspend
 fun getAnimeById(malId: Int): JikanMediaData? {
 return tryWithSuspend {
     val response = rateLimitedGet("$apiUrl/anime/$malId/full")            
-val wrapper = response.parsed<JikanSingleResponse>()            wrapper.data        }}
+val wrapper = response.parsed<JikanSingleResponse>()            wrapper.data
+        }}
 suspend
 fun getSchedules(        filter: String? = null,          page: Int = 1,        limit: Int = 25,    ): JikanSearchResponse? {
     val params = mutableListOf(            "page" to page.toString(),        }}

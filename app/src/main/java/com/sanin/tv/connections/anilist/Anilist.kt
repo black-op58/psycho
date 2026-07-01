@@ -103,7 +103,8 @@ val payload = android.util.Base64.decode(                parts[1].replace('-', '
 val json = JSONObject(String(payload))
 if (!json.has("exp")) return null
 val expSeconds = json.getLong("exp")            
-val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        } catch (e: Exception) {            Logger.log("getTokenExpiryDays error: ${e.message}")            null        }}
+val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        } catch (e: Exception) {            Logger.log("getTokenExpiryDays error: ${e.message}")            null
+        }}
 suspend inline
 fun <reified T : Any> executeQuery(        query: String,        variables: String = "",        force: Boolean = false,        useToken: Boolean = true,        show: Boolean = false,        cache: Int? = null    ): T? {
 return try {
@@ -140,6 +141,7 @@ throw Exception(currContext()?.getString(R.string.anilist_down) + " (error: ${js
 anilistDisabledSignal = false                json.parsed()
 } else null        } catch (e: Exception) {
 if (e is java.net.UnknownHostException ||                e is java.net.ConnectException ||                e is java.net.SocketTimeoutException ||                e.cause is java.net.UnknownHostException ||                e.cause is java.net.ConnectException ||                e.cause is java.net.SocketTimeoutException) {                anilistDisabledSignal = true            }
-if (show) snackString("Error fetching Anilist data: ${e.message}")            Logger.log("Anilist Query Error: ${e.message}")            null        }
+if (show) snackString("Error fetching Anilist data: ${e.message}")            Logger.log("Anilist Query Error: ${e.message}")            null
+        }
 }}
 }

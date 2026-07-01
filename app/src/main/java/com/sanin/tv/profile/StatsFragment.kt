@@ -37,7 +37,11 @@ private var loadedFirstTime = false
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        binding = FragmentStatisticsBinding.inflate(inflater, container, false)
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        activity = requireActivity() as ProfileActivity        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile        binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)        binding.statisticList.adapter = adapter        binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)        binding.statisticList.isNestedScrollingEnabled = true        binding.statisticList.layoutManager =            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)        binding.statisticProgressBar.visibility = View.VISIBLE        binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE        binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        activity = requireActivity() as ProfileActivity
+        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile        binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)        binding.statisticList.adapter = adapter
+        binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)        binding.statisticList.isNestedScrollingEnabled = true
+        binding.statisticList.layoutManager =            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)        binding.statisticProgressBar.visibility = View.VISIBLE
+        binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE        binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
 binding.sourceType.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                MediaType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")}
 )        )        binding.sourceFilter.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                StatType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")}
 )        )        binding.compare.setOnCheckedChangeListener { _, isChecked ->
@@ -45,16 +49,21 @@ if (isChecked) {                activity.lifecycleScope.launch {
 if (Anilist.userid != null) {                        withContext(Dispatchers.Main) {                            binding.statisticProgressBar.visibility = View.VISIBLE                            binding.statisticList.visibility = View.GONE                        }
 
 val userStats =                            Anilist.query.getUserStatistics(Anilist.userid!!)?.data?.user
-if (userStats != null) {                            stats.add(userStats)                            withContext(Dispatchers.Main) {                                loadStats(type == MediaType.ANIME)                                binding.statisticProgressBar.visibility = View.GONE                                binding.statisticList.visibility = View.VISIBLE                            }}}
+if (userStats != null) {                            stats.add(userStats)                            withContext(Dispatchers.Main) {
+                                loadStats(type == MediaType.ANIME)                                binding.statisticProgressBar.visibility = View.GONE
+                                binding.statisticList.visibility = View.VISIBLE                            }}}
 }
 } else {                stats.removeAll(                    stats.filter { it?.id == Anilist.userid }.toSet()                )                loadStats(type == MediaType.ANIME)            }}
 binding.filterContainer.visibility = View.GONE    }
 
-override fun onPause() {        super.onPause()        binding.statisticList.visibility = View.GONE    }
+override fun onPause() {        super.onPause()        binding.statisticList.visibility = View.GONE
+    }
 
 override fun onResume() {        super.onResume()
 if (this::binding.isInitialized) {            binding.statisticList.visibility = View.VISIBLE            binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)            binding.root.requestLayout()
-if (!loadedFirstTime) {                activity.lifecycleScope.launch {                    stats.clear()                    stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)                    withContext(Dispatchers.Main) {                        binding.filterContainer.visibility = View.VISIBLE                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->                            type = MediaType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)                        }
+if (!loadedFirstTime) {                activity.lifecycleScope.launch {                    stats.clear()                    stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
+                    withContext(Dispatchers.Main) {
+                        binding.filterContainer.visibility = View.VISIBLE                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->                            type = MediaType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)                        }
 binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->                            statType = StatType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)}
 loadStats(type == MediaType.ANIME)                        binding.statisticProgressBar.visibility = View.GONE}}
 loadedFirstTime = true

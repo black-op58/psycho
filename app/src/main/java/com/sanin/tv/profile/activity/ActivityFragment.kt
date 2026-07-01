@@ -35,23 +35,33 @@ private var hasMoreActivities: Boolean = true
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        binding = FragmentFeedBinding.inflate(inflater, container, false)
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        arguments?.let {            type = it.getSerializableCompat<ActivityType>("type") as ActivityType            userId = it.getInt("userId")            activityId = it.getInt("activityId")        }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        arguments?.let {
+            type = it.getSerializableCompat<ActivityType>("type") as ActivityType            userId = it.getInt("userId")            activityId = it.getInt("activityId")
+        }
 binding.titleBar.visibility =
 if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.titleText.text =
 if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)                // Set up filter icon visibility        binding.filterButton.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.filterButton.setOnClickListener {            showFilterBottomSheet()        }
 binding.titleImage.setOnClickListener { handleTitleImageClick()}
-binding.listRecyclerView.adapter = adapter        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)        binding.listProgressBar.isVisible = true        binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight}
-binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {            getList()
+binding.listRecyclerView.adapter = adapter        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)        binding.listProgressBar.isVisible = true
+        binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight}
+binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {
+            getList()
 if (adapter.itemCount == 0) {                binding.emptyTextView.isVisible = true            }
 binding.listProgressBar.isVisible = false}
-binding.feedSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()                allActivities.clear()                page = 1                hasMoreActivities = true                getList()                binding.feedSwipeRefresh.isRefreshing = false}}
+binding.feedSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()                allActivities.clear()
+                page = 1
+                hasMoreActivities = true                getList()                binding.feedSwipeRefresh.isRefreshing = false}}
 binding.listRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                super.onScrolled(recyclerView, dx, dy)
-if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.feedRefresh.isVisible = true                        getList()                        binding.feedRefresh.isVisible = false                    }}}
+if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.feedRefresh.isVisible = true                        getList()                        binding.feedRefresh.isVisible = false
+                    }}}
 })    }
 
-private fun showFilterBottomSheet() {        ActivityFilterBottomSheet.newInstance(currentFilter) { filterType ->            currentFilter = filterType            lifecycleScope.launch {                binding.listProgressBar.isVisible = true                adapter.clear()                allActivities.clear()                page = 1                hasMoreActivities = true                getList()                binding.listProgressBar.isVisible = false            }
+private fun showFilterBottomSheet() {        ActivityFilterBottomSheet.newInstance(currentFilter) { filterType ->            currentFilter = filterType            lifecycleScope.launch {                binding.listProgressBar.isVisible = true                adapter.clear()                allActivities.clear()
+                page = 1
+                hasMoreActivities = true                getList()                binding.listProgressBar.isVisible = false
+            }
 }.show(childFragmentManager, "ActivityFilterBottomSheet")    }
 
 private fun shouldLoadMore(): Boolean {

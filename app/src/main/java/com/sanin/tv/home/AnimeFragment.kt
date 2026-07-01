@@ -38,7 +38,8 @@ val model: AnilistAnimeViewModel by activityViewModels()
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = FragmentAnimeBinding.inflate(inflater, container, false)
 return binding.root    }
 
-override fun onDestroyView() {        super.onDestroyView()        _binding = null    }
+override fun onDestroyView() {        super.onDestroyView()        _binding = null
+    }
 
 @SuppressLint("NotifyDataSetChanged")    
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        
@@ -66,19 +67,25 @@ else -> false
 object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
     override fun onScrolled(                    rv: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int                ) {                    super.onScrolled(rv, dx, dy)
 if (dy > 0) {                        // Scrolling down — hide FAB after a short delay.                        rv.postDelayed({
-if (_binding != null)                                binding.animePageScrollTop.visibility = View.GONE                        }, 300)                    }}}
+if (_binding != null)                                binding.animePageScrollTop.visibility = View.GONE
+                        }, 300)                    }}}
 )        animePageAdapter.ready.observe(viewLifecycleOwner) { i ->
 if (i) {                model.getUpdated().observe(viewLifecycleOwner) {
-if (it != null)                        animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()), it)                }
+if (it != null)                        animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()), it)
+                }
 model.getMovies().observe(viewLifecycleOwner) {
-if (it != null)                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()), it)                }
+if (it != null)                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()), it)
+                }
 model.getTopRated().observe(viewLifecycleOwner) {
-if (it != null)                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)                }
+if (it != null)                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)
+                }
 model.getMostFav().observe(viewLifecycleOwner) {
-if (it != null)                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)                }
+if (it != null)                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)
+                }
 if (animePageAdapter.trendingViewPager != null) {                    animePageAdapter.updateHeight()                    model.getTrending().observe(viewLifecycleOwner) {
 if (it != null) {                            animePageAdapter.updateTrending(                                MediaAdaptor(
-if (PrefManager.getVal(PrefName.SmallView)) 3 else 2,                                    it,                                    requireActivity(),                                    viewPager = animePageAdapter.trendingViewPager                                )                            )                            animePageAdapter.updateAvatar()                        }}}
+if (PrefManager.getVal(PrefName.SmallView)) 3 else 2,                                    it,                                    requireActivity(),                                    viewPager = animePageAdapter.trendingViewPager                                )                            )                            animePageAdapter.updateAvatar()
+                        }}}
 binding.animePageScrollTop.translationY = -navBarHeight.toFloat()}
 }
 
@@ -104,11 +111,14 @@ val loadAll      = async(Dispatchers.IO) { model.loadAll() }
 val loadPopular  = async(Dispatchers.IO) {                        model.loadPopular(                            "ANIME",                            sort   = Anilist.sortBy[1],                            onList = PrefManager.getVal(PrefName.PopularAnimeList)                        )                    }
 loadTrending.await()
 loadAll.await(
-loadPopular.await()                    live.postValue(false)                    _binding?.animeRefresh?.isRefreshing = false                    running = false                }}}
+loadPopular.await()                    live.postValue(false)
+                    _binding?.animeRefresh?.isRefreshing = false
+                    running = false                }}}
 }
 
 override fun onResume() {
 if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true
-if (animePageAdapter.trendingViewPager != null) {            binding.root.requestApplyInsets()            binding.root.requestLayout()        }
+if (animePageAdapter.trendingViewPager != null) {            binding.root.requestApplyInsets()            binding.root.requestLayout()
+        }
 if (this::animePageAdapter.isInitialized && _binding != null) {            animePageAdapter.updateNotificationCount()        }
 super.onResume()    }

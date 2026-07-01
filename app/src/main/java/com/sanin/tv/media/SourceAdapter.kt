@@ -18,7 +18,8 @@ return SourceViewHolder(binding)    }
 
 override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
     val binding = holder.binding
-val character = sources[position]        binding.itemCompactImage.loadImage(character.coverUrl, 200)        binding.itemCompactTitle.isSelected = true        binding.itemCompactTitle.text = character.name    }
+val character = sources[position]        binding.itemCompactImage.loadImage(character.coverUrl, 200)        binding.itemCompactTitle.isSelected = true
+        binding.itemCompactTitle.text = character.name    }
 
 override fun getItemCount(): Int = sources.size    
 abstract suspend 

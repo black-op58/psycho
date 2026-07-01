@@ -29,7 +29,9 @@ override fun onCreateView(        inflater: LayoutInflater,        container: Vi
 return binding.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)
-if (type == TRACK_TYPE_AUDIO) binding.selectionTitle.text = getString(R.string.audio_tracks)        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())        binding.subtitlesRecycler.adapter = TrackGroupAdapter()    }
+if (type == TRACK_TYPE_AUDIO) binding.selectionTitle.text = getString(R.string.audio_tracks)        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.subtitlesRecycler.adapter = TrackGroupAdapter()
+    }
 inner
 class TrackGroupAdapter : RecyclerView.Adapter<TrackGroupAdapter.StreamViewHolder>() {        inner 
 class StreamViewHolder(

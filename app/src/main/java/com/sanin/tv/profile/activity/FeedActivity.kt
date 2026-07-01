@@ -19,7 +19,12 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 class FeedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNotificationBinding    
 private var selected: Int = 0    lateinit var navBar: AnimatedBottomBar    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityNotificationBinding.inflate(layoutInflater)        setContentView(binding.root)        binding.notificationTitle.text = getString(R.string.activities)        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+        binding = ActivityNotificationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.notificationTitle.text = getString(R.string.activities)
+        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight        }
 navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight        }
 
 val tabs = listOf(            Pair(R.drawable.ic_round_person_24, "Following"),            Pair(R.drawable.ic_globe_24, "Global"),        )        tabs.forEach { (icon, title) -> navBar.addTab(navBar.createTab(icon, title)) }
@@ -27,12 +32,16 @@ binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPres
 
 val getOne = intent.getIntExtra("activityId", -1)
 if (getOne != -1) {            navBar.visibility = View.GONE        }
-binding.notificationViewPager.isUserInputEnabled = false        binding.notificationViewPager.adapter =            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)        binding.notificationViewPager.setOffscreenPageLimit(4)        binding.notificationViewPager.setCurrentItem(selected, false)        navBar.selectTabAt(selected)        navBar.setOnTabSelectListener(
+binding.notificationViewPager.isUserInputEnabled = false        binding.notificationViewPager.adapter =            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)        binding.notificationViewPager.setOffscreenPageLimit(4)
+        binding.notificationViewPager.setCurrentItem(selected, false)
+        navBar.selectTabAt(selected)
+        navBar.setOnTabSelectListener(
 object : AnimatedBottomBar.OnTabSelectListener {
     override fun onTabSelected(                lastIndex: Int,                lastTab: AnimatedBottomBar.Tab?,                newIndex: Int,                newTab: AnimatedBottomBar.Tab            ) {                selected = newIndex                binding.notificationViewPager.setCurrentItem(selected, false)            }
     })    }
 
-override fun onResume() {        super.onResume()        navBar.selectTabAt(selected)    }
+override fun onResume() {        super.onResume()        navBar.selectTabAt(selected)
+    }
 
 private class ViewPagerAdapter(        fragmentManager: FragmentManager,        lifecycle: Lifecycle,        
 private val activityId: Int    ) : FragmentStateAdapter(fragmentManager, lifecycle) {

@@ -44,13 +44,16 @@ fun splitAndMerge(imageStream: InputStream, upperSide: Side): InputStream {
 val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)        
 val height = imageBitmap.height
 val width = imageBitmap.width
-val result = createBitmap(width / 2, height * 2)        result.applyCanvas {            // right -> upper
+val result = createBitmap(width / 2, height * 2)        result.applyCanvas {
+            // right -> upper
 val rightPart = when (upperSide) {                Side.RIGHT -> Rect(width - width / 2, 0, width, height)                Side.LEFT -> Rect(0, 0, width / 2, height)            }
 
-val upperPart = Rect(0, 0, width / 2, height)            drawBitmap(imageBitmap, rightPart, upperPart, null)            // left -> bottom
+val upperPart = Rect(0, 0, width / 2, height)            drawBitmap(imageBitmap, rightPart, upperPart, null)
+            // left -> bottom
 val leftPart = when (upperSide) {                Side.LEFT -> Rect(width - width / 2, 0, width, height)                Side.RIGHT -> Rect(0, 0, width / 2, height)            }
 
-val bottomPart = Rect(0, height, width / 2, height * 2)            drawBitmap(imageBitmap, leftPart, bottomPart, null)        }
+val bottomPart = Rect(0, height, width / 2, height * 2)            drawBitmap(imageBitmap, leftPart, bottomPart, null)
+        }
 
 val output = ByteArrayOutputStream()        result.compress(Bitmap.CompressFormat.JPEG, 100, output)
 return ByteArrayInputStream(output.toByteArray())    }

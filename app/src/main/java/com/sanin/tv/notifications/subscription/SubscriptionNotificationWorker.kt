@@ -17,5 +17,6 @@ return if (SubscriptionNotificationTask().execute(applicationContext)) {        
 }
 
 companion object {
-    val checkIntervals = arrayOf(0L, 480, 720, 1440)        const val WORK_NAME =            "com.sanin.tv.notifications.subscription.SubscriptionNotificationWorker"        
+    val checkIntervals = arrayOf(0L, 480, 720, 1440)        const val WORK_NAME =
+            "com.sanin.tv.notifications.subscription.SubscriptionNotificationWorker"        
 private var lastCheck = 0L    }}

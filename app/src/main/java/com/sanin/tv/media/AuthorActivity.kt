@@ -50,13 +50,18 @@ private var screenWidth: Float = 0f
 private val percent = 30    
 private var mMaxScrollSize = 0    
 private var isCollapsed = false    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCharacterBinding.inflate(layoutInflater)        setContentView(binding.root)        initActivity(this)        screenWidth = resources.displayMetrics.run { widthPixels / density }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCharacterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initActivity(this)
+        screenWidth = resources.displayMetrics.run { widthPixels / density }
 if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =            ContextCompat.getColor(this, R.color.transparent)        
 val banner =
 if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams { height += statusBarHeight }
 binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
 binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true
+        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()}
 author = intent.getSerialized("author") ?: return        binding.characterTitle.text = author.name        binding.characterCoverImage.loadImage(author.image)        binding.characterFav.setImageResource(
 if (author.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {            ImageViewDialog.newInstance(                this,                author.name,                author.image            )        }
 
@@ -64,8 +69,10 @@ val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
 val link = if (rescueMode) {            "https://myanimelist.net/people/${author.id}"
 } else {            "https://anilist.co/staff/${author.id}"        }
 binding.characterShare.setOnClickListener {
-    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, author.name))        }
-    binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true        }
+    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, author.name))
+        }
+    binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true
+        }
 if (!rescueMode) {            lifecycleScope.launch {                withContext(Dispatchers.IO) {                    author.isFav =                        Anilist.query.isUserFav(AnilistMutations.FavType.STAFF, author.id)                }
 withContext(Dispatchers.Main) {                    binding.characterFav.setImageResource(
 if (author.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                    )                }}
@@ -98,8 +105,13 @@ val markWon = Markwon.builder(this).usePlugin(SoftBreakAddsNewLinePlugin.create(
 } else {                    binding.authorCharacterDesc.visibility = View.GONE                }
 for (i in keys.indices) {
     val medias = map[keys[i]]!!                    
-val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos)                    pos += (empty + medias.size + 1)                    concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))                    concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))                    concatAdapter.addAdapter(EmptyAdapter(empty))                }
-binding.characterRecyclerView.adapter = concatAdapter                binding.characterRecyclerView.layoutManager = gridLayoutManager                binding.authorCharactersRecycler.visibility = View.VISIBLE                binding.AuthorCharactersText.visibility = View.VISIBLE                binding.authorCharactersRecycler.adapter =                    CharacterAdapter(author.character ?: arrayListOf())                binding.authorCharactersRecycler.layoutManager =                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos)                    pos += (empty + medias.size + 1)
+                    concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
+                    concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
+                    concatAdapter.addAdapter(EmptyAdapter(empty))
+                }
+binding.characterRecyclerView.adapter = concatAdapter                binding.characterRecyclerView.layoutManager = gridLayoutManager                binding.authorCharactersRecycler.visibility = View.VISIBLE                binding.AuthorCharactersText.visibility = View.VISIBLE                binding.authorCharactersRecycler.adapter =                    CharacterAdapter(author.character ?: arrayListOf())                binding.authorCharactersRecycler.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 if (author.character.isNullOrEmpty()) {                    binding.authorCharactersRecycler.visibility = View.GONE                    binding.AuthorCharactersText.visibility = View.GONE                }}
 }
 
@@ -136,7 +148,8 @@ override fun onResume() {        binding.characterProgress.visibility = if (!loa
 override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
 if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
 val percentage = abs(i) * 100 / mMaxScrollSize
-val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        binding.characterCover.scaleX = 1f * cap        binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
+val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        binding.characterCover.scaleX = 1f * cap
+        binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
 if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
 if (percentage >= percent && !isCollapsed) {            isCollapsed = true

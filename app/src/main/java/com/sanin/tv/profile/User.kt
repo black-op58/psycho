@@ -29,10 +29,15 @@ import com.sanin.tv.toast
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 class SingleStatActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySingleStatBinding    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivitySingleStatBinding.inflate(layoutInflater)        setContentView(binding.root)        
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+        binding = ActivitySingleStatBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
 val chartOptions = chartOptions
-if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)            binding.chartView.aa_drawChartWithChartOptions(chartOptions)            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-} else {            toast("No chart data")            finish()        }
+if (chartOptions != null) {            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)            binding.chartView.aa_drawChartWithChartOptions(chartOptions)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+} else {            toast("No chart data")            finish()
+        }
 }
 
 companion object {
@@ -96,7 +101,8 @@ else -> R.string.follow                        }
 )}
 b.followStatusChip.text = followText()                b.followStatusChip.setOnClickListener {                    b.root.findViewTreeLifecycleOwner()?.lifecycleScope?.launch(Dispatchers.IO) {
     val res = Anilist.mutation.toggleFollow(user.id)
-if (res?.data?.toggleFollow != null) {                            withContext(Dispatchers.Main) {                                snackString(R.string.success)                                user.isFollowing = res.data.toggleFollow.isFollowing                                b.followStatusChip.text = followText()                            }}}}}}
+if (res?.data?.toggleFollow != null) {                            withContext(Dispatchers.Main) {                                snackString(R.string.success)                                user.isFollowing = res.data.toggleFollow.isFollowing
+                                b.followStatusChip.text = followText()                            }}}}}}
 }
 
 override fun getItemCount(): Int = user.size}

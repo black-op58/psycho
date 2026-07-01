@@ -24,7 +24,8 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 if (packageName != process) WebView.setDataDirectorySuffix(process)        }
 setContentView(R.layout.activity_cookie_catcher)
 val webView = findViewById<WebView>(R.id.cookieCatcherWebView)        
-val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager        cookies?.setAcceptThirdPartyCookies(webView, true)        webView.apply {            settings.javaScriptEnabled = true            settings.databaseEnabled = true            settings.domStorageEnabled = true        }
+val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager        cookies?.setAcceptThirdPartyCookies(webView, true)        webView.apply {
+            settings.javaScriptEnabled = true            settings.databaseEnabled = true            settings.domStorageEnabled = true        }
 WebView.setWebContentsDebuggingEnabled(true)        webView.webViewClient =
 object : WebViewClient() {        }
 webView.loadUrl(url, headers)    }}

@@ -15,10 +15,12 @@ if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val lm = layoutManager as? LinearLayoutManager ?: return@setOnKeyListener false
 when (keyCode) {                KeyEvent.KEYCODE_DPAD_UP -> {
     val first = lm.findFirstVisibleItemPosition()
-if (first > 0) smoothScrollToPosition(first - 1)                    true                }
+if (first > 0) smoothScrollToPosition(first - 1)                    true
+                }
 KeyEvent.KEYCODE_DPAD_DOWN -> {
     val last = lm.findLastVisibleItemPosition()
-if (last < (adapter?.itemCount ?: 0) - 1) smoothScrollToPosition(last + 1)                    true                }
+if (last < (adapter?.itemCount ?: 0) - 1) smoothScrollToPosition(last + 1)                    true
+                }
 KeyEvent.KEYCODE_DPAD_LEFT -> {
 if (lm.orientation == LinearLayoutManager.HORIZONTAL) {
     val first = lm.findFirstVisibleItemPosition()

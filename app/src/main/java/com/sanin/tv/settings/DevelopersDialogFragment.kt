@@ -14,9 +14,14 @@ private val binding get() = _binding!!
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetDevelopersBinding.inflate(inflater, container, false)
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        binding.devsProgressBar.visibility = View.VISIBLE        binding.devsRecyclerView.visibility = View.GONE        lifecycleScope.launch {
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        binding.devsProgressBar.visibility = View.VISIBLE
+        binding.devsRecyclerView.visibility = View.GONE        lifecycleScope.launch {
 try {
-    val contributors = emptyList()                binding.devsRecyclerView.adapter = DevelopersAdapter(contributors)                binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())                binding.devsRecyclerView.visibility = View.VISIBLE                binding.devsProgressBar.visibility = View.GONE            } catch (e: Exception) {                e.printStackTrace()                binding.devsProgressBar.visibility = View.GONE            }}
+    val contributors = emptyList()                binding.devsRecyclerView.adapter = DevelopersAdapter(contributors)
+                binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                binding.devsRecyclerView.visibility = View.VISIBLE
+                binding.devsProgressBar.visibility = View.GONE            } catch (e: Exception) {                e.printStackTrace()                binding.devsProgressBar.visibility = View.GONE
+            }}
     }
 
 override fun onDestroy() {        _binding = null        super.onDestroy()    }}

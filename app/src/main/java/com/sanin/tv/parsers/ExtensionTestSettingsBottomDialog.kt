@@ -8,7 +8,8 @@ viewModel.let {
 
 else -> emptyList()        }
 adapter.clear()        extDataList.forEach { data ->
-val isSelected = extensionsToTest.contains(data.name)            adapter.add(ExtensionSelectItem(data.name, data.icon, data.iconUrl, isSelected, ::selectedCallback))        }
+val isSelected = extensionsToTest.contains(data.name)            adapter.add(ExtensionSelectItem(data.name, data.icon, data.iconUrl, isSelected, ::selectedCallback))
+        }
 }
 
 private fun selectedCallback(name: String, isSelected: Boolean) {

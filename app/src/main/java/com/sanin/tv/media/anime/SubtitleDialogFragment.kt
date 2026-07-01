@@ -44,14 +44,18 @@ else -> isoCode    }
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = BottomSheetSubtitlesBinding.inflate(inflater, container, false)
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        // Logger.log("SubtitleDialogFragment: onViewCreated called")        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())        model.getMedia().observe(viewLifecycleOwner) { media ->            // Logger.log("SubtitleDialogFragment: Media observed")            episode = media?.anime?.episodes?.get(media.anime.selectedEpisode) ?: return@observe
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        // Logger.log("SubtitleDialogFragment: onViewCreated called")        binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        model.getMedia().observe(viewLifecycleOwner) { media ->
+            // Logger.log("SubtitleDialogFragment: Media observed")            episode = media?.anime?.episodes?.get(media.anime.selectedEpisode) ?: return@observe
 val currentExtractor =                episode.extractors?.find { it.server.name == episode.selectedExtractor }
 ?: return@observe            // Logger.log("SubtitleDialogFragment: Got extractor with ${currentExtractor.subtitles.size} local subtitles")            viewLifecycleOwner.lifecycleScope.launch(kotlinx.coroutines.Dispatchers.Main) {
     val episodeId = "${media.id}-${episode.number}"                
 val selectedEpisode = media.anime?.selectedEpisode ?: "1"                
 val episodeNum = selectedEpisode.toIntOrNull() ?: 1
-val allSubtitles = mutableListOf<Any>()                allSubtitles.add(AddLocalSubtitle("+ Add Local Subtitle"))                // Add any locally-added subtitles (stored separately from online cache)                
-val localSubs = model.getLocalSubtitles(episodeId)                allSubtitles.addAll(localSubs)                // Online subtitle section: populated instantly
+val allSubtitles = mutableListOf<Any>()                allSubtitles.add(AddLocalSubtitle("+ Add Local Subtitle"))
+                // Add any locally-added subtitles (stored separately from online cache)                
+val localSubs = model.getLocalSubtitles(episodeId)                allSubtitles.addAll(localSubs)
+                // Online subtitle section: populated instantly
 val cached = model.getFetchedSubtitles(episodeId)
 if (cached != null) {
 if (cached.isNotEmpty()) {                        allSubtitles.addAll(cached)                    }
@@ -78,10 +82,12 @@ val isMovie = media.format == "MOVIE"
 val selectedEpisode = media.anime?.selectedEpisode ?: "1"                
 val episodeNum = selectedEpisode.toIntOrNull() ?: 1                // Phase 2: Calculator (Translation) — reads AniZip data from episode.extra (no extra API call)                
 val currentEpisode = media.anime?.episodes?.get(selectedEpisode)                
-val seasonEpisode = EpisodeMapper.mapEpisode(media, episodeNum, currentEpisode)                currentSeasonEpisode = seasonEpisode                // Phase 3 & 4: Fetcher & Backup Plan
+val seasonEpisode = EpisodeMapper.mapEpisode(media, episodeNum, currentEpisode)                currentSeasonEpisode = seasonEpisode
+                // Phase 3 & 4: Fetcher & Backup Plan
 val onlineSubs = mutableListOf<Any>()                // Unified Fetcher (handles Wyzie & Stremio based on settings)                // Use the new signature: getSubtitles(media, season, episode)                // Ensure we pass the Media 
 object correctly.                
-val fetchedSubs = StremioSubtitles.getSubtitles(media, seasonEpisode.season, seasonEpisode.episode)                onlineSubs.addAll(fetchedSubs)                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+val fetchedSubs = StremioSubtitles.getSubtitles(media, seasonEpisode.season, seasonEpisode.episode)                onlineSubs.addAll(fetchedSubs)
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
 try {
 if (_binding == null) return@withContext
 val validAdapter = binding.subtitlesRecycler.adapter as? SubtitleAdapter ?: return@withContext                        // Verify item is still at position (basic check, improved by verifying content)
@@ -91,7 +97,8 @@ if (onlineSubs.isNotEmpty()) {                                model.saveFetchedS
 } else {                                     toast("No subtitles found")                                }
 validAdapter.notifyDataSetChanged()}
 } catch (e: Exception) {                        e.printStackTrace()}}
-} catch (e: Exception) {                e.printStackTrace()                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {                         toast("Error fetching subtitles")
+} catch (e: Exception) {                e.printStackTrace()                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        toast("Error fetching subtitles")
 if (_binding != null) adapter.notifyDataSetChanged()                }}}}
 inner
 class SubtitleAdapter(
@@ -103,7 +110,8 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamViewHol
 override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
     val binding = holder.binding            // Create alpha background color for highlighted item
 val highlightColor = ColorUtils.setAlphaComponent(                PrefManager.getVal<Int>(PrefName.PrimaryColor),                60            )            // Handle "None" option at position 0
-if (position == 0) {                binding.subtitleTitle.setText(R.string.none)                model.getMedia().observe(viewLifecycleOwner) { media ->                    
+if (position == 0) {                binding.subtitleTitle.setText(R.string.none)                model.getMedia().observe(viewLifecycleOwner) { media ->
+                    
 val mediaID: Int = media.id
 val selSubs = PrefManager.getNullableCustomVal(                        "subLang_${mediaID}",                        null,                        String::class.java                    )
 if (episode.selectedSubtitle != null && selSubs != "None") {                        binding.root.setCardBackgroundColor(TRANSPARENT)
@@ -118,10 +126,13 @@ val item = subtitles[adjustedPosition]            // Handle separator
 if (item is String) {                binding.subtitleTitle.text = item                binding.root.isClickable = false                binding.root.setCardBackgroundColor(TRANSPARENT)
 return            }
 // --- ADD LOCAL SUBTITLE ---
-if (item is AddLocalSubtitle) {                binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {                    (requireActivity() as? ExoplayerView)?.requestLocalSubtitle()                    dismiss()                }
+if (item is AddLocalSubtitle) {                binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {
+                    (requireActivity() as? ExoplayerView)?.requestLocalSubtitle()                    dismiss()
+                }
 return            }
 // --- SEARCH ONLINE SUBTITLES ---
-if (item is SearchOnlineSubtitles) {                binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {                    // Prevent double clicks
+if (item is SearchOnlineSubtitles) {                binding.subtitleTitle.text = item.text                binding.root.setCardBackgroundColor(TRANSPARENT)                binding.root.setOnClickListener {
+                    // Prevent double clicks
 if (item.text == "Searching...") return@setOnClickListener                    fetchOnlineSubtitles(this
 @SubtitleAdapter, item, adjustedPosition)                }
 return            }
@@ -140,7 +151,8 @@ val activity = requireActivity()
 if (activity is ExoplayerView) {
 try {                                activity.reApplyLocalSubtitle(item.file.url)                            } catch (e: Exception) {                                e.printStackTrace()                            }
 }
-} else {                        // Standard built-in local subtitle                        episode.selectedSubtitle = adjustedPosition                        model.setEpisode(episode, "Subtitle")                        model.getMedia().observe(viewLifecycleOwner) { media ->                            
+} else {                        // Standard built-in local subtitle                        episode.selectedSubtitle = adjustedPosition                        model.setEpisode(episode, "Subtitle")                        model.getMedia().observe(viewLifecycleOwner) { media ->
+                            
 val mediaID: Int = media.id                            PrefManager.setCustomVal(                                "subLang_${mediaID}",                                item.language                            )                        }}
 dismiss()                }
 return            }
@@ -155,7 +167,8 @@ if (selSubs != "Online:${item.url}") {                        binding.root.setCa
 binding.root.setOnClickListener {
 try {
     val activity = requireActivity()
-if (activity is ExoplayerView) {                            episode.selectedSubtitle = -1                            model.setEpisode(episode, "Subtitle")                            model.getMedia().observe(viewLifecycleOwner) { media ->                                PrefManager.setCustomVal("subLang_${media.id}", "Online:${item.url}")                            }
+if (activity is ExoplayerView) {                            episode.selectedSubtitle = -1                            model.setEpisode(episode, "Subtitle")                            model.getMedia().observe(viewLifecycleOwner) { media ->
+                                PrefManager.setCustomVal("subLang_${media.id}", "Online:${item.url}")                            }
 // Convert WyzieSub to StremioSub for compatibility
 val stremioSub = StremioSub(                                id = item.url, // Use URL as ID                                url = item.url,                                lang = item.language                            )                            activity.applyOnlineSubtitle(stremioSub)                        }
 } catch (e: Exception) {                        e.printStackTrace()}

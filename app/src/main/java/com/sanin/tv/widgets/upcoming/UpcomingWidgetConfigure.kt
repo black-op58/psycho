@@ -20,12 +20,20 @@ private var isMonetEnabled = false
 private var onClickListener = View.OnClickListener {
     val context = this
 @UpcomingWidgetConfigure
-val appWidgetManager = AppWidgetManager.getInstance(context)        updateAppWidget(            context,            appWidgetManager,            appWidgetId,        )        
-val resultValue = Intent()        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)        setResult(RESULT_OK, resultValue)        finish()    }
+val appWidgetManager = AppWidgetManager.getInstance(context)        updateAppWidget(
+            context,            appWidgetManager,            appWidgetId,        )        
+val resultValue = Intent()        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(RESULT_OK, resultValue)
+        finish()
+    }
 
 private lateinit var binding: UpcomingWidgetConfigureBinding    
 public override 
-fun onCreate(icicle: Bundle?) {        ThemeManager(this).applyTheme()        super.onCreate(icicle)        setResult(RESULT_CANCELED)        binding = UpcomingWidgetConfigureBinding.inflate(layoutInflater)        setContentView(binding.root)        
+fun onCreate(icicle: Bundle?) {        ThemeManager(this).applyTheme()        super.onCreate(icicle)
+        setResult(RESULT_CANCELED)
+        binding = UpcomingWidgetConfigureBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
 val prefs = getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE)        
 val topBackground =            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))        (binding.topBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(topBackground)        binding.topBackgroundButton.setOnClickListener {
     val tag = UpcomingWidget.PREF_BACKGROUND_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)        }
@@ -52,7 +60,12 @@ return        }
 private fun themeColors() {
     val backgroundColor = getThemeColor(com.google.android.material.R.attr.colorSurface)        
 val textColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)        
-val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)            putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)            putInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, textColor)            putInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, subTextColor)            apply()        }
+val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)            putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)
+            putInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, textColor)
+            putInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, subTextColor)
+            apply()
+        }
 }
 
 override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {

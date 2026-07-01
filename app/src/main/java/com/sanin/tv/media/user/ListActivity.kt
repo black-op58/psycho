@@ -43,7 +43,8 @@ if (it != null) {                binding.listProgressBar.visibility = View.GONE 
 val keys = it.keys.toList()                    .map { key -> userKeys.getOrNull(defaultKeys.indexOf(key)) ?: key }
 
 val values = it.values.toList()                
-val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { tab, position ->                    tab.text = "${keys[position]} (${values[position].size})"                }.attach()                binding.listViewPager.setCurrentItem(savedTab, false)            }
+val savedTab = this.selectedTabIdx                TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { tab, position ->                    tab.text = "${keys[position]} (${values[position].size})"                }.attach()                binding.listViewPager.setCurrentItem(savedTab, false)
+            }
 }
 
 val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
@@ -51,9 +52,13 @@ live.observe(this) {
 if (it) {                scope.launch {                    withContext(Dispatchers.IO) {                        model.loadLists(            popup.show()        }
 binding.filter.setOnClickListener {
     val genres =                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()            
-val popup = PopupMenu(this, it)            popup.menu.add("All")            genres.forEach { genre ->                popup.menu.add(genre)            }
+val popup = PopupMenu(this, it)            popup.menu.add("All")
+            genres.forEach { genre ->
+                popup.menu.add(genre)            }
 popup.setOnMenuItemClickListener { menuItem ->
-val selectedGenre = menuItem.title.toString()                model.filterLists(selectedGenre)                true            }
+val selectedGenre = menuItem.title.toString()                model.filterLists(selectedGenre)
+                true
+            }
 popup.show()}
 binding.random.setOnClickListener {            //get the current tab
 val currentTab =                binding.listTabLayout.getTabAt(binding.listTabLayout.selectedTabPosition)            

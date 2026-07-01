@@ -35,12 +35,18 @@ fun refreshToken(): ResponseToken? {
 return tryWithSuspend {
     val token = PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)                ?: throw Exception(currContext()?.getString(R.string.refresh_token_load_failed))            
 val res = client.post(                "https://myanimelist.net/v1/oauth2/token",
-data = mapOf(                    "client_id" to clientId,                    "grant_type" to "refresh_token",                    "refresh_token" to token.refreshToken                )            ).parsed<ResponseToken>()            saveResponse(res)            return@tryWithSuspend res        }}
+data = mapOf(                    "client_id" to clientId,                    "grant_type" to "refresh_token",                    "refresh_token" to token.refreshToken                )            ).parsed<ResponseToken>()            saveResponse(res)
+            return@tryWithSuspend res
+        }}
 suspend
 fun getSavedToken(): Boolean {
 return tryWithSuspend(false) {
     var res: ResponseToken =                PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)                    ?: return@tryWithSuspend false
-if (System.currentTimeMillis() > res.expiresIn)                res = refreshToken()                    ?: throw Exception(currContext()?.getString(R.string.refreshing_token_failed))            token = res.accessToken            username = PrefManager.getVal(PrefName.MALUserName, null as String?)            avatar = PrefManager.getVal(PrefName.MALAvatar, null as String?)            return@tryWithSuspend true        } ?: false    }
+if (System.currentTimeMillis() > res.expiresIn)                res = refreshToken()
+                    ?: throw Exception(currContext()?.getString(R.string.refreshing_token_failed))            token = res.accessToken
+            username = PrefManager.getVal(PrefName.MALUserName, null as String?)            avatar = PrefManager.getVal(PrefName.MALAvatar, null as String?)
+            return@tryWithSuspend true
+        } ?: false    }
 
 fun removeSavedToken() {        token = null        username = null        userid = null        avatar = null        episodesWatched = null        chaptersRead = null        PrefManager.removeVal(PrefName.MALToken)    }
 

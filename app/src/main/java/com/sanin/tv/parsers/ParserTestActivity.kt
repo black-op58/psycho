@@ -16,7 +16,11 @@ class ParserTestActivity : AppCompatActivity() {
     private lateinit var binding: ActivityParserTestBinding
 val adapter = GroupieAdapter()    
 val extensionsToTest: MutableList<ExtensionTestItem> = mutableListOf()    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityParserTestBinding.inflate(layoutInflater)        binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+        binding = ActivityParserTestBinding.inflate(layoutInflater)
+        binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight        }
 binding.extensionResultsRecyclerView.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight}
-setContentView(binding.root)        binding.extensionResultsRecyclerView.adapter = adapter        binding.extensionResultsRecyclerView.layoutManager = LinearLayoutManager(            this,            LinearLayoutManager.VERTICAL,            false        )
+setContentView(binding.root)        binding.extensionResultsRecyclerView.adapter = adapter
+        binding.extensionResultsRecyclerView.layoutManager = LinearLayoutManager(            this,            LinearLayoutManager.VERTICAL,            false        )
 }}

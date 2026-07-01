@@ -34,7 +34,8 @@ companion object {
     fun newInstance(m: Media): MediaListDialogSmallFragment =            MediaListDialogSmallFragment().apply {                arguments = Bundle().apply {                    putSerializable("media", m as Serializable)                }}
     }
 
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        arguments?.let {            media = it.getSerialized("media")!!        }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        arguments?.let {
+            media = it.getSerialized("media")!!        }
 }
 
 private var _binding: BottomSheetMediaListSmallBinding? = null    
@@ -44,10 +45,13 @@ return binding.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
 
-val scope = viewLifecycleOwner.lifecycleScope        binding.mediaListDelete.setOnClickListener {            scope.launch {                media.deleteFromList(scope, onSuccess = {                    Refresh.all()                    snackString(getString(R.string.deleted_from_list))                    dismissAllowingStateLoss()                }, onError = { e ->                    withContext(Dispatchers.Main) {                        snackString(                            getString(                                R.string.delete_fail_reason, e.message                    InputFilterMinMax(0.0, total.toDouble(), binding.mediaListStatus),                    LengthFilter(total.toString().length)                )        }
+val scope = viewLifecycleOwner.lifecycleScope        binding.mediaListDelete.setOnClickListener {            scope.launch {                media.deleteFromList(scope, onSuccess = {                    Refresh.all()                    snackString(getString(R.string.deleted_from_list))
+                    dismissAllowingStateLoss()
+                }, onError = { e ->                    withContext(Dispatchers.Main) {                        snackString(                            getString(                                R.string.delete_fail_reason, e.message                    InputFilterMinMax(0.0, total.toDouble(), binding.mediaListStatus),                    LengthFilter(total.toString().length)                )        }
 binding.mediaListProgressLayout.suffixText = " / ${total ?: '?'}"        binding.mediaListProgressLayout.suffixTextView.updateLayoutParams {            height = ViewGroup.LayoutParams.MATCH_PARENT}
 binding.mediaListProgressLayout.suffixTextView.gravity = Gravity.CENTER        binding.mediaListScore.setText(
-if (media.userScore != 0) media.userScore.div(                10.0            ).toString() else ""        )        binding.mediaListScore.filters =            arrayOf(InputFilterMinMax(0.0, 10.0), LengthFilter(10.0.toString().length))        binding.mediaListScoreLayout.suffixTextView.updateLayoutParams {            height = ViewGroup.LayoutParams.MATCH_PARENT        }
+if (media.userScore != 0) media.userScore.div(                10.0            ).toString() else ""        )        binding.mediaListScore.filters =            arrayOf(InputFilterMinMax(0.0, 10.0), LengthFilter(10.0.toString().length))        binding.mediaListScoreLayout.suffixTextView.updateLayoutParams {
+            height = ViewGroup.LayoutParams.MATCH_PARENT        }
 binding.mediaListScoreLayout.suffixTextView.gravity = Gravity.CENTER        binding.mediaListIncrement.setOnClickListener {
 if (binding.mediaListStatus.text.toString() == statusStrings[0]) binding.mediaListStatus.setText(                statusStrings[1],                false            )            
 val init =
@@ -67,7 +71,8 @@ var remove: Boolean? = null        binding.mediaListShow.isChecked = media.id in
 binding.mediaListSave.setOnClickListener {
     val progressText = binding.mediaListProgress.text.toString()            
 val scoreText = binding.mediaListScore.text.toString()            
-val statusText = binding.mediaListStatus.text.toString()            scope.launch {                withContext(Dispatchers.IO) {
+val statusText = binding.mediaListStatus.text.toString()            scope.launch {
+                withContext(Dispatchers.IO) {
     val progress = _binding?.mediaListProgress?.text.toString().toIntOrNull()                    
 val progressVolumes = media.userProgressVolumes
 val score = (_binding?.mediaListScore?.text.toString().toDoubleOrNull()?.times(10))?.toInt()                    
@@ -85,8 +90,10 @@ private = media.isListPrivate,                            startedAt = startD,   
 MAL.query.editList(                        media.idMAL,                        media.anime != null,                        progress,                        score,                        status,                        start = startD,                        end = endD                    )                }
 if (remove == true) {                    PrefManager.setCustomVal("removeList", removeList.plus(media.id))
 } else if (remove == false) {                    PrefManager.setCustomVal("removeList", removeList.minus(media.id))                }
-Refresh.all()                snackString(getString(R.string.list_updated))                dismissAllowingStateLoss()}}
+Refresh.all()                snackString(getString(R.string.list_updated))
+                dismissAllowingStateLoss()}}
 }
 
-override fun onDestroyView() {        super.onDestroyView()        _binding = null    }}
+override fun onDestroyView() {        super.onDestroyView()        _binding = null
+    }}
 }}}))

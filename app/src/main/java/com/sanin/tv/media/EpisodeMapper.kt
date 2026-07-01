@@ -133,7 +133,8 @@ val index = absoluteEpisode - 1
 if (index >= 0 && index < epsData.size) {
     val ep = epsData[index]                    // Safe calculation
 val s = ep.season
-val e = ep.number ?: (index + 1)                    return@withContext SeasonEpisode(s, e)                }
+val e = ep.number ?: (index + 1)                    return@withContext SeasonEpisode(s, e)
+                }
 return@withContext null            } catch (e: Exception) {                return@withContext null}}}
 /**     * LOGIC C: Prequel Counting     */
 private suspend 
@@ -144,12 +145,15 @@ var safety = 0
 while (safety < 20) {
     val relations = current.relations            // Logger.log("EpisodeMapper: S$season Current media ${current.id} has ${relations?.size ?: 0} relations")            
 val prequel = relations?.find {                (it.relation != null && (it.relation == "PREQUEL" || it.relation!!.startsWith("PREQUEL\n"))) &&                        (it.format == "TV" || it.format == "TV_SHORT" || it.format == "ONA")            }
-if (prequel != null) {                // Logger.log("EpisodeMapper: Found prequel: ${prequel.userPreferredName} (ID: ${prequel.id})")                season++                
+if (prequel != null) {                // Logger.log("EpisodeMapper: Found prequel: ${prequel.userPreferredName} (ID: ${prequel.id})")                season++
+                
 val fetchedPrequel = AnilistQueries().getMedia(prequel.id)
 if (fetchedPrequel != null) {
     val detailedPrequel = AnilistQueries().mediaDetails(fetchedPrequel)                    current = detailedPrequel
-} else {                    // Logger.log("EpisodeMapper: Failed to fetch prequel details for ID ${prequel.id}")                    break                }
-} else {                // Logger.log("EpisodeMapper: No TV/ONA prequel found for ${current.id}")                break            }
+} else {                    // Logger.log("EpisodeMapper: Failed to fetch prequel details for ID ${prequel.id}")                    break
+                }
+} else {                // Logger.log("EpisodeMapper: No TV/ONA prequel found for ${current.id}")                break
+            }
 safety++}
 // Logger.log("EpisodeMapper: Final calculated season: $season")
 return season    }}// --- DATA CLASSES ---

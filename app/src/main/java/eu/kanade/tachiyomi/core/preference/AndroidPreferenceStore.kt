@@ -41,5 +41,6 @@ return Object(            preferences = sharedPreferences,            keyFlow = 
 @OptIn(ExperimentalCoroutinesApi::class)
 private val SharedPreferences.keyFlow    get() = callbackFlow {
     val listener =            SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? -> trySend(key) }
-    registerOnSharedPreferenceChangeListener(listener)        awaitClose {            unregisterOnSharedPreferenceChangeListener(listener)}
+    registerOnSharedPreferenceChangeListener(listener)        awaitClose {
+            unregisterOnSharedPreferenceChangeListener(listener)}
     }

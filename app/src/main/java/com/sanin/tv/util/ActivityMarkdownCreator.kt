@@ -38,7 +38,10 @@ val selectionOffset: Int,
 val imageViewId: Int    ) {        BOLD("****", 2, R.id.formatBold),        ITALIC("**", 1, R.id.formatItalic),        STRIKETHROUGH("~~~~", 2, R.id.formatStrikethrough),        SPOILER("~!!~", 2, R.id.formatSpoiler),        LINK("[Placeholder](%s)", 0, R.id.formatLink),        IMAGE("img(%s)", 0, R.id.formatImage),        YOUTUBE("youtube(%s)", 0, R.id.formatYoutube),        VIDEO("webm(%s)", 0, R.id.formatVideo),        ORDERED_LIST("1. ", 3, R.id.formatListOrdered),        UNORDERED_LIST("- ", 2, R.id.formatListUnordered),        HEADING("# ", 2, R.id.formatTitle),        CENTERED("~~~~~~", 3, R.id.formatCenter),        QUOTE("> ", 2, R.id.formatQuote),        CODE("``", 1, R.id.formatCode)    }
 
 @OptIn(DelicateCoroutinesApi::class)    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityMarkdownCreatorBinding.inflate(layoutInflater)        binding.markdownCreatorToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+        binding = ActivityMarkdownCreatorBinding.inflate(layoutInflater)
+        binding.markdownCreatorToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight        }
 binding.markdownOptionsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin += navBarHeight}
 setContentView(binding.root)        AndroidBug5497Workaround.assistActivity(this) {}
 
@@ -57,12 +60,17 @@ if (editId == -1) {                    binding.privateCheckbox.visibility = View
 
 var private = false        binding.privateCheckbox.setOnCheckedChangeListener { _, isChecked ->            
 private = isChecked        }
-ping = intent.getStringExtra("other")        text = ping ?: ""        binding.editText.setText(text)        binding.editText.addTextChangedListener {
+ping = intent.getStringExtra("other")        text = ping ?: ""
+        binding.editText.setText(text)        binding.editText.addTextChangedListener {
 if (!isPreviewMode) {                text = it.toString()            }}
-previewMarkdown(false)        binding.markdownCreatorBack.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
+previewMarkdown(false)        binding.markdownCreatorBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()}
 binding.createButton.setOnClickListener {
-if (text.isBlank()) {                toast(getString(R.string.cannot_be_empty))                return@setOnClickListener            }
-customAlertDialog().apply {                setTitle(R.string.warning)                setMessage(R.string.post_to_anilist_warning)                setPosButton(R.string.ok) {                    launchIO {
+if (text.isBlank()) {                toast(getString(R.string.cannot_be_empty))                return@setOnClickListener
+            }
+customAlertDialog().apply {                setTitle(R.string.warning)                setMessage(R.string.post_to_anilist_warning)
+                setPosButton(R.string.ok) {
+                    launchIO {
     val isEdit = editId != -1
 val success = when (type) {                            "activity" -> if (isEdit) {                                Anilist.mutation.postActivity(text, editId)
 } else {                                Anilist.mutation.postActivity(text)                            }
@@ -78,7 +86,8 @@ setNegButton(R.string.cancel)                show()}}
 binding.previewCheckbox.setOnClickListener {            isPreviewMode = !isPreviewMode            previewMarkdown(isPreviewMode)
 if (isPreviewMode) {                toast("Preview enabled")
 } else {                toast("Preview disabled")            }}
-binding.editText.requestFocus()        setupMarkdownButtons()    }
+binding.editText.requestFocus()        setupMarkdownButtons()
+    }
 
 private fun setupMarkdownButtons() {        MarkdownFormat.entries.forEach { format ->            findViewById<ImageView>(format.imageViewId)?.setOnClickListener {                applyMarkdownFormat(format)            }}
 }
@@ -99,7 +108,8 @@ binding.editText.text?.replace(start, end, newText)            binding.editText.
 } else {
 if (format.syntax.contains("%s")) {                showInputDialog(format, start)
 } else {
-    val newText = format.syntax                binding.editText.text?.insert(start, newText)                binding.editText.setSelection(start + format.selectionOffset)            }}
+    val newText = format.syntax                binding.editText.text?.insert(start, newText)                binding.editText.setSelection(start + format.selectionOffset)
+            }}
     }
 
 private fun showInputDialog(format: MarkdownFormat, position: Int) {
@@ -107,15 +117,21 @@ private fun showInputDialog(format: MarkdownFormat, position: Int) {
 
 val inputEditText = TextInputEditText(this).apply {            layoutParams = LinearLayout.LayoutParams(                LinearLayout.LayoutParams.MATCH_PARENT,                LinearLayout.LayoutParams.WRAP_CONTENT            )        }
 inputLayout.addView(inputEditText)
-val container = FrameLayout(this).apply {            addView(inputLayout)            layoutParams = ViewGroup.LayoutParams(                ViewGroup.LayoutParams.MATCH_PARENT,                ViewGroup.LayoutParams.MATCH_PARENT            )            setPadding(0, 0, 0, 0)        }
-customAlertDialog().apply {            setTitle("Paste your link here")            setCustomView(container)            setPosButton(getString(R.string.ok)) {
+val container = FrameLayout(this).apply {            addView(inputLayout)            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,                ViewGroup.LayoutParams.MATCH_PARENT            )            setPadding(0, 0, 0, 0)        }
+customAlertDialog().apply {            setTitle("Paste your link here")            setCustomView(container)
+            setPosButton(getString(R.string.ok)) {
     val input = inputEditText.text.toString()                
-val formattedText = String.format(format.syntax, input)                binding.editText.text?.insert(position, formattedText)                binding.editText.setSelection(position + formattedText.length)            }
-setNegButton(getString(R.string.cancel))        }.show()        inputEditText.requestFocus()    }
+val formattedText = String.format(format.syntax, input)                binding.editText.text?.insert(position, formattedText)
+                binding.editText.setSelection(position + formattedText.length)
+            }
+setNegButton(getString(R.string.cancel))        }.show()        inputEditText.requestFocus()
+    }
 
 private fun previewMarkdown(preview: Boolean) {
     val markwon = buildMarkwon(this, false, anilist = true)
 if (preview) {            binding.editText.isVisible = false            binding.editText.isEnabled = false            binding.markdownPreview.isVisible = true            markwon.setMarkdown(binding.markdownPreview, AniMarkdown.getBasicAniHTML(text))
 } else {            binding.editText.isVisible = true            binding.markdownPreview.isVisible = false            binding.editText.setText(text)            binding.editText.isEnabled = true
-val markwonEditor = MarkwonEditor.create(markwon)            binding.editText.addTextChangedListener(                MarkwonEditorTextWatcher.withProcess(markwonEditor)            )        }
+val markwonEditor = MarkwonEditor.create(markwon)            binding.editText.addTextChangedListener(
+                MarkwonEditorTextWatcher.withProcess(markwonEditor)            )        }
 }

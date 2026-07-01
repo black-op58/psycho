@@ -38,7 +38,8 @@ var isMod: Boolean = false
 var totalVotes: Int = 0    suspend 
 fun getCommentsForId(        id: Int,        page: Int = 1,        tag: Int?,        sort: String?    ): CommentResponse? {
     var url = "$ADDRESS/comments/$id/$page"        
-val request = requestBuilder()        tag?.let {            url += "?tag=$it"        }
+val request = requestBuilder()        tag?.let {
+            url += "?tag=$it"        }
 sort?.let {            url += if (tag != null) "&sort=$it" else "?sort=$it"        }
 
 val json = try {            request.get(url)        } catch (e: IOException) {            Logger.log(e)            errorMessage("Failed to fetch comments")
@@ -206,7 +207,8 @@ private fun errorMessage(reason: String) {
 if (commentsEnabled) Logger.log(reason)
 if (isOnline && commentsEnabled) snackString(reason)    }
 
-fun logout() {        PrefManager.removeVal(PrefName.CommentAuthResponse)        PrefManager.removeVal(PrefName.CommentTokenExpiry)        authToken = null        userId = null        isBanned = false        isAdmin = false        isMod = false        totalVotes = 0    }
+fun logout() {        PrefManager.removeVal(PrefName.CommentAuthResponse)        PrefManager.removeVal(PrefName.CommentTokenExpiry)        authToken = null
+        userId = null        isBanned = false        isAdmin = false        isMod = false        totalVotes = 0    }
 
 private suspend 
 fun authRequest(        token: String,        url: String,        client: OkHttpClient? = null    ): NiceResponse {

@@ -39,7 +39,8 @@ val request = Request.Builder().url(url).build()
 val response = okHttpClient.newCall(request).execute()
 if (response.isSuccessful && response.body != null) {
     val text = response.body!!.string()                            
-val data = Mapper.json.decodeFromString<StremioResponse>(text)                            allSubs.addAll(data.subtitles)                        }}
+val data = Mapper.json.decodeFromString<StremioResponse>(text)                            allSubs.addAll(data.subtitles)
+                        }}
 } catch (e: Exception) {                    e.printStackTrace()}}
 allSubs}
 }}

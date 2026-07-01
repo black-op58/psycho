@@ -13,13 +13,15 @@ private var listeners: ArrayList<OnChangeListener> = arrayListOf()    init {    
 }
 
 override fun onAttachedToWindow() {        getChildAt(0)!!.setOnClickListener {
-if (expanded) hideAll() else showAll()            postDelayed({                expanded = !expanded            }, 300)        }
+if (expanded) hideAll() else showAll()            postDelayed({
+                expanded = !expanded            }, 300)        }
 if (!expanded) children.forEach {
 if (it != getChildAt(0)) {                it.visibility = GONE            }}
 super.onAttachedToWindow()    }
 
 private fun hideAll() {        children.forEach {
-if (it != getChildAt(0)) {                ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.5f).setDuration(200).start()                ObjectAnimator.ofFloat(it, "translationY", 0f, -32f).setDuration(200).start()                ObjectAnimator.ofFloat(it, "alpha", 1f, 0f).setDuration(200).start()                it.postDelayed({                    it.visibility = GONE                }, 300)            }}
+if (it != getChildAt(0)) {                ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.5f).setDuration(200).start()                ObjectAnimator.ofFloat(it, "translationY", 0f, -32f).setDuration(200).start()                ObjectAnimator.ofFloat(it, "alpha", 1f, 0f).setDuration(200).start()                it.postDelayed({
+                    it.visibility = GONE                }, 300)            }}
 postDelayed({            listeners.forEach {                it.onRetract()}
 }, 300)    }
 

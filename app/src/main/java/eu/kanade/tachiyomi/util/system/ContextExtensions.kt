@@ -29,7 +29,8 @@ if (content.isBlank()) return
 try {
     val clipboard = getSystemService<ClipboardManager>()!!        clipboard.setPrimaryClip(ClipData.newPlainText(label, content))        // Android 13 and higher shows a visual confirmation of copied contents        // https://developer.android.com/about/versions/13/features/copy-paste
 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {            toast("Copied to clipboard: " + content.truncateCenter(50))        }
-} catch (e: Throwable) {        Logger.log(e)        toast("Failed to copy to clipboard")    }}/** * Checks if the give permission is granted. * * @param permission the permission to check. * @return true if it has permissions. */
+} catch (e: Throwable) {        Logger.log(e)        toast("Failed to copy to clipboard")
+    }}/** * Checks if the give permission is granted. * * @param permission the permission to check. * @return true if it has permissions. */
 fun Context.hasPermission(permission: String) =    PermissionChecker.checkSelfPermission(this, permission) == PermissionChecker.PERMISSION_GRANTED/** * Returns the color for the given attribute. * * @param resource the attribute. * @param alphaFactor the alpha number [0,1]. */
 @ColorInt
 fun Context.getResourceColor(
@@ -65,7 +66,8 @@ private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())    
 val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {        packageManager.resolveActivity(            browserIntent,            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())        )
 } else {        
-@Suppress("DEPRECATION")        packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)    }
+@Suppress("DEPRECATION")        packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+    }
 return resolveInfo        ?.activityInfo?.packageName        ?.takeUnless { it in DeviceUtil.invalidDefaultBrowsers }}
 
 fun Context.createFileInCacheDir(name: String): File {
@@ -74,7 +76,8 @@ if (file.exists()) {        file.delete()    }
 file.createNewFile()
 return file}/** * Returns true if [packageName] is installed. */
 fun Context.isPackageInstalled(packageName: String): Boolean {
-return try {        packageManager.getApplicationInfo(packageName, 0)        true    } catch (e: PackageManager.NameNotFoundException) {        false    }}/** * Gets document size of provided [Uri] * * @return document size of [uri] or null if size can't be obtained */
+return try {        packageManager.getApplicationInfo(packageName, 0)        true
+    } catch (e: PackageManager.NameNotFoundException) {        false    }}/** * Gets document size of provided [Uri] * * @return document size of [uri] or null if size can't be obtained */
 fun Context.getUriSize(uri: Uri): Long? {
 return UniFile.fromUri(this, uri).length().takeIf { it >= 0 }}
 

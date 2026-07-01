@@ -31,9 +31,11 @@ if (userAction == null) {                        Logger.log("Fatal error for $in
 return                    }
 userAction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)                    service.startActivity(userAction)}
 PackageInstaller.STATUS_FAILURE_ABORTED -> {                    continueQueue(InstallStep.Idle)}
-PackageInstaller.STATUS_SUCCESS -> continueQueue(InstallStep.Installed)                PackageInstaller.STATUS_FAILURE_CONFLICT -> {                    Logger.log("Failed to install extension due to conflict")                    toast(context.getString(R.string.failed_ext_install_conflict))                    continueQueue(InstallStep.Error)
+PackageInstaller.STATUS_SUCCESS -> continueQueue(InstallStep.Installed)                PackageInstaller.STATUS_FAILURE_CONFLICT -> {                    Logger.log("Failed to install extension due to conflict")                    toast(context.getString(R.string.failed_ext_install_conflict))
+                    continueQueue(InstallStep.Error)
 }
-else -> {                    Logger.log("Fatal error for $intent")                    Logger.log("Status: ${intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)}")                    continueQueue(InstallStep.Error)                }}}
+else -> {                    Logger.log("Fatal error for $intent")                    Logger.log("Status: ${intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)}")                    continueQueue(InstallStep.Error)
+                }}}
 }
 
 private var activeSession: Pair<Entry, Int>? = null    // Always ready    
@@ -47,7 +49,8 @@ return false            }
 }
 return true    }
 
-override fun onDestroy() {        service.unregisterReceiver(packageActionReceiver)        super.onDestroy()    }
+override fun onDestroy() {        service.unregisterReceiver(packageActionReceiver)        super.onDestroy()
+    }
 init {        ContextCompat.registerReceiver(            service,            packageActionReceiver,            IntentFilter(INSTALL_ACTION),            ContextCompat.RECEIVER_EXPORTED,        )    }}
 
 private const val INSTALL_ACTION = "PackageInstallerInstaller.INSTALL_ACTION"

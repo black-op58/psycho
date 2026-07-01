@@ -7,7 +7,8 @@ override fun onEnabled(context: Context) {        super.onEnabled(context)    }
 
 override fun onDisabled(context: Context) {        super.onDisabled(context)    }
 
-override fun onAppWidgetOptionsChanged(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetId: Int,        newOptions: android.os.Bundle?    ) {        updateAppWidget(context, appWidgetManager, appWidgetId)        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)    }
+override fun onAppWidgetOptionsChanged(        context: Context,        appWidgetManager: AppWidgetManager,        appWidgetId: Int,        newOptions: android.os.Bundle?    ) {        updateAppWidget(context, appWidgetManager, appWidgetId)        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+    }
 
 companion object {        
 @OptIn(DelicateCoroutinesApi::class)        
@@ -18,7 +19,15 @@ val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000
 val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)            
 val statsTextColor = prefs.getInt(PREF_STATS_TEXT_COLOR, Color.WHITE)            
 val gradientDrawable = ResourcesCompat.getDrawable(                context.resources,                R.drawable.linear_gradient_black,        ) {            withContext(Dispatchers.Main) {
-    val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {                    setImageViewBitmap(R.id.backgroundView, backgroundBitmap)                    setTextViewText(R.id.topLeftItem, "")                    setTextViewText(R.id.topLeftLabel, context.getString(R.string.please))                    setTextViewText(R.id.topRightItem, "")                    setTextViewText(R.id.topRightLabel, context.getString(R.string.log_in))                    setTextViewText(R.id.bottomLeftItem, context.getString(R.string.or_join))                    setTextViewText(R.id.bottomLeftLabel, "")                    setTextViewText(R.id.bottomRightItem, context.getString(R.string.anilist))                    setTextViewText(R.id.bottomRightLabel, "")                    
+    val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {                    setImageViewBitmap(R.id.backgroundView, backgroundBitmap)                    setTextViewText(R.id.topLeftItem, "")
+                    setTextViewText(R.id.topLeftLabel, context.getString(R.string.please))
+                    setTextViewText(R.id.topRightItem, "")
+                    setTextViewText(R.id.topRightLabel, context.getString(R.string.log_in))
+                    setTextViewText(R.id.bottomLeftItem, context.getString(R.string.or_join))
+                    setTextViewText(R.id.bottomLeftLabel, "")
+                    setTextViewText(R.id.bottomRightItem, context.getString(R.string.anilist))
+                    setTextViewText(R.id.bottomRightLabel, "")
+                    
 val intent = Intent(context, MainActivity::class.java)                    
 val pendingIntent = PendingIntent.getActivity(                        context, 0, intent, PendingIntent.FLAG_IMMUTABLE                    )                    setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)                }
 appWidgetManager.updateAppWidget(appWidgetId, views)}

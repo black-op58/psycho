@@ -11,7 +11,8 @@ object Anify {    suspend
 fun fetchAndParseMetadata(anilistId: Int): Map<String, Episode> {
 return try {            Logger.log("AniZip : fetching episodes for anilist_id=$anilistId")            
 val response = client.get("https://api.ani.zip/mappings?anilist_id=$anilistId")                .parsed<AniZipResponse>()            
-val episodes = response.episodes ?: return emptyMap()            episodes.entries                .filter { (key, _) ->                    // Only include numbered episodes (1, 2, 3 …)
+val episodes = response.episodes ?: return emptyMap()            episodes.entries
+                .filter { (key, _) ->                    // Only include numbered episodes (1, 2, 3 …)
 skip specials like "S1", "S2"                    key.toIntOrNull() != null                }
 .associate { (key, ep) ->
 val title = ep.title?.en                    key to Episode(                        number = key,                        title = title,                        desc = ep.overview ?: ep.summary,                        thumb = FileUrl[ep.image],                        extra = buildMap {                            ep.airDate?.let { put("airDate", it) }

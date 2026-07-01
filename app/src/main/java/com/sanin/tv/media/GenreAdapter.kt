@@ -32,8 +32,10 @@ override fun getItemCount(): Int = genres.size    inner
 class GenreViewHolder(
 val binding: ItemGenreBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {                ContextCompat.startActivity(                    itemView.context,                    Intent(itemView.context, SearchActivity::class.java)                        .putExtra("type", type)                        .putExtra("genre", pos[bindingAdapterPosition])                        .putExtra("sortBy", Anilist.sortBy[2])                        .putExtra("search", true)                        .also {
 if (pos[bindingAdapterPosition].lowercase() == "hentai") {
-if (!Anilist.adult) Toast.makeText(                                    itemView.context,                                    currActivity()?.getString(R.string.content_18),                                    Toast.LENGTH_SHORT                                ).show()                                it.putExtra("hentai", true)                            }
+if (!Anilist.adult) Toast.makeText(                                    itemView.context,                                    currActivity()?.getString(R.string.content_18),                                    Toast.LENGTH_SHORT                                ).show()                                it.putExtra("hentai", true)
+                            }
 },                    null                )}}
 }
 
-fun addGenre(genre: Pair<String, String>) {        genres[genre.first] = genre.second        pos.add(genre.first)        notifyItemInserted(pos.size - 1)    }}
+fun addGenre(genre: Pair<String, String>) {        genres[genre.first] = genre.second        pos.add(genre.first)        notifyItemInserted(pos.size - 1)
+    }}

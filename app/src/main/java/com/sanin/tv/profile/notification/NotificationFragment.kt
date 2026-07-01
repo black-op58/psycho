@@ -40,13 +40,21 @@ private var countResetCallback: ((NotificationType, Boolean) -> Unit)? = null
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        binding = FragmentNotificationsBinding.inflate(inflater, container, false)
 return binding.root    }
 
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        arguments?.let {            getID = it.getInt("id")            type = it.getSerializableCompat<NotificationType>("type") as NotificationType        }
-binding.notificationRecyclerView.adapter = adapter        binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)        binding.notificationProgressBar.isVisible = true        binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {            getList()            resetCountIfNeeded()            binding.notificationProgressBar.isVisible = false}
-binding.notificationSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()                currentPage = 1                resetCountIfNeeded()                getList()                binding.notificationSwipeRefresh.isRefreshing = false}}
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        super.onViewCreated(view, savedInstanceState)        arguments?.let {
+            getID = it.getInt("id")            type = it.getSerializableCompat<NotificationType>("type") as NotificationType
+        }
+binding.notificationRecyclerView.adapter = adapter        binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)        binding.notificationProgressBar.isVisible = true
+        binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {
+            getList()            resetCountIfNeeded()
+            binding.notificationProgressBar.isVisible = false}
+binding.notificationSwipeRefresh.setOnRefreshListener {            lifecycleScope.launch {                adapter.clear()                currentPage = 1
+                resetCountIfNeeded()                getList()
+                binding.notificationSwipeRefresh.isRefreshing = false}}
 binding.notificationRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                super.onScrolled(recyclerView, dx, dy)
-if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.notificationRefresh.isVisible = true                        getList()                        binding.notificationRefresh.isVisible = false                    }}}
+if (shouldLoadMore()) {                    lifecycleScope.launch {                        binding.notificationRefresh.isVisible = true                        getList()                        binding.notificationRefresh.isVisible = false
+                    }}}
 })    }
 
 private fun resetCountIfNeeded() {
@@ -95,7 +103,8 @@ fun onClick(id: Int, optional: Int?, type: NotificationClickType) {
     val intent = when (type) {            NotificationClickType.USER -> Intent(                requireContext(),                ProfileActivity::class.java            ).apply {                putExtra("userId", id)            }
     NotificationClickType.MEDIA -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("mediaId", id)}
     NotificationClickType.ACTIVITY -> Intent(                requireContext(),                FeedActivity::class.java            ).apply {                putExtra("activityId", id)}
-    NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("FRAGMENT_TO_LOAD", "COMMENTS")                putExtra("mediaId", id)                putExtra("commentId", optional ?: -1)}
+    NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {                putExtra("FRAGMENT_TO_LOAD", "COMMENTS")                putExtra("mediaId", id)
+                putExtra("commentId", optional ?: -1)}
     NotificationClickType.UNDEFINED -> null}
     intent?.let {            ContextCompat.startActivity(requireContext(), it, null)}
     }
@@ -112,6 +121,7 @@ enum class NotificationClickType { USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
 enum class NotificationType { MEDIA, USER, SUBSCRIPTION, COMMENT, ONE }
 
 fun newInstance(            type: NotificationType,             id: Int = -1,            countResetCallback: ((NotificationType, Boolean) -> Unit)? = null        ): NotificationFragment {
-return NotificationFragment().apply {                this.countResetCallback = countResetCallback                arguments = Bundle().apply {                    putSerializable("type", type)                    putInt("id", id)                }}}
+return NotificationFragment().apply {                this.countResetCallback = countResetCallback                arguments = Bundle().apply {                    putSerializable("type", type)                    putInt("id", id)
+                }}}
 }}
 }

@@ -30,7 +30,8 @@ try {            synchronized(requestQueue) {
 while (requestQueue.size >= permits) { // queue is full, remove expired entries
 val periodStart = SystemClock.elapsedRealtime() - rateLimitMillis
 var hasRemovedExpired = false
-while (requestQueue.isEmpty().not() && requestQueue.first <= periodStart) {                        requestQueue.removeFirst()                        hasRemovedExpired = true                    }
+while (requestQueue.isEmpty().not() && requestQueue.first <= periodStart) {                        requestQueue.removeFirst()                        hasRemovedExpired = true
+                    }
 if (call.isCanceled()) {
 throw IOException("Canceled")
 } else if (hasRemovedExpired) {                        break

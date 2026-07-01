@@ -28,13 +28,19 @@ class FollowActivity : AppCompatActivity() {
 val adapter = GroupieAdapter()    
 var users: List<User>? = null    
 private lateinit var selected: ImageButton    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityFollowBinding.inflate(layoutInflater)        binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+        binding = ActivityFollowBinding.inflate(layoutInflater)
+        binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
 binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> {            bottomMargin = navBarHeight}
 setContentView(binding.root)
-val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)        selected = getSelected(layoutType)        binding.followFilterButton.visibility = View.GONE        binding.followerGrid.alpha = 0.33f        binding.followerList.alpha = 0.33f        selected(selected)        binding.listRecyclerView.layoutManager = LinearLayoutManager(            this, LinearLayoutManager.VERTICAL, false        )        binding.listRecyclerView.adapter = adapter        binding.listProgressBar.visibility = View.VISIBLE        binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)        selected = getSelected(layoutType)
+        binding.followFilterButton.visibility = View.GONE
+        binding.followerGrid.alpha = 0.33f        binding.followerList.alpha = 0.33f        selected(selected)        binding.listRecyclerView.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.VERTICAL, false        )        binding.listRecyclerView.adapter = adapter        binding.listProgressBar.visibility = View.VISIBLE        binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
 val title = intent.getStringExtra("title")        
-val userID = intent.getIntExtra("userId", 0)        binding.listTitle.text = title        lifecycleScope.launch(Dispatchers.IO) {
+val userID = intent.getIntExtra("userId", 0)        binding.listTitle.text = title
+        lifecycleScope.launch(Dispatchers.IO) {
     val respond: List<User>? = when (title) {                "Following" -> Anilist.query.userFollowing(userID)                "Followers" -> Anilist.query.userFollowers(userID)
 else -> null            }
 users = respond            withContext(Dispatchers.Main) {                fillList()                binding.listProgressBar.visibility = View.GONE}}
@@ -65,4 +71,6 @@ else -> 0        }
 }
 
 private fun onUserClick(id: Int) {
-    val intent = Intent(this, ProfileActivity::class.java)        intent.putExtra("userId", id)        startActivity(intent)    }}
+    val intent = Intent(this, ProfileActivity::class.java)        intent.putExtra("userId", id)
+        startActivity(intent)
+    }}

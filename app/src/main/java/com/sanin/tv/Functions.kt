@@ -290,15 +290,19 @@ try {        startActivity(Intent().setComponent(component))    } catch (e: Exce
 finishAndRemoveTask()    PrefManager.setCustomVal("reload", true)}
 
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
-    override fun onStart() {        super.onStart()        dialog?.window?.let { window ->            WindowCompat.setDecorFitsSystemWindows(window, false)            
+    override fun onStart() {        super.onStart()        dialog?.window?.let { window ->
+            WindowCompat.setDecorFitsSystemWindows(window, false)            
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
 if (immersiveMode) {                WindowInsetsControllerCompat(                    window, window.decorView                ).hide(WindowInsetsCompat.Type.statusBars())            }
 if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
-    val behavior = BottomSheetBehavior.from(requireView().parent as View)                behavior.state = BottomSheetBehavior.STATE_EXPANDED            }
+    val behavior = BottomSheetBehavior.from(requireView().parent as View)                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
     window.navigationBarColor =                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)}
     }
     override fun show(manager: FragmentManager, tag: String?) {
-    val ft = manager.beginTransaction()        ft.add(this, tag)        ft.commitAllowingStateLoss()    }}
+    val ft = manager.beginTransaction()        ft.add(this, tag)
+        ft.commitAllowingStateLoss()
+    }}
     fun isOnline(context: Context): Boolean {
     val connectivityManager =        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 return tryWith {
@@ -308,7 +312,8 @@ when {                    cap.hasTransport(TRANSPORT_BLUETOOTH) ||              
 else -> false                }
 } else false
 } else {            
-@Suppress("DEPRECATION")            return@tryWith connectivityManager.activeNetworkInfo?.run {                type == ConnectivityManager.TYPE_BLUETOOTH ||                        type == ConnectivityManager.TYPE_ETHERNET ||                        type == ConnectivityManager.TYPE_MOBILE ||                        type == ConnectivityManager.TYPE_MOBILE_DUN ||                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||                        type == ConnectivityManager.TYPE_WIFI ||                        type == ConnectivityManager.TYPE_WIMAX ||                        type == ConnectivityManager.TYPE_VPN            } ?: false        }
+@Suppress("DEPRECATION")            return@tryWith connectivityManager.activeNetworkInfo?.run {
+                type == ConnectivityManager.TYPE_BLUETOOTH ||                        type == ConnectivityManager.TYPE_ETHERNET ||                        type == ConnectivityManager.TYPE_MOBILE ||                        type == ConnectivityManager.TYPE_MOBILE_DUN ||                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||                        type == ConnectivityManager.TYPE_WIFI ||                        type == ConnectivityManager.TYPE_WIMAX ||                        type == ConnectivityManager.TYPE_VPN            } ?: false        }
 } ?: false}
     fun startMainActivity(activity: Activity, bundle: Bundle? = null) {    activity.finishAffinity()    activity.startActivity(        Intent(            activity,            MainActivity::class.java        ).apply {            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
 if (bundle != null) putExtras(bundle)        }
@@ -320,8 +325,10 @@ var date: FuzzyDate = FuzzyDate().getToday()) :    DialogFragment(),    DatePick
     val c = Calendar.getInstance()        
 val year = date.year ?: c.get(Calendar.YEAR)        
 val month = if (date.month != null) date.month!! - 1 else c.get(Calendar.MONTH)        
-val day = date.day ?: c.get(Calendar.DAY_OF_MONTH)        dialog = DatePickerDialog(activity, this, year, month, day)        dialog.setButton(
-if (c == b) {            status?.setText(statusStrings, false)            status?.parent?.requestLayout()        }
+val day = date.day ?: c.get(Calendar.DAY_OF_MONTH)        dialog = DatePickerDialog(activity, this, year, month, day)
+        dialog.setButton(
+if (c == b) {            status?.setText(statusStrings, false)            status?.parent?.requestLayout()
+        }
 return if (b > a) c in a..b else c in b..a    }}
     class ZoomOutPageTransformer :    ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
@@ -329,7 +336,9 @@ if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {        
 }}
     fun setAnimation(    context: Context,    viewToAnimate: View,    duration: Long = 150,    list: FloatArray = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),    pivot: Pair<Float, Float> = 0.5f to 0.5f) {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
-    val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        )        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()        anim.setInterpolator(context, R.anim.over_shoot)        viewToAnimate.startAnimation(anim)    }}
+    val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        )        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()        anim.setInterpolator(context, R.anim.over_shoot)
+        viewToAnimate.startAnimation(anim)
+    }}
     class FadingEdgeRecyclerView : RecyclerView {    constructor(context: Context) : super(context)    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    )    
 override fun isPaddingOffsetRequired(): Boolean {
 return !clipToPadding    }
@@ -406,7 +415,8 @@ private val onSafeCLick: (View) -> Unit) : View.OnClickListener {
 override fun onClick(v: View) {
 if (SystemClock.elapsedRealtime() - lastTimeClicked < defaultInterval) {
 return        }
-lastTimeClicked = SystemClock.elapsedRealtime()        onSafeCLick(v)    }}
+lastTimeClicked = SystemClock.elapsedRealtime()        onSafeCLick(v)
+    }}
     fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
     val safeClickListener = SafeClickListener {        onSafeClick(it)    }
     setOnClickListener(safeClickListener)}suspend
@@ -420,7 +430,8 @@ abstract class GesturesListener : GestureDetector.SimpleOnGestureListener() {
     private val delay: Long = 200    
 override fun onSingleTapUp(e: MotionEvent): Boolean {        processSingleClickEvent(e)
 return super.onSingleTapUp(e)    }
-    override fun onLongPress(e: MotionEvent) {        processLongClickEvent(e)        super.onLongPress(e)    }
+    override fun onLongPress(e: MotionEvent) {        processLongClickEvent(e)        super.onLongPress(e)
+    }
     override fun onDoubleTap(e: MotionEvent): Boolean {        processDoubleClickEvent(e)
 return super.onDoubleTap(e)    }
     override fun onScroll(        e1: MotionEvent?,        e2: MotionEvent,        distanceX: Float,        distanceY: Float    ): Boolean {        onScrollYClick(distanceY)        onScrollXClick(distanceX)
@@ -433,9 +444,11 @@ object : TimerTask() {
     override fun run() {                    handler.post(mRunnable)                }
     }, delay)}
     }
-    private fun processDoubleClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()        }
+    private fun processDoubleClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()
+        }
     onDoubleClick(e)    }
-    private fun processLongClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()        }
+    private fun processLongClickEvent(e: MotionEvent) {        timer?.apply {            cancel()            purge()
+        }
     onLongClick(e)    }
 
 open fun onSingleClick(event: MotionEvent) {}
@@ -454,18 +467,21 @@ try {
     val emptyBrowserIntent = Intent(Intent.ACTION_VIEW).apply {                addCategory(Intent.CATEGORY_BROWSABLE)
 data = Uri.fromParts("http", "", null)            }
     val sendIntent = Intent().apply {                action = Intent.ACTION_VIEW                addCategory(Intent.CATEGORY_BROWSABLE)
-data = Uri.parse(link)                selector = emptyBrowserIntent            }
+data = Uri.parse(link)                selector = emptyBrowserIntent
+            }
 currContext()!!.startActivity(sendIntent)        } catch (e: ActivityNotFoundException) {            snackString("No browser found")        } catch (e: Exception) {            Logger.log(e)}
 }}
     fun openLinkInCustomTab(link: String?) {    link?.let {
 try {
     val builder = androidx.browser.customtabs.CustomTabsIntent.Builder()            
-val customTabsIntent = builder.build()            customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))        } catch (e: Exception) {            openLinkInBrowser(it)        }
+val customTabsIntent = builder.build()            customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))
+        } catch (e: Exception) {            openLinkInBrowser(it)        }
 }}
     fun openLinkInYouTube(link: String?) {    link?.let {
 try {
     val videoIntent = Intent(Intent.ACTION_VIEW).apply {                addCategory(Intent.CATEGORY_BROWSABLE)
-data = Uri.parse(link)                setPackage("com.google.android.youtube")            }
+data = Uri.parse(link)                setPackage("com.google.android.youtube")
+            }
 currContext()!!.startActivity(videoIntent)        } catch (e: ActivityNotFoundException) {
             openLinkInBrowser(link)
         }
@@ -475,18 +491,28 @@ currContext()!!.startActivity(videoIntent)        } catch (e: ActivityNotFoundEx
 fun savePrefs(serialized: String, path: String, title: String, context: Context): File? {
     var file = File(path, "$title.ani")    
 var counter = 1
-while (file.exists()) {        file = File(path, "${title}_${counter}.ani")        counter++    }
-return try {        file.writeText(serialized)        scanFile(file.absolutePath, context)        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))        file    } catch (e: Exception) {        snackString("Failed to save settings: ${e.localizedMessage}")        null    }}
+while (file.exists()) {        file = File(path, "${title}_${counter}.ani")        counter++
+    }
+return try {        file.writeText(serialized)        scanFile(file.absolutePath, context)
+        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
+        file
+    } catch (e: Exception) {        snackString("Failed to save settings: ${e.localizedMessage}")        null
+    }}
 
 @SuppressLint("StringFormatMatches")
 fun savePrefs(    serialized: String,    path: String,    title: String,    context: Context,    password: CharArray): File? {
     var file = File(path, "$title.sani")    
 var counter = 1
-while (file.exists()) {        file = File(path, "${title}_${counter}.sani")        counter++    }
+while (file.exists()) {        file = File(path, "${title}_${counter}.sani")        counter++
+    }
     val salt = generateSalt()
 return try {
     val encryptedData = PreferenceKeystore.encryptWithPassword(password, serialized, salt)        // Combine salt and encrypted data
-val dataToSave = salt + encryptedData        file.writeBytes(dataToSave)        scanFile(file.absolutePath, context)        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))        file    } catch (e: Exception) {        snackString("Failed to save settings: ${e.localizedMessage}")        null    }}
+val dataToSave = salt + encryptedData        file.writeBytes(dataToSave)        scanFile(file.absolutePath, context)
+        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
+        file
+    } catch (e: Exception) {        snackString("Failed to save settings: ${e.localizedMessage}")        null
+    }}
     fun shareImage(title: String, bitmap: Bitmap, context: Context) {
     val contentUri = FileProvider.getUriForFile(        context,        "$APPLICATION_ID.provider",        saveImage(bitmap, context.cacheDir.absolutePath, title) ?: return    )    
 val intent = Intent(Intent.ACTION_SEND)    intent.type = "image/png"    intent.putExtra(Intent.EXTRA_TEXT, title)    intent.putExtra(Intent.EXTRA_STREAM, contentUri)    context.startActivity(Intent.createChooser(intent, "Share $title"))}
@@ -495,15 +521,23 @@ val intent = Intent(Intent.ACTION_SEND)    intent.type = "image/png"    intent.p
 fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
     val imageFile = File(path, "$imageFileName.png")
 return try {
-    val fOut: OutputStream = FileOutputStream(imageFile)        image.compress(Bitmap.CompressFormat.PNG, 0, fOut)        fOut.close()        scanFile(imageFile.absolutePath, currContext()!!)        toast(String.format(currContext()!!.getString(R.string.saved_to_path, path)))        imageFile    } catch (e: Exception) {        snackString("Failed to save image: ${e.localizedMessage}")        null    }}
+    val fOut: OutputStream = FileOutputStream(imageFile)        image.compress(Bitmap.CompressFormat.PNG, 0, fOut)
+        fOut.close()
+        scanFile(imageFile.absolutePath, currContext()!!)
+        toast(String.format(currContext()!!.getString(R.string.saved_to_path, path)))
+        imageFile
+    } catch (e: Exception) {        snackString("Failed to save image: ${e.localizedMessage}")        null
+    }}
     private fun scanFile(path: String, context: Context) {    MediaScannerConnection.scanFile(context, arrayOf(path), null) { p, _ ->        Logger.log("Finished scanning $p")    }}
     class MediaPageTransformer : ViewPager2.PageTransformer {
     private fun parallax(view: View, position: Float) {
 if (position > -1 && position < 1) {
-    val width = view.width.toFloat()            view.translationX = -(position * width * 0.8f)        }
+    val width = view.width.toFloat()            view.translationX = -(position * width * 0.8f)
+        }
     }
     override fun transformPage(view: View, position: Float) {
-    val bannerContainer = view.findViewById<View>(R.id.itemCompactBanner)        parallax(bannerContainer, position)    }}
+    val bannerContainer = view.findViewById<View>(R.id.itemCompactBanner)        parallax(bannerContainer, position)
+    }}
     class NoGestureSubsamplingImageView(context: Context?, attr: AttributeSet?) :    SubsamplingScaleImageView(context, attr) {    
 @SuppressLint("ClickableViewAccessibility")    
 override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -544,11 +578,23 @@ return true}
     fun setSlideIn() = AnimationSet(false).apply {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
     var animation: Animation = AlphaAnimation(0.0f, 1.0f)        
-val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)        animation.duration = (500 * animationSpeed).toLong()        animation.interpolator = AccelerateDecelerateInterpolator()        addAnimation(animation)        animation = TranslateAnimation(            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f        )        animation.duration = (750 * animationSpeed).toLong()        animation.interpolator = OvershootInterpolator(1.1f)        addAnimation(animation)    }}
+val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)        animation.duration = (500 * animationSpeed).toLong()
+        animation.interpolator = AccelerateDecelerateInterpolator()
+        addAnimation(animation)
+        animation = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f        )        animation.duration = (750 * animationSpeed).toLong()        animation.interpolator = OvershootInterpolator(1.1f)
+        addAnimation(animation)
+    }}
     fun setSlideUp() = AnimationSet(false).apply {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
     var animation: Animation = AlphaAnimation(0.0f, 1.0f)        
-val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)        animation.duration = (500 * animationSpeed).toLong()        animation.interpolator = AccelerateDecelerateInterpolator()        addAnimation(animation)        animation = TranslateAnimation(            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f        )        animation.duration = (750 * animationSpeed).toLong()        animation.interpolator = OvershootInterpolator(1.1f)        addAnimation(animation)    }}
+val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)        animation.duration = (500 * animationSpeed).toLong()
+        animation.interpolator = AccelerateDecelerateInterpolator()
+        addAnimation(animation)
+        animation = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f        )        animation.duration = (750 * animationSpeed).toLong()        animation.interpolator = OvershootInterpolator(1.1f)
+        addAnimation(animation)
+    }}
     class EmptyAdapter(
 private val count: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -565,9 +611,13 @@ if (string != null) {        Logger.log(string)        MainScope().launch {     
     fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
 try { //I have no idea why this sometimes crashes for some people...
 if (s != null) {            (activity ?: currActivity())?.apply {
-    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    snackBar.view.apply {                        updateLayoutParams<FrameLayout.LayoutParams> {                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)                            width = WRAP_CONTENT                        }
-    translationY = -(navBarHeight.dp + 32f)                        translationZ = 32f                        updatePadding(16f.px, right = 16f.px)                        setOnClickListener {                            snackBar.dismiss()}
-    setOnLongClickListener {                            copyToClipboard(clipboard ?: s, false)                            toast(getString(R.string.copied_to_clipboard))                            true}}
+    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    snackBar.view.apply {                        updateLayoutParams<FrameLayout.LayoutParams> {                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)                            width = WRAP_CONTENT
+                        }
+    translationY = -(navBarHeight.dp + 32f)                        translationZ = 32f
+                        updatePadding(16f.px, right = 16f.px)                        setOnClickListener {
+                            snackBar.dismiss()}
+    setOnLongClickListener {                            copyToClipboard(clipboard ?: s, false)                            toast(getString(R.string.copied_to_clipboard))
+                            true}}
     snackBar.show()                }
 return snackBar            }
 Logger.log(s)}
@@ -578,7 +628,8 @@ return snackString(getAppString(r), activity, clipboard)}
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :    ArrayAdapter<T>(context, layoutId, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-    val view = super.getView(position, convertView, parent)        view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)        (view as TextView).setTextColor(Color.WHITE)
+    val view = super.getView(position, convertView, parent)        view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
+        (view as TextView).setTextColor(Color.WHITE)
 return view    }}
 
 @SuppressLint("ClickableViewAccessibility")
@@ -641,7 +692,8 @@ return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {        conte
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     val intent = Intent(
 if (channelId != null) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS
-else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)        }
+else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+        }
 context.startActivity(intent)        true
 } else false}suspend 
 fun View.pop() {    currActivity()?.runOnUiThread {        ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()        ObjectAnimator.ofFloat(this@pop, "scaleY", 1f, 1.25f).setDuration(120).start()    }
@@ -696,7 +748,8 @@ return false                    }
 })            }
     override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {                Logger.log("Loading image: ${drawable.destination}")
 return requestManager                    .load(drawable.destination)                    .apply(markdownImageRequestOptions)            }
-    override fun cancel(target: Target<*>) {                Logger.log("Cancelling image load")                requestManager.clear(target)            }
+    override fun cancel(target: Target<*>) {                Logger.log("Cancelling image load")                requestManager.clear(target)
+            }
     }))        .build()
 return markwon}
     fun getYoutubeId(url: String): String {

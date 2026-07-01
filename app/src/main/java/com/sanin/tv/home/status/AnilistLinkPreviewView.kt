@@ -14,11 +14,13 @@ class AnilistLinkPreviewView
 @JvmOverloads constructor(    context: Context,    attrs: AttributeSet? = null,    defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
     private var previewBinding: ItemAnilistLinkPreviewBinding? = null    init {        showEmpty()    }
 
-private fun showEmpty() {        removeAllViews()        previewBinding = null    }
+private fun showEmpty() {        removeAllViews()        previewBinding = null
+    }
 
 fun setMediaData(media: Media) {        showPreview(media)    }
 
-private fun showPreview(media: Media) {        removeAllViews()        previewBinding = ItemAnilistLinkPreviewBinding.inflate(            LayoutInflater.from(context),            this,            }
+private fun showPreview(media: Media) {        removeAllViews()        previewBinding = ItemAnilistLinkPreviewBinding.inflate(
+            LayoutInflater.from(context),            this,            }
 if (episodesOrChapters != null) {                previewEpisodes.text = episodesOrChapters                previewEpisodes.isVisible = true
 } else {                previewEpisodes.isVisible = false            }
 previewCard.setOnClickListener {

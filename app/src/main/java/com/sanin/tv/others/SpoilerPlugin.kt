@@ -40,11 +40,14 @@ while (matcher.find()) {
     val spoilerSpan = RedditSpoilerSpan()                
 val clickableSpan: ClickableSpan = 
 object : ClickableSpan() {
-    override fun onClick(widget: View) {                        spoilerSpan.setRevealed(true)                        widget.postInvalidateOnAnimation()                    }
+    override fun onClick(widget: View) {                        spoilerSpan.setRevealed(true)                        widget.postInvalidateOnAnimation()
+                    }
 
 override fun updateDrawState(ds: TextPaint) {                        // no op                    }
 }
 
 val s = matcher.start()                
-val e = matcher.end()                spannable.setSpan(spoilerSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)                spannable.setSpan(clickableSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)                // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
+val e = matcher.end()                spannable.setSpan(spoilerSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spannable.setSpan(clickableSpan, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // we also can hide original syntax                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    s,                    s + 2,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )                spannable.setSpan(                    HideSpoilerSyntaxSpan(),                    e - 2,                    e,                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE                )            }}
 }}

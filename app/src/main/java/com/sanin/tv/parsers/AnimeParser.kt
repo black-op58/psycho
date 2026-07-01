@@ -31,7 +31,8 @@ fun getVideoExtractor(server: VideoServer): VideoExtractor? {
     var domain = Uri.parse(server.embed.url).host ?: return null
 if (domain.startsWith("www.")) {            domain = domain.substring(4)        }
 return when (domain) {
-else -> {                println("$name : No extractor found for: $domain | ${server.embed.url}")                null            }}}
+else -> {                println("$name : No extractor found for: $domain | ${server.embed.url}")                null
+            }}}
 /**     * If the Video Servers support preloading links for the videos     * typically depends on what Video Extractor is being used     * **/
 open val allowsPreloading = true    /**     * This Function used when there "isn't" a default Server set by the user, or when user wants to switch the Server     *     * Doesn't need to be overridden, if the parser is following the norm.     * **/    
 open suspend 
@@ -52,11 +53,13 @@ override suspend
 fun loadSavedShowResponse(mediaId: Int): ShowResponse? {        checkIfVariablesAreEmpty()        
 val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""        
 var loaded = PrefManager.getNullableCustomVal(            "${saveName}${dub}_$mediaId",            null,            ShowResponse::class.java        )
-if (loaded == null && malSyncBackupName.isNotEmpty())            loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)                ?.also { saveShowResponse(mediaId, it, true) }
+if (loaded == null && malSyncBackupName.isNotEmpty())            loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
+                ?.also { saveShowResponse(mediaId, it, true) }
 return loaded    }
 
 override fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean) {
-if (response != null) {            checkIfVariablesAreEmpty()            setUserText(                "${
+if (response != null) {            checkIfVariablesAreEmpty()            setUserText(
+                "${
 if (selected) currContext()!!.getString(R.string.selected) else currContext()!!.getString(                        R.string.found                    )                } : ${response.name}"            )            
 val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""            PrefManager.setCustomVal("${saveName}${dub}_$mediaId", response)        }
 }}

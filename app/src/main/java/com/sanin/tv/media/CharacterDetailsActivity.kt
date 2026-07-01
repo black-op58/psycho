@@ -47,22 +47,30 @@ private var isCollapsed = false
 private val percent = 30    
 private var mMaxScrollSize = 0    
 private var screenWidth: Float = 0f    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCharacterBinding.inflate(layoutInflater)        setContentView(binding.root)        initActivity(this)        screenWidth = resources.displayMetrics.run { widthPixels / density }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        binding = ActivityCharacterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initActivity(this)
+        screenWidth = resources.displayMetrics.run { widthPixels / density }
 if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =            ContextCompat.getColor(this, R.color.transparent)        
 val banner =
 if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams { height += statusBarHeight }
 binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
 binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {            onBackPressedDispatcher.onBackPressed()}
-binding.authorCharactersRecycler.isVisible = false        binding.AuthorCharactersText.isVisible = false        binding.authorCharacterDesc.isVisible = false        character = intent.getSerialized("character") ?: return        binding.characterTitle.text = character.name        banner.loadImage(character.banner)        binding.characterCoverImage.loadImage(character.image)        binding.characterFav.setImageResource(
+binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true
+        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()}
+binding.authorCharactersRecycler.isVisible = false        binding.AuthorCharactersText.isVisible = false        binding.authorCharacterDesc.isVisible = false        character = intent.getSerialized("character") ?: return        binding.characterTitle.text = character.name        banner.loadImage(character.banner)        binding.characterCoverImage.loadImage(character.image)
+        binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {            ImageViewDialog.newInstance(                this,                character.name,                character.image            )        }
 
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        
 val link = if (rescueMode) {            "https://myanimelist.net/character/${character.id}"
 } else {            "https://anilist.co/character/${character.id}"        }
 binding.characterShare.setOnClickListener {
-    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, character.name))        }
-    binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true        }
+    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)            startActivity(Intent.createChooser(i, character.name))
+        }
+    binding.characterShare.setOnLongClickListener {            openLinkInBrowser(link)            true
+        }
 if (!rescueMode) {            lifecycleScope.launch {                withContext(Dispatchers.IO) {                    character.isFav =                        Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)                }
 withContext(Dispatchers.Main) {                    binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                    )                }}
@@ -96,7 +104,8 @@ override fun onResume() {        binding.characterProgress.isGone = loaded      
 override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
 if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
 val percentage = abs(i) * 100 / mMaxScrollSize
-val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        binding.characterCover.scaleX = 1f * cap        binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
+val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        binding.characterCover.scaleX = 1f * cap
+        binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
 if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
 if (percentage >= percent && !isCollapsed) {            isCollapsed = true

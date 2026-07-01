@@ -18,7 +18,8 @@ override val saveName = extension.name
 override val hostUrl =        (extension.sources.first() as? AnimeHttpSource)?.baseUrl ?: extension.sources.first().name    
 override val isNSFW = extension.isNsfw    
 override val icon = extension.icon    
-override var selectDub: Boolean        get() = getDub()        set(value) {            setDub(value)        }
+override var selectDub: Boolean        get() = getDub()        set(value) {
+            setDub(value)        }
 
 private fun getDub(): Boolean {
 if (sourceLanguage >= extension.sources.size) {            sourceLanguage = extension.sources.size - 1        }
@@ -153,7 +154,9 @@ override suspend
 fun search(query: String): List<ShowResponse> {
     val source = try {            extension.sources[sourceLanguage]        } catch (e: Exception) {            sourceLanguage = 0            extension.sources[sourceLanguage]        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource            ?: return emptyList())
 return try {
-    val res = source.getSearchAnime(1, query, source.getFilterList())            Logger.log("query: $query")            convertAnimesPageToShowResponse(res)        } catch (e: CloudflareBypassException) {            Logger.log("Exception in search: $e")            Logger.log(e)            withContext(Dispatchers.Main) {                snackString("Failed to bypass Cloudflare")            }
+    val res = source.getSearchAnime(1, query, source.getFilterList())            Logger.log("query: $query")            convertAnimesPageToShowResponse(res)
+        } catch (e: CloudflareBypassException) {            Logger.log("Exception in search: $e")            Logger.log(e)            withContext(Dispatchers.Main) {
+                snackString("Failed to bypass Cloudflare")            }
     emptyList()        } catch (e: Exception) {            Logger.log("General exception in search: $e")            Logger.log(e)            emptyList()}
     }
 
@@ -198,7 +201,8 @@ val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")                   
 val fileName = queryPairs.find { it.first == "file" }?.second ?: ""                format = getVideoType(fileName)                // this solves a problem no one has, so I'm commenting it out for now                //if (format == null) {                //    
 val networkHelper = Injekt.get<NetworkHelper>()                //    format = headRequest(videoUrl, networkHelper)                //}}
 // If the format is still undetermined, log an error
-if (format == null) {                Logger.log("Unknown video format: $videoUrl")                format = VideoType.CONTAINER            }
+if (format == null) {                Logger.log("Unknown video format: $videoUrl")                format = VideoType.CONTAINER
+            }
 } catch (malformed: MalformedURLException) {
 if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent"))                format = VideoType.CONTAINER
 else
@@ -215,7 +219,8 @@ return type    }
 @Suppress("unused")    
 private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoType? {
 return try {            Logger.log("attempting head request for $fileName")            
-val request = Request.Builder()                .url(fileName)                .head()                .build()            networkHelper.client.newCall(request).execute().use { response ->                
+val request = Request.Builder()                .url(fileName)                .head()                .build()            networkHelper.client.newCall(request).execute().use { response ->
+                
 val contentType = response.header("Content-Type")                
 val contentDisposition = response.header("Content-Disposition")
 if (contentType != null) {
@@ -224,7 +229,8 @@ else -> null                    }
 } else if (contentDisposition != null) {
 when {                        contentDisposition.contains("mpegurl", ignoreCase = true) -> VideoType.M3U8                        contentDisposition.contains("dash", ignoreCase = true) -> VideoType.DASH                        contentDisposition.contains("mp4", ignoreCase = true) -> VideoType.CONTAINER
 else -> null                    }
-} else {                    Logger.log("failed head request for $fileName")                    null                }}
+} else {                    Logger.log("failed head request for $fileName")                    null
+                }}
 } catch (e: Exception) {            Logger.log("Exception in headRequest: $e")            null}
 }
 

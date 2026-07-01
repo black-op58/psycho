@@ -29,7 +29,11 @@ private var serverResultData: TestResult = TestResult()
 override fun bind(viewBinding: ItemExtensionTestBinding, position: Int) {        binding = viewBinding        context = binding.root.context                Glide.with(context).clear(binding.extensionIconImageView)        binding.extensionIconImageView.setImageDrawable(null)
 if (extension.icon != null) {            binding.extensionIconImageView.setImageDrawable(extension.icon)
 } else if (extension.iconUrl != null) {            Glide.with(context)                .load(extension.iconUrl)                .into(binding.extensionIconImageView)        }
-binding.extensionNameTextView.text = extension.name        binding.extensionLoading.isVisible = isRunning        hideAllResults()        pingResult()        searchResult()        episodeResult()        serverResult()    }
+binding.extensionNameTextView.text = extension.name        binding.extensionLoading.isVisible = isRunning        hideAllResults()        pingResult()
+        searchResult()
+        episodeResult()
+        serverResult()
+    }
 
 override fun getLayout(): Int {
 return R.layout.item_extension_test    }
@@ -40,15 +44,21 @@ return ItemExtensionTestBinding.bind(view)    }
 private fun hideAllResults() {
 if (::binding.isInitialized.not()) return        binding.searchResultText.isVisible = false        binding.episodeResultText.isVisible = false        binding.serverResultText.isVisible = false    }
 
-fun cancelJob() {        job?.cancel()        job = null        binding.extensionLoading.isVisible = false    }
+fun cancelJob() {        job?.cancel()        job = null
+        binding.extensionLoading.isVisible = false    }
 
 fun startTest() {        pingResult = null        searchResultData = TestResult()        
-val searchResult = extension.search(searchString)        searchResultData.time = (System.currentTimeMillis() - searchStart).toInt()        searchResultData.size = searchResult.size        withContext(Dispatchers.Main) {            searchResult()        }
+val searchResult = extension.search(searchString)        searchResultData.time = (System.currentTimeMillis() - searchStart).toInt()
+        searchResultData.size = searchResult.size
+        withContext(Dispatchers.Main) {            searchResult()        }
 if (searchResultData.size == 0 || testType == "basic") {            done()
 return        }
 
 val chapterResultTime = System.currentTimeMillis()        
-val chapterResult = extension.loadBook(searchResult.first().link, null)        episodeResultData.time = (System.currentTimeMillis() - chapterResultTime).toInt()        episodeResultData.size = chapterResult.links.size        withContext(Dispatchers.Main) {            episodeResult()            serverResult()        }
+val chapterResult = extension.loadBook(searchResult.first().link, null)        episodeResultData.time = (System.currentTimeMillis() - chapterResultTime).toInt()
+        episodeResultData.size = chapterResult.links.size
+        withContext(Dispatchers.Main) {            episodeResult()            serverResult()
+        }
 done()    }
 
 private suspend 
@@ -63,9 +73,11 @@ return
 } else {            binding.pingResultText.isVisible = true        }
 binding.pingResultText.setTextColor(            context.getThemeColor(com.google.android.material.R.attr.colorPrimary)        )
 val (code, time, message) = pingResult!!
-if (code == 200) {            binding.pingResultText.text = context.getString(R.string.ping_success, time.toString())            binding.pingResultText.setCompoundDrawablesWithIntrinsicBounds(                R.drawable.ic_circle_check, 0, 0, 0            )
+if (code == 200) {            binding.pingResultText.text = context.getString(R.string.ping_success, time.toString())            binding.pingResultText.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_circle_check, 0, 0, 0            )
 return        }
-binding.pingResultText.text =            context.getString(R.string.ping_error, code.toString(), message)        binding.pingResultText.setCompoundDrawablesWithIntrinsicBounds(            R.drawable.ic_circle_cancel, 0, 0, 0        )        binding.pingResultText.setTextColor(            context.getThemeColor(com.google.android.material.R.attr.colorError)        )    }
+binding.pingResultText.text =            context.getString(R.string.ping_error, code.toString(), message)        binding.pingResultText.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.ic_circle_cancel, 0, 0, 0        )        binding.pingResultText.setTextColor(            context.getThemeColor(com.google.android.material.R.attr.colorError)        )    }
 
 @SuppressLint("SetTextI18n")    
 private fun searchResult() {

@@ -22,7 +22,8 @@ return StudioViewHolder(binding)    }
 
 override fun onBindViewHolder(holder: StudioViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
-val studio = studioList.getOrNull(position) ?: return        binding.itemCompactRelation.isVisible = false        binding.itemCompactImage.loadImage(studio.imageUrl)        binding.itemCompactTitle.text = studio.name    }
+val studio = studioList.getOrNull(position) ?: return        binding.itemCompactRelation.isVisible = false        binding.itemCompactImage.loadImage(studio.imageUrl)        binding.itemCompactTitle.text = studio.name
+    }
 
 override fun getItemCount(): Int = studioList.size    inner 
 class StudioViewHolder(

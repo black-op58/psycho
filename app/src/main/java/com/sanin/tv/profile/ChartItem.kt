@@ -21,7 +21,10 @@ object : AAChartView.AAChartViewCallBack {
     override fun chartViewDidFinishLoad(aaChartView: AAChartView) {                binding.root.visibility = View.VISIBLE            }
 
 override fun chartViewMoveOverEventMessage(                aaChartView: AAChartView,                messageModel: AAMoveOverEventMessageModel            ) {            }}
-binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)        binding.chartView.callBack = callback        binding.chartView.reload()        binding.chartView.aa_drawChartWithChartOptions(aaOptions)        binding.openButton.setOnClickListener {            SingleStatActivity.chartOptions = aaOptions            activity.startActivity(                Intent(activity, SingleStatActivity::class.java)            )}
+binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)        binding.chartView.callBack = callback
+        binding.chartView.reload()        binding.chartView.aa_drawChartWithChartOptions(aaOptions)
+        binding.openButton.setOnClickListener {
+            SingleStatActivity.chartOptions = aaOptions            activity.startActivity(                Intent(activity, SingleStatActivity::class.java)            )}
 }
 
 override fun getLayout(): Int {
@@ -30,11 +33,14 @@ return R.layout.item_chart    }
 override fun initializeViewBinding(view: View): ItemChartBinding {
 return ItemChartBinding.bind(view)    }
 
-override fun bind(viewHolder: GroupieViewHolder<ItemChartBinding>, position: Int) {        viewHolder.setIsRecyclable(false)        super.bind(viewHolder, position)    }
+override fun bind(viewHolder: GroupieViewHolder<ItemChartBinding>, position: Int) {        viewHolder.setIsRecyclable(false)        super.bind(viewHolder, position)
+    }
 
-override fun bind(        viewHolder: GroupieViewHolder<ItemChartBinding>,        position: Int,        payloads: MutableList<Any>    ) {        viewHolder.setIsRecyclable(false)        super.bind(viewHolder, position, payloads)    }
+override fun bind(        viewHolder: GroupieViewHolder<ItemChartBinding>,        position: Int,        payloads: MutableList<Any>    ) {        viewHolder.setIsRecyclable(false)        super.bind(viewHolder, position, payloads)
+    }
 
-override fun bind(        viewHolder: GroupieViewHolder<ItemChartBinding>,        position: Int,        payloads: MutableList<Any>,        onItemClickListener: OnItemClickListener?,        onItemLongClickListener: OnItemLongClickListener?    ) {        viewHolder.setIsRecyclable(false)        super.bind(viewHolder, position, payloads, onItemClickListener, onItemLongClickListener)    }
+override fun bind(        viewHolder: GroupieViewHolder<ItemChartBinding>,        position: Int,        payloads: MutableList<Any>,        onItemClickListener: OnItemClickListener?,        onItemLongClickListener: OnItemLongClickListener?    ) {        viewHolder.setIsRecyclable(false)        super.bind(viewHolder, position, payloads, onItemClickListener, onItemLongClickListener)
+    }
 
 override fun getViewType(): Int {
 return 0    }}

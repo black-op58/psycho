@@ -9,7 +9,8 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.util.Logger
 import kotlinx.coroutines.runBlocking
 class AnilistNotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {        Logger.log("AnilistNotificationReceiver: onReceive")        runBlocking(Dispatchers.IO) {            AnilistNotificationTask().execute(context)        }
+    override fun onReceive(context: Context, intent: Intent?) {        Logger.log("AnilistNotificationReceiver: onReceive")        runBlocking(Dispatchers.IO) {
+            AnilistNotificationTask().execute(context)        }
 
 val anilistInter
 val =            AnilistNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.AnilistNotificationInterval)]        AlarmManagerScheduler(context).scheduleRepeatingTask(            TaskScheduler.TaskType.ANILIST_NOTIFICATION,            anilistInter

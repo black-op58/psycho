@@ -22,7 +22,8 @@ return SearchResultViewHolder(binding)    }
 override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
     val searchResult = searchResults[position]        
 val binding = holder.binding        binding.root.setOnClickListener {            itemClickListener?.onItemClick(searchResult)        }
-binding.root.context.apply {            binding.itemCompactTitle.text = searchResult.anilist?.title?.romaji            binding.itemTotal.text = getString(                R.string.similarity_text, String.format("%.1f", searchResult.similarity?.times(100))            )            binding.episodeNumber.text =                getString(R.string.episode_num, searchResult.episode.toString())            binding.timeStamp.text = getString(                R.string.time_range,                toTimestamp(searchResult.from),                toTimestamp(searchResult.to)            )            binding.itemImage.loadImage(searchResult.image)}
+binding.root.context.apply {            binding.itemCompactTitle.text = searchResult.anilist?.title?.romaji            binding.itemTotal.text = getString(                R.string.similarity_text, String.format("%.1f", searchResult.similarity?.times(100))            )            binding.episodeNumber.text =                getString(R.string.episode_num, searchResult.episode.toString())            binding.timeStamp.text = getString(
+                R.string.time_range,                toTimestamp(searchResult.from),                toTimestamp(searchResult.to)            )            binding.itemImage.loadImage(searchResult.image)}
 }
 
 override fun getItemCount(): Int {

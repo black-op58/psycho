@@ -41,7 +41,8 @@ override fun afterTextChanged(s: Editable?) {                searchJob?.cancel()
 val query = s?.toString()?.trim() ?: ""                searchJob = CoroutineScope(Dispatchers.Main).launch {                    delay(800)
 if (query.isEmpty()) loadTrending()
 else searchGifs(query)                }}
-})        loadTrending()    }
+})        loadTrending()
+    }
 
 private fun loadTrending() {        binding.gifProgressBar.visibility = View.VISIBLE        binding.gifRecycler.visibility = View.GONE        CoroutineScope(Dispatchers.IO).launch {
     val gifs = try {
@@ -70,7 +71,8 @@ if (url.isNotEmpty()) urls.add(url)            }
 urls        } catch (_: Exception) {            emptyList()}
 }
 
-override fun onDestroyView() {        super.onDestroyView()        _binding = null    }
+override fun onDestroyView() {        super.onDestroyView()        _binding = null
+    }
 
 class GifAdapter(        
 private val gifs: List<String>,        

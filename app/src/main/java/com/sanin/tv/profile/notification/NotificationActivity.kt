@@ -36,7 +36,12 @@ private var userTab: AnimatedBottomBar.Tab? = null
 private var mediaTab: AnimatedBottomBar.Tab? = null    
 private var subsTab: AnimatedBottomBar.Tab? = null    
 private var commentTab: AnimatedBottomBar.Tab? = null    
-override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)        binding = ActivityNotificationBinding.inflate(layoutInflater)        setContentView(binding.root)        binding.notificationTitle.text = getString(R.string.notifications)        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {            topMargin = statusBarHeight        }
+override fun onCreate(savedInstanceState: Bundle?) {        super.onCreate(savedInstanceState)        ThemeManager(this).applyTheme()        initActivity(this)
+        binding = ActivityNotificationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.notificationTitle.text = getString(R.string.notifications)
+        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight        }
 navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = navBarHeight}
 updateCounts()
 val tabs = mutableListOf(            Pair(R.drawable.ic_round_person_24, "User"),            Pair(R.drawable.ic_round_movie_filter_24, "Media"),            Pair(R.drawable.ic_round_notifications_active_24, "Subs")        )
@@ -66,13 +71,19 @@ ONE -> {}}
 saveCounts()}}
 binding.notificationViewPager.registerOnPageChangeCallback(
 object : ViewPager2 .OnPageChangeCallback() {
-    override fun onPageSelected(position: Int) {                    super.onPageSelected(position)                    fragments[position]?.onVisible()                }}
-    )        binding.notificationViewPager.setCurrentItem(selected, false)        navBar.selectTabAt(selected)        navBar.setOnTabSelectListener(
+    override fun onPageSelected(position: Int) {                    super.onPageSelected(position)                    fragments[position]?.onVisible()
+                }}
+    )        binding.notificationViewPager.setCurrentItem(selected, false)
+        navBar.selectTabAt(selected)
+        navBar.setOnTabSelectListener(
 object : AnimatedBottomBar.OnTabSelectListener {
     override fun onTabSelected(                lastIndex: Int,                lastTab: AnimatedBottomBar.Tab?,                newIndex: Int,                newTab: AnimatedBottomBar.Tab            ) {                selected = newIndex                binding.notificationViewPager.setCurrentItem(selected, false)            }
     })    }
 
-private fun updateCounts() {        userCount = PrefManager.getVal(PrefName.UnreadUserNotifications, 0)        mediaCount = PrefManager.getVal(PrefName.UnreadMediaNotifications, 0)        subsCount = PrefManager.getVal(PrefName.UnreadSubscriptionNotifications, 0)        commentCount = PrefManager.getVal(PrefName.UnreadCommentNotifications, 0)    }
+private fun updateCounts() {        userCount = PrefManager.getVal(PrefName.UnreadUserNotifications, 0)        mediaCount = PrefManager.getVal(PrefName.UnreadMediaNotifications, 0)
+        subsCount = PrefManager.getVal(PrefName.UnreadSubscriptionNotifications, 0)
+        commentCount = PrefManager.getVal(PrefName.UnreadCommentNotifications, 0)
+    }
 
 private fun saveCounts() {        PrefManager.setVal(PrefName.UnreadUserNotifications, userCount)        PrefManager.setVal(PrefName.UnreadMediaNotifications, mediaCount)        PrefManager.setVal(PrefName.UnreadSubscriptionNotifications, subsCount)        PrefManager.setVal(PrefName.UnreadCommentNotifications, commentCount)        Anilist.unreadNotificationCount = subsCount + commentCount    }
 

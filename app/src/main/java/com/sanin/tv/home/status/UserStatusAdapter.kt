@@ -19,7 +19,8 @@ class UserStatusAdapter(
 private val user: ArrayList<User>) :    RecyclerView.Adapter<UserStatusAdapter.UsersViewHolder>() {    inner 
 class UsersViewHolder(
 val binding: ItemUserStatusBinding) :        RecyclerView.ViewHolder(binding.root) {        init {            itemView.setOnClickListener {
-if (user[bindingAdapterPosition].activity.isEmpty()) {                    snackString("No activity")                    return@setOnClickListener                }
+if (user[bindingAdapterPosition].activity.isEmpty()) {                    snackString("No activity")                    return@setOnClickListener
+                }
 StatusActivity.user = user                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        StatusActivity::class.java                    ).putExtra("position", bindingAdapterPosition),                    null                )}
 itemView.setOnLongClickListener {
 if (user[bindingAdapterPosition].id == Anilist.userid) {                    ContextCompat.startActivity(                        itemView.context,                        Intent(itemView.context, ActivityMarkdownCreator::class.java)                            .putExtra("type", "activity"),                        null                    )

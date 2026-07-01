@@ -16,7 +16,8 @@ val data = mapOf(                    "query" to queryBuilder(ids),              
     val response = client.post(                        url,                        headers = mapOf(                            "Content-Type" to "application/json",                            "Accept" to "application/json"                        ),
 data = data                    )                    
 val mediaResponse = parseMediaResponseWithGson(response.text)                    
-val mediaMap = mutableMapOf<Int, ReturnedData>()                    mediaResponse.data.forEach { (_, mediaItem) ->                        mediaMap[mediaItem.id] = ReturnedData(                            mediaItem.title.romaji,                            mediaItem.coverImage.medium,                            mediaItem.coverImage.color                        )                    }
+val mediaMap = mutableMapOf<Int, ReturnedData>()                    mediaResponse.data.forEach { (_, mediaItem) ->
+                        mediaMap[mediaItem.id] = ReturnedData(                            mediaItem.title.romaji,                            mediaItem.coverImage.medium,                            mediaItem.coverImage.color                        )                    }
 mediaMap}
 } catch (e: Exception) {
     val errorMap = mutableMapOf<Int, ReturnedData>()                ids.forEach { errorMap[it] = ReturnedData("Unknown", "", "#222222") }

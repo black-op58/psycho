@@ -52,27 +52,38 @@ var MAX_DEPTH = 3    init {        adapter.add(repliesSection)    }
 override fun bind(viewBinding: ItemCommentsBinding, position: Int) {        binding = viewBinding        setAnimation(binding.root.context, binding.root)        
 val item = this        viewBinding.apply {            commentRepliesList.layoutManager =                LinearLayoutManager(commentsFragment.activity)            commentRepliesList.adapter = adapter
 val isUserComment = CommentsAPI.userId == comment.userId
-val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)            markwon.setMarkdown(commentText, comment.content)            commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
+val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)            markwon.setMarkdown(commentText, comment.content)
+            commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
 if (comment.tag == null) {                commentUserTagLayout.visibility = View.GONE
-} else {                commentUserTagLayout.visibility = View.VISIBLE                commentUserTag.text = comment.tag.toString()                commentUserTagLayout.setOnClickListener {                    commentsFragment.onTagClicked(comment.tag.toString())                }}
+} else {                commentUserTagLayout.visibility = View.VISIBLE                commentUserTag.text = comment.tag.toString()                commentUserTagLayout.setOnClickListener {
+                    commentsFragment.onTagClicked(comment.tag.toString())                }}
 replying(isReplying) //sets default text            editing(isEditing)
-if ((comment.replyCount ?: 0) > 0) {                commentTotalReplies.visibility = View.VISIBLE                commentRepliesDivider.visibility = View.VISIBLE                commentTotalReplies.context.run {                    commentTotalReplies.text = if (repliesVisible)                        getString(R.string.hide_replies)                    else
+if ((comment.replyCount ?: 0) > 0) {                commentTotalReplies.visibility = View.VISIBLE                commentRepliesDivider.visibility = View.VISIBLE                commentTotalReplies.context.run {                    commentTotalReplies.text = if (repliesVisible)                        getString(R.string.hide_replies)
+                    else
 if (comment.replyCount == 1)                            getString(R.string.view_reply)
 else                            getString(R.string.view_replies_count, comment.replyCount)                }
 } else {                commentTotalReplies.visibility = View.GONE                commentRepliesDivider.visibility = View.GONE            }
 commentReply.visibility = View.VISIBLE            commentTotalReplies.setOnClickListener {
-if (repliesVisible) {                    repliesSection.clear()                    removeSubCommentIds()                    commentTotalReplies.context.run {                        commentTotalReplies.text = if (comment.replyCount == 1)                            getString(R.string.view_reply)
+if (repliesVisible) {                    repliesSection.clear()                    removeSubCommentIds()
+                    commentTotalReplies.context.run {
+                        commentTotalReplies.text = if (comment.replyCount == 1)                            getString(R.string.view_reply)
 else                            getString(R.string.view_replies_count, comment.replyCount)                    }
 repliesVisible = false
-} else {                    commentTotalReplies.setText(R.string.hide_replies)                    repliesSection.clear()                    commentsFragment.viewReplyCallback(item)                    repliesVisible = true                }}
+} else {                    commentTotalReplies.setText(R.string.hide_replies)                    repliesSection.clear()
+                    commentsFragment.viewReplyCallback(item)
+                    repliesVisible = true
+                }}
 commentUserName.setOnClickListener {                ContextCompat.startActivity(                    commentsFragment.activity,                    Intent(commentsFragment.activity, ProfileActivity::class.java)                        .putExtra("userId", comment.userId.toInt()),                    null                )}
 commentUserAvatar.setOnClickListener {                ContextCompat.startActivity(                    commentsFragment.activity,                    Intent(commentsFragment.activity, ProfileActivity::class.java)                        .putExtra("userId", comment.userId.toInt()),                    null                )}
 commentText.setOnLongClickListener {                copyToClipboard(comment.content)                true}
 commentEdit.setOnClickListener {                editing(!isEditing)                commentsFragment.editCallback(item)}
-commentReply.setOnClickListener {                replying(!isReplying)                commentsFragment.replyTo(item, comment.username)                commentsFragment.replyCallback(item)}
+commentReply.setOnClickListener {                replying(!isReplying)                commentsFragment.replyTo(item, comment.username)
+                commentsFragment.replyCallback(item)}
 modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE            adminBadge.visibility =
 if (comment.isAdmin == true) View.VISIBLE else View.GONE            commentInfo.setOnClickListener {
-    val popup = PopupMenu(commentsFragment.requireContext(), commentInfo)                popup.menuInflater.inflate(R.menu.profile_details_menu, popup.menu)                popup.menu.findItem(R.id.commentDelete)?.isVisible =                    isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod                popup.menu.findItem(R.id.commentBanUser)?.isVisible =                    (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment                popup.menu.findItem(R.id.commentReport)?.isVisible = !isUserComment                popup.setOnMenuItemClickListener { item ->
+    val popup = PopupMenu(commentsFragment.requireContext(), commentInfo)                popup.menuInflater.inflate(R.menu.profile_details_menu, popup.menu)
+                popup.menu.findItem(R.id.commentDelete)?.isVisible =
+                    isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod                popup.menu.findItem(R.id.commentBanUser)?.isVisible =                    (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment                popup.menu.findItem(R.id.commentReport)?.isVisible = !isUserComment                popup.setOnMenuItemClickListener { item ->
 when (item.itemId) {                        R.id.commentReport -> {                            dialogBuilder(                                getAppString(R.string.report_comment),                                getAppString(R.string.report_comment_confirm)                            ) {                                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
     val success = CommentsAPI.reportComment(                                        comment.commentId,                                        comment.username,                                        commentsFragment.mediaName,                                        comment.userId                                    )
 if (success) {                                        snackString(R.string.comment_reported)                                    }}}
@@ -105,9 +116,11 @@ val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())                sc
 if (success) {                        comment.userVoteType = voteType
 if (previousVoteType == 1) {                            comment.upvotes -= 1                        }
 comment.downvotes += if (voteType == -1) 1 else -1                        notifyChanged()}}}
-commentTotalVotes.text = (comment.upvotes - comment.downvotes).toString()            commentUserAvatar.openImage(                commentsFragment.activity.getString(R.string.avatar, comment.username),                comment.profilePictureUrl ?: ""            )            comment.profilePictureUrl?.let { commentUserAvatar.loadImage(it)}
+commentTotalVotes.text = (comment.upvotes - comment.downvotes).toString()            commentUserAvatar.openImage(
+                commentsFragment.activity.getString(R.string.avatar, comment.username),                comment.profilePictureUrl ?: ""            )            comment.profilePictureUrl?.let { commentUserAvatar.loadImage(it)}
 commentUserName.text = comment.username
-val userColor = "[${levelColor.second}]"            commentUserLevel.text = userColor            commentUserLevel.setTextColor(levelColor.first)            commentUserTime.text = formatTimestamp(comment.timestamp)        }
+val userColor = "[${levelColor.second}]"            commentUserLevel.text = userColor            commentUserLevel.setTextColor(levelColor.first)            commentUserTime.text = formatTimestamp(comment.timestamp)
+        }
 }
 
 override fun getLayout(): Int {
@@ -135,16 +148,20 @@ commentToRemove?.let {                it.removeSubCommentIds()                pa
 subCommentIds.clear()    }
 
 private fun setVoteButtons(viewBinding: ItemCommentsBinding) {
-when (comment.userVoteType) {            1 -> {                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)                viewBinding.commentUpVote.alpha = 1f                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)            }
--1 -> {                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)                viewBinding.commentDownVote.alpha = 1f
+when (comment.userVoteType) {            1 -> {                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)                viewBinding.commentUpVote.alpha = 1f
+                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)            }
+-1 -> {                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
+                viewBinding.commentDownVote.alpha = 1f
 }
-else -> {                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)            }}
+else -> {                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+            }}
 }
 
 @SuppressLint("SimpleDateFormat")    
 private fun formatTimestamp(timestamp: String): String {
 return try {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)            dateFormat.timeZone = TimeZone.getTimeZone("UTC")            
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+            
 val parsedDate = dateFormat.parse(timestamp)            
 val currentDate = Date()            
 val diff = currentDate.time - (parsedDate?.time ?: 0)            
@@ -159,7 +176,8 @@ else -> "now"            }
 companion object {        
 @SuppressLint("SimpleDateFormat")        
 fun timestampToMillis(timestamp: String): Long {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)            dateFormat.timeZone = TimeZone.getTimeZone("UTC")            
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+            
 val parsedDate = dateFormat.parse(timestamp)
 return parsedDate?.time ?: 0        }
 }
@@ -173,7 +191,9 @@ val ratio = getContrastRatio(color, backgroundColor)
 if (ratio < 4.5) {            color = adjustColorForContrast(color, backgroundColor)        }
 return Pair(color, level)    }
 /**     * Builds the dialog for yes/no confirmation     * no doesn't do anything, yes calls the callback     * @param title the title of the dialog     * @param message the message of the dialog     * @param callback the callback to call when the user clicks yes     */
-private fun dialogBuilder(title: String, message: String, callback: () -> Unit) {        commentsFragment.activity.customAlertDialog().apply {            setTitle(title)            setMessage(message)            setPosButton("Yes") {                callback()            }
+private fun dialogBuilder(title: String, message: String, callback: () -> Unit) {        commentsFragment.activity.customAlertDialog().apply {            setTitle(title)            setMessage(message)
+            setPosButton("Yes") {
+                callback()            }
 setNegButton("No") {}
 }.show()    }
 

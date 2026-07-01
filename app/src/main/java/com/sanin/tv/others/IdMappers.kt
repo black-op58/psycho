@@ -21,7 +21,8 @@ val response = client.get("$MAPPER_API_URL?anilist_id=$anilistId")              
 val data = Mapper.json.decodeFromString<AnimeId>(response.text)                // 4. Save to cache
 if (data.anilistId != null) {                    cache[data.anilistId] = data                }
 data            } catch (e: CancellationException) {
-throw e            } catch (e: Exception) {                // If 404 or no internet, return null safely                e.printStackTrace()                null            }}}
+throw e            } catch (e: Exception) {                // If 404 or no internet, return null safely                e.printStackTrace()                null
+            }}}
 // --- Helper Functions ---    suspend
 fun getSimklId(anilistId: Int): Int? {
 return getIds(anilistId)?.simklId    }
@@ -40,13 +41,16 @@ return withContext(Dispatchers.IO) {
 try {
     val response = client.get("https://api.ani.zip/mappings?anilist_id=$anilistId")                
 val payload = response.text
-if (payload.isBlank()) {                    Logger.log("AniZip : empty mapping response for anilist_id=$anilistId")                    return@withContext null                }
+if (payload.isBlank()) {                    Logger.log("AniZip : empty mapping response for anilist_id=$anilistId")                    return@withContext null
+                }
 
 val jsonElement = Mapper.json.parseToJsonElement(payload)
-if (jsonElement !is JsonObject) {                    Logger.log("AniZip : unexpected mapping payload type for anilist_id=$anilistId")                    return@withContext null                }
+if (jsonElement !is JsonObject) {                    Logger.log("AniZip : unexpected mapping payload type for anilist_id=$anilistId")                    return@withContext null
+                }
 
 val data = Mapper.json.decodeFromJsonElement<AniZipResponse>(jsonElement)                // Accessing the first mapping's imdb_id, if available                data.mappings.values.firstOrNull()?.imdbId            } catch (e: CancellationException) {
-throw e            } catch (e: Exception) {                e.printStackTrace()                null            }}
+throw e            } catch (e: Exception) {                e.printStackTrace()                null
+            }}
 }}
 
 @Serializable

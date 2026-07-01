@@ -23,7 +23,8 @@ override suspend
 fun loadEpisodes(        animeLink: String,        extra: Map<String, String>?,        sAnime: SAnime    ): List<Episode> {        sAnime.url = animeLink
 val sEpisodes = localSource.getEpisodeList(sAnime)
 return sEpisodes.map { sEpisode ->            
-val extraData = mutableMapOf<String, String>()            extraData["animeUrl"] = animeLink            extraData["episodeUrl"] = sEpisode.url           // fallback : thumbnail/poster
+val extraData = mutableMapOf<String, String>()            extraData["animeUrl"] = animeLink
+            extraData["episodeUrl"] = sEpisode.url           // fallback : thumbnail/poster
 val videoUri = localSource.cachedVideoUris[sEpisode.url] ?: localSource.getVideoUri(sEpisode)            
 val thumbFileUrl = videoUri?.let { FileUrl(it.toString()) }
 
@@ -73,7 +74,8 @@ var quality: Int? = null
 if (videoUri != null) {            currContext()?.let { ctx ->                
 val retriever = MediaMetadataRetriever()
 try {                    retriever.setDataSource(ctx, videoUri)                    
-val heightStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)                    quality = heightStr?.toIntOrNull()                } catch (e: Exception) {                    // Ignore metadata ext errors                } finally {
+val heightStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)                    quality = heightStr?.toIntOrNull()
+                } catch (e: Exception) {                    // Ignore metadata ext errors                } finally {
 try {                        retriever.release()                    } catch (e: Exception) {}}}}
 // show resolution
 if (quality != null) {            videoServer = videoServer.copy(name = "Local - ${quality}p")        }

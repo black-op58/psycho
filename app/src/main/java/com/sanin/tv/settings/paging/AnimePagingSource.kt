@@ -50,7 +50,8 @@ fun invalidatePager() {        currentPagingSource?.invalidate()    }
 
 @OptIn(ExperimentalCoroutinesApi::class)    
 val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = combine(        animeExtensionManager.availableExtensionsFlow,        animeExtensionManager.installedExtensionsFlow,        searchQuery    ) { available, installed, query ->        Triple(available, installed, query)    }.flatMapLatest { (available, installed, query) ->        Pager(            PagingConfig(                pageSize = 15,                initialLoadSize = 15,                prefetchDistance = 15            )        ) {
-    val aEPS = AnimeExtensionPagingSource(available, installed, query)            currentPagingSource = aEPS            aEPS        }.flow    }.cachedIn(viewModelScope)}
+    val aEPS = AnimeExtensionPagingSource(available, installed, query)            currentPagingSource = aEPS
+            aEPS        }.flow    }.cachedIn(viewModelScope)}
 
 class AnimeExtensionPagingSource(    
 private val availableExtensionsFlow: List<AnimeExtension.Available>,    
@@ -106,10 +107,12 @@ inner
 class AnimeExtensionViewHolder(
 private val binding: ItemExtensionAllBinding) :        RecyclerView.ViewHolder(binding.root) {
     private val job = Job()        
-private val scope = CoroutineScope(Dispatchers.Main + job)        init {            binding.closeTextView.setOnClickListener {
+private val scope = CoroutineScope(Dispatchers.Main + job)        init {
+            binding.closeTextView.setOnClickListener {
 if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
 val extension = getItem(bindingAdapterPosition)
-if (extension != null) {                    clickListener.onInstallClick(extension)                    binding.closeTextView.setImageResource(R.drawable.ic_sync)                    scope.launch {
+if (extension != null) {                    clickListener.onInstallClick(extension)                    binding.closeTextView.setImageResource(R.drawable.ic_sync)
+                    scope.launch {
 while (isActive) {                            withContext(Dispatchers.Main) {                                binding.closeTextView.animate()                                    .rotationBy(360f)                                    .setDuration(1000)                                    .setInterpolator(LinearInterpolator())                                    .start()                            }
 delay(1000)}}}}
 }
@@ -123,7 +126,8 @@ val versionText = "$lang ${extension.versionName} $nsfw"            binding.exte
 fun clear() {            job.cancel() // Cancel the coroutine when the view is recycled        }
 }
 
-override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        super.onViewRecycled(holder)        holder.clear()    }}
+override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        super.onViewRecycled(holder)        holder.clear()
+    }}
 interface OnAnimeInstallClickListener {
     fun onInstallClick(pkg: AnimeExtension.Available)}
 }}

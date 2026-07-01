@@ -11,7 +11,8 @@ suspend
 fun getEpisode(            parser: AnimeParser,            subscribeMedia: SubscribeMedia        ): Episode? {
     val selected = loadSelected(subscribeMedia.id)            
 val ep = withTimeoutOrNull(10 * 1000) {                tryWithSuspend {
-    val show = parser.loadSavedShowResponse(subscribeMedia.id)                        ?: forceLoadShowResponse(subscribeMedia, selected, parser)                        ?: throw Exception(                            currContext()?.getString(                                R.string.failed_to_load_data,                                subscribeMedia.id                            )                        )                    show.sAnime?.let {                        parser.getLatestEpisode(                            show.link, show.extra,                            it, selected.latest                        )                    }}
+    val show = parser.loadSavedShowResponse(subscribeMedia.id)                        ?: forceLoadShowResponse(subscribeMedia, selected, parser)                        ?: throw Exception(                            currContext()?.getString(                                R.string.failed_to_load_data,                                subscribeMedia.id                            )                        )                    show.sAnime?.let {
+                        parser.getLatestEpisode(                            show.link, show.extra,                            it, selected.latest                        )                    }}
     }
 return ep?.apply {
 return chp?.apply {                selected.latest = MediaNameAdapter.findChapterNumber(number) ?: 0f                saveSelected(subscribeMedia.id, selected)            }
@@ -39,7 +40,8 @@ fun getSubscriptions(): Map<Int, SubscribeMedia> =            (PrefManager.getNu
 
 @Suppress("UNCHECKED_CAST")        
 fun deleteSubscription(id: Int, showSnack: Boolean = false) {
-    val data = PrefManager.getNullableCustomVal(                SUBSCRIPTIONS,                null,                Map::class.java            ) as? MutableMap<Int, SubscribeMedia>                ?: mutableMapOf()            data.remove(id)            PrefManager.setCustomVal(SUBSCRIPTIONS, data)
+    val data = PrefManager.getNullableCustomVal(                SUBSCRIPTIONS,                null,                Map::class.java            ) as? MutableMap<Int, SubscribeMedia>                ?: mutableMapOf()            data.remove(id)
+            PrefManager.setCustomVal(SUBSCRIPTIONS, data)
 if (showSnack) toast(R.string.subscription_deleted)        }
 
 @Suppress("UNCHECKED_CAST")        
@@ -50,7 +52,8 @@ if (!data.containsKey(media.id)) {
     val new = SubscribeMedia(                        media.anime != null,                        media.isAdult,                        media.id,                        media.userPreferredName,                        media.cover,                        media.banner                    )                    data[media.id] = new
 val current = PrefManager.getNullableCustomVal(                        "Selected-${media.id}", null, Selected::class.java                    )
 if (current == null) {
-    val selected = Selected().apply {                            sourceIndex = media.selected?.sourceIndex ?: 0                            preferDub = media.selected?.preferDub                                ?: PrefManager.getVal(PrefName.SettingsPreferDub)                            latest = media.selected?.latest ?: 0f                        }
+    val selected = Selected().apply {                            sourceIndex = media.selected?.sourceIndex ?: 0                            preferDub = media.selected?.preferDub                                ?: PrefManager.getVal(PrefName.SettingsPreferDub)                            latest = media.selected?.latest ?: 0f
+                        }
     saveSelected(media.id, selected)}
     }
 } else {                data.remove(media.id)            }

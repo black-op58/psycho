@@ -58,14 +58,16 @@ private val _untrustedAnimeExtensionsFlow =        MutableStateFlow(emptyList<An
 val untrustedExtensionsFlow = _untrustedAnimeExtensionsFlow.asStateFlow()    init {        initAnimeExtensions()        ExtensionInstallReceiver().setAnimeListener(InstallationListener()).register(context)    }
 /**     * Loads and registers the installed animeextensions.     */
 private fun initAnimeExtensions() {
-    val animeextensions = ExtensionLoader.loadAnimeExtensions(context)        _installedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Success>()            .map { it.extension }
+    val animeextensions = ExtensionLoader.loadAnimeExtensions(context)        _installedAnimeExtensionsFlow.value = animeextensions
+            .filterIsInstance<AnimeLoadResult.Success>()            .map { it.extension }
     _untrustedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Untrusted>()            .map { it.extension}
     isInitialized = true}
     /**     * Finds the available anime extensions in the [api] and updates [availableExtensions].     */    suspend
 fun findAvailableExtensions() {
     val extensions: List<AnimeExtension.Available> = try {            api.findAnimeExtensions()        } catch (e: Exception) {            Logger.log(e)            withUIContext { snackString("Failed to get extensions list") }
     emptyList()}
-    enableAdditionalSubLanguages(extensions)        _availableAnimeExtensionsFlow.value = extensions        updatedInstalledAnimeExtensionsStatuses(extensions)        setupAvailableAnimeExtensionsSourcesDataMap(extensions)}
+    enableAdditionalSubLanguages(extensions)        _availableAnimeExtensionsFlow.value = extensions
+        updatedInstalledAnimeExtensionsStatuses(extensions)        setupAvailableAnimeExtensionsSourcesDataMap(extensions)}
     /**     * Enables the additional sub-languages in the app first run. This addresses     * the issue where users still need to enable some specific languages even when     * the device language is inside that major group. As an example, if a user     * has a zh device language, the app will also enable zh-Hans and zh-Hant.     *     * If the user have already changed the enabledLanguages preference value once,     * the new languages will not be added to respect the user enabled choices.     */
 private fun enableAdditionalSubLanguages(animeextensions: List<AnimeExtension.Available>) {
 if (subLanguagesEnabledOnFirstRun || animeextensions.isEmpty()) {
@@ -89,7 +91,8 @@ val availableExt = availableAnimeExtensions.find { it.pkgName == pkgName }
 if (!installedExt.isUnofficial && availableExt == null && !installedExt.isObsolete) {                mutInstalledAnimeExtensions[index] = installedExt.copy(isObsolete = true)                changed = true
 } else if (availableExt != null) {
     val hasUpdate = installedExt.updateExists(availableExt)
-if (installedExt.hasUpdate != hasUpdate) {                    mutInstalledAnimeExtensions[index] = installedExt.copy(hasUpdate = hasUpdate)                    changed = true                }}
+if (installedExt.hasUpdate != hasUpdate) {                    mutInstalledAnimeExtensions[index] = installedExt.copy(hasUpdate = hasUpdate)                    changed = true
+                }}
 }
 if (changed) {            _installedAnimeExtensionsFlow.value = mutInstalledAnimeExtensions        }
 updatePendingUpdatesCount()}
@@ -105,13 +108,16 @@ if (untrustedAnimeExtension != null) {            _untrustedAnimeExtensionsFlow.
 /**     * Listener which receives events of the anime extensions being installed, updated or removed.     */
 private inner 
 class InstallationListener : ExtensionInstallReceiver.AnimeListener {
-    override fun onExtensionInstalled(extension: AnimeExtension.Installed) {            registerNewExtension(extension.withUpdateCheck())            updatePendingUpdatesCount()        }
+    override fun onExtensionInstalled(extension: AnimeExtension.Installed) {            registerNewExtension(extension.withUpdateCheck())            updatePendingUpdatesCount()
+        }
 
-override fun onExtensionUpdated(extension: AnimeExtension.Installed) {            registerUpdatedExtension(extension.withUpdateCheck())            updatePendingUpdatesCount()        }
+override fun onExtensionUpdated(extension: AnimeExtension.Installed) {            registerUpdatedExtension(extension.withUpdateCheck())            updatePendingUpdatesCount()
+        }
 
 override fun onExtensionUntrusted(extension: AnimeExtension.Untrusted) {            _untrustedAnimeExtensionsFlow.value += extension        }
 
-override fun onPackageUninstalled(pkgName: String) {            unregisterAnimeExtension(pkgName)            updatePendingUpdatesCount()        }}
+override fun onPackageUninstalled(pkgName: String) {            unregisterAnimeExtension(pkgName)            updatePendingUpdatesCount()
+        }}
 /**     * AnimeExtension method to set the update field of an installed anime extension.     */
 private fun AnimeExtension.Installed.withUpdateCheck(): AnimeExtension.Installed {
 return if (updateExists()) {            copy(hasUpdate = true)

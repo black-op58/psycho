@@ -29,7 +29,8 @@ private val viewModel: AnimeExtensionsViewModel by viewModels {        AnimeExte
 private val adapter by lazy {        AnimeExtensionAdapter(this)    }
 
 private val animeExtensionManager: AnimeExtensionManager = Injekt.get()    
-override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = FragmentExtensionsBinding.inflate(inflater, container, false)        binding.allExtensionsRecyclerView.isNestedScrollingEnabled = false        binding.allExtensionsRecyclerView.adapter = adapter        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =            true        lifecycleScope.launch {            viewModel.pagerFlow.collectLatest { it ->                binding.allExtensionsRecyclerView.post {                    lifecycleScope.launch {                        adapter.submitData(it)                    }}}}
+override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        _binding = FragmentExtensionsBinding.inflate(inflater, container, false)        binding.allExtensionsRecyclerView.isNestedScrollingEnabled = false
+        binding.allExtensionsRecyclerView.adapter = adapter        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =            true        lifecycleScope.launch {            viewModel.pagerFlow.collectLatest { it ->                binding.allExtensionsRecyclerView.post {                    lifecycleScope.launch {                        adapter.submitData(it)                    }}}}
 viewModel.invalidatePager() // Force a refresh of the pager
 return binding.root    }
 
