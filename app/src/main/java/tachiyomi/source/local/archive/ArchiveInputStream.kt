@@ -9,7 +9,8 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
     private val lock = Any()    
 @Volatile    
 private var isClosed = false    
-private val archive = Archive.readNew()    init {
+private val archive = Archive.readNew()
+    init {
 try {            Archive.setCharset(archive, Charsets.UTF_8.name().toByteArray())            Archive.readSupportFilterAll(archive)            Archive.readSupportFormatAll(archive)            Archive.readOpenMemoryUnsafe(archive, buffer, size)        } catch (e: ArchiveException) {            close()
 throw e        }
 }
@@ -31,7 +32,8 @@ private fun read(buffer: ByteBuffer) {
 
 override fun close() {
         synchronized(lock) {
-if (isClosed) return            isClosed = true        }
+if (isClosed) return
+            isClosed = true        }
 Archive.readFree(archive)
     }
 
@@ -39,5 +41,6 @@ fun getNextEntry() = Archive.readNextHeader(archive).takeUnless { it == 0L }?.le
 val name = ArchiveEntry.pathnameUtf8(entry) ?: ArchiveEntry.pathname(entry)?.decodeToString() ?: return null
 val isFile = ArchiveEntry.filetype(entry) == ArchiveEntry.AE_IFREG
         tachiyomi.source.local.archive.ArchiveEntry(name, isFile)
-    }}
+    }
+}
 }
