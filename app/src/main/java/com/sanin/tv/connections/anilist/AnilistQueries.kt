@@ -37,14 +37,17 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
-if (ids.isEmpty()) return null
-val idsString = ids.joinToString(",")        
-val response = executeQuery<Query.MediaList>(            """{Page(page:1,perPage:50){media(id_in:[${idsString}],isAdult:false){id mediaListEntry{progress 
+private suspend fun fetchMediaList(ids: List<Int>): List<Media>? {
+    if (ids.isEmpty()) return null
+    val idsString = ids.joinToString(",")
+    val response = executeQuery<Query.MediaList>(            """{Page(page:1,perPage:50){media(id_in:[${idsString}],isAdult:false){id mediaListEntry{progress 
 private score(format:POINT_100) status} idMal type isAdult popularity status(version:2) chapters episodes nextAiringEpisode{episode} meanScore isFavourite format bannerImage coverImage{large} title{english romaji userPreferred} startDate{year}}}}""",            force = true        )        
 val fetchedMediaList = response?.data?.page?.media ?: return null
 return fetchedMediaList.map {            Media(it)        }    }
 
-fun mediaDetails(media: Media): Media {        media.cameFromContinue = false        runBlocking(Dispatchers.IO) {
+fun mediaDetails(media: Media): Media {
+    media.cameFromContinue = false
+    runBlocking(Dispatchers.IO) {
     val anilist = async {
     var response =                    executeQuery<Query.Media>(fullMediaInformation(media.id), force = true)
 if (response != null) {
@@ -150,7 +153,9 @@ val cacheExpired = System.currentTimeMillis() - cached.cachedAt > 6 * 60 * 60 * 
 if (cacheExpired || cached.sourceIds != ids) return null
 return ArrayList(cached.media)    }
 
-private fun saveMissingSequelCache(ids: Set<Int>, media: ArrayList<Media>) {        PrefManager.setCustomVal(            "missing_sequels_cache",            MissingSequelsCache(ids, media, System.currentTimeMillis())        )    }
+private fun saveMissingSequelCache(ids: Set<Int>, media: ArrayList<Media>) {
+    PrefManager.setCustomVal("missing_sequels_cache", MissingSequelsCache(ids, media, System.currentTimeMillis()))
+}
 
 private fun loadUserStatusCache(): ArrayList<User>? {
     val cached = PrefManager.getNullableCustomVal(            "user_status_cache",            null,            UserStatusCache::class.java        ) ?: return null
@@ -158,7 +163,9 @@ val cacheExpired = System.currentTimeMillis() - cached.cachedAt > 15 * 60 * 1000
 if (cacheExpired) return null
 return ArrayList(cached.users)    }
 
-private fun saveUserStatusCache(users: ArrayList<User>) {        PrefManager.setCustomVal(            "user_status_cache",            UserStatusCache(users, System.currentTimeMillis())        )    }
+private fun saveUserStatusCache(users: ArrayList<User>) {
+    PrefManager.setCustomVal("user_status_cache", UserStatusCache(users, System.currentTimeMillis()))
+}
 
 private suspend 
 fun getMissingSequelMedia(ids: Set<Int>): ArrayList<Media> {        loadMissingSequelCache(ids)?.let { return it }

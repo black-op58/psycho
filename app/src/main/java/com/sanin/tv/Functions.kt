@@ -180,8 +180,9 @@ var loadIsMAL = false
 val Int.toPx    get() = TypedValue.applyDimension(        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), getSystem().displayMetrics    ).toInt()
 fun initActivity(a: Activity) {
     val window = a.window
-    WindowCompat.setDecorFitsSystemWindows(window, false)    
-val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)    
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)
+    
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
     darkMode.apply {        AppCompatDelegate.setDefaultNightMode(
 when (this) {                2 -> AppCompatDelegate.MODE_NIGHT_YES                1 -> AppCompatDelegate.MODE_NIGHT_NO
@@ -228,15 +229,21 @@ if (a !is MainActivity) a.setNavigationTheme()}
     showSystemBars()
 }
     fun Activity.setNavigationTheme() {
-    val tv = TypedValue()    theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
+    val tv = TypedValue()
+    theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
 if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && tv.isColorType)        || (tv.type >= TypedValue.TYPE_FIRST_COLOR_INT && tv.type <= TypedValue.TYPE_LAST_COLOR_INT)    ) {        window.navigationBarColor = tv.data    }}/** * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding. * * When nesting multiple scrolling views, only call this method on the inner most scrolling view. */
 fun ViewGroup.setBaseline(view: View, includeSystemNavBar: Boolean = true) {
     fun updateLayout() {
     val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE        // In landscape, sidebars are vertical. We shouldn't use their height as bottom padding.        
 val isVerticalSidebar = view.height > view.width && isLandscape
-val baselineHeight = if (view.isVisible && !isVerticalSidebar) view.measuredHeight else 0        clipToPadding = false        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (includeSystemNavBar) navBarHeight else 0) + baselineHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }    }    post { updateLayout() }    view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
-    fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {    setBaseline(navBar as View)}
+val baselineHeight = if (view.isVisible && !isVerticalSidebar) view.measuredHeight else 0
+        clipToPadding = false
+        setPadding(            paddingLeft,            paddingTop,            paddingRight,            (if (includeSystemNavBar) navBarHeight else 0) + baselineHeight        )        updateLayoutParams<ViewGroup.MarginLayoutParams> {            bottomMargin = 0        }    }    post { updateLayout() }    view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout() } }    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout() } }}
+    fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
+    setBaseline(navBar as View)
+}
     fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, extraPaddingBottom: Int) {
+
     fun updateLayout() {
     val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 val isVerticalSidebar = navBar.height > navBar.width && isLandscape
