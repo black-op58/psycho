@@ -183,7 +183,8 @@ var loadMedia: Int? = null
 var loadIsMAL = false
 val Int.toPx    get() = TypedValue.applyDimension(        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), getSystem().displayMetrics    ).toInt()
 fun initActivity(a: Activity) {
-    val window = a.window    WindowCompat.setDecorFitsSystemWindows(window, false)    
+    val window = a.window
+    WindowCompat.setDecorFitsSystemWindows(window, false)    
 val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)    
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)    darkMode.apply {        AppCompatDelegate.setDefaultNightMode(
 when (this) {                2 -> AppCompatDelegate.MODE_NIGHT_YES                1 -> AppCompatDelegate.MODE_NIGHT_NO
@@ -265,7 +266,8 @@ if (bundle != null) putExtras(bundle)        }    )}
 
 class DatePickerFragment(activity: Activity, 
 var date: FuzzyDate = FuzzyDate().getToday()) :    DialogFragment(),    DatePickerDialog.OnDateSetListener {
-    var dialog: DatePickerDialog    init {
+    var dialog: DatePickerDialog
+    init {
     val c = Calendar.getInstance()        
 val year = date.year ?: c.get(Calendar.YEAR)        
 val month = if (date.month != null) date.month!! - 1 else c.get(Calendar.MONTH)        
