@@ -52,7 +52,9 @@ binding.uploadImage.setOnClickListener {
 binding.imageSearchTitle.setOnClickListener {
         onBackPressedDispatcher.onBackPressed()
 }
-viewModel.searchResultLiveData.observe(this) { result ->            result?.let { displayResult(it)}}
+viewModel.searchResultLiveData.observe(this) {
+        result ->            result?.let {
+        displayResult(it)}}
 }
 
 private fun displayResult(result: ImageSearchViewModel.SearchResult) {
@@ -74,7 +76,8 @@ val media = Anilist.query.getMedia(id, false)
                         media?.let {
         startActivity(                                Intent(this
 @ImageSearchActivity, MediaDetailsActivity::class.java)                                    .putExtra("media", it)                            )                        }}}}
-})        recyclerView.post {
+});
+        recyclerView.post {
             recyclerView.adapter = adapter            recyclerView.layoutManager = LinearLayoutManager(context)
 }
 }

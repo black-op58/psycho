@@ -30,8 +30,12 @@ val version = semPlatformIntField.getInt(null) - 90000
 if (version < 0) {
         1.0
 }
+        
+}
         else {                ((version / 10000).toString() + "." + version % 10000 / 100).toDouble()
             }
+}
+        
 }
         catch (e: Exception) {
         null}
@@ -43,7 +47,8 @@ private fun getSystemProperty(key: String?): String? {
 return try {
         Class.forName("android.os.SystemProperties")                .getDeclaredMethod("get", String::class.java)                .invoke(null, key) as String        }
         catch (e: Exception) {
-        Logger.log("Unable to use SystemProperties.get()")            null
+        Logger.log("Unable to use SystemProperties.get()");
+        null
         }
 }
 }

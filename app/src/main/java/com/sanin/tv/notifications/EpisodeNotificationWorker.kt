@@ -37,12 +37,15 @@ class EpisodeNotificationWorker(
             if (!PrefManager.getVal<Boolean>(PrefName.NewEpisodeNotifications)) {
                 return@withContext Result.success()
               }
+            
+              }
             val watchingList = Anilist.getUserWatchingList() ?: return@withContext Result.retry();
         for (media in watchingList) {
         val mediaId    = media.id
                 val title      = media.name ?: media.nameRomaji ?: continue
                 val nowAired   = media.anime?.nextAiringEpisode
-                    ?.let { it.episode - 1 }
+                    ?.let {
+        it.episode - 1 }
                     ?: media.anime?.episodes
                     ?: continue
 
@@ -58,13 +61,21 @@ class EpisodeNotificationWorker(
                     )
                     PrefManager.setCustomVal(seenKey, nowAired)
                  
+
+}
+            
+                 
 }
             }
 
             Result.success()
          }
+        
+         }
         catch (e: Exception) {
         Result.retry()
+         }
+    
          }
     }
 
@@ -92,10 +103,13 @@ class EpisodeNotificationWorker(
                 WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
-            )
+)
+            }
           }
         fun cancel(context: Context) {
             WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+          }
+        
           }
         fun runNow(context: Context) {
             val request = OneTimeWorkRequestBuilder<EpisodeNotificationWorker>()
@@ -106,6 +120,8 @@ class EpisodeNotificationWorker(
                 )
                 .build()
             WorkManager.getInstance(context).enqueue(request)
+         }
+    
          }
     }
 }

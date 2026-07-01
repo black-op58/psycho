@@ -27,6 +27,8 @@ class SyncConflictResolverActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
             setPadding(48, statusBarHeight(), 48, 64)
          }
+        
+         }
         scroll.addView(root)
         setContentView(scroll)
 
@@ -38,6 +40,8 @@ class SyncConflictResolverActivity : AppCompatActivity() {
         val subtitle = TextView(this).apply {
             text = "Checking for AniList ↔ MAL conflicts…"
             textSize = 14f
+        }
+        
         }
         root.addView(subtitle)
 
@@ -54,8 +58,11 @@ class SyncConflictResolverActivity : AppCompatActivity() {
                 else
                     "${conflicts.size} conflict(s) found:"
 
-                conflicts.forEach { conflict ->
+                conflicts.forEach {
+        conflict ->
                     root.addView(buildConflictCard(conflict))
+                  }
+                
                   }
                 if (conflicts.isEmpty()) {
                     root.addView(TextView(this@SyncConflictResolverActivity).apply {
@@ -64,14 +71,20 @@ class SyncConflictResolverActivity : AppCompatActivity() {
                         setPadding(0, 16, 0, 0)
                     })
                  }
+        
+                 }
         else {
     val resolveAllBtn = Button(this@SyncConflictResolverActivity).apply {
                         text = "Resolve All (Use Higher Progress)"
                         setOnClickListener {
                             resolveAll(conflicts, SyncResolution.USE_HIGHER, root)
                          }
+                    
+                         }
                     }
                     root.addView(resolveAllBtn)
+                 }
+            
                  }
             }
         catch (e: Exception) {
@@ -79,16 +92,25 @@ class SyncConflictResolverActivity : AppCompatActivity() {
                 subtitle.text = "Error loading conflicts: ${e.message}"
                 snackString("Failed to load conflicts: ${e.message}")
              }
+        
+             }
         }
+    }
+
+    
     }
 
     private suspend fun loadConflicts(): List<SyncConflict> {
     return emptyList()
       }
+    
+      }
     private fun buildConflictCard(conflict: SyncConflict): View {
     val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, 24, 0, 0)
+          }
+        
           }
         card.addView(TextView(this).apply {
             text = conflict.mediaName
@@ -100,11 +122,15 @@ class SyncConflictResolverActivity : AppCompatActivity() {
                 textSize = 13f
             })
          }
+        
+         }
         if (conflict.hasStatusConflict) {
         card.addView(TextView(this).apply {
                 text = "Status: AniList=${conflict.anilistStatus}, MAL=${conflict.malStatus}"
                 textSize = 13f
             })
+          }
+        
           }
         val btnRow = LinearLayout(this).apply { 
         o
@@ -122,11 +148,17 @@ class SyncConflictResolverActivity : AppCompatActivity() {
     val ok = withContext(Dispatchers.IO) {
                             SyncConflictResolver.resolveConflict(conflict, res)
                          }
+                        
+                         }
                         statusLabel.text = if (ok) "✓ Resolved using $label" else "✗ Failed"
                         if (ok) toast("Resolved: ${conflict.mediaName}")
                      }
+                
+                     }
                 }
             })
+          }
+        
           }
         addBtn("AniList", SyncResolution.USE_ANILIST)
         addBtn("MAL", SyncResolution.USE_MAL)
@@ -136,15 +168,23 @@ class SyncConflictResolverActivity : AppCompatActivity() {
         return card
     }
 
+    
+    }
+
     private fun resolveAll(conflicts: List<SyncConflict>, resolution: SyncResolution, root: LinearLayout) {
         lifecycleScope.launch {
     var resolved = 0
             withContext(Dispatchers.IO) {
-                conflicts.forEach { conflict ->
+                conflicts.forEach {
+        conflict ->
                     if (SyncConflictResolver.resolveConflict(conflict, resolution)) resolved++
+                }
+            
                 }
             }
             snackString("Resolved $resolved / ${conflicts.size} conflicts")
+         }
+    
          }
     }
 

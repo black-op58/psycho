@@ -40,12 +40,17 @@ object StreamFetcher {
         isDub: Boolean = false
     ): StreamResult? {
         val providers = ProviderRepository.load()
-            .filter { it.enabled }
-            .sortedBy { it.priority }
+            .filter {
+        it.enabled }
+            .sortedBy {
+        it.priority }
 
         if (providers.isEmpty()) {
             Logger.log("StreamFetcher: no providers enabled")
             return null
+        }
+
+        
         }
 
         for (provider in providers) {
@@ -56,18 +61,29 @@ object StreamFetcher {
         Logger.log("StreamFetcher: ✓ ${provider.name} → ${result.url.take(80)}")
                     return result
                 }
+                
+                }
                 Logger.log("StreamFetcher: ${provider.name} returned null — trying next")
+             }
+        
              }
         catch (e: CancellationException) {
         throw e
             }
+        
+            }
         catch (e: Exception) {
         Logger.log("StreamFetcher: ${provider.name} threw ${e.javaClass.simpleName}: ${e.message}")
+             }
+        
              }
         }
 
         Logger.log("StreamFetcher: all providers exhausted for \"$animeTitle\" ep$episodeNumber")
         return null
+    }
+
+    
     }
 
     /**

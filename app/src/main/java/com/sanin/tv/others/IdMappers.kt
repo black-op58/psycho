@@ -26,7 +26,8 @@ data            }
         catch (e: CancellationException) {
         throw e            }
         catch (e: Exception) {
-        // If 404 or no internet, return null safely                e.printStackTrace()                null
+        // If 404 or no internet, return null safely                e.printStackTrace();
+        null
             }}}
 // --- Helper Functions ---    suspend
 fun getSimklId(anilistId: Int): Int? {
@@ -63,7 +64,10 @@ val data = Mapper.json.decodeFromJsonElement<AniZipResponse>(jsonElement)       
         catch (e: CancellationException) {
         throw e            }
         catch (e: Exception) {
-        e.printStackTrace()                null
+        e.printStackTrace();
+        null
+            }
+            
             }
             }
 }

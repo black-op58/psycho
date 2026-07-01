@@ -12,5 +12,6 @@ data class Lazier<T>(
 }
 
 fun <T> lazyList(vararg objects: Pair<String, () -> T>): List<Lazier<T>> =
-    objects.map { Lazier(it.second, it.first)
+    objects.map {
+        Lazier(it.second, it.first)
   }

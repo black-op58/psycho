@@ -46,7 +46,11 @@ class ExtensionsActivity : AppCompatActivity() {
         MediaType.NOVEL -> {
                     PrefManager.getVal(PrefName.NovelExtensionRepos)
                  }
+                
+                 }
                 else -> emptyList<String>()
+             }
+            
              }
             AddRepositoryBottomSheet.newInstance(
                 type,
@@ -55,6 +59,8 @@ class ExtensionsActivity : AppCompatActivity() {
                 AddRepositoryBottomSheet::removeRepo
 
             ).show(supportFragmentManager, "add_repo")
+         }
+    
          }
     }
 }

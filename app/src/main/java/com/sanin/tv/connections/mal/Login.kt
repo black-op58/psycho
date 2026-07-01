@@ -35,6 +35,8 @@ data = mapOf(                            "client_id" to clientId,               
                         startMainActivity(this
 @Login)                    }}}
 }
+        
+}
         catch (e: Exception) {
         logError(e, snackbar = false)
         startMainActivity(this)

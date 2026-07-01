@@ -5,7 +5,8 @@ import kotlin.reflect.KClass
 
 data class Pref<T : Any>(val location: Location, val type: KClass<T>, val default: T)
 
-enum class Location { Player, Reader, General }
+enum class Location {
+        Player, Reader, General }
 
 enum class PrefName(val data: Pref<out Any>) {
 

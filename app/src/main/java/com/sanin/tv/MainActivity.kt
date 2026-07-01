@@ -39,10 +39,15 @@ class MainActivity : AppCompatActivity() {
             val currentRoute by navViewModel.currentRoute.collectAsState()
             NavigationPills(
                 currentRoute = currentRoute,
-                onNavigate   = { route -> navigateTo(route) },
-                onBack       = { onBackPressedDispatcher.onBackPressed()
+                onNavigate   = {
+        route -> navigateTo(route) },
+                onBack       = {
+        onBackPressedDispatcher.onBackPressed()
  }
-            )
+            
+ }
+)
+            }
           }
         // Mount the right side rail overlay — covers the whole screen above everything
         findViewById<ComposeView>(R.id.sideRailCompose).setContent {
@@ -53,13 +58,19 @@ class MainActivity : AppCompatActivity() {
                 visible    = sideRailVisible,
                 avatarUrl  = avatarUrl,
                 username   = username,
-                onDismiss  = { navViewModel.hideSideRail()
+                onDismiss  = {
+        navViewModel.hideSideRail()
  }
-            )
+            
+ }
+)
+            }
           }
         // Load the default tab on first launch only
         if (savedInstanceState == null) {
         navigateTo("home")
+         }
+    
          }
     }
 
@@ -68,6 +79,8 @@ class MainActivity : AppCompatActivity() {
         // Keep the notification badge and user avatar/name up to date
         navViewModel.updateNotificationCount(Anilist.unreadNotificationCount)
         navViewModel.updateUserInfo(Anilist.avatar, Anilist.username)
+      }
+    
       }
     /**
      * Navigate to one of the four main tabs.
@@ -83,9 +96,13 @@ class MainActivity : AppCompatActivity() {
             "library" -> LibraryFragment()
             else      -> HomeFragment()
           }
+        
+          }
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragmentContainer, fragment, route)
+         }
+    
          }
     }
 }

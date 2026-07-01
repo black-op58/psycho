@@ -38,54 +38,70 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
         setContentView(binding.root)
         binding.root.doOnAttach {
-            initActivity(this)            binding.displayContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            initActivity(this);
+        binding.displayContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin += statusBarHeight            }
 binding.buttonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         bottomMargin += navBarHeight}}
 code = intent.getStringExtra("code") ?: "0"        binding.apply {
-        button0.setOnClickListener { stack.add('0')
+        button0.setOnClickListener {
+        stack.add('0')
 updateDisplay()
  }
-button1.setOnClickListener { stack.add('1')
+button1.setOnClickListener {
+        stack.add('1')
 updateDisplay()
  }
-button2.setOnClickListener { stack.add('2')
+button2.setOnClickListener {
+        stack.add('2')
 updateDisplay()
  }
-button3.setOnClickListener { stack.add('3')
+button3.setOnClickListener {
+        stack.add('3')
 updateDisplay()
  }
-button4.setOnClickListener { stack.add('4')
+button4.setOnClickListener {
+        stack.add('4')
 updateDisplay()
  }
-button5.setOnClickListener { stack.add('5')
+button5.setOnClickListener {
+        stack.add('5')
 updateDisplay()
  }
-button6.setOnClickListener { stack.add('6')
+button6.setOnClickListener {
+        stack.add('6')
 updateDisplay()
  }
-button7.setOnClickListener { stack.add('7')
+button7.setOnClickListener {
+        stack.add('7')
 updateDisplay()
  }
-button8.setOnClickListener { stack.add('8')
+button8.setOnClickListener {
+        stack.add('8')
 updateDisplay()
  }
-button9.setOnClickListener { stack.add('9')
+button9.setOnClickListener {
+        stack.add('9')
 updateDisplay()
  }
-buttonDot.setOnClickListener { stack.add('.')
+buttonDot.setOnClickListener {
+        stack.add('.')
 updateDisplay()
  }
-buttonAdd.setOnClickListener { stack.add('+')
+buttonAdd.setOnClickListener {
+        stack.add('+')
 updateDisplay()
  }
-buttonSubtract.setOnClickListener { stack.add('-')
+buttonSubtract.setOnClickListener {
+        stack.add('-')
 updateDisplay()
  }
-buttonMultiply.setOnClickListener { stack.add('*')
+buttonMultiply.setOnClickListener {
+        stack.add('*')
 updateDisplay()
  }
-buttonDivide.setOnClickListener { stack.add('/')
+buttonDivide.setOnClickListener {
+        stack.add('/')
 updateDisplay()
  }
 buttonEquals.setOnClickListener {
@@ -95,23 +111,29 @@ try {
                     binding.displayBinary.text = ans.toBinary()
                     binding.displayHex.text = ans.toHex()
                  }
+        
+                 }
         catch (e: Exception) {
         display.text = getString(R.string.error)                }}
     buttonClear.setOnClickListener {
-        stack.clear()                binding.displayBinary.text = ""
+        stack.clear();
+        binding.displayBinary.text = ""
                 binding.displayHex.text = ""                binding.display.text = "0"            }
 if (PrefManager.getVal(PrefName.OverridePassword, false)) {
-        buttonClear.setOnTouchListener { v, event ->
+        buttonClear.setOnTouchListener {
+        v, event ->
 when (event.action) {
         MotionEvent.ACTION_DOWN -> {
-        handler.postDelayed(runnable, 10000)                            true
+        handler.postDelayed(runnable, 10000);
+        true
                         }
 MotionEvent.ACTION_UP -> {
         v.performClick()
         handler.removeCallbacks(runnable)
                             true}
 MotionEvent.ACTION_CANCEL -> {
-        handler.removeCallbacks(runnable)                            true
+        handler.removeCallbacks(runnable);
+        true
 }
 else -> false                    }}}
 buttonBackspace.setOnClickListener {
@@ -145,7 +167,8 @@ return        }
 
 val expression = stack.getExpression().replace("*", "×").replace("/", "÷")        
 val spannable = SpannableString(expression)        
-val operators = arrayOf('+', '-', '×', '÷')        expression.forEachIndexed { 
+val operators = arrayOf('+', '-', '×', '÷');
+        expression.forEachIndexed { 
         i
 if (char in operators) {
     val color = getThemeColor(com.google.android.material.R.attr.colorSecondary)

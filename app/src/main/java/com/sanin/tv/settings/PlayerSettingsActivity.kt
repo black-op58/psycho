@@ -54,6 +54,8 @@ try {
         media = intent.getSerialized("media");
         subtitle = intent.getSerialized("subtitle")
          }
+        
+         }
         catch (e: Exception) {
         toast(e.toString())
         }
@@ -68,15 +70,20 @@ val cursedSpeeds = arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25
 var curSpeedArr = if (PrefManager.getVal(PrefName.CursedSpeeds)) cursedSpeeds else speeds
 var speedsName = curSpeedArr.map { 
         "
-            getString(                R.string.default_playback_speed,                speedsName[PrefManager.getVal(PrefName.DefaultSpeed)],            )        binding.playerSettingsSpeed.setOnClickListener {
+            getString(                R.string.default_playback_speed,                speedsName[PrefManager.getVal(PrefName.DefaultSpeed)],            );
+        binding.playerSettingsSpeed.setOnClickListener {
         customAlertDialog().apply {
         setTitle(getString(R.string.default_speed))
         singleChoiceItems(
-                    speedsName,                    PrefManager.getVal(PrefName.DefaultSpeed),                ) { i ->                    PrefManager.setVal(PrefName.DefaultSpeed, i)                    binding.playerSettingsSpeed.text =
+                    speedsName,                    PrefManager.getVal(PrefName.DefaultSpeed),                ) {
+        i ->                    PrefManager.setVal(PrefName.DefaultSpeed, i);
+        binding.playerSettingsSpeed.text =
                         getString(R.string.default_playback_speed, speedsName[i])
                 }
 show()}}
-binding.playerSettingsCursedSpeeds.isChecked = PrefManager.getVal(PrefName.CursedSpeeds)        binding.playerSettingsCursedSpeeds.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsCursedSpeeds.isChecked = PrefManager.getVal(PrefName.CursedSpeeds);
+        binding.playerSettingsCursedSpeeds.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.CursedSpeeds, isChecked);
         curSpeedArr = if (isChecked) cursedSpeeds else speeds
 val newDefaultSpeed = if (isChecked) 0 else 5            PrefManager.setVal(PrefName.DefaultSpeed, newDefaultSpeed);
@@ -84,109 +91,180 @@ val newDefaultSpeed = if (isChecked) 0 else 5            PrefManager.setVal(Pref
             binding.playerSettingsSpeed.text =
                 getString(                    R.string.default_playback_speed,                    speedsName[PrefManager.getVal(PrefName.DefaultSpeed)],                )
         }
-// Time Stamp        binding.playerSettingsTimeStamps.isChecked = PrefManager.getVal(PrefName.TimeStampsEnabled)        binding.playerSettingsTimeStamps.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.TimeStampsEnabled, isChecked)            binding.playerSettingsAutoSkipOpEd.isEnabled = isChecked}
-binding.playerSettingsTimeStampsProxy.isChecked =            PrefManager.getVal(PrefName.UseProxyForTimeStamps)        binding.playerSettingsTimeStampsProxy.setOnCheckedChangeListener { _, isChecked ->
+// Time Stamp        binding.playerSettingsTimeStamps.isChecked = PrefManager.getVal(PrefName.TimeStampsEnabled);
+        binding.playerSettingsTimeStamps.setOnCheckedChangeListener {
+        _, isChecked ->
+            PrefManager.setVal(PrefName.TimeStampsEnabled, isChecked);
+        binding.playerSettingsAutoSkipOpEd.isEnabled = isChecked}
+binding.playerSettingsTimeStampsProxy.isChecked =            PrefManager.getVal(PrefName.UseProxyForTimeStamps);
+        binding.playerSettingsTimeStampsProxy.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.UseProxyForTimeStamps, isChecked)
 }
-binding.playerSettingsShowTimeStamp.isChecked =            PrefManager.getVal(PrefName.ShowTimeStampButton)        binding.playerSettingsShowTimeStamp.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.ShowTimeStampButton, isChecked)            binding.playerSettingsTimeStampsAutoHide.isEnabled = isChecked}
-binding.playerSettingsTimeStampsAutoHide.isChecked =            PrefManager.getVal(PrefName.AutoHideTimeStamps)        binding.playerSettingsTimeStampsAutoHide.isEnabled =
-            binding.playerSettingsShowTimeStamp.isChecked        binding.playerSettingsTimeStampsAutoHide.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.AutoHideTimeStamps, isChecked)
+binding.playerSettingsShowTimeStamp.isChecked =            PrefManager.getVal(PrefName.ShowTimeStampButton);
+        binding.playerSettingsShowTimeStamp.setOnCheckedChangeListener {
+        _, isChecked ->
+            PrefManager.setVal(PrefName.ShowTimeStampButton, isChecked);
+        binding.playerSettingsTimeStampsAutoHide.isEnabled = isChecked}
+binding.playerSettingsTimeStampsAutoHide.isChecked =            PrefManager.getVal(PrefName.AutoHideTimeStamps);
+        binding.playerSettingsTimeStampsAutoHide.isEnabled =
+            binding.playerSettingsShowTimeStamp.isChecked        binding.playerSettingsTimeStampsAutoHide.setOnCheckedChangeListener {
+        _, isChecked ->            PrefManager.setVal(PrefName.AutoHideTimeStamps, isChecked)
 }
-// Auto        binding.playerSettingsAutoSkipOpEd.isChecked = PrefManager.getVal(PrefName.AutoSkipOPED)        binding.playerSettingsAutoSkipOpEd.isEnabled = binding.playerSettingsTimeStamps.isChecked
-        binding.playerSettingsAutoSkipOpEd.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.AutoSkipOPED, isChecked)
+// Auto        binding.playerSettingsAutoSkipOpEd.isChecked = PrefManager.getVal(PrefName.AutoSkipOPED);
+        binding.playerSettingsAutoSkipOpEd.isEnabled = binding.playerSettingsTimeStamps.isChecked
+        binding.playerSettingsAutoSkipOpEd.setOnCheckedChangeListener {
+        _, isChecked ->            PrefManager.setVal(PrefName.AutoSkipOPED, isChecked)
 }
-binding.playerSettingsAutoSkipRecap.isChecked = PrefManager.getVal(PrefName.AutoSkipRecap)        binding.playerSettingsAutoSkipRecap.isEnabled = binding.playerSettingsTimeStamps.isChecked
-        binding.playerSettingsAutoSkipRecap.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.AutoSkipRecap, isChecked)
+binding.playerSettingsAutoSkipRecap.isChecked = PrefManager.getVal(PrefName.AutoSkipRecap);
+        binding.playerSettingsAutoSkipRecap.isEnabled = binding.playerSettingsTimeStamps.isChecked
+        binding.playerSettingsAutoSkipRecap.setOnCheckedChangeListener {
+        _, isChecked ->            PrefManager.setVal(PrefName.AutoSkipRecap, isChecked)
 }
-binding.playerSettingsAutoPlay.isChecked = PrefManager.getVal(PrefName.AutoPlay)        binding.playerSettingsAutoPlay.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsAutoPlay.isChecked = PrefManager.getVal(PrefName.AutoPlay);
+        binding.playerSettingsAutoPlay.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.AutoPlay, isChecked)
 }
-binding.playerSettingsAutoSkip.isChecked = PrefManager.getVal(PrefName.AutoSkipFiller)        binding.playerSettingsAutoSkip.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsAutoSkip.isChecked = PrefManager.getVal(PrefName.AutoSkipFiller);
+        binding.playerSettingsAutoSkip.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.AutoSkipFiller, isChecked)
 }
-// Update Progress        binding.playerSettingsAskUpdateProgress.isChecked =            PrefManager.getVal(PrefName.AskIndividualPlayer)        binding.playerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.AskIndividualPlayer, isChecked)            binding.playerSettingsAskChapterZero.isEnabled = !isChecked}
-binding.playerSettingsAskChapterZero.isChecked =            PrefManager.getVal(PrefName.ChapterZeroPlayer)        binding.playerSettingsAskChapterZero.setOnCheckedChangeListener { _, isChecked ->
+// Update Progress        binding.playerSettingsAskUpdateProgress.isChecked =            PrefManager.getVal(PrefName.AskIndividualPlayer);
+        binding.playerSettingsAskUpdateProgress.setOnCheckedChangeListener {
+        _, isChecked ->
+            PrefManager.setVal(PrefName.AskIndividualPlayer, isChecked);
+        binding.playerSettingsAskChapterZero.isEnabled = !isChecked}
+binding.playerSettingsAskChapterZero.isChecked =            PrefManager.getVal(PrefName.ChapterZeroPlayer);
+        binding.playerSettingsAskChapterZero.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.ChapterZeroPlayer, isChecked)
 }
-binding.playerSettingsAskUpdateHentai.isChecked =            PrefManager.getVal(PrefName.UpdateForHPlayer)        binding.playerSettingsAskUpdateHentai.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsAskUpdateHentai.isChecked =            PrefManager.getVal(PrefName.UpdateForHPlayer);
+        binding.playerSettingsAskUpdateHentai.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.UpdateForHPlayer, isChecked)
 if (isChecked) snackString(getString(R.string.very_bold))
         }
-binding.playerSettingsCompletePercentage.value =            (PrefManager.getVal<Float>(PrefName.WatchPercentage) * 100).roundToInt().toFloat()        binding.playerSettingsCompletePercentage.addOnChangeListener { _, value, _ ->
+binding.playerSettingsCompletePercentage.value =            (PrefManager.getVal<Float>(PrefName.WatchPercentage) * 100).roundToInt().toFloat();
+        binding.playerSettingsCompletePercentage.addOnChangeListener {
+        _, value, _ ->
             PrefManager.setVal(PrefName.WatchPercentage, value / 100)
 }
-// Behaviour        binding.playerSettingsAlwaysContinue.isChecked = PrefManager.getVal(PrefName.AlwaysContinue)        binding.playerSettingsAlwaysContinue.setOnCheckedChangeListener { _, isChecked ->
+// Behaviour        binding.playerSettingsAlwaysContinue.isChecked = PrefManager.getVal(PrefName.AlwaysContinue);
+        binding.playerSettingsAlwaysContinue.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.AlwaysContinue, isChecked)
 }
-binding.playerSettingsPauseVideo.isChecked = PrefManager.getVal(PrefName.FocusPause)        binding.playerSettingsPauseVideo.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsPauseVideo.isChecked = PrefManager.getVal(PrefName.FocusPause);
+        binding.playerSettingsPauseVideo.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.FocusPause, isChecked)
 }
-binding.playerSettingsVerticalGestures.isChecked = PrefManager.getVal(PrefName.Gestures)        binding.playerSettingsVerticalGestures.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsVerticalGestures.isChecked = PrefManager.getVal(PrefName.Gestures);
+        binding.playerSettingsVerticalGestures.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.Gestures, isChecked)
 }
-binding.playerSettingsDoubleTap.isChecked = PrefManager.getVal(PrefName.DoubleTap)        binding.playerSettingsDoubleTap.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsDoubleTap.isChecked = PrefManager.getVal(PrefName.DoubleTap);
+        binding.playerSettingsDoubleTap.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.DoubleTap, isChecked)
 }
-binding.playerSettingsFastForward.isChecked = PrefManager.getVal(PrefName.FastForward)        binding.playerSettingsFastForward.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsFastForward.isChecked = PrefManager.getVal(PrefName.FastForward);
+        binding.playerSettingsFastForward.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.FastForward, isChecked)
 }
-binding.playerSettingsSeekTime.value = PrefManager.getVal<Int>(PrefName.SeekTime).toFloat()        binding.playerSettingsSeekTime.addOnChangeListener { _, value, _ ->
+binding.playerSettingsSeekTime.value = PrefManager.getVal<Int>(PrefName.SeekTime).toFloat();
+        binding.playerSettingsSeekTime.addOnChangeListener {
+        _, value, _ ->
             PrefManager.setVal(PrefName.SeekTime, value.toInt())
+        }
+        
         }
         // Pause Metadata Overlay
         binding.playerSettingsPauseOverlay.isChecked = PrefManager.getVal(PrefName.PauseOverlay)
-        binding.playerSettingsPauseOverlay.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.PauseOverlay, isChecked)
+        binding.playerSettingsPauseOverlay.setOnCheckedChangeListener {
+        _, isChecked ->            PrefManager.setVal(PrefName.PauseOverlay, isChecked)
+                }
+        
                 }
         // Prefer Dub audio track
         binding.playerSettingsPreferDub.isChecked = PrefManager.getVal(PrefName.PreferDub)
-        binding.playerSettingsPreferDub.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.PreferDub, isChecked)
+        binding.playerSettingsPreferDub.setOnCheckedChangeListener {
+        _, isChecked ->            PrefManager.setVal(PrefName.PreferDub, isChecked)
         }
-        binding.playerSettingsSkipTime.value = PrefManager.getVal<Int>(PrefName.SkipTime).toFloat()        binding.playerSettingsSkipTime.addOnChangeListener { _, value, _ ->
+        
+        }
+        binding.playerSettingsSkipTime.value = PrefManager.getVal<Int>(PrefName.SkipTime).toFloat();
+        binding.playerSettingsSkipTime.addOnChangeListener {
+        _, value, _ ->
             PrefManager.setVal(PrefName.SkipTime, value.toInt())
+}
+        
 }
         // Other        binding.playerSettingsPiP.apply {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        visibility = View.VISIBLE                isChecked = PrefManager.getVal(PrefName.Pip)                setOnCheckedChangeListener { _, isChecked ->
+        visibility = View.VISIBLE                isChecked = PrefManager.getVal(PrefName.Pip);
+        setOnCheckedChangeListener {
+        _, isChecked ->
                     PrefManager.setVal(PrefName.Pip, isChecked)
                 }
 }
+        
+}
         else {
         visibility = View.GONE            }}
-binding.playerSettingsCast.isChecked = PrefManager.getVal(PrefName.Cast)        binding.playerSettingsCast.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsCast.isChecked = PrefManager.getVal(PrefName.Cast);
+        binding.playerSettingsCast.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.Cast, isChecked)
 }
-binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer);
+        binding.playerSettingsRotate.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.RotationPlayer, isChecked)
 }
-binding.playerSettingsInternalCast.isChecked = PrefManager.getVal(PrefName.UseInternalCast)        binding.playerSettingsInternalCast.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsInternalCast.isChecked = PrefManager.getVal(PrefName.UseInternalCast);
+        binding.playerSettingsInternalCast.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.UseInternalCast, isChecked)
 }
-binding.playerSettingsAdditionalCodec.isChecked =            PrefManager.getVal(PrefName.UseAdditionalCodec)        binding.playerSettingsAdditionalCodec.setOnCheckedChangeListener { _, isChecked ->
+binding.playerSettingsAdditionalCodec.isChecked =            PrefManager.getVal(PrefName.UseAdditionalCodec);
+        binding.playerSettingsAdditionalCodec.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.UseAdditionalCodec, isChecked)
          }
-val resizeModes = arrayOf("Original", "Zoom", "Stretch")        binding.playerResizeMode.setOnClickListener {
+val resizeModes = arrayOf("Original", "Zoom", "Stretch");
+        binding.playerResizeMode.setOnClickListener {
             customAlertDialog().apply {
         setTitle(getString(R.string.default_resize_mode))
         singleChoiceItems(
-                    resizeModes,                    PrefManager.getVal<Int>(PrefName.Resize),                ) { count ->                    PrefManager.setVal(PrefName.Resize, count)
+                    resizeModes,                    PrefManager.getVal<Int>(PrefName.Resize),                ) {
+        count ->                    PrefManager.setVal(PrefName.Resize, count)
                 }
 show()}}
-// Online Subtitles        binding.playerSettingsOnlineSubtitles.isChecked = PrefManager.getVal(PrefName.OnlineSubtitlesEnabled)        binding.playerSettingsOnlineSubtitles.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.OnlineSubtitlesEnabled, isChecked)            binding.playerSettingsOnlineProviders.isEnabled = isChecked
+// Online Subtitles        binding.playerSettingsOnlineSubtitles.isChecked = PrefManager.getVal(PrefName.OnlineSubtitlesEnabled);
+        binding.playerSettingsOnlineSubtitles.setOnCheckedChangeListener {
+        _, isChecked ->
+            PrefManager.setVal(PrefName.OnlineSubtitlesEnabled, isChecked);
+        binding.playerSettingsOnlineProviders.isEnabled = isChecked
             binding.playerSettingsOnlineLanguages.isEnabled = isChecked}
 binding.playerSettingsOnlineProviders.isEnabled = binding.playerSettingsOnlineSubtitles.isChecked        binding.playerSettingsOnlineLanguages.isEnabled = binding.playerSettingsOnlineSubtitles.isChecked
 val allProviders = arrayOf("Wyzie", "Stremio")        
-val allProviderLabels = arrayOf("Wyzie", "Stremio")        binding.playerSettingsOnlineProviders.setOnClickListener {
+val allProviderLabels = arrayOf("Wyzie", "Stremio");
+        binding.playerSettingsOnlineProviders.setOnClickListener {
     val currentProviders = PrefManager.getVal<Set<String>>(PrefName.OnlineSubtitleProviders)            
 val checkedItems = BooleanArray(allProviders.size) { 
         i
 customAlertDialog().apply {
         setTitle("Subtitle Providers")
-        multiChoiceItems(allProviderLabels, checkedItems) { checked ->
-val selected = mutableSetOf<String>()                    checked.forEachIndexed { 
+        multiChoiceItems(allProviderLabels, checkedItems) {
+        checked ->
+val selected = mutableSetOf<String>();
+        checked.forEachIndexed { 
         i
 if (isChecked) selected.add(allProviders[index])
                     }
@@ -198,14 +276,17 @@ setPosButton("Done", null)
 }
 
 val allLanguages = arrayOf(            "en", "ar", "pt", "es", "id", "fr", "ru", "zh", "ja", "tr", "it", "de", "pl", "th", "vi", "ko"        )        
-val allFullLanguages = arrayOf(             "English", "Arabic", "Portuguese", "Spanish", "Indonesian", "French", "Russian",             "Chinese", "Japanese", "Turkish", "Italian", "German", "Polish", "Thai",             "Vietnamese", "Korean"        )        binding.playerSettingsOnlineLanguages.setOnClickListener {
+val allFullLanguages = arrayOf(             "English", "Arabic", "Portuguese", "Spanish", "Indonesian", "French", "Russian",             "Chinese", "Japanese", "Turkish", "Italian", "German", "Polish", "Thai",             "Vietnamese", "Korean"        );
+        binding.playerSettingsOnlineLanguages.setOnClickListener {
     val currentLanguages = PrefManager.getVal<Set<String>>(PrefName.OnlineSubtitleLanguages)            
 val checkedItems = BooleanArray(allLanguages.size) { 
         i
 customAlertDialog().apply {
         setTitle("Online Languages")
-        multiChoiceItems(allFullLanguages, checkedItems) { checked ->
-val selected = mutableSetOf<String>()                    checked.forEachIndexed { 
+        multiChoiceItems(allFullLanguages, checkedItems) {
+        checked ->
+val selected = mutableSetOf<String>();
+        checked.forEachIndexed { 
         i
 if (isChecked) selected.add(allLanguages[index])
                     }
@@ -226,20 +307,26 @@ fun toggleExpSubOptions(isChecked: Boolean) {
         a
 when (isChecked) {
         true -> 1f                        false -> 0.5f                    }}}
-binding.subSwitch.isChecked = PrefManager.getVal(PrefName.Subtitles)        binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
+binding.subSwitch.isChecked = PrefManager.getVal(PrefName.Subtitles);
+        binding.subSwitch.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.Subtitles, isChecked)
         toggleSubOptions(isChecked)
             toggleExpSubOptions(binding.subTextSwitch.isChecked && isChecked)
 }
-toggleSubOptions(binding.subSwitch.isChecked)        binding.subTextSwitch.isChecked = PrefManager.getVal(PrefName.TextviewSubtitles)
-        binding.subTextSwitch.setOnCheckedChangeListener { _, isChecked ->
+toggleSubOptions(binding.subSwitch.isChecked);
+        binding.subTextSwitch.isChecked = PrefManager.getVal(PrefName.TextviewSubtitles)
+        binding.subTextSwitch.setOnCheckedChangeListener {
+        _, isChecked ->
             PrefManager.setVal(PrefName.TextviewSubtitles, isChecked)
         toggleExpSubOptions(isChecked)
 }
 toggleExpSubOptions(binding.subTextSwitch.isChecked)
-val subLanguages =            arrayOf(                "Albanian",                "Arabic",                "Bosnian",                "Bulgarian",                "Chinese",                "Croatian",                "Czech",                "Danish",                "Dutch",                "English",                "Estonian",                "Finnish",                "French",                "Georgian",                "German",                "Greek",                "Hebrew",                "Hindi",                "Indonesian",                "Irish",                "Italian",                "Japanese",                "Korean",                "Lithuanian",                "Luxembourgish",                "Macedonian",                "Mongolian",                "Norwegian",                "Polish",                "Portuguese",                "Punjabi",                "Romanian",                "Russian",                "Serbian",                "Slovak",                "Slovenian",                "Spanish",                "Turkish",                "Ukrainian",                "Urdu",                "Vietnamese",            )        binding.videoSubLanguage.setOnClickListener {            
+val subLanguages =            arrayOf(                "Albanian",                "Arabic",                "Bosnian",                "Bulgarian",                "Chinese",                "Croatian",                "Czech",                "Danish",                "Dutch",                "English",                "Estonian",                "Finnish",                "French",                "Georgian",                "German",                "Greek",                "Hebrew",                "Hindi",                "Indonesian",                "Irish",                "Italian",                "Japanese",                "Korean",                "Lithuanian",                "Luxembourgish",                "Macedonian",                "Mongolian",                "Norwegian",                "Polish",                "Portuguese",                "Punjabi",                "Romanian",                "Russian",                "Serbian",                "Slovak",                "Slovenian",                "Spanish",                "Turkish",                "Ukrainian",                "Urdu",                "Vietnamese",            );
+        binding.videoSubLanguage.setOnClickListener {            
         c
-                    subLanguages,                    PrefManager.getVal(PrefName.SubLanguage),                ) { count ->                    PrefManager.setVal(PrefName.SubLanguage, count)
+                    subLanguages,                    PrefManager.getVal(PrefName.SubLanguage),                ) {
+        count ->                    PrefManager.setVal(PrefName.SubLanguage, count)
                 }
 show()}}
 binding.videoSubColorPrimary.setOnClickListener {
@@ -251,7 +338,11 @@ object : ColorPickerCallback {
     override fun onColorSelected(color: Int) {                        
         P
                     }
+    
+                    }
     },            )
+}
+    
 }
     binding.videoSubColorSecondary.setOnClickListener {
     val color = PrefManager.getVal<Int>(PrefName.SecondaryColor)            
@@ -262,13 +353,17 @@ object : ColorPickerCallback {
     override fun onColorSelected(color: Int) {                        
         P
                     }
+    
+                    }
     },            )
          }
-val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")        binding.videoSubOutline.setOnClickListener {
+val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None");
+        binding.videoSubOutline.setOnClickListener {
             customAlertDialog().apply {
         setTitle(getString(R.string.outline_type))
         singleChoiceItems(
-                    typesOutline,                    PrefManager.getVal(PrefName.Outline),                ) { count ->                    PrefManager.setVal(PrefName.Outline, count)
+                    typesOutline,                    PrefManager.getVal(PrefName.Outline),                ) {
+        count ->                    PrefManager.setVal(PrefName.Outline, count)
         updateSubPreview()
                  }
 show()}}
@@ -281,7 +376,11 @@ object : ColorPickerCallback {
     override fun onColorSelected(color: Int) {                        
         P
                     }
+    
+                    }
     },            )
+}
+    
 }
     binding.videoSubColorWindow.setOnClickListener {
     val color = PrefManager.getVal<Int>(PrefName.SubWindow)            
@@ -292,37 +391,50 @@ object : ColorPickerCallback {
     override fun onColorSelected(color: Int) {                        
         P
                     }
+    
+                    }
     },            )
+}
+    
 }
     binding.videoSubAlpha.value = PrefManager.getVal(PrefName.SubAlpha)
         binding.videoSubAlpha.addOnChangeListener(
-            OnChangeListener { _, value, fromUser ->
+            OnChangeListener {
+        _, value, fromUser ->
 if (fromUser) {
         PrefManager.setVal(PrefName.SubAlpha, value)
         updateSubPreview()
                  }
-},        )        binding.videoSubStroke.value = PrefManager.getVal(PrefName.SubStroke)
+},        );
+        binding.videoSubStroke.value = PrefManager.getVal(PrefName.SubStroke)
         binding.videoSubStroke.addOnChangeListener(
-            OnChangeListener { _, value, fromUser ->
+            OnChangeListener {
+        _, value, fromUser ->
 if (fromUser) {
         PrefManager.setVal(PrefName.SubStroke, value)
         updateSubPreview()
                  }
-},        )        binding.videoSubBottomMargin.value = PrefManager.getVal(PrefName.SubBottomMargin)
+},        );
+        binding.videoSubBottomMargin.value = PrefManager.getVal(PrefName.SubBottomMargin)
         binding.videoSubBottomMargin.addOnChangeListener(
-            OnChangeListener { _, value, fromUser ->
+            OnChangeListener {
+        _, value, fromUser ->
 if (fromUser) {
         PrefManager.setVal(PrefName.SubBottomMargin, value)
         updateSubPreview()
                  }
 },        )
-val fonts =            arrayOf(                "Poppins Semi Bold",                "Poppins Bold",                "Poppins",                "Poppins Thin",                "Century Gothic",                "Levenim MT Bold",                "Blocky",            )        binding.videoSubFont.setOnClickListener {            
+val fonts =            arrayOf(                "Poppins Semi Bold",                "Poppins Bold",                "Poppins",                "Poppins Thin",                "Century Gothic",                "Levenim MT Bold",                "Blocky",            );
+        binding.videoSubFont.setOnClickListener {            
         c
-                    fonts,                    PrefManager.getVal(PrefName.Font),                ) { count ->                    PrefManager.setVal(PrefName.Font, count)
+                    fonts,                    PrefManager.getVal(PrefName.Font),                ) {
+        count ->                    PrefManager.setVal(PrefName.Font, count)
         updateSubPreview()
                  }
 show()}}
-binding.subtitleFontSize.setText(PrefManager.getVal<Int>(PrefName.FontSize).toString())        binding.subtitleFontSize.setOnEditorActionListener { _, actionId, _ ->
+binding.subtitleFontSize.setText(PrefManager.getVal<Int>(PrefName.FontSize).toString());
+        binding.subtitleFontSize.setOnEditorActionListener {
+        _, actionId, _ ->
 if (actionId == EditorInfo.IME_ACTION_DONE) {
         binding.subtitleFontSize.clearFocus()
             }
@@ -332,6 +444,8 @@ binding.subtitleFontSize.addTextChangedListener {
 if (size != null) {
         PrefManager.setVal(PrefName.FontSize, size)
         updateSubPreview()
+             }
+            
              }
             }
 binding.subtitleTest.addOnChangeListener(
@@ -348,7 +462,8 @@ private fun showColorPicker(        originalColor: Int,        title: String,   
 
 override fun onResult(        dialogTag: String,        which: Int,        extras: Bundle,    ): Boolean {
 if (dialogTag == "colorPicker" && which == SimpleColorPicker.OnDialogResultListener.BUTTON_POSITIVE) {
-    val color = extras.getInt(SimpleColorPicker.COLOR)            colorPickerCallback?.onColorSelected(color)
+    val color = extras.getInt(SimpleColorPicker.COLOR);
+        colorPickerCallback?.onColorSelected(color)
 return true        }
 return false    }
 
@@ -362,6 +477,8 @@ else -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)
                 }
 setTextColor(PrefManager.getVal<Int>(PrefName.PrimaryColor))
         setBackgroundColor(PrefManager.getVal<Int>(PrefName.SubBackground))
+         }
+    
          }
     }
 }

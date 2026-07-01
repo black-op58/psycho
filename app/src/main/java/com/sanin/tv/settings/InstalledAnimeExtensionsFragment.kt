@@ -60,7 +60,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsRecyclerView = binding.extensionsRecyclerView
 
         extensionsAdapter = AnimeExtensionsAdapter(
-            onSettingsClicked = { pkg ->
+            onSettingsClicked = {
+        pkg ->
                 val name = pkg.name
                 val changeUIVisibility: (Boolean) -> Unit = { 
         s
@@ -73,6 +74,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                         if (show) getString(R.string.extensions) else name
                     activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
                 }
+                
+                }
                 var itemSelected = false
                 val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>();
         if (allSettings.isNotEmpty()) {
@@ -83,12 +86,16 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                         var selectedIndex = 0
                         requireContext().customAlertDialog().apply {
                             setTitle("Select a Source")
-                            singleChoiceItems(names, selectedIndex) { which ->
+                            singleChoiceItems(names, selectedIndex) {
+        which ->
                                 itemSelected = true
                                 selectedIndex = which
                                 selectedSetting = allSettings[selectedIndex]
                                 val fragment = AnimeSourcePreferencesFragment()
-                                    .getInstance(selectedSetting.id) { changeUIVisibility(true)
+                                    .getInstance(selectedSetting.id) {
+        changeUIVisibility(true)
+ }
+                                
  }
                                 parentFragmentManager.beginTransaction()
                                     .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
@@ -96,14 +103,24 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                                     .addToBackStack(null)
                                     .commit()
                              }
-                            onDismiss { if (!itemSelected) changeUIVisibility(true)
+                            
+                             }
+                            onDismiss {
+        if (!itemSelected) changeUIVisibility(true)
+ }
+                            
  }
                             show()
+                         }
+                    
                          }
                     }
         else {
                         val fragment = AnimeSourcePreferencesFragment()
-                            .getInstance(selectedSetting.id) { changeUIVisibility(true)
+                            .getInstance(selectedSetting.id) {
+        changeUIVisibility(true)
+ }
+                        
  }
                         parentFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
@@ -111,16 +128,24 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                             .addToBackStack(null)
                             .commit()
                      }
+                    
+                     }
                     changeUIVisibility(false)
+                 }
+        
                  }
         else {
                     Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT).show()
                  }
+            
+                 }
             },
-            onUninstallClicked = { pkg ->
+            onUninstallClicked = {
+        pkg ->
                 animeExtensionManager.uninstallExtension(pkg)
             },
-            onUpdateClicked = { pkg ->
+            onUpdateClicked = {
+        pkg ->
                 animeExtensionManager.updateExtension(pkg)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe()
@@ -141,8 +166,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 val newList = extensionsAdapter.currentList.toMutableList().apply {
                     add(toPosition, removeAt(fromPosition))
                  }
+                
+                 }
                 extensionsAdapter.submitList(newList)
                 return true
+            }
+
+            
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
@@ -153,6 +183,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         viewHolder?.itemView?.elevation = 8f
                     viewHolder?.itemView?.translationZ = 8f
                 }
+            
+                }
             }
 
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
@@ -161,6 +193,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder.itemView.elevation = 0f
                 viewHolder.itemView.translationZ = 0f
             }
+        
+            }
         }
 
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -168,12 +202,18 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(extensionsRecyclerView)
 
         lifecycleScope.launch {
-            animeExtensionManager.installedExtensionsFlow.collect { extensions ->
+            animeExtensionManager.installedExtensionsFlow.collect {
+        extensions ->
                 extensionsAdapter.updateData(sortToAnimeSourcesList(extensions))
+             }
+        
              }
         }
 
         return binding.root
+    }
+
+    
     }
 
     private fun sortToAnimeSourcesList(inpt: List<AnimeExtension.Installed>): List<AnimeExtension.Installed> {
@@ -183,7 +223,11 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         n
             sourcesMap[name]
         }
+        
+        }
         return orderedSources + inpt.filter { !AnimeSources.pinnedAnimeSources.contains(it.name)
+ }
+    
  }
     }
 
@@ -192,11 +236,15 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         _binding = null
     }
 
+    
+    }
+
     override fun updateContentBasedOnQuery(query: String?) {
         extensionsAdapter.filter(
             query ?: "",
             sortToAnimeSourcesList(animeExtensionManager.installedExtensionsFlow.value)
-        )
+)
+        }
       }
     override fun notifyDataChanged() { 
         /
@@ -211,6 +259,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         fun updateData(newExtensions: List<AnimeExtension.Installed>) {
             submitList(newExtensions)
           }
+        
+          }
         fun updatePref() {
             val map = currentList.map { 
         i
@@ -218,10 +268,14 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             AnimeSources.pinnedAnimeSources = map
             AnimeSources.performReorderAnimeSources()
           }
+        
+          }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_extension, parent, false)
             return ViewHolder(view)
+          }
+        
           }
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)
@@ -233,12 +287,23 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (!skipIcons) {
         holder.extensionIconImageView.setImageDrawable(extension.icon)
              }
+            
+             }
             holder.updateView.isVisible = extension.hasUpdate
-            holder.deleteView.setOnClickListener { onUninstallClicked(extension)
+            holder.deleteView.setOnClickListener {
+        onUninstallClicked(extension)
  }
-            holder.updateView.setOnClickListener { onUpdateClicked(extension)
+            
  }
-            holder.settingsImageView.setOnClickListener { onSettingsClicked(extension)
+            holder.updateView.setOnClickListener {
+        onUpdateClicked(extension)
+ }
+            
+ }
+            holder.settingsImageView.setOnClickListener {
+        onSettingsClicked(extension)
+ }
+        
  }
         }
 
@@ -248,8 +313,12 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         if (extension.name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
                     filteredList.add(extension)
                  }
+            
+                 }
             }
             if (filteredList != currentList) submitList(filteredList)
+          }
+        
           }
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
@@ -258,6 +327,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val deleteView: ImageView = view.findViewById(R.id.deleteTextView)
             val updateView: ImageView = view.findViewById(R.id.updateTextView)
+          }
+        
           }
         companion object {
             val DIFF_CALLBACK_INSTALLED = object : DiffUtil.ItemCallback<AnimeExtension.Installed>() {
@@ -270,6 +341,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                     oldItem: AnimeExtension.Installed,
                     newItem: AnimeExtension.Installed
                 ): Boolean = oldItem == newItem
+            }
+        
             }
         }
     }

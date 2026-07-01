@@ -39,9 +39,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
         
 val screenWidth = resources.displayMetrics.run { 
         w
-binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.studioRecycler.updatePadding(bottom = 64f.px + navBarHeight)        binding.studioTitle.isSelected = true
-        studio = intent.getSerialized("studio")        binding.studioTitle.text = studio?.name
+binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight}
+binding.studioRecycler.updatePadding(bottom = 64f.px + navBarHeight);
+        binding.studioTitle.isSelected = true
+        studio = intent.getSerialized("studio");
+        binding.studioTitle.text = studio?.name
         binding.studioClose.setOnClickListener {
         onBackPressedDispatcher.onBackPressed()
 }
@@ -54,7 +57,8 @@ val map = studio!!.yearMedia ?: return@observe
 val keys = map.keys.toTypedArray()                
 var pos = 0
 val gridSize = (screenWidth / 124f).toInt()                
-val gridLayoutManager = GridLayoutManager(this, gridSize)                gridLayoutManager.spanSizeLookup = 
+val gridLayoutManager = GridLayoutManager(this, gridSize);
+        gridLayoutManager.spanSizeLookup = 
 object : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
 return when (position in titlePosition) {
@@ -63,7 +67,8 @@ else -> 1                        }}
 }
 for (i in keys.indices) {
     val medias = map[keys[i]]!!                    
-val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos)                    pos += (empty + medias.size + 1)
+val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos);
+        pos += (empty + medias.size + 1)
                     concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
                     concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
                     concatAdapter.addAdapter(EmptyAdapter(empty))
@@ -77,7 +82,8 @@ live.observe(this) {
 if (it) {
         scope.launch {
 if (studio != null)
-        withContext(Dispatchers.IO) { model.loadStudio(studio!!)
+        withContext(Dispatchers.IO) {
+        model.loadStudio(studio!!)
  }
 live.postValue(false)}}}
 }

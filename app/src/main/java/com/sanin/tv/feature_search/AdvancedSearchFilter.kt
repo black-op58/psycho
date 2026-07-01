@@ -35,6 +35,8 @@ data class AdvancedSearchFilter(
 
         val EMPTY = AdvancedSearchFilter()
       }
+    
+      }
     val isEmpty: Boolean
         get() = seasonYear == null && season == null && minScore == null && maxScore == null &&
                 studioId == null && source == null && status == null && format == null &&
@@ -43,31 +45,66 @@ data class AdvancedSearchFilter(
     /** Build AniList GraphQL variable string fragment from the active filters. */
     fun toGraphQLArgs(): String {
     val parts = mutableListOf<String>()
-        seasonYear?.let { parts.add("seasonYear: $it")
+        seasonYear?.let {
+        parts.add("seasonYear: $it")
  }
-        season?.let { parts.add("season: $it")
+        
  }
-        minScore?.let { parts.add("averageScore_greater: ${it - 1}")
+        season?.let {
+        parts.add("season: $it")
  }
-        maxScore?.let { parts.add("averageScore_lesser: ${it + 1}")
+        
  }
-        studioId?.let { parts.add("studios: [$it]")
+        minScore?.let {
+        parts.add("averageScore_greater: ${it - 1}")
  }
-        source?.let { parts.add("source: $it")
+        
  }
-        status?.let { parts.add("status: $it")
+        maxScore?.let {
+        parts.add("averageScore_lesser: ${it + 1}")
  }
-        format?.let { parts.add("format: $it")
+        
  }
-        genre?.let { parts.add("genre: \"$it\"")
+        studioId?.let {
+        parts.add("studios: [$it]")
  }
-        minEpisodes?.let { parts.add("episodes_greater: ${it - 1}")
+        
  }
-        maxEpisodes?.let { parts.add("episodes_lesser: ${it + 1}")
+        source?.let {
+        parts.add("source: $it")
+ }
+        
+ }
+        status?.let {
+        parts.add("status: $it")
+ }
+        
+ }
+        format?.let {
+        parts.add("format: $it")
+ }
+        
+ }
+        genre?.let {
+        parts.add("genre: \"$it\"")
+ }
+        
+ }
+        minEpisodes?.let {
+        parts.add("episodes_greater: ${it - 1}")
+ }
+        
+ }
+        maxEpisodes?.let {
+        parts.add("episodes_lesser: ${it + 1}")
+ }
+        
  }
         if (onMyList) parts.add("onList: true");
         if (!isAdult) parts.add("isAdult: false")
         return parts.joinToString(", ")
+      }
+    
       }
     fun activeFilterCount(): Int {
     var count = 0

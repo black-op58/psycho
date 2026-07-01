@@ -42,6 +42,8 @@ object TmdbApi {
         val ctx = App.context ?: return File(CACHE_FILE)
         return File(ctx.getDir(CACHE_DIR, Context.MODE_PRIVATE), CACHE_FILE)
       }
+    
+      }
     private fun getSafCacheFile(): DocumentFile? {
         val ctx = App.context ?: return null
         val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri);
@@ -49,11 +51,15 @@ object TmdbApi {
         val tree = DocumentFile.fromTreeUri(ctx, Uri.parse(uriStr)) ?: return null
         return tree.findFile(CACHE_FILE)
       }
+    
+      }
     private fun getSafCacheTree(): DocumentFile? {
         val ctx = App.context ?: return null
         val uriStr = PrefManager.getVal<String>(PrefName.CacheStorageUri);
         if (uriStr.isBlank()) return null
         return DocumentFile.fromTreeUri(ctx, Uri.parse(uriStr))
+      }
+    
       }
     // ── Disk I/O ─────────────────────────────────────────
 
@@ -61,12 +67,17 @@ object TmdbApi {
         val ctx = App.context ?: return null
         val safFile = getSafCacheFile()
         return if (safFile != null) {
-        ctx.contentResolver.openInputStream(safFile.uri)?.use { it.readText()
+        ctx.contentResolver.openInputStream(safFile.uri)?.use {
+        it.readText()
+ }
+        
  }
         }
         else {
             val f = getInternalFile();
         if (f.exists()) f.readText() else null
+        }
+    
         }
     }
 
@@ -76,13 +87,18 @@ object TmdbApi {
         if (tree != null) {
         val safFile = tree.findFile(CACHE_FILE)
                 ?: tree.createFile("application/json", CACHE_FILE) ?: return
-            ctx.contentResolver.openOutputStream(safFile.uri, "w")?.use { it.write(json.toByteArray())
+            ctx.contentResolver.openOutputStream(safFile.uri, "w")?.use {
+        it.write(json.toByteArray())
+ }
+        
  }
         }
         else {
             val f = getInternalFile()
             f.parentFile?.mkdirs()
             f.writeText(json)
+         }
+    
          }
     }
 
@@ -96,18 +112,27 @@ object TmdbApi {
             map.forEach { (k, v) -> cache[k.toInt()] = v }
             Logger.log("TmdbApi: loaded ${map.size} cache entries")
          }
+        
+         }
         catch (e: Exception) {
         Logger.log("TmdbApi: disk load failed — ${e.message}")
+         }
+    
          }
     }
 
     @Synchronized
     private fun saveToDisk() {
         try {
-            writeDiskRaw(Mapper.json.encodeToString(cache.mapKeys { it.key.toString() }))
+            writeDiskRaw(Mapper.json.encodeToString(cache.mapKeys {
+        it.key.toString() }))
+         }
+        
          }
         catch (e: Exception) {
         Logger.log("TmdbApi: disk save failed — ${e.message}")
+         }
+    
          }
     }
 
@@ -122,14 +147,21 @@ object TmdbApi {
                 ?: newTree?.createFile("application/json", CACHE_FILE);
         if (newFile != null && json != null) {
         ctx.contentResolver.openOutputStream(newFile.uri, "w")
-                    ?.use { it.write(json.toByteArray())
+                    ?.use {
+        it.write(json.toByteArray())
+ }
+            
  }
             }
             getSafCacheFile()?.delete() ?: getInternalFile().delete()
             diskLoaded = false
         }
+        
+        }
         catch (e: Exception) {
         Logger.log("TmdbApi: SAF migration failed — ${e.message}")
+         }
+    
          }
     }
 
@@ -143,10 +175,16 @@ object TmdbApi {
                 f.parentFile?.mkdirs()
                 f.writeText(json)
              }
+            
+             }
             diskLoaded = false
+        }
+        
         }
         catch (e: Exception) {
         Logger.log("TmdbApi: reset to internal failed — ${e.message}")
+         }
+    
          }
     }
 
@@ -167,24 +205,38 @@ object TmdbApi {
                 val direct = logoKeys.firstNotNullOfOrNull { 
         k
                     (element[key] as? JsonPrimitive)?.contentOrNull
-                        ?.takeIf { isUrl(it)
+                        ?.takeIf {
+        isUrl(it)
+ }
+                
  }
                 }
                 if (direct != null) return direct
 
                 val imagesArray = element["images"] as? JsonArray
                 imagesArray?.filterIsInstance<JsonObject>()
-                    ?.firstOrNull { img ->
+                    ?.firstOrNull {
+        img ->
                         (img["coverType"] as? JsonPrimitive)?.contentOrNull
                             ?.equals("Clearlogo", ignoreCase = true) == true
                     }
-                    ?.let { (it["url"] as? JsonPrimitive)?.contentOrNull?.takeIf { u -> isUrl(u) } }
+                    
+                    }
+                    ?.let { (it["url"] as? JsonPrimitive)?.contentOrNull?.takeIf {
+        u -> isUrl(u) } }
+            }
+            
             }
             is JsonArray -> {
-                element.filterIsInstance<JsonObject>().firstNotNullOfOrNull { extractLogoUrl(it)
+                element.filterIsInstance<JsonObject>().firstNotNullOfOrNull {
+        extractLogoUrl(it)
+ }
+            
  }
             }
             else -> null
+        }
+    
         }
     }
 
@@ -196,9 +248,14 @@ object TmdbApi {
     suspend fun getLogoUrl(anilistId: Int, isAnime: Boolean): String? {
         if (!isAnime) return null
 
-        if (!diskLoaded) withContext(Dispatchers.IO) { loadFromDisk()
+        if (!diskLoaded) withContext(Dispatchers.IO) {
+        loadFromDisk()
  }
-        cache[anilistId]?.let { return it.ifEmpty { null } }
+        
+ }
+        cache[anilistId]?.let {
+        return it.ifEmpty {
+        null } }
 
         return withContext(Dispatchers.IO) {
             try {
@@ -207,23 +264,36 @@ object TmdbApi {
                     val jsonElement = Mapper.json.parseToJsonElement(response.text)
                     extractLogoUrl(jsonElement)
                   }
+                
+                  }
                 val logoUrl = if (url != null) "$IMAGE_PROXY$url" else ""
 
                 cache[anilistId] = logoUrl
                 saveToDisk()
 
                 Logger.log("TmdbApi: anilist=$anilistId → ${logoUrl.ifEmpty { "no logo" }}")
-                logoUrl.ifEmpty { null }
+                logoUrl.ifEmpty {
+        null }
+
+            }
+        
 
             }
         catch (e: CancellationException) {
         throw e
             }
+        
+            }
         catch (e: Exception) {
         Logger.log("TmdbApi: fallback anilist=$anilistId → ${e.message}")
                 null
             }
+        
+            }
         }
+    }
+
+    
     }
 
     fun clearCache() {
@@ -234,8 +304,12 @@ object TmdbApi {
             getInternalFile().delete()
             Logger.log("TmdbApi: cache cleared")
          }
+        
+         }
         catch (e: Exception) {
         Logger.log("TmdbApi: clearCache error — ${e.message}")
+         }
+    
          }
     }
 }

@@ -13,7 +13,10 @@ private val context: Context,    preferenceStore: PreferenceStore) : Preference<
 override fun key() = "extension_installer"    
 val entries        get() = ExtensionInstaller.entries.toTypedArray().run {
 if (context.hasMiuiPackageInstaller) {
-        filter { it != ExtensionInstaller.PACKAGEINSTALLER }
+        filter {
+        it != ExtensionInstaller.PACKAGEINSTALLER }
+}
+        
 }
         else {
         toList()
@@ -22,6 +25,8 @@ if (context.hasMiuiPackageInstaller) {
 
 override fun defaultValue() = if (context.hasMiuiPackageInstaller) {
         E
+}
+        
 }
         else {
         ExtensionInstaller.PACKAGEINSTALLER    }

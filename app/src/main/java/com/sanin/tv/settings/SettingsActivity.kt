@@ -42,7 +42,8 @@ class SettingsActivity : AppCompatActivity() {
                         startActivity(
                             Intent(this@SettingsActivity, ProfileActivity::class.java)
                                 .putExtra("userId", Anilist.userid ?: -1)
-                        )
+)
+                        }
                      }
                 ),
                 // ── Account ───────────────────────────────────────────────
@@ -54,6 +55,8 @@ class SettingsActivity : AppCompatActivity() {
                     onClick = {
                         startActivity(Intent(this@SettingsActivity, SettingsAccountActivity::class.java))
                      }
+                
+                     }
                 ),
                 // ── UI ────────────────────────────────────────────────────
                 Settings(
@@ -63,6 +66,8 @@ class SettingsActivity : AppCompatActivity() {
                     icon    = R.drawable.ic_round_auto_awesome_24,
                     onClick = {
                         startActivity(Intent(this@SettingsActivity, UserInterfaceSettingsActivity::class.java))
+                     }
+                
                      }
                 ),
                 // ── Common ────────────────────────────────────────────────
@@ -74,6 +79,8 @@ class SettingsActivity : AppCompatActivity() {
                     onClick = {
                         startActivity(Intent(this@SettingsActivity, SettingsCommonActivity::class.java))
                      }
+                
+                     }
                 ),
                 // ── Anime ─────────────────────────────────────────────────
                 Settings(
@@ -83,6 +90,8 @@ class SettingsActivity : AppCompatActivity() {
                     icon    = R.drawable.ic_round_movie_filter_24,
                     onClick = {
                         startActivity(Intent(this@SettingsActivity, SettingsAnimeActivity::class.java))
+                     }
+                
                      }
                 ),
                 // ── Advanced Video ────────────────────────────────────────
@@ -95,6 +104,8 @@ class SettingsActivity : AppCompatActivity() {
                     onClick    = {
                         startActivity(Intent(this@SettingsActivity, SettingsVideoActivity::class.java))
                      }
+                
+                     }
                 ),
 
                 // ── Extensions ────────────────────────────────────────────
@@ -106,6 +117,8 @@ class SettingsActivity : AppCompatActivity() {
                     onClick = {
                         startActivity(Intent(this@SettingsActivity, SettingsExtensionsActivity::class.java))
                      }
+                
+                     }
                 ),
                 // ── Notifications ─────────────────────────────────────────
                 Settings(
@@ -116,6 +129,8 @@ class SettingsActivity : AppCompatActivity() {
                     onClick = {
                         startActivity(Intent(this@SettingsActivity, SettingsNotificationActivity::class.java))
                      }
+                
+                     }
                 ),
             )
 
@@ -124,16 +139,22 @@ class SettingsActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@SettingsActivity)
                 isFocusable = true
                 isFocusableInTouchMode = false
-                setOnKeyListener { _, keyCode, event ->
+                setOnKeyListener {
+        _, keyCode, event ->
                     if (event.action == KeyEvent.ACTION_DOWN &&
                         keyCode == KeyEvent.KEYCODE_BACK) {
         finish()
                         true
                     } else false
                 }
+            
+                }
             }
 
-            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+            settingsBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+  }
+            
   }
             // Randomised logo animation on each visit
             val animations = listOf(
@@ -151,7 +172,11 @@ class SettingsActivity : AppCompatActivity() {
                     append(getString(R.string.version))
                     append(": $versionName (${getString(R.string.dantotsu)})")
                  }
+            
+                 }
             }
+        }
+    
         }
     }
 }

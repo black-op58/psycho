@@ -74,10 +74,13 @@ private fun addLoadingViews(storiesList: List<Activity>) {
     var idCounter = 1
 for (story in storiesList) {
         binding.progressBarContainer.removeView(findViewWithTag<ProgressBar>("story${idCounter}"))            
-val progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)            progressBar.visibility = View.VISIBLE
-            progressBar.id = idCounter            progressBar.tag = "story${idCounter++}"            progressBar.progressBackgroundTintList = ColorStateList.valueOf(primaryColor)            progressBar.progressTintList = ColorStateList.valueOf(onPrimaryColor)
+val progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.visibility = View.VISIBLE
+            progressBar.id = idCounter            progressBar.tag = "story${idCounter++}"            progressBar.progressBackgroundTintList = ColorStateList.valueOf(primaryColor);
+        progressBar.progressTintList = ColorStateList.valueOf(onPrimaryColor)
             
-val params = LayoutParams(0, LayoutParams.WRAP_CONTENT)            params.marginEnd = 5
+val params = LayoutParams(0, LayoutParams.WRAP_CONTENT);
+        params.marginEnd = 5
             params.marginStart = 5            binding.progressBarContainer.addView(progressBar, params)
          }
 val constraintSet = ConstraintSet()
@@ -106,6 +109,8 @@ else -> {
                         }
 }
 }
+        
+}
         else {
         constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.END,                        LayoutParams.PARENT_ID,                        ConstraintSet.END                    )
         constraintSet.connect(                        getId("story${counter}"),                        ConstraintSet.TOP,                        LayoutParams.PARENT_ID,                        ConstraintSet.TOP                    )
@@ -121,7 +126,8 @@ private fun showStory() {
 if (storyIndex > 1) {
         completeProgressBar(storyIndex - 1)
          }
-val progressBar = findViewWithTag<ProgressBar>("story${storyIndex}")        binding.androidStoriesLoadingView.visibility = View.VISIBLE
+val progressBar = findViewWithTag<ProgressBar>("story${storyIndex}");
+        binding.androidStoriesLoadingView.visibility = View.VISIBLE
         timer.setOnTimerCompletedListener {
         Logger.log("onAnimationEnd: $storyIndex")
 if (storyIndex - 1 <= activityList.size) {
@@ -129,8 +135,12 @@ if (storyIndex - 1 <= activityList.size) {
 if (storyIndex < activityList.size) {
         storyIndex += 1                    showStory()
  }
+        
+ }
         else {                    // on stories end                    binding.androidStoriesLoadingView.visibility = View.GONE                    onStoriesCompleted()
                 }
+}
+        
 }
         else {                // on stories end                binding.androidStoriesLoadingView.visibility = View.GONE                onStoriesCompleted()            }}
 timer.setOnPercentTickListener {
@@ -145,13 +155,15 @@ return (seconds.toLong()).times(1000)
      }
 private fun resetProgressBar(storyIndex: Int) {
 for (i in storyIndex until activityList.size + 1) {
-    val progressBar = findViewWithTag<ProgressBar>("story${i}")            progressBar?.let {
+    val progressBar = findViewWithTag<ProgressBar>("story${i}");
+        progressBar?.let {
                 it.progress = 0            }}
     }
 
 private fun completeProgressBar(storyIndex: Int) {
 for (i in 1 until storyIndex + 1) {
-    val progressBar = findViewWithTag<ProgressBar>("story${i}")            progressBar?.let {
+    val progressBar = findViewWithTag<ProgressBar>("story${i}");
+        progressBar?.let {
                 it.progress = 100            }}
     }
 
@@ -203,13 +215,16 @@ val newList = set.sorted().takeLast(200).toSet()
         PrefManager.setCustomVal(key, newList)
         binding.statusUserAvatar.loadImage(story.user?.avatar?.large)
         binding.statusUserName.text = story.user?.name
-        binding.statusUserTime.text = ActivityItemBuilder.getDateTime(story.createdAt)        binding.statusUserContainer.setOnClickListener {
+        binding.statusUserTime.text = ActivityItemBuilder.getDateTime(story.createdAt);
+        binding.statusUserContainer.setOnClickListener {
             ContextCompat.startActivity(                context,                Intent(context, ProfileActivity::class.java).putExtra("userId", story.userId),                null            )
         }
-binding.textActivity.setOnTouchListener { v, event ->            onTouchView(v, event, true)
+binding.textActivity.setOnTouchListener {
+        v, event ->            onTouchView(v, event, true)
         v.onTouchEvent(event)
 }
-binding.textActivityContainer.setOnTouchListener { v, event ->            onTouchView(v, event, true)
+binding.textActivityContainer.setOnTouchListener {
+        v, event ->            onTouchView(v, event, true)
         v.onTouchEvent(event)
          }
 fun visible(isList: Boolean) {            
@@ -222,17 +237,22 @@ val text = "${
 if (it.isLowerCase()) {
         it.titlecase(Locale.ROOT)
  }
+        
+ }
         else {
         it.toString()                        }}
 } ${story.progress ?: story.media?.title?.userPreferred} " +
 if (                            story.status?.contains("completed") == false &&                            !story.status.contains("plans") &&                            !story.status.contains("repeating") &&                            !story.status.contains("paused") &&                            !story.status.contains("dropped")                        ) {                            "of ${story.media?.title?.userPreferred}"
+}
+        
 }
         else {                            ""                        }
 binding.infoText.text = text
 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
         blurImage(
 if (bannerAnimations) binding.contentImageViewKen else binding.contentImageView,                    story.media?.bannerImage ?: story.media?.coverImage?.extraLarge                )
-        binding.coverImage.loadImage(story.media?.coverImage?.extraLarge)                binding.coverImage.setOnClickListener {
+        binding.coverImage.loadImage(story.media?.coverImage?.extraLarge);
+        binding.coverImage.setOnClickListener {
                     ContextCompat.startActivity(                        context,                        Intent(context, MediaDetailsActivity::class.java).putExtra(                            "mediaId",                            story.media?.id                        ),                        ActivityOptionsCompat.makeSceneTransitionAnimation(                            (it.context as FragmentActivity),                            binding.coverImage,                            ViewCompat.getTransitionName(binding.coverImage)!!                        ).toBundle()                    )                }}
 "TextActivity" -> {
         visible(false)
@@ -244,6 +264,8 @@ val cleanedHtml = AnilistLinkParser.removeAnilistUrlsFromHtml(htmlText)
 val markwon = buildMarkwon(context, false)
         markwon.setMarkdown(binding.textActivity, cleanedHtml)
                     addLinkPreviews(anilistLinks)
+                 }
+                
                  }
                 }
 "MessageActivity" -> {
@@ -257,15 +279,19 @@ val markwon = buildMarkwon(context, false)
         markwon.setMarkdown(binding.textActivity, cleanedHtml)
                     addLinkPreviews(anilistLinks)
                  }
+                
+                 }
                 }
 }
 
-val userList = arrayListOf<User>()        story.likes?.forEach { 
+val userList = arrayListOf<User>();
+        story.likes?.forEach { 
         i
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage, isFollowing = i.isFollowing, isFollower = i.isFollower))
          }
 val likeColor = ContextCompat.getColor(context, R.color.yt_red)        
-val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)        binding.replyCount.text = story.replyCount.toString()
+val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp);
+        binding.replyCount.text = story.replyCount.toString()
         binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityRepliesContainer.setOnClickListener {
     val hostActivity = it.context as? FragmentActivity ?: return@setOnClickListener            pause()
@@ -276,7 +302,8 @@ if (!hostActivity.isFinishing &&                            !hostActivity.isDest
         resume()                        }}}
 }.show(hostActivity.supportFragmentManager, "replies")
 }
-binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)        binding.activityLikeCount.text = story.likeCount.toString()
+binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor);
+        binding.activityLikeCount.text = story.likeCount.toString()
         binding.activityLikeContainer.setOnClickListener {
             like()
 }
@@ -292,18 +319,24 @@ fun like() {
     val story = activityList[storyIndex - 1]        
 val likeColor = ContextCompat.getColor(context, R.color.yt_red)        
 val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)        
-val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())        scope.launch {
+val scope = CoroutineScope(Dispatchers.IO + SupervisorJob());
+        scope.launch {
     val res = Anilist.mutation.toggleLike(story.id, "ACTIVITY")
         withContext(Dispatchers.Main) {
 if (res != null) {
 if (story.isLiked == true) {
         story.likeCount = story.likeCount?.minus(1)
  }
+        
+ }
         else {
         story.likeCount = story.likeCount?.plus(1)
                     }
-binding.activityLikeCount.text = (story.likeCount ?: 0).toString()                    story.isLiked = !story.isLiked!!
+binding.activityLikeCount.text = (story.likeCount ?: 0).toString();
+        story.isLiked = !story.isLiked!!
                     binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
+ }
+        
  }
         else {
         snackString("Failed to like activity")                }}}
@@ -325,11 +358,14 @@ if (fragmentActivity != null && mediaIds.isNotEmpty()) {
 
 val mediaMap = mediaList?.associateBy { 
         i
-                    links.forEach { link ->                        
+                    links.forEach {
+        link ->                        
 val previewView = AnilistLinkPreviewView(context)                        
 val media = mediaMap[link.id]
 if (media != null) {
         previewView.setMediaData(media)
+ }
+        
  }
         else {
         previewView.visibility = View.GONE                        }
@@ -370,22 +406,32 @@ if (event.x < leftQuarter) {
 } else if (event.x > rightQuarter) {
         rightPanelTouch()
  }
+        
+ }
         else {
         resume()
                         }
 }
+        
+}
         else {
         resume()
                     }
+}
+        
 }
         else {
 if (clickDuration < maxClickDuration && !isLongPress) {
 if (event.x < leftHalf) {
         leftPanelTouch()
  }
+        
+ }
         else {
         rightPanelTouch()
                         }
+}
+        
 }
         else {
         resume()

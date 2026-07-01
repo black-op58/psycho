@@ -6,7 +6,8 @@ enum class NotificationType(
 val value: String) {    
         A
 fun toFormattedString(): String {
-return this.value.replace("_", " ").lowercase(Locale.ROOT)            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+return this.value.replace("_", " ").lowercase(Locale.ROOT)            .replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
  }
 }
 

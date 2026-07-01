@@ -25,7 +25,8 @@ if (reload) {
         onReloadPressed?.invoke(this)            }}
 binding.bottomImageTitle.text = title        binding.bottomImageReload.setOnLongClickListener {
         openLinkInBrowser(image.url)
-if (image2 != null) openLinkInBrowser(image2.url)            true
+if (image2 != null) openLinkInBrowser(image2.url);
+        true
     
 override fun onDestroy() {        
         _
@@ -35,6 +36,8 @@ companion object {
         a
                 putSerializable("image", image)
                 putSerializable("image2", image2)
+             }
+    
              }
     }
 

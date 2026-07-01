@@ -46,12 +46,15 @@ if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.
 if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)                // Set up filter icon visibility        binding.filterButton.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE        binding.filterButton.setOnClickListener {
         showFilterBottomSheet()
         }
-binding.titleImage.setOnClickListener { handleTitleImageClick()
+binding.titleImage.setOnClickListener {
+        handleTitleImageClick()
 }
-binding.listRecyclerView.adapter = adapter        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)        binding.listProgressBar.isVisible = true
+binding.listRecyclerView.adapter = adapter        binding.listRecyclerView.layoutManager = LinearLayoutManager(context);
+        binding.listProgressBar.isVisible = true
         binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         bottomMargin = navBarHeight}
-binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {
+binding.emptyTextView.text = getString(R.string.nothing_here);
+        lifecycleScope.launch {
             getList()
 if (adapter.itemCount == 0) {
         binding.emptyTextView.isVisible = true            }
@@ -61,21 +64,24 @@ binding.feedSwipeRefresh.setOnRefreshListener {
         adapter.clear()
         allActivities.clear()
                 page = 1
-                hasMoreActivities = true                getList()                binding.feedSwipeRefresh.isRefreshing = false}}
+                hasMoreActivities = true                getList();
+        binding.feedSwipeRefresh.isRefreshing = false}}
 binding.listRecyclerView.addOnScrollListener(
 object :            RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {                
         s
 if (shouldLoadMore()) {
         lifecycleScope.launch {
-        binding.feedRefresh.isVisible = true                        getList()                        binding.feedRefresh.isVisible = false
+        binding.feedRefresh.isVisible = true                        getList();
+        binding.feedRefresh.isVisible = false
                     }}}
 })
      }
 private fun showFilterBottomSheet() {        
         A
                 page = 1
-                hasMoreActivities = true                getList()                binding.listProgressBar.isVisible = false
+                hasMoreActivities = true                getList();
+        binding.listProgressBar.isVisible = false
             }
 }.show(childFragmentManager, "ActivityFilterBottomSheet")
      }
@@ -98,12 +104,16 @@ if (this::binding.isInitialized) {
 }
 
 companion object {        
-enum class ActivityType { GLOBAL, USER, OTHER_USER, ONE }
+enum class ActivityType {
+        GLOBAL, USER, OTHER_USER, ONE }
 
 fun newInstance(            type: ActivityType,            userId: Int? = null,            activityId: Int? = null        ): ActivityFragment {
 return ActivityFragment().apply {
         arguments = Bundle().apply {
-        putSerializable("type", type)                    userId?.let { putInt("userId", it)
+        putSerializable("type", type);
+        userId?.let {
+        putInt("userId", it)
  }
-activityId?.let { putInt("activityId", it)}}}}
+activityId?.let {
+        putInt("activityId", it)}}}}
 }

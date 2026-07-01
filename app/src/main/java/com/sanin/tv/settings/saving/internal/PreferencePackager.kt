@@ -16,10 +16,12 @@ fun unpack(decryptedJson: String): Boolean {
 val type = 
 object :                TypeToken<Map<String, Map<String, Map<String, Any>>>>() {}.type  //oh god...            
 val rawPrefsMap: Map<String, Map<String, Map<String, Any>>> =                gson.fromJson(decryptedJson, type)            
-val deserializedMap = mutableMapOf<String, Map<String, Any?>>()            rawPrefsMap.forEach { 
+val deserializedMap = mutableMapOf<String, Map<String, Any?>>();
+        rawPrefsMap.forEach { 
         (
                 
-val innerMap = mutableMapOf<String, Any?>()                prefValueMap.forEach { 
+val innerMap = mutableMapOf<String, Any?>();
+        prefValueMap.forEach { 
         (
                     
 val typeName = typeValueMap["type"] as? String
@@ -33,10 +35,12 @@ return unpackagePreferences(deserializedMap)
 private fun packagePreferences(map: Map<Location, SharedPreferences>): Map<String, Map<String, *>> {
     val result = mutableMapOf<String, Map<String, *>>()
 for ((location, preferences) in map) {
-    val prefMap = mutableMapOf<String, Any>()                preferences.all.forEach { 
+    val prefMap = mutableMapOf<String, Any>();
+        preferences.all.forEach { 
         (
                     
-val typeValueMap = mapOf(                        "type" to value?.javaClass?.kotlin?.qualifiedName,                        "value" to value                    )                    prefMap[key] = typeValueMap                }
+val typeValueMap = mapOf(                        "type" to value?.javaClass?.kotlin?.qualifiedName,                        "value" to value                    );
+        prefMap[key] = typeValueMap                }
 result[location.name] = prefMap            }
 return result        }
 /**         * @return true if successful, false if error         */

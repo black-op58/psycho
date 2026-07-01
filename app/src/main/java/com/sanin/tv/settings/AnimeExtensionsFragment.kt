@@ -34,7 +34,8 @@ private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {        
         _
         binding.allExtensionsRecyclerView.adapter = adapter        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =            true        lifecycleScope.launch {
-        viewModel.pagerFlow.collectLatest { it ->                binding.allExtensionsRecyclerView.post {
+        viewModel.pagerFlow.collectLatest {
+        it ->                binding.allExtensionsRecyclerView.post {
         lifecycleScope.launch {
         adapter.submitData(it)                    }}}}
 viewModel.invalidatePager() // Force a refresh of the pager

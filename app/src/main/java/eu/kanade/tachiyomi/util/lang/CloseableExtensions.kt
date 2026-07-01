@@ -7,16 +7,21 @@ inline fun <T : Closeable?> Array<T>.use(block: () -> Unit) {
 try {
 return block()
  }
+        
+ }
         catch (e: Throwable) {
         blockException = e
 throw e
 } finally {
 when (blockException) {
-    null -> forEach { it?.close()
+    null -> forEach {
+        it?.close()
  }
 else -> forEach {
 try {
     it?.close()
+ }
+        
  }
         catch (closeException: Throwable) {
         blockException.addSuppressed(closeException)

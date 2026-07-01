@@ -29,7 +29,11 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
                     putFloat(ARG_EPISODE, episodeNumber)
                     putLong(ARG_TIMESTAMP, currentPositionMs)
                  }
+            
+                 }
             }
+        }
+    
         }
     }
 
@@ -44,6 +48,9 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
         currentTimestampMs = arguments?.getLong(ARG_TIMESTAMP) ?: 0L
     }
 
+    
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -53,17 +60,23 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
             orientation = LinearLayout.VERTICAL
             setPadding(48, 32, 48, 32)
          }
+        
+         }
         scroll.addView(layout)
 
         val title = TextView(ctx).apply {
             text = "Episode Notes — Ep $episodeNumber"
             textSize = 18f
         }
+        
+        }
         layout.addView(title)
 
         val timestampLabel = TextView(ctx).apply {
             text = "At: ${EpisodeNotesManager.formatTimestamp(currentTimestampMs)}"
             textSize = 13f
+        }
+        
         }
         layout.addView(timestampLabel)
 
@@ -72,7 +85,10 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
         val editText = EditText(ctx).apply {
             hint = "Write your note here…"
             minLines = 3
-            existing?.let { setText(it.text)
+            existing?.let {
+        setText(it.text)
+ }
+        
  }
         }
         layout.addView(editText)
@@ -85,6 +101,8 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
             text = "Delete Note"
             isEnabled = existing != null
         }
+        
+        }
         layout.addView(deleteBtn)
 
         val allNotesLabel = TextView(ctx).apply {
@@ -92,19 +110,27 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
             textSize = 14f
             setPadding(0, 24, 0, 4)
          }
+        
+         }
         layout.addView(allNotesLabel)
 
         val allNotes = EpisodeNotesManager.getAllNotes(mediaId);
         if (allNotes.isEmpty()) {
-            layout.addView(TextView(ctx).apply { text = "No notes yet." })
+            layout.addView(TextView(ctx).apply {
+        text = "No notes yet." })
+         }
+        
          }
         else {
-            allNotes.forEach { note ->
+            allNotes.forEach {
+        note ->
                 layout.addView(TextView(ctx).apply {
                     text = "Ep ${note.episodeNumber} @ ${EpisodeNotesManager.formatTimestamp(note.timestampMs)}: ${note.text}"
                     textSize = 12f
                     setPadding(0, 4, 0, 4)
                 })
+             }
+        
              }
         }
 
@@ -114,11 +140,15 @@ class EpisodeNotesBottomSheet : BottomSheetDialogFragment() {
                 EpisodeNotesManager.saveNote(mediaId, episodeNumber, currentTimestampMs, text)
                 dismiss()
              }
+        
+             }
         }
 
         deleteBtn.setOnClickListener {
             EpisodeNotesManager.deleteNote(mediaId, episodeNumber)
             dismiss()
+          }
+        
           }
         return scroll
     }

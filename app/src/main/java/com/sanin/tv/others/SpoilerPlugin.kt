@@ -16,6 +16,8 @@ private val anilist: Boolean = false) : AbstractMarkwonPlugin() {
 if (anilist) {
         applySpoilerSpans(markdown as Spannable, ARE)
  }
+        
+ }
         else {
         applySpoilerSpans(markdown as Spannable)
         }
@@ -26,6 +28,8 @@ private class RedditSpoilerSpan : CharacterStyle() {
 override fun updateDrawState(tp: TextPaint) {
 if (!revealed) {
         // use the same text color                tp.bgColor = Color.DKGRAY                tp.color = Color.DKGRAY
+}
+        
 }
         else {                // for example keep a bit of black background to remind that it is a spoiler                tp.bgColor = ColorUtils.applyAlpha(Color.DKGRAY, 25)
             }

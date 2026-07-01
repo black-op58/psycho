@@ -14,6 +14,8 @@ object AnilistSearch {
                 STUDIO    -> "STUDIO"
                 USER      -> "USER"
             }
+        
+            }
         }
 
         fun toAnilistString(): String = toAnilistString(this)

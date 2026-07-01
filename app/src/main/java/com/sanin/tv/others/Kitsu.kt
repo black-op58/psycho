@@ -8,7 +8,8 @@ import com.sanin.tv.util.Logger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.net.URLEncoder
-object Kitsu {    suspend 
+object Kitsu {
+        suspend 
 fun getKitsuEpisodesDetails(media: Media): Map<String, Episode>? {        
         L
 return try {
@@ -20,9 +21,15 @@ try {
                                     original {
         url                                    }
         }
-    }
+    
         }
     }
+        }
+    
+        }
+    }
+        }
+    
         }
     }""".trimIndent()
                     
@@ -34,8 +41,11 @@ if (graphqlRes.data?.lookupMapping != null) {
 val mapping = graphqlRes.data.lookupMapping                        media.idKitsu = mapping.id
 val nodes = mapping.episodes?.nodes
 if (!nodes.isNullOrEmpty()) {
-        returnedEpisodes = nodes.mapNotNull { ep ->                                
+        returnedEpisodes = nodes.mapNotNull {
+        ep ->                                
 val num = ep?.number?.toString() ?: return@mapNotNull null                                num to Episode(                                    number = num,                                    title = ep.titles?.canonical,                                    desc = ep.description?.en ?: ep.description?.enUs,                                    thumb = FileUrl[ep.thumbnail?.original?.url]                                )                            }.toMap()                        }}
+}
+        
 }
         catch (e: Exception) {
         Logger.log("Kitsu GraphQL failed: ${e.message}")
@@ -65,6 +75,8 @@ if (episodesRes.links?.next == null || pageEpisodes.isNullOrEmpty()) {
         break                    }
 offset += limit}
 allEpisodes}
+}
+        
 }
         catch (e: Exception) {
         null}

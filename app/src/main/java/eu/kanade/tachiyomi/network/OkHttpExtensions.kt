@@ -22,7 +22,8 @@ val jsonMime = "application/json
 charset=utf-8".toMediaType()
 @OptIn(ExperimentalAtomicApi::class)
 fun Call.asObservable(): Observable<Response> {
-return Observable.unsafeCreate { subscriber ->        // Since Call is a one-shot type, clone it for each new subscriber.        
+return Observable.unsafeCreate {
+        subscriber ->        // Since Call is a one-shot type, clone it for each new subscriber.        
 val call = clone()        // Wrap the call in a helper which handles both unsubscription and backpressure.        
 val requestArbiter = 
 object : Producer, Subscription {
@@ -35,6 +36,8 @@ if (!subscriber.isUnsubscribed) {
         subscriber.onNext(response)
         subscriber.onCompleted()
                      }
+}
+        
 }
         catch (e: Exception) {
         if (!subscriber.isUnsubscribed) {
@@ -49,10 +52,13 @@ return call.isCanceled()            }}
 subscriber.add(requestArbiter)
         subscriber.setProducer(requestArbiter)
      }
+    
+     }
     }
 
 fun Call.asObservableSuccess(): Observable<Response> {
-return asObservable().doOnNext { response ->
+return asObservable().doOnNext {
+        response ->
 if (!response.isSuccessful) {
         response.close()
 throw HttpException(response.code)
@@ -61,7 +67,8 @@ throw HttpException(response.code)
 @OptIn(ExperimentalCoroutinesApi::class)
 private suspend 
 fun Call.await(callStack: Array<StackTraceElement>): Response {
-return suspendCancellableCoroutine { continuation ->        
+return suspendCancellableCoroutine {
+        continuation ->        
 val callback =            
 object : Callback {
     override fun onResponse(call: Call, response: Response) {                    
@@ -74,9 +81,12 @@ if (continuation.isCancelled) return
 val exception = IOException(e.message, e).apply { 
         s
 continuation.resumeWithException(exception)}}
-enqueue(callback)        continuation.invokeOnCancellation {
+enqueue(callback);
+        continuation.invokeOnCancellation {
 try {
         cancel()
+            }
+        
             }
         catch (ex: Throwable) {
         // Ignore cancel exception            }}
@@ -92,7 +102,8 @@ fun Call.awaitSuccess(): Response {
 val response = await(callStack)
 if (!response.isSuccessful) {
         response.close()
-throw HttpException(response.code).apply { stackTrace = callStack }
+throw HttpException(response.code).apply {
+        stackTrace = callStack }
 }
 return response}
 

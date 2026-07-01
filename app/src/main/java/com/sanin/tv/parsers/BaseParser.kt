@@ -22,24 +22,35 @@ abstract class BaseParser {
         if (saveName.isEmpty()) throw IllegalStateException("saveName is empty");
         if (hostUrl.isEmpty()) throw IllegalStateException("hostUrl is empty")
       }
+    
+      }
     open suspend fun autoSearch(mediaObj: com.sanin.tv.media.Media): ShowResponse? {
         response = loadSavedShowResponse(mediaObj.id);
         if (response != null) {
         setUserText("Loaded : ${response?.name}")
             return response
         }
+        
+        }
         setUserText("Searching : ${mediaObj.mainName()}")
         Logger.log("Searching : ${mediaObj.mainName()}")
         val results = search(mediaObj.mainName())
-        results.forEach { Logger.log("Result: ${it.name}")
+        results.forEach {
+        Logger.log("Result: ${it.name}")
+  }
+        
   }
         val sortedResults = if (results.isNotEmpty()) {
             results.sortedByDescending {
                 FuzzySearch.ratio(it.name.lowercase(), mediaObj.mainName().lowercase())
              }
+        
+             }
         }
         else {
             emptyList()
+         }
+        
          }
         response = sortedResults.firstOrNull();
         if (response == null || FuzzySearch.ratio(
@@ -54,15 +65,21 @@ abstract class BaseParser {
                 romajiResults.sortedByDescending {
                     FuzzySearch.ratio(it.name.lowercase(), mediaObj.nameRomaji.lowercase())
                  }
+            
+                 }
             }
         else {
                 emptyList()
+             }
+            
              }
             val closestRomaji = sortedRomajiResults.firstOrNull()
             Logger.log("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
             response = if (response == null) {
         Logger.log("No exact match found in results. Using closest match from RomajiResults.")
                 closestRomaji
+            }
+        
             }
         else {
                 val romajiRatio = FuzzySearch.ratio(
@@ -79,14 +96,23 @@ abstract class BaseParser {
         Logger.log("RomajiResults has a closer match. Replacing response.")
                     closestRomaji
                 }
+        
+                }
         else {
                     Logger.log("Results has a closer or equal match. Keeping existing response.")
                     response
                 }
+            
+                }
             }
+        }
+        
         }
         saveShowResponse(mediaObj.id, response)
         return response
+    }
+
+    
     }
 
     fun ping(): Triple<Int, Int?, String> {
@@ -98,11 +124,16 @@ abstract class BaseParser {
         try {
             val request = Request.Builder().url(hostUrl).build()
             responseTime = measureTimeMillis {
-                client.newCall(request).execute().use { resp ->
+                client.newCall(request).execute().use {
+        resp ->
                     statusCode = resp.code
                     responseMessage = resp.message.ifEmpty { "None" }
                 }
+            
+                }
             }.toInt()
+         }
+        
          }
         catch (e: Exception) {
         Logger.log("Failed to ping $name")
@@ -110,16 +141,24 @@ abstract class BaseParser {
             responseMessage = if (e.message.isNullOrEmpty()) "None" else e.message!!
             Logger.log(e)
          }
+        
+         }
         return Triple(statusCode, responseTime, responseMessage)
+      }
+    
       }
     open suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
         return PrefManager.getNullableCustomVal("${saveName}_$mediaId", null, ShowResponse::class.java)
       }
+    
+      }
     open fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean = false) {
         if (response != null) {
         PrefManager.setCustomVal("${saveName}_$mediaId", response)
             Logger.log("Saved ${response.name} for $saveName:$mediaId (selected=$selected)")
+         }
+    
          }
     }
 }

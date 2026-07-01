@@ -27,15 +27,20 @@ val clickCallback: (Int) -> Unit) : BindableItem<ViewBinding>() {
 if (grid) {
     val binding = viewBinding as ItemFollowerGridBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { 
         b
-    //setupFollowButton(binding.followStatusChip)            binding.root.setOnClickListener { clickCallback(user.id)
+    //setupFollowButton(binding.followStatusChip);
+        binding.root.setOnClickListener {
+        clickCallback(user.id)
  }
+}
+        
 }
         else {
     val binding = viewBinding as ItemFollowerBinding            binding.profileUserName.text = username            user.avatar?.medium?.let { 
         b
     blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)
         setupFollowButton(binding.followStatusChip)
-            binding.root.setOnClickListener { clickCallback(user.id)}}
+            binding.root.setOnClickListener {
+        clickCallback(user.id)}}
     }
 
 private fun setupFollowButton(followButton: View) {
@@ -47,12 +52,14 @@ when {
 else -> R.string.follow                }
 )
 }
-button.text = followText()        button.setOnClickListener {
+button.text = followText();
+        button.setOnClickListener {
         scope.launch(Dispatchers.IO) {
     val res = Anilist.mutation.toggleFollow(user.id)
 if (res?.data?.toggleFollow != null) {
         withContext(Dispatchers.Main) {
-        snackString(R.string.success)                        user.isFollowing = res.data.toggleFollow.isFollowing
+        snackString(R.string.success);
+        user.isFollowing = res.data.toggleFollow.isFollowing
                         button.text = followText()                    }}}}
 }
 
@@ -62,6 +69,8 @@ return if (grid) R.layout.item_follower_grid else R.layout.item_follower    }
 override fun initializeViewBinding(view: View): ViewBinding {
 return if (grid) {
         ItemFollowerGridBinding.bind(view)
+ }
+        
  }
         else {
         ItemFollowerBinding.bind(view)

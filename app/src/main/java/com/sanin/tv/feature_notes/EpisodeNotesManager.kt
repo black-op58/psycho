@@ -20,6 +20,8 @@ object EpisodeNotesManager {
             deleteNote(mediaId, episodeNumber)
             return
         }
+        
+        }
         val existing = getNote(mediaId, episodeNumber)
         val note = EpisodeNote(
             mediaId = mediaId,
@@ -32,6 +34,8 @@ object EpisodeNotesManager {
         PrefManager.setCustomVal(key, note)
         updateIndex(mediaId, episodeNumber, add = true)
       }
+    
+      }
     fun getNote(mediaId: Int, episodeNumber: Float): EpisodeNote? =
         PrefManager.getNullableCustomVal(keyFor(mediaId, episodeNumber), null, EpisodeNote::class.java)
 
@@ -39,13 +43,22 @@ object EpisodeNotesManager {
         PrefManager.removeVal(keyFor(mediaId, episodeNumber))
         updateIndex(mediaId, episodeNumber, add = false)
       }
+    
+      }
     /** Returns all notes for a given media item sorted by episode number. */
     @Suppress("UNCHECKED_CAST")
     fun getAllNotes(mediaId: Int): List<EpisodeNote> {
     val index = getIndex(mediaId)
-        return index.mapNotNull { ep -> getNote(mediaId, ep)
+        return index.mapNotNull {
+        ep -> getNote(mediaId, ep)
  }
-            .sortedBy { it.episodeNumber }
+            
+ }
+            .sortedBy {
+        it.episodeNumber }
+    }
+
+    
     }
 
     fun hasNote(mediaId: Int, episodeNumber: Float): Boolean =
@@ -57,10 +70,14 @@ object EpisodeNotesManager {
             allNotesKey(mediaId), null, Set::class.java
         ) as? Set<Float>) ?: emptySet()
       }
+    
+      }
     private fun updateIndex(mediaId: Int, episodeNumber: Float, add: Boolean) {
     val current = getIndex(mediaId).toMutableSet();
         if (add) current.add(episodeNumber) else current.remove(episodeNumber)
         PrefManager.setCustomVal(allNotesKey(mediaId), current)
+      }
+    
       }
     /** Format a millisecond timestamp as HH:MM:SS for display. */
     fun formatTimestamp(ms: Long): String {

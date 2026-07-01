@@ -23,7 +23,8 @@ fun mapEpisode(media: Media, episodeNumber: Int, episode: Episode? = null): Seas
 if (episodeCache.containsKey(cacheKey)) {
 return episodeCache[cacheKey]!!        }
 
-val result = mapEpisodeInternal(media, episodeNumber, episode)        episodeCache[cacheKey] = result
+val result = mapEpisodeInternal(media, episodeNumber, episode);
+        episodeCache[cacheKey] = result
 return result    }
 /**     * MAIN FUNCTION     * Pass the Episode
 object so we can read AniZip data already stored in     * episode.extra["season"] / episode.extra["episode"] — no second network call.     */    
@@ -87,12 +88,16 @@ val end = if (parts.size > 1 && parts[1].isNotEmpty()) {
 } else if (parts.size > 1) {
         Int.MAX_VALUE // "e13-" means 13 to infinity
 }
+        
+}
         else {
         start // "e5" means just 5                }
 if (episodeNumber in start..end) {
         Logger.log("EpisodeMapper: Match found for $key: $value")
 return SeasonEpisode(season, episodeNumber - start + 1)
                 }
+}
+        
 }
         catch (e: Exception) {
         Logger.log("EpisodeMapper: Error parsing mapping $key=$value")
@@ -178,17 +183,24 @@ while (safety < 20) {
 val prequel = relations?.find {                
         (
 if (prequel != null) {
-        // Logger.log("EpisodeMapper: Found prequel: ${prequel.userPreferredName} (ID: ${prequel.id})")                season++
+        // Logger.log("EpisodeMapper: Found prequel: ${prequel.userPreferredName} (ID: ${prequel.id})");
+        season++
                 
 val fetchedPrequel = AnilistQueries().getMedia(prequel.id)
 if (fetchedPrequel != null) {
     val detailedPrequel = AnilistQueries().mediaDetails(fetchedPrequel);
         current = detailedPrequel
 }
-        else {                    // Logger.log("EpisodeMapper: Failed to fetch prequel details for ID ${prequel.id}")                    break
+        
+}
+        else {                    // Logger.log("EpisodeMapper: Failed to fetch prequel details for ID ${prequel.id}");
+        break
                 }
 }
-        else {                // Logger.log("EpisodeMapper: No TV/ONA prequel found for ${current.id}")                break
+        
+}
+        else {                // Logger.log("EpisodeMapper: No TV/ONA prequel found for ${current.id}");
+        break
             }
 safety++}
 // Logger.log("EpisodeMapper: Final calculated season: $season")

@@ -57,6 +57,9 @@ class MediaAdaptor(
         const val STYLE_SMALL = 0
     }
 
+    
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
         0 -> {
@@ -69,7 +72,11 @@ class MediaAdaptor(
                     it.width = imgW
                     it.height = imgH
                 }
+                
+                }
                 MediaViewHolder(b)
+             }
+            
              }
             1 -> MediaLargeViewHolder(
                 ItemMediaLargeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -81,6 +88,8 @@ class MediaAdaptor(
                 ItemMediaPageSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             else -> throw IllegalArgumentException()
+         }
+    
          }
     }
 
@@ -104,10 +113,14 @@ class MediaAdaptor(
                         blurImage(b.itemCompactImageBg, imageUrl)
                         b.itemCompactImage.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
                     }
+        
+                    }
         else {
                         // Portrait card or banner image: centerCrop fills the frame cleanly.
                         b.itemCompactImageBg.visibility = View.GONE
                         b.itemCompactImage.scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                    }
+                    
                     }
                     // Apply card roundness pref
                     val density0 = b.root.context.resources.displayMetrics.density
@@ -130,6 +143,8 @@ class MediaAdaptor(
                             b.itemCompactLogoArt.visibility = View.VISIBLE
                             b.itemCompactTitle.visibility = View.GONE
                         }
+                    
+                        }
                     }
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
@@ -150,6 +165,10 @@ class MediaAdaptor(
                         total0 == null && isReleasing0 -> " | ?"
                         else -> ""
                     
+
+}
+                    
+                    
 }
                     b.itemCompactTotal.text = totalText0
                     b.itemCompactTotal.isVisible = totalText0.isNotEmpty()
@@ -164,8 +183,12 @@ class MediaAdaptor(
         b.itemCompactWatchProgress.visibility = View.VISIBLE
                         b.itemCompactWatchProgress.progress = ((watched.toFloat() / total) * 100).toInt()
                      }
+        
+                     }
         else {
                         b.itemCompactWatchProgress.visibility = View.GONE
+                    }
+                    
                     }
                     if (media.relation != null) {
         b.itemCompactRelation.text = "${media.relation}  "
@@ -178,7 +201,12 @@ class MediaAdaptor(
                                 includeFontPadding = false
                                 setLineSpacing(0f, 0.9f)
                              }
+                        
+                             }
                         }
+                    }
+
+                    
                     }
 
                     @SuppressLint("NotifyDataSetChanged");
@@ -187,7 +215,12 @@ class MediaAdaptor(
                         mediaList.addAll(mediaList)
                         notifyItemRangeInserted(size - 1, mediaList.size)
                      }
+                
+                     }
                 }
+            }
+
+            
             }
 
             // ── Type 1: large full-width card (library list mode) ────────────
@@ -229,6 +262,8 @@ class MediaAdaptor(
                             b.itemCompactLogoArt.visibility = View.VISIBLE
                             b.itemCompactTitle.visibility = View.GONE
                         }
+                    
+                        }
                     }
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
@@ -248,6 +283,10 @@ class MediaAdaptor(
                         totalEps1 == null && isReleasing1 -> " | ?"
                         else -> ""
                     
+
+}
+                    
+                    
 }
                     b.itemCompactTotal.text = totalText1
                     b.itemCompactTotal.isVisible = totalText1.isNotEmpty()
@@ -259,7 +298,12 @@ class MediaAdaptor(
         b.itemCompactRelation.text = "${media.relation}  "
                         b.itemCompactType.visibility = View.VISIBLE
                     }
+                
+                    }
                 }
+            }
+
+            
             }
 
             // ── Type 3: page small (trending/discover ViewPager) ─────────────
@@ -294,6 +338,8 @@ class MediaAdaptor(
                             b.itemCompactLogoArt.visibility = View.VISIBLE
                             b.itemCompactTitle.visibility = View.GONE
                         }
+                    
+                        }
                     }
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
@@ -304,36 +350,55 @@ class MediaAdaptor(
                     media.genres.apply {
                         if (isNotEmpty()) {
                             var genres = ""
-                            forEach { genres += "$it • " }
+                            forEach {
+        genres += "$it • " }
                             mediaList.random()
+                         }
+        
                          }
         else {
                             null
+                        }
+                        
                         }
                         media.let {
                             val index = mediaList?.indexOf(it) ?: -1
                             clicked(index, null)
                          }
+                    
+                         }
                     }
                 }
+            
+                }
             }
+        }
+    
         }
     }
 
     inner class MediaViewHolder(val binding: ItemMediaCompactBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            if (matchParent) itemView.updateLayoutParams { width = -1 }
+            if (matchParent) itemView.updateLayoutParams {
+        width = -1 }
             itemView.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
-                )
+)
+                }
              }
-            itemView.setOnLongClickListener { longClicked(bindingAdapterPosition)
+            itemView.setOnLongClickListener {
+        longClicked(bindingAdapterPosition)
+ }
+        
  }
         }
+    }
+
+    
     }
 
     inner class MediaLargeViewHolder(val binding: ItemMediaLargeBinding) :
@@ -344,11 +409,18 @@ class MediaAdaptor(
                     bindingAdapterPosition,
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
-                )
+)
+                }
              }
-            itemView.setOnLongClickListener { longClicked(bindingAdapterPosition)
+            itemView.setOnLongClickListener {
+        longClicked(bindingAdapterPosition)
+ }
+        
  }
         }
+    }
+
+    
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -360,12 +432,20 @@ class MediaAdaptor(
                     bindingAdapterPosition,
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
-                )
+)
+                }
              }
-            itemView.setOnTouchListener { _, _ -> true }
-            binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition)
+            itemView.setOnTouchListener {
+        _, _ -> true }
+            binding.itemCompactImage.setOnLongClickListener {
+        longClicked(bindingAdapterPosition)
+ }
+        
  }
         }
+    }
+
+    
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -377,19 +457,28 @@ class MediaAdaptor(
                     bindingAdapterPosition,
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
-                )
+)
+                }
              }
             binding.itemCompactTitleContainer.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
                     binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
-                )
+)
+                }
              }
-            itemView.setOnTouchListener { _, _ -> true }
-            binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition)
+            itemView.setOnTouchListener {
+        _, _ -> true }
+            binding.itemCompactImage.setOnLongClickListener {
+        longClicked(bindingAdapterPosition)
+ }
+        
  }
         }
+    }
+
+    
     }
 
     fun clicked(position: Int, itemCompactImage: ImageView?, bitmap: Bitmap? = null) {
@@ -397,7 +486,10 @@ class MediaAdaptor(
             val media = mediaList?.get(position);
         if (bitmap != null) MediaSingleton.bitmap = bitmap
             // Dismiss the "New Episode" badge as soon as the user taps into the show.
-            media?.id?.let { NewEpisodeBadgeManager.markAsSeen(it, activity.applicationContext)
+            media?.id?.let {
+        NewEpisodeBadgeManager.markAsSeen(it, activity.applicationContext)
+ }
+            
  }
             ContextCompat.startActivity(
                 activity,
@@ -409,10 +501,15 @@ class MediaAdaptor(
                         ViewCompat.getTransitionName(itemCompactImage)!!
                     ).toBundle()
                  }
+        
+                 }
         else {
                     null
                 }
-            )
+            
+                }
+)
+            }
          }
     }
 
@@ -425,14 +522,21 @@ class MediaAdaptor(
                     .show(activity.supportFragmentManager, "list")
                 return true
             }
+        
+            }
         }
         return false
+    }
+
+    
     }
 
     fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
         val drawable = imageView.drawable ?: return null
         if (drawable is BitmapDrawable) {
         return drawable.bitmap
+        }
+        
         }
         val bitmap = Bitmap.createBitmap(
             drawable.intrinsicWidth,
@@ -445,6 +549,9 @@ class MediaAdaptor(
         return bitmap
     }
 
+    
+    }
+
     fun resizeBitmap(source: Bitmap?, maxDimension: Int): Bitmap? {
         if (source == null) return null
         val width = source.width
@@ -455,9 +562,13 @@ class MediaAdaptor(
         newWidth = maxDimension
             newHeight = (height * (maxDimension.toFloat() / width)).toInt()
          }
+        
+         }
         else {
             newHeight = maxDimension
             newWidth = (width * (maxDimension.toFloat() / height)).toInt()
+         }
+        
          }
         return Bitmap.createScaledBitmap(source, newWidth, newHeight, true)
      }

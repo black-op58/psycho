@@ -118,7 +118,8 @@ fun NavigationPills(
             val glyphs   = if (isMain) MAIN_TAB_GLYPHS else CONTEXT_GLYPHS
             val labels   = if (isMain) MAIN_TAB_LABELS else CONTEXT_LABELS
 
-            tabOrder.forEach { tab ->
+            tabOrder.forEach {
+        tab ->
                 NavigationPill(
                     tab        = tab,
                     glyph      = glyphs[tab] ?: "",
@@ -126,9 +127,13 @@ fun NavigationPills(
                     isActive   = currentRoute == tab,
                     isExpanded = isExpanded,
                     focusEffect = settings.focusEffect,
-                    onClick    = { if (tab == "back") onBack() else onNavigate(tab)
+                    onClick    = {
+        if (tab == "back") onBack() else onNavigate(tab)
  }
-                )
+                
+ }
+)
+                }
               }
             Spacer(modifier = Modifier.width(6.dp))
 
@@ -162,9 +167,13 @@ fun NavigationPills(
                             color = Color.White,
                             fontSize = 7.sp,
                             lineHeight = 7.sp
-                        )
+)
+                        }
                      }
                 }
+            }
+
+            
             }
 
             Spacer(modifier = Modifier.width(4.dp))
@@ -172,9 +181,13 @@ fun NavigationPills(
             // ── Avatar button: tapping opens the right side rail ──────────
             AvatarButton(
                 avatarUrl = avatarUrl,
-                onClick   = { viewModel.showSideRail()
+                onClick   = {
+        viewModel.showSideRail()
  }
-            )
+            
+ }
+)
+            }
          }
     }
 }
@@ -200,6 +213,8 @@ fun NavigationPill(
         "comments" -> R.drawable.ic_round_comment_24
         else -> R.drawable.ic_round_home_24
     }
+    
+    }
     var isFocused by remember { 
         m
 
@@ -223,9 +238,11 @@ fun NavigationPill(
                 shape = RoundedCornerShape(50)
             )
             .focusable()
-            .onFocusChanged { isFocused = it.isFocused }
+            .onFocusChanged {
+        isFocused = it.isFocused }
             .navigationPillFocusEffect(isFocused, focusEffect)
-            .clickable { onClick() },
+            .clickable {
+        onClick() },
         contentAlignment = Alignment.Center
     ) {
         if (isExpanded) {
@@ -245,7 +262,8 @@ fun NavigationPill(
                     fontSize = 12.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
-                )
+)
+                }
              }
         }
         else {
@@ -254,7 +272,8 @@ fun NavigationPill(
                 contentDescription = label,
                 tint = if (isActive) Color(0xFF87CEEB) else Color.White.copy(alpha = 0.7f),
                 modifier = Modifier.size(20.dp)
-            )
+)
+            }
          }
     }
 }

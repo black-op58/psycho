@@ -23,7 +23,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
             topMargin = statusBarHeight        }
 binding.extensionResultsRecyclerView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         bottomMargin = navBarHeight}
-setContentView(binding.root)        binding.extensionResultsRecyclerView.adapter = adapter
+setContentView(binding.root);
+        binding.extensionResultsRecyclerView.adapter = adapter
         binding.extensionResultsRecyclerView.layoutManager = LinearLayoutManager(            this,            LinearLayoutManager.VERTICAL,            false        )
  }
 }

@@ -27,7 +27,8 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.proxyUsername.setText(proxyUsername)
         binding.proxyPassword.setText(proxyPassword)
         binding.proxyAuthentication.isChecked = authEnabled
-        toggleAuthentication(authEnabled)        binding.proxySave.setOnClickListener {
+        toggleAuthentication(authEnabled);
+        binding.proxySave.setOnClickListener {
             proxyHost = binding.proxyHost.text?.toString().orEmpty();
         proxyPort = binding.proxyPort.text?.toString().orEmpty()
             proxyUsername = binding.proxyUsername.text?.toString().orEmpty()
@@ -39,7 +40,8 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         dismiss()
 if (proxyEnabled) activity?.restartApp()
         }
-binding.proxyAuthentication.setOnCheckedChangeListener { _, isChecked ->            PrefManager.setVal(PrefName.ProxyAuthEnabled, isChecked)
+binding.proxyAuthentication.setOnCheckedChangeListener {
+        _, isChecked ->            PrefManager.setVal(PrefName.ProxyAuthEnabled, isChecked)
         toggleAuthentication(isChecked)
 }
 }

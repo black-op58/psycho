@@ -37,6 +37,8 @@ class SettingsAccountActivity : AppCompatActivity() {
         object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() = startMainActivity(this@SettingsAccountActivity)
           }
+    
+          }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -52,7 +54,13 @@ class SettingsAccountActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
 
-            accountSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+            
+            }
+
+            accountSettingsBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+  }
+            
   }
             settingsAccountHelp.setOnClickListener {
                 CustomBottomDialog.newInstance().apply {
@@ -63,33 +71,47 @@ class SettingsAccountActivity : AppCompatActivity() {
                                 .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
                             markWon.setMarkdown(this, context.getString(R.string.full_account_help))
                          }
+                    
+                         }
                     )
                 }.show(supportFragmentManager, "dialog")
+              }
+            
               }
             // AniList card click -> login/logout
             settingsAnilistCard.setOnClickListener {
                 if (Anilist.token == null) {
         Anilist.loginIntent(context)
                  }
+        
+                 }
         else {
                     Anilist.removeSavedToken()
                     restartMainActivity.isEnabled = true
                     reload()
+                 }
+            
                  }
             }
 
             settingsAnilistLoginAction.setOnClickListener {
                 settingsAnilistCard.performClick()
               }
+            
+              }
             // MAL login action
             settingsMalLoginAction.setOnClickListener {
                 if (MAL.token == null) {
         MAL.loginIntent(context)
                  }
+        
+                 }
         else {
                     MAL.removeSavedToken()
                     restartMainActivity.isEnabled = true
                     reload()
+                 }
+            
                  }
             }
 
@@ -105,7 +127,12 @@ class SettingsAccountActivity : AppCompatActivity() {
                     )
                     openLinkInBrowser(anilistLink)
                  }
+            
+                 }
             }
+        }
+
+        
         }
 
         binding.settingsRecyclerView.adapter = SettingsAdapter(
@@ -120,6 +147,8 @@ class SettingsAccountActivity : AppCompatActivity() {
                             Anilist.query.getUserData()
                             startActivity(Intent(context, AnilistSettingsActivity::class.java))
                          }
+                    
+                         }
                     },
                     isActivity = true
                 ),
@@ -129,7 +158,8 @@ class SettingsAccountActivity : AppCompatActivity() {
                     desc = getString(R.string.comments_button_desc),
                     icon = R.drawable.ic_round_comment_24,
                     isChecked = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1,
-                    switch = { isChecked, _ ->
+                    switch = {
+        isChecked, _ ->
                         PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 2)
                         reload()
                     },
@@ -140,6 +170,8 @@ class SettingsAccountActivity : AppCompatActivity() {
         binding.settingsRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
       }
+    
+      }
     private fun reload() {
         binding.apply {
             if (Anilist.token != null) {
@@ -149,13 +181,16 @@ class SettingsAccountActivity : AppCompatActivity() {
                     profileBannerScrim.visibility = View.VISIBLE
                     profileBannerImage.loadImage(Anilist.bg)
                  }
+        
+                 }
         else {
                     profileBannerImage.visibility = View.VISIBLE
                     profileBannerScrim.visibility = View.VISIBLE
                     profileBannerImage.setImageResource(R.drawable.ic_anilist)
                     profileBannerImage.setBackgroundColor(
                         androidx.core.content.ContextCompat.getColor(this@SettingsAccountActivity, R.color.nav_bg)
-                    )
+)
+                    }
                   }
                 // Update username
                 profileUsername.text = Anilist.username ?: getString(R.string.username)
@@ -169,12 +204,19 @@ class SettingsAccountActivity : AppCompatActivity() {
                         daysLeft <= 0 -> getString(R.string.reconnect_now)
                         else -> getString(R.string.reconnect_in, daysLeft)
                      }
+                    
+                     }
                     profileTokenExpiry.setOnClickListener {
                         Anilist.loginIntent(this@SettingsAccountActivity)
+                     }
+                
                      }
                 }
         else {
                     profileTokenExpiry.visibility = View.GONE
+                }
+
+                
                 }
 
                 // Update avatar
@@ -193,8 +235,13 @@ class SettingsAccountActivity : AppCompatActivity() {
         settingsAnilistAvatar.visibility = View.VISIBLE
                     settingsAnilistAvatar.loadImage(Anilist.avatar)
                  }
+        
+                 }
         else {
                     settingsAnilistAvatar.visibility = View.GONE
+                }
+
+                
                 }
 
                 // Token in card
@@ -205,9 +252,14 @@ class SettingsAccountActivity : AppCompatActivity() {
                         cardDaysLeft <= 0 -> getString(R.string.reconnect_now)
                         else -> getString(R.string.reconnect_in, cardDaysLeft)
                      }
+                
+                     }
                 }
         else {
                     settingsAnilistTokenExpiryDisplay.visibility = View.GONE
+                }
+
+                
                 }
 
                 // MAL section
@@ -215,13 +267,20 @@ class SettingsAccountActivity : AppCompatActivity() {
         if (MAL.token != null) {
         settingsMalLoginAction.text = getString(R.string.logout)
                  }
+        
+                 }
         else {
                     settingsMalLoginAction.text = getString(R.string.login)
+                 }
+                
                  }
                 settingsMalLoginAction.visibility = View.VISIBLE
 
                 // Show settings
                 settingsRecyclerView.visibility = View.VISIBLE
+
+            }
+        
 
             }
         else {
@@ -249,6 +308,8 @@ class SettingsAccountActivity : AppCompatActivity() {
                 settingsMalLoginAction.visibility = View.VISIBLE
 
                 settingsRecyclerView.visibility = View.GONE
+            }
+        
             }
         }
     }

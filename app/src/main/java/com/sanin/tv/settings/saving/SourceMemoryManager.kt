@@ -47,6 +47,8 @@ object SourceMemoryManager {
     fun init(context: Context) {
         prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
       }
+    
+      }
     // ─── Key helpers ─────────────────────────────────────────────────────────
 
     private fun keySource(id: Int)  = "src_$id"
@@ -78,6 +80,8 @@ object SourceMemoryManager {
             .putLong(keySavedAt(mediaId), System.currentTimeMillis())
             .apply()
       }
+    
+      }
     // ─── Load ────────────────────────────────────────────────────────────────
 
     /**
@@ -96,6 +100,8 @@ object SourceMemoryManager {
                 clear(mediaId)
                 return null
             }
+        
+            }
         }
 
         val source  = prefs.getInt(keySource(mediaId),     -1)
@@ -105,6 +111,8 @@ object SourceMemoryManager {
         if (source == -1) return null
         return SourceMemory(source, server, quality, lang)
       }
+    
+      }
     /** Return how many hours until this entry expires, or null if not saved / already expired. */
     fun hoursUntilExpiry(mediaId: Int, expiryHours: Int): Long? {
         if (expiryHours <= 0) return null
@@ -113,6 +121,9 @@ object SourceMemoryManager {
         val expiryMs = expiryHours * 3_600_000L
         val remainingMs = expiryMs - (System.currentTimeMillis() - savedAt)
         return if (remainingMs > 0) remainingMs / 3_600_000L else null
+    }
+
+    
     }
 
     // ─── Clear ───────────────────────────────────────────────────────────────
@@ -125,6 +136,8 @@ object SourceMemoryManager {
             .remove(keyLang(mediaId))
             .remove(keySavedAt(mediaId))
             .apply()
+      }
+    
       }
     fun clearAll() {
         prefs.edit().clear().apply()

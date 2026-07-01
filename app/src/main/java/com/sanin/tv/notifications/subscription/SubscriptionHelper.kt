@@ -13,7 +13,8 @@ fun getEpisode(            parser: AnimeParser,            subscribeMedia: Subsc
     val selected = loadSelected(subscribeMedia.id)            
 val ep = withTimeoutOrNull(10 * 1000) {                
         t
-    val show = parser.loadSavedShowResponse(subscribeMedia.id)                        ?: forceLoadShowResponse(subscribeMedia, selected, parser)                        ?: throw Exception(                            currContext()?.getString(                                R.string.failed_to_load_data,                                subscribeMedia.id                            )                        )                    show.sAnime?.let {
+    val show = parser.loadSavedShowResponse(subscribeMedia.id)                        ?: forceLoadShowResponse(subscribeMedia, selected, parser)                        ?: throw Exception(                            currContext()?.getString(                                R.string.failed_to_load_data,                                subscribeMedia.id                            )                        );
+        show.sAnime?.let {
                         parser.getLatestEpisode(                            show.link, show.extra,                            it, selected.latest                        )                    }}
     }
 return ep?.apply {
@@ -56,15 +57,22 @@ fun saveSubscription(media: Media, subscribed: Boolean) {
     val data = PrefManager.getNullableCustomVal(                SUBSCRIPTIONS,                null,                Map::class.java            ) as? MutableMap<Int, SubscribeMedia>                ?: mutableMapOf()
 if (subscribed) {
 if (!data.containsKey(media.id)) {
-    val new = SubscribeMedia(                        media.anime != null,                        media.isAdult,                        media.id,                        media.userPreferredName,                        media.cover,                        media.banner                    )                    data[media.id] = new
+    val new = SubscribeMedia(                        media.anime != null,                        media.isAdult,                        media.id,                        media.userPreferredName,                        media.cover,                        media.banner                    );
+        data[media.id] = new
 val current = PrefManager.getNullableCustomVal(                        "Selected-${media.id}", null, Selected::class.java                    )
 if (current == null) {
     val selected = Selected().apply {                            
         s
                         }
+    
+                        }
     saveSelected(media.id, selected)
 }
+    
+}
     }
+}
+        
 }
         else {
         data.remove(media.id)

@@ -25,10 +25,14 @@ class ContinueWatchingAdapter :
         val episode: TextView = itemView.findViewById(R.id.cwEpisode)
         val progress: ProgressBar = itemView.findViewById(R.id.cwProgressBar)
       }
+    
+      }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
     val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_continue_watching, parent, false)
         return VH(v)
+      }
+    
       }
     override fun onBindViewHolder(holder: VH, position: Int) {
     val entry = getItem(position)
@@ -42,6 +46,8 @@ val epLabel = buildString {
             ) {
                 append(" · ")
                 append(entry.episodeTitle)
+             }
+        
              }
         }
         holder.episode.text = epLabel
@@ -59,7 +65,11 @@ val intent = Intent(ctx, MediaDetailsActivity::class.java).apply {
                 putExtra("mediaId", entry.mediaId)
                 putExtra("anime", true)
              }
+            
+             }
             ctx.startActivity(intent)
+         }
+    
          }
     }
 
@@ -70,6 +80,8 @@ val intent = Intent(ctx, MediaDetailsActivity::class.java).apply {
 
             override fun areContentsTheSame(a: WatchEntry, b: WatchEntry) =
                 a == b
+        }
+    
         }
     }
 }

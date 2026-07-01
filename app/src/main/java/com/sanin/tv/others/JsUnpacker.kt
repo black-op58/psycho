@@ -36,11 +36,14 @@ val value = if (x < tabs.size && x >= 0) {
         t
 } else null
 if (!value.isNullOrEmpty()) {
-        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value)                        replaceOffset += value.length - word.length
+        decoded.replace(m.start() + replaceOffset, m.end() + replaceOffset, value);
+        replaceOffset += value.length - word.length
                     }
 }
 return decoded.toString()
             }
+}
+        
 }
         catch (e: Exception) {
         Logger.log(e)
@@ -60,6 +63,8 @@ fun unbase(str: String): Int {
     var ret = 0
 if (alphabet == null) {
         ret = str.toInt(radix)
+ }
+        
  }
         else {
     val tmp = StringBuilder(str).reverse().toString()
@@ -96,6 +101,8 @@ return try {
 for (q in c.indices) {
 if (c[q % 4] > 270) {
         load += c[q % 3]
+}
+        
 }
         else {
         load += c[q].toChar()                    }}

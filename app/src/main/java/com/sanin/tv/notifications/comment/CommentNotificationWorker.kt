@@ -16,6 +16,8 @@ lastCheck = System.currentTimeMillis()
 return if (CommentNotificationTask().execute(applicationContext)) {
         Result.success()
  }
+        
+ }
         else {
         Logger.log("CommentNotificationWorker: doWork failed")
         Result.retry()
@@ -27,6 +29,7 @@ val id: String) {
         C
 
 companion object {
-    val checkIntervals = arrayOf(0L, 480, 720, 1440)        const val WORK_NAME = "com.sanin.tv.notifications.comment.CommentNotificationWorker"
+    val checkIntervals = arrayOf(0L, 480, 720, 1440);
+        const val WORK_NAME = "com.sanin.tv.notifications.comment.CommentNotificationWorker"
         
 private var lastCheck = 0L    }}

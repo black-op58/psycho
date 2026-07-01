@@ -20,10 +20,13 @@ if (expression[i] == '.') {
 } else if (!isDecimal) {
         value = value * 10 + (expression[i] - '0')
  }
+        
+ }
         else {
         value += (expression[i] - '0') * decimalFactor                            decimalFactor *= 0.1                        }
 i++}
-values.push(value)                    i-- // to compensate the additional i++ in the loop
+values.push(value);
+        i-- // to compensate the additional i++ in the loop
 }
 else -> {
 while (!ops.isEmpty() && precedence(ops.peek()) >= precedence(expression[i])) {
@@ -68,7 +71,8 @@ else -> -1        }
 private fun applyOp(a: Double, b: Double, op: Char): Double {
 return when (op) {
         '+' -> a + b            '-' -> a - b            '*' -> a * b            '/' -> {
-if (b == 0.0) throw UnsupportedOperationException("Cannot divide by zero.")                a / b
+if (b == 0.0) throw UnsupportedOperationException("Cannot divide by zero.");
+        a / b
 }
 else -> 0.0        }
 }

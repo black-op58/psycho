@@ -20,12 +20,15 @@ val isRescueModeEarly: Boolean = PrefManager.getVal(PrefName.RescueMode)
 val notificationIcon = if (!isRescueModeEarly && Anilist.unreadNotificationCount > 0) {
         R
 }
+        
+}
         else {
         R.drawable.ic_round_notifications_none_24        }
 binding.settingsNotification.setImageResource(notificationIcon)
 if (isRescueModeEarly) binding.settingsNotification.visibility = View.GONE
 if (Anilist.token != null) {
-        binding.settingsLogin.setText(R.string.logout)            binding.settingsLogin.setOnClickListener {
+        binding.settingsLogin.setText(R.string.logout);
+        binding.settingsLogin.setOnClickListener {
                 requireContext().customAlertDialog().apply {
         setTitle(R.string.logout)
         setMessage(R.string.logout_confirm)
@@ -38,17 +41,22 @@ setNegButton(R.string.no)
 }
 }
 
-val isRescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)            binding.settingsUsername.text = if (isRescueMode) MAL.username ?: "MAL User" else Anilist.username
+val isRescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode);
+        binding.settingsUsername.text = if (isRescueMode) MAL.username ?: "MAL User" else Anilist.username
             binding.settingsUserAvatar.loadImage(if (isRescueMode) MAL.avatar else Anilist.avatar)
  }
+        
+ }
         else {
-        binding.settingsUsername.visibility = View.GONE            binding.settingsLogin.setText(R.string.login)            binding.settingsLogin.setOnClickListener {
+        binding.settingsUsername.visibility = View.GONE            binding.settingsLogin.setText(R.string.login);
+        binding.settingsLogin.setOnClickListener {
                 dismiss()
         Anilist.loginIntent(requireActivity())
             }
 }
 
-val isRescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        binding.settingsNotificationCount.isVisible = !isRescueMode && Anilist.unreadNotificationCount > 0
+val isRescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode);
+        binding.settingsNotificationCount.isVisible = !isRescueMode && Anilist.unreadNotificationCount > 0
         binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
 if (isRescueMode) {
         binding.settingsActivity.visibility = View.GONE        }
@@ -58,21 +66,31 @@ if (isRescueMode) {
 if (!malUsername.isNullOrBlank()) {
         openLinkInCustomTab("https://myanimelist.net/profile/$malUsername")
  }
+        
+ }
         else {
         snackString(getString(R.string.rescue_mode_active))
                 }
 return@setOnClickListener}
 ContextCompat.startActivity(                requireContext(), Intent(requireContext(), ProfileActivity::class.java)                    .putExtra("userId", Anilist.userid), null            )
 }
-binding.settingsIncognito.isChecked = PrefManager.getVal(PrefName.Incognito)        binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
+binding.settingsIncognito.isChecked = PrefManager.getVal(PrefName.Incognito);
+        binding.settingsIncognito.setOnCheckedChangeListener {
+        _, isChecked ->
             // Added check to ensure fragment is still active before updating
 if (isAdded) {
         PrefManager.setVal(PrefName.Incognito, isChecked)
         incognitoNotification(requireContext())
              }
+            
+             }
             }
-binding.settingsRescueMode.isChecked = PrefManager.getVal(PrefName.RescueMode)        binding.settingsRescueMode.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.RescueMode, isChecked)            activity?.let { act ->
+binding.settingsRescueMode.isChecked = PrefManager.getVal(PrefName.RescueMode);
+        binding.settingsRescueMode.setOnCheckedChangeListener {
+        _, isChecked ->
+            PrefManager.setVal(PrefName.RescueMode, isChecked);
+        activity?.let {
+        act ->
                 dismiss()
 val intent = Intent(act, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -80,6 +98,8 @@ val intent = Intent(act, MainActivity::class.java)
                 act.overridePendingTransition(0, 0)
                 act.finish()
                 act.overridePendingTransition(0, 0)
+             }
+            
              }
             }
 binding.settingsExtensionSettings.setSafeOnClickListener {

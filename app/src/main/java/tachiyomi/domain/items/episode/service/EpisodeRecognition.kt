@@ -25,6 +25,8 @@ object EpisodeRecognition {
         if (episodeNumber != null && (episodeNumber == -2f || episodeNumber > -1f)) {
             return episodeNumber
         }
+        
+        }
         // Get chapter title with lower case
         var name = episodeName.lowercase()
         // Remove anime title from episode title.
@@ -36,12 +38,21 @@ object EpisodeRecognition {
         // Remove unwanted tags.
         name = unwanted.replace(name, "")
         // Check base case ch.xx
-        basic.find(name)?.let { return getEpisodeNumberFromMatch(it)
+        basic.find(name)?.let {
+        return getEpisodeNumberFromMatch(it)
+ }
+        
  }
         // Take the first number encountered.
-        number.find(name)?.let { return getEpisodeNumberFromMatch(it)
+        number.find(name)?.let {
+        return getEpisodeNumberFromMatch(it)
+ }
+        
  }
         return episodeNumber ?: -1f
+    }
+
+    
     }
 
     /** * Check if episode number is found and return it * @param match result of regex * @return chapter number if found else null */
@@ -53,6 +64,8 @@ object EpisodeRecognition {
             val addition = checkForDecimal(subChapterDecimal, subChapterAlpha)
             initial.plus(addition)
          }
+    
+         }
     }
 
     /** * Check for decimal in received strings * @param decimal decimal value of regex * @param alpha alpha value of regex * @return decimal/alpha float value */
@@ -60,22 +73,35 @@ object EpisodeRecognition {
         if (!decimal.isNullOrEmpty()) {
             return decimal.toFloat()
          }
+        
+         }
         if (!alpha.isNullOrEmpty()) {
             if (alpha.contains("extra")) {
                 return .99f
             }
+            
+            }
             if (alpha.contains("omake")) {
                 return .98f
             }
+            
+            }
             if (alpha.contains("special")) {
                 return .97f
+            }
+            
             }
             val trimmedAlpha = alpha.trimStart('.');
         if (trimmedAlpha.length == 1) {
         return parseAlphaPostFix(trimmedAlpha[0])
              }
+        
+             }
         }
         return .0f
+    }
+
+    
     }
 
     /** * x.a -> x.1, x.b -> x.2, etc */

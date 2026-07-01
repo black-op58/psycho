@@ -37,11 +37,15 @@ object CustomScraper {
             val streamUrl = pickUrl(obj) ?: return null
             StreamFetcher.StreamResult(url = streamUrl, quality = "custom", providerName = "Custom")
          }
+        
+         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("CustomScraper: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -52,6 +56,8 @@ object CustomScraper {
         val el = obj[key] as? JsonPrimitive ?: continue
             val s  = el.content
             if (s.startsWith("http")) return s
+        }
+        
         }
         return null
     }

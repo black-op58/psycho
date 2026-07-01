@@ -12,6 +12,8 @@ class AlignTagHandler : SimpleTagHandler() {
 } else if (tag.attributes().containsKey("end")) {
         Layout.Alignment.ALIGN_OPPOSITE
 }
+        
+}
         else {
         Layout.Alignment.ALIGN_NORMAL        }
 return AlignmentSpan.Standard(alignment)

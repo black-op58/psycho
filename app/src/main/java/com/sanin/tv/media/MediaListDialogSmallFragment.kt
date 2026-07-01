@@ -52,13 +52,16 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 val scope = viewLifecycleOwner.lifecycleScope        binding.mediaListDelete.setOnClickListener {            
         s
                     dismissAllowingStateLoss()
-                }, onError = { e ->                    withContext(Dispatchers.Main) {
+                }, onError = {
+        e ->                    withContext(Dispatchers.Main) {
         snackString(                            getString(                                R.string.delete_fail_reason, e.message                    InputFilterMinMax(0.0, total.toDouble(), binding.mediaListStatus),                    LengthFilter(total.toString().length)                )
         }
 binding.mediaListProgressLayout.suffixText = " / ${total ?: '?'}"        binding.mediaListProgressLayout.suffixTextView.updateLayoutParams {
         height = ViewGroup.LayoutParams.MATCH_PARENT}
 binding.mediaListProgressLayout.suffixTextView.gravity = Gravity.CENTER        binding.mediaListScore.setText(
-if (media.userScore != 0) media.userScore.div(                10.0            ).toString() else ""        )        binding.mediaListScore.filters =            arrayOf(InputFilterMinMax(0.0, 10.0), LengthFilter(10.0.toString().length))        binding.mediaListScoreLayout.suffixTextView.updateLayoutParams {
+if (media.userScore != 0) media.userScore.div(                10.0            ).toString() else ""        );
+        binding.mediaListScore.filters =            arrayOf(InputFilterMinMax(0.0, 10.0), LengthFilter(10.0.toString().length));
+        binding.mediaListScoreLayout.suffixTextView.updateLayoutParams {
             height = ViewGroup.LayoutParams.MATCH_PARENT        }
 binding.mediaListScoreLayout.suffixTextView.gravity = Gravity.CENTER        binding.mediaListIncrement.setOnClickListener {
 if (binding.mediaListStatus.text.toString() == statusStrings[0]) binding.mediaListStatus.setText(                statusStrings[1],                false            )            
@@ -77,9 +80,12 @@ if (isRescueMode) {
         binding.mediaListPrivate.apply { (parent as? ViewGroup)?.removeView(this)
  }
 }
+        
+}
         else {
         binding.mediaListPrivate.visibility = View.VISIBLE        }
-binding.mediaListPrivate.isChecked = media.isListPrivate        binding.mediaListPrivate.setOnCheckedChangeListener { _, checked ->            media.isListPrivate = checked        }
+binding.mediaListPrivate.isChecked = media.isListPrivate        binding.mediaListPrivate.setOnCheckedChangeListener {
+        _, checked ->            media.isListPrivate = checked        }
 
 val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())        
 var remove: Boolean? = null        binding.mediaListShow.isChecked = media.id in removeList        binding.mediaListShow.setOnCheckedChangeListener { 
@@ -87,7 +93,8 @@ var remove: Boolean? = null        binding.mediaListShow.isChecked = media.id in
 binding.mediaListSave.setOnClickListener {
     val progressText = binding.mediaListProgress.text.toString()            
 val scoreText = binding.mediaListScore.text.toString()            
-val statusText = binding.mediaListStatus.text.toString()            scope.launch {
+val statusText = binding.mediaListStatus.text.toString();
+        scope.launch {
                 withContext(Dispatchers.IO) {
     val progress = _binding?.mediaListProgress?.text.toString().toIntOrNull()                    
 val progressVolumes = media.userProgressVolumes
@@ -102,6 +109,8 @@ if (rescueMode) {
 val existing: List<PendingProgressUpdate> =                            PrefManager.getVal(PrefName.PendingProgressUpdates, listOf())                        
 val updated = existing.filterNot { 
         i
+}
+        
 }
         else {
         Anilist.mutation.editList(                            mediaID = media.id,                            progress = progress,                            progressVolumes = progressVolumes,                            score = score,                            status = status,                            
@@ -121,6 +130,8 @@ Refresh.all()
 
 override fun onDestroyView() {        
         s
+    }
+    
     }
     }
 }}}))

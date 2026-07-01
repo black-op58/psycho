@@ -35,9 +35,11 @@ val screenWidth = resources.displayMetrics.run {
 
 fun update() {
 if (grid != null && list != null) {
-    val adapter = MediaAdaptor(if (grid!!) 0 else 1, list!!, requireActivity(), true)                binding.listRecyclerView.layoutManager =
+    val adapter = MediaAdaptor(if (grid!!) 0 else 1, list!!, requireActivity(), true);
+        binding.listRecyclerView.layoutManager =
                     GridLayoutManager(                        requireContext(),
-if (grid!!) (screenWidth / 120f).toInt() else 1                    )                binding.listRecyclerView.adapter = adapter            }
+if (grid!!) (screenWidth / 120f).toInt() else 1                    );
+        binding.listRecyclerView.adapter = adapter            }
 }
 if (calendar) {
     val model: OtherDetailsViewModel by activityViewModels()
@@ -46,8 +48,12 @@ if (it != null) {
         list = it.values.toList().getOrNull(pos!!)
         update()
                  }
+                
+                 }
                 }
 grid = true
+}
+        
 }
         else {
     val model: ListViewModel by activityViewModels()
@@ -55,6 +61,8 @@ grid = true
 if (it != null) {
         list = it.values.toList().getOrNull(pos!!)
         update()
+                 }
+                
                  }
                 }
 model.grid.observe(viewLifecycleOwner) {
@@ -68,10 +76,14 @@ companion object {
     fun newInstance(pos: Int, calendar: Boolean = false): ListFragment =            ListFragment().apply {                
         a
                 }
+                
+                }
                 }
     }
 
 override fun onDestroyView() {        
         s
+    }
+    
     }
     }

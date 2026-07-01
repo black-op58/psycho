@@ -55,34 +55,69 @@ class AnilistMutations {
                         displayAdultContent
                         restrictMessagesToFollowing
                     }
+                    
+                    }
                     mediaListOptions {
                         scoreFormat
                         rowOrder
                     }
+                
+                    }
                 }
+            }
+        
             }
         """.trimIndent()
         val variables = """{
             ${timezone?.let { "\"timezone\":\"$it\"" } ?: ""
+
+}
+            
 }
             ${titleLanguage?.let { "\"titleLanguage\":\"$it\"" } ?: ""
+
+}
+            
 }
             ${staffNameLanguage?.let { "\"staffNameLanguage\":\"$it\"" } ?: ""
+
+}
+            
 }
             ${activityMergeTime?.let { "\"activityMergeTime\":$it" } ?: ""
+
+}
+            
 }
             ${airingNotifications?.let { "\"airingNotifications\":$it" } ?: ""
+
+}
+            
 }
             ${displayAdultContent?.let { "\"displayAdultContent\":$it" } ?: ""
+
+}
+            
 }
             ${restrictMessagesToFollowing?.let { "\"restrictMessagesToFollowing\":$it" } ?: ""
+
+}
+            
 }
             ${scoreFormat?.let { "\"scoreFormat\":\"$it\"" } ?: ""
+
+}
+            
 }
             ${rowOrder?.let { "\"rowOrder\":\"$it\"" } ?: ""
+
+}
+        
 }
         }""".trimIndent().replace("\n", "").replace("    ", "").replace(",}", "}")
         executeQuery<JsonObject>(query, variables)
+      }
+    
       }
     suspend fun editList(
         mediaId: Int,
@@ -130,8 +165,12 @@ class AnilistMutations {
                     customLists: ${"$"}customLists
                 ) {
                     score(format: POINT_10_DECIMAL)
-                    startedAt { year month day }
-                    completedAt { year month day }
+                    startedAt {
+        year month day }
+                    completedAt {
+        year month day }
+                }
+            
                 }
             }
         """.trimIndent()
@@ -150,7 +189,11 @@ class AnilistMutations {
         if (customLists != null)   append(""","customLists":[${customLists.joinToString { "\"$it\"" }}]""")
             append("}")
          }
+        
+         }
         executeQuery<JsonObject>(query, variables, show = true)
+      }
+    
       }
     suspend fun deleteList(listId: Int) {
         val query = """
@@ -158,10 +201,14 @@ class AnilistMutations {
                 DeleteMediaListEntry(id: ${"$"}id) {
                     deleted
                 }
+            
+                }
             }
         """.trimIndent()
         val variables = """{"id":$listId}"""
         executeQuery<JsonObject>(query, variables)
+      }
+    
       }
     suspend fun rateReview(reviewId: Int, rating: String): Query.RateReviewResponse? {
         val query = """
@@ -170,25 +217,41 @@ class AnilistMutations {
                     id mediaId mediaType summary body(asHtml: true)
                     rating ratingAmount userRating score private
                     siteUrl createdAt updatedAt
-                    user { id name bannerImage avatar { medium large } }
+                    user {
+        id name bannerImage avatar {
+        medium large } }
+                }
+            
                 }
             }
         """.trimIndent()
         return executeQuery<Query.RateReviewResponse>(query)
       }
+    
+      }
     suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
         return executeQuery<Query.ToggleFollow>("""
             mutation {
-                ToggleFollow(userId: $id) { id isFollowing isFollower }
+                ToggleFollow(userId: $id) {
+        id isFollowing isFollower }
+            }
+        
             }
         """.trimIndent())
+      }
+    
       }
     suspend fun toggleLike(id: Int, type: String): ToggleLike? {
         return executeQuery<ToggleLike>("""
             mutation Like {
-                ToggleLikeV2(id: $id, type: $type) { __typename }
+                ToggleLikeV2(id: $id, type: $type) {
+        __typename }
+            }
+        
             }
         """.trimIndent())
+      }
+    
       }
     suspend fun toggleActivitySubscription(activityId: Int, subscribe: Boolean): Boolean {
         val result = executeQuery<JsonObject>("""
@@ -196,22 +259,31 @@ class AnilistMutations {
                 ToggleActivitySubscription(activityId: $activityId, subscribe: $subscribe) {
                     __typename
                 }
+            
+                }
             }
         """.trimIndent())
         val errors = result?.get("errors") as? JsonArray
         return result != null && errors.isNullOrEmpty()
+      }
+    
       }
     suspend fun postActivity(text: String, edit: Int? = null): String {
         val encodedText = text.stringSanitizer()
         val idPart = if (edit != null) "id: $edit," else ""
         val query = """
             mutation {
-                SaveTextActivity($idPart text: $encodedText) { siteUrl }
+                SaveTextActivity($idPart text: $encodedText) {
+        siteUrl }
+            }
+        
             }
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
+      }
+    
       }
     suspend fun postMessage(
         userId: Int,
@@ -227,24 +299,34 @@ class AnilistMutations {
                     ${idPart}recipientId: $userId,
                     message: $encodedText,
                     private: $isPrivate
-                ) { id }
+                ) {
+        id }
+            }
+        
             }
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
       }
+    
+      }
     suspend fun postReply(activityId: Int, text: String, edit: Int? = null): String {
         val encodedText = text.stringSanitizer()
         val idPart = if (edit != null) "id: $edit," else ""
         val query = """
             mutation {
-                SaveActivityReply(${idPart}activityId: $activityId, text: $encodedText) { id }
+                SaveActivityReply(${idPart}activityId: $activityId, text: $encodedText) {
+        id }
+            }
+        
             }
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
+      }
+    
       }
     suspend fun postReview(summary: String, body: String, mediaId: Int, score: Int): String {
         val encodedSummary = summary.stringSanitizer()
@@ -256,27 +338,42 @@ class AnilistMutations {
                     summary: $encodedSummary,
                     body: $encodedBody,
                     score: $score
-                ) { siteUrl }
+                ) {
+        siteUrl }
+            }
+        
             }
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString() ?: (currContext()?.getString(com.sanin.tv.R.string.success) ?: "Success")
       }
+    
+      }
     suspend fun deleteActivityReply(activityId: Int): Boolean {
         val query = """
-            mutation { DeleteActivityReply(id: $activityId) { deleted } }
+            mutation {
+        DeleteActivityReply(id: $activityId) {
+        deleted } }
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         return result?.get("errors") == null
     }
 
+    
+    }
+
     suspend fun deleteActivity(activityId: Int): Boolean {
         val query = """
-            mutation { DeleteActivity(id: $activityId) { deleted } }
+            mutation {
+        DeleteActivity(id: $activityId) {
+        deleted } }
         """.trimIndent()
         val result = executeQuery<JsonObject>(query)
         return result?.get("errors") == null
+    }
+
+    
     }
 
     private fun String.stringSanitizer(): String {
@@ -288,9 +385,13 @@ class AnilistMutations {
         sb.append("&#").append(codePoint).append(";")
                 i += 2
             }
+        
+            }
         else {
                 sb.append(this[i])
                 i++
+            }
+        
             }
         }
         return Gson().toJson(sb.toString())

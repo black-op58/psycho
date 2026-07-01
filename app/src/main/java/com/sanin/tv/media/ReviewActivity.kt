@@ -44,11 +44,15 @@ setContentView(binding.root);
 if (mediaId == -1) {
         finish()
 return        }
-binding.followerGrid.visibility = View.GONE        binding.followerList.visibility = View.GONE        binding.followFilterButton.setImageResource(R.drawable.ic_add)        binding.followFilterButton.setOnClickListener {
+binding.followerGrid.visibility = View.GONE        binding.followerList.visibility = View.GONE        binding.followFilterButton.setImageResource(R.drawable.ic_add);
+        binding.followFilterButton.setOnClickListener {
             ContextCompat.startActivity(                this,                Intent(this, ActivityMarkdownCreator::class.java)                    .putExtra("type", "review"),                null            )
 }
-binding.followFilterButton.visibility = View.GONE        binding.listTitle.text = getString(R.string.reviews)        binding.listRecyclerView.adapter = adapter
-        binding.listRecyclerView.layoutManager = LinearLayoutManager(            this,            LinearLayoutManager.VERTICAL,            false        )        binding.listProgressBar.visibility = View.VISIBLE        binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+binding.followFilterButton.visibility = View.GONE        binding.listTitle.text = getString(R.string.reviews);
+        binding.listRecyclerView.adapter = adapter
+        binding.listRecyclerView.layoutManager = LinearLayoutManager(            this,            LinearLayoutManager.VERTICAL,            false        );
+        binding.listProgressBar.visibility = View.VISIBLE        binding.listBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
 }
 lifecycleScope.launch(Dispatchers.IO) {
     val response = Anilist.query.getReviews(mediaId)?.data?.page            withContext(Dispatchers.Main) {                
@@ -71,6 +75,8 @@ private fun loadPage(page: Int, callback: () -> Unit) {
         response?.data?.page?.reviews?.let {
         reviews.addAll(it)
         fillList()
+                 }
+    
                  }
     callback()}}
     }

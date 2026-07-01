@@ -32,6 +32,8 @@ if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
         toast("Copied to clipboard: " + content.truncateCenter(50))
         }
 }
+        
+}
         catch (e: Throwable) {
         Logger.log(e)
         toast("Failed to copy to clipboard")
@@ -57,7 +59,8 @@ fun Context.isServiceRunning(serviceClass: Class<*>): Boolean {
     val className = serviceClass.name
 val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager    
 @Suppress("DEPRECATION")
-return manager.getRunningServices(Integer.MAX_VALUE)        .any { className == it.service.className }}
+return manager.getRunningServices(Integer.MAX_VALUE)        .any {
+        className == it.service.className }}
 
 fun Context.openInBrowser(url: String, forceDefaultBrowser: Boolean = false) {    
         t
@@ -68,8 +71,11 @@ try {
         /
 open Tachiyomi
 if (forceDefaultBrowser) {
-        defaultBrowserPackageName()?.let { setPackage(it) }}}
+        defaultBrowserPackageName()?.let {
+        setPackage(it) }}}
 startActivity(intent)
+    }
+        
     }
         catch (e: Exception) {
         toast(e.message)    }}
@@ -79,11 +85,14 @@ private fun Context.defaultBrowserPackageName(): String? {
 val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         p
 }
+        
+}
         else {        
 @Suppress("DEPRECATION")
         packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
      }
-return resolveInfo        ?.activityInfo?.packageName        ?.takeUnless { it in DeviceUtil.invalidDefaultBrowsers }}
+return resolveInfo        ?.activityInfo?.packageName        ?.takeUnless {
+        it in DeviceUtil.invalidDefaultBrowsers }}
 
 fun Context.createFileInCacheDir(name: String): File {
     val file = File(externalCacheDir, name)
@@ -94,18 +103,24 @@ file.createNewFile()
 return file}/** * Returns true if [packageName] is installed. */
 fun Context.isPackageInstalled(packageName: String): Boolean {
 return try {
-        packageManager.getApplicationInfo(packageName, 0)        true
+        packageManager.getApplicationInfo(packageName, 0);
+        true
+    }
+        
     }
         catch (e: PackageManager.NameNotFoundException) {
         false    }}/** * Gets document size of provided [Uri] * * @return document size of [uri] or null if size can't be obtained */
 fun Context.getUriSize(uri: Uri): Long? {
-return UniFile.fromUri(this, uri).length().takeIf { it >= 0 }}
+return UniFile.fromUri(this, uri).length().takeIf {
+        it >= 0 }}
 
 val Context.hasMiuiPackageInstaller get() = isPackageInstalled("com.miui.packageinstaller")
 val Context.isShizukuInstalled get() = false
 fun Context.getApplicationIcon(pkgName: String): Drawable? {
 return try {
         packageManager.getApplicationIcon(pkgName)
+    }
+        
     }
         catch (e: PackageManager.NameNotFoundException) {
         null    }}

@@ -16,14 +16,19 @@ import com.sanin.tv.statusBarHeight
 class OfflineFragment : Fragment() {
     private var offline = false    
 override fun onCreateView(        inflater: LayoutInflater,        container: ViewGroup?,        savedInstanceState: Bundle?    ): View {
-    val binding = FragmentOfflineBinding.inflate(inflater, container, false)        binding.refreshContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+    val binding = FragmentOfflineBinding.inflate(inflater, container, false);
+        binding.refreshContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight            bottomMargin = navBarHeight        }
-    offline = PrefManager.getVal(PrefName.OfflineMode)        binding.noInternet.text =
-if (offline) "Offline Mode" else getString(R.string.no_internet)        binding.refreshButton.text = if (offline) "Go Online" else getString(R.string.refresh)
+    offline = PrefManager.getVal(PrefName.OfflineMode);
+        binding.noInternet.text =
+if (offline) "Offline Mode" else getString(R.string.no_internet);
+        binding.refreshButton.text = if (offline) "Go Online" else getString(R.string.refresh)
         binding.refreshButton.setOnClickListener {
 if (offline && isOnline(requireContext())) {
         PrefManager.setVal(PrefName.OfflineMode, false)
         startMainActivity(requireActivity())
+ }
+        
  }
         else {
 if (isOnline(requireContext())) {
@@ -33,5 +38,7 @@ return binding.root    }
 
 override fun onResume() {        
         s
+    }
+    
     }
     }

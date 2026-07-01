@@ -40,6 +40,8 @@ if (chartOptions != null) {
         binding.chartView.aa_drawChartWithChartOptions(chartOptions)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 }
+        
+}
         else {
         toast("No chart data")
         finish()
@@ -84,6 +86,8 @@ val u = user[pos]
 if (rescueMode) {
     val malUrl = u.banner ?: "https://myanimelist.net/profile/${u.name}"                    openLinkInCustomTab(malUrl)
  }
+        
+ }
         else {
         ContextCompat.startActivity(                        binding.root.context, Intent(binding.root.context, ProfileActivity::class.java)                            .putExtra("userId", u.id), null                    )                }}}
 }
@@ -96,12 +100,17 @@ override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         s
 val user = user.getOrNull(position) ?: return
 if (grid) {
-    val b = holder.binding as ItemFollowerGridBinding            b.profileUserAvatar.loadImage(user.pfp)            b.profileUserName.text = user.name            b.profileCompactScoreBG.isVisible = false            b.profileInfo.isVisible = false            b.profileCompactProgressContainer.isVisible = false
+    val b = holder.binding as ItemFollowerGridBinding            b.profileUserAvatar.loadImage(user.pfp);
+        b.profileUserName.text = user.name            b.profileCompactScoreBG.isVisible = false            b.profileInfo.isVisible = false            b.profileCompactProgressContainer.isVisible = false
+}
+        
 }
         else {
     val b = holder.binding as ItemFollowerBinding            b.profileUserAvatar.loadImage(user.pfp)
 if (rescueMode) {
         b.profileBannerImage.loadImage(user.pfp)
+ }
+        
  }
         else {
         b.profileBannerImage.loadImage(user.banner ?: user.pfp)
@@ -109,6 +118,8 @@ if (rescueMode) {
 b.profileUserName.text = user.name
 if (rescueMode || user.id == Anilist.userid || user.isFollowing == null) {
         b.followStatusChip.isVisible = false
+}
+        
 }
         else {
         b.followStatusChip.isVisible = true
@@ -119,12 +130,14 @@ when {
 else -> R.string.follow                        }
 )
 }
-b.followStatusChip.text = followText()                b.followStatusChip.setOnClickListener {
+b.followStatusChip.text = followText();
+        b.followStatusChip.setOnClickListener {
         b.root.findViewTreeLifecycleOwner()?.lifecycleScope?.launch(Dispatchers.IO) {
     val res = Anilist.mutation.toggleFollow(user.id)
 if (res?.data?.toggleFollow != null) {
         withContext(Dispatchers.Main) {
-        snackString(R.string.success)                                user.isFollowing = res.data.toggleFollow.isFollowing
+        snackString(R.string.success);
+        user.isFollowing = res.data.toggleFollow.isFollowing
                                 b.followStatusChip.text = followText()                            }}}}}}
 }
 

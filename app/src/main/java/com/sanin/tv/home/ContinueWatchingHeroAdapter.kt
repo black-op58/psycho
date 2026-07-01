@@ -45,6 +45,8 @@ class ContinueWatchingHeroAdapter(
         media = newMedia
         notifyDataSetChanged()
       }
+    
+      }
     override fun getItemCount(): Int = if (media != null) 1 else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder {
@@ -53,8 +55,13 @@ class ContinueWatchingHeroAdapter(
         )
         return HeroViewHolder(binding)
       }
+    
+      }
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
-        media?.let { holder.bind(it)
+        media?.let {
+        holder.bind(it)
+ }
+    
  }
     }
 
@@ -82,12 +89,19 @@ class ContinueWatchingHeroAdapter(
                     val bmp: Bitmap? = withContext(Dispatchers.IO) {
                         LastScreenshotManager.load(context, m.id)
                      }
+                    
+                     }
                     if (bmp != null) b.heroScreenshot.setImageBitmap(bmp)
                     else b.heroScreenshot.isVisible = false
+                }
+            
                 }
             }
         else {
                 b.heroScreenshot.isVisible = false
+            }
+
+            
             }
 
             // ── TMDB logo (async, fade in) ────────────────────────────────
@@ -104,6 +118,8 @@ class ContinueWatchingHeroAdapter(
                     b.heroLogo.loadImage(logoUrl)
                     b.heroLogo.animate().alpha(1f).setDuration(400).start()
                     b.heroTitle.animate().alpha(0f).setDuration(200).start()
+                 }
+            
                  }
             }
 
@@ -122,8 +138,13 @@ class ContinueWatchingHeroAdapter(
         b.heroMinutesRemaining.isVisible = true
                 b.heroMinutesRemaining.text = "~$remaining min remaining"
             }
+        
+            }
         else {
                 b.heroMinutesRemaining.isVisible = false
+            }
+
+            
             }
 
             // ── Next episode air countdown ────────────────────────────────
@@ -133,16 +154,26 @@ class ContinueWatchingHeroAdapter(
         b.heroNextEp.isVisible = true
                 b.heroNextEp.text = "Ep $nextEpNum in ${formatCountdown(timeUntilAiring)}"
             }
+        
+            }
         else {
                 b.heroNextEp.isVisible = false
+            }
+
+            
             }
 
             // ── Progress bar ──────────────────────────────────────────────
             if (totalEps != null && totalEps > 0) {
         b.heroProgressBar.progress = ((progress.toFloat() / totalEps) * 100).toInt()
              }
+        
+             }
         else {
                 b.heroProgressBar.progress = 0
+            }
+
+            
             }
 
             // ── Source memory badge ───────────────────────────────────────
@@ -151,16 +182,25 @@ class ContinueWatchingHeroAdapter(
             b.heroSourceMemory.isVisible = hasMemory
 
             // ── D-pad / click ─────────────────────────────────────────────
-            b.root.setOnClickListener { onResume(m)
+            b.root.setOnClickListener {
+        onResume(m)
  }
-            b.root.setOnFocusChangeListener { v, hasFocus ->
+            
+ }
+            b.root.setOnFocusChangeListener {
+        v, hasFocus ->
                 v.animate()
                     .scaleX(if (hasFocus) 1.03f else 1f)
                     .scaleY(if (hasFocus) 1.03f else 1f)
                     .setDuration(150)
                     .start()
              }
+        
+             }
         }
+    }
+
+    
     }
 
     private fun formatCountdown(seconds: Long): String {
@@ -171,6 +211,8 @@ class ContinueWatchingHeroAdapter(
             days > 0  -> "${days}d ${hours}h"
             hours > 0 -> "${hours}h ${mins}m"
             else      -> "${mins}m"
+        }
+    
         }
     }
 }

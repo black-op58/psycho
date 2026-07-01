@@ -66,7 +66,8 @@ fun <A, B> Collection<A>.asyncMap(    dispatcher: CoroutineDispatcher = Dispatch
 }.awaitAll()}/** * Performs parallel processing of collection items without blocking threads, * filtering out null results. * * @param dispatcher The CoroutineDispatcher to use for parallel operations (defaults to IO) * @param f The suspend function to apply to each item * @return List of non-null results in the same order as the original collection */suspend
 fun <A, B> Collection<A>.asyncMapNotNull(    dispatcher: CoroutineDispatcher = Dispatchers.IO,    f: suspend (A) -> B?): List<B> = coroutineScope {    
         m
-}.mapNotNull { it.await() }}
+}.mapNotNull {
+        it.await() }}
 
 fun logError(e: Throwable, post: Boolean = true, snackbar: Boolean = true) {
     val sw = StringWriter()    
@@ -83,16 +84,26 @@ fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T):
 return try {
         call.invoke()
     }
+        
+    }
         catch (e: Throwable) {
-        logError(e, post, snackbar)        null
+        logError(e, post, snackbar);
+        null
+    }
+    
     }
     }
 suspend fun <T> tryWithSuspend(    post: Boolean = false,    snackbar: Boolean = true,    call: suspend () -> T): T? {
 return try {
         call.invoke()
     }
+        
+    }
         catch (e: Throwable) {
-        logError(e, post, snackbar)        null
+        logError(e, post, snackbar);
+        null
+    }
+        
     }
         catch (e: CancellationException) {
         null    }}/** * A url, which can also have headers * **/

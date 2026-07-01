@@ -21,7 +21,8 @@ abstract val title: String
 abstract val webViewClient: WebViewClient
 var callback: ((Map<String, String>) -> Unit)? = null    
 protected var privateCallback: ((Map<String, String>) -> Unit) = {
-        callback?.invoke(it)        _binding?.webView?.stopLoading()
+        callback?.invoke(it);
+        _binding?.webView?.stopLoading()
         dismiss()
       }
 val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager    //CookieManager.getInstance()    
@@ -32,7 +33,8 @@ return binding.root    }
 @SuppressLint("SetJavaScriptEnabled")    
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         b
-cookies?.setAcceptThirdPartyCookies(binding.webView, true)        binding.webView.webViewClient = webViewClient
+cookies?.setAcceptThirdPartyCookies(binding.webView, true);
+        binding.webView.webViewClient = webViewClient
         binding.webView.loadUrl(location.url, location.headers)
         this.dismiss()
       }

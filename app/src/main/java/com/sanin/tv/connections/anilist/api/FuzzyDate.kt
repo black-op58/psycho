@@ -17,7 +17,8 @@ override fun toString(): String {
 return if (isEmpty()) "??" else toStringOrEmpty()
      }
 fun toStringOrEmpty(): String {
-return listOfNotNull(            day?.toString(),            month?.let { DateFormatSymbols().months.elementAt(it - 1) },            year?.toString()        ).joinToString(" ")
+return listOfNotNull(            day?.toString(),            month?.let {
+        DateFormatSymbols().months.elementAt(it - 1) },            year?.toString()        ).joinToString(" ")
      }
 fun getToday(): FuzzyDate {
     val cal = Calendar.getInstance()
@@ -30,7 +31,8 @@ return listOfNotNull(            year?.let { "year:$it" },            month?.let
 fun toMALString(): String {
     val padding = '0'        
 val values = listOf(            year?.toString()?.padStart(4, padding),            month?.toString()?.padStart(2, padding),            day?.toString()?.padStart(2, padding)        )
-return values.takeWhile { it is String }.joinToString("-")    }//    
+return values.takeWhile {
+        it is String }.joinToString("-")    }//    
 fun toInt(): Int {//
 return 10000 * (this.year ?: 0) + 100 * (this.month ?: 0) + (this.day ?: 0)//    }
 

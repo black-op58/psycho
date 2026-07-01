@@ -33,7 +33,8 @@ val client = OkHttpClient()
 val notificationResponse = CommentsAPI.getNotifications(client)                
 var notifications = notificationResponse?.notifications?.toMutableList()                //if we have at least one reply notification, we need to fetch the media titles
 var names = emptyMap<Int, MediaNameFetch.Companion.ReturnedData>()
-if (notifications?.any { it.type == 1 || it.type == null } == true) {
+if (notifications?.any {
+        it.type == 1 || it.type == null } == true) {
     val mediaIds =                        notifications.filter { 
         i
     names = MediaNameFetch.fetchMediaTitles(mediaIds)
@@ -88,6 +89,8 @@ if (totalNewComments > 0) {
     val currentCommentCount = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)
         PrefManager.setVal(PrefName.UnreadCommentNotifications, currentCommentCount + totalNewComments)
                 }
+    
+                }
     }
 return true        }
         catch (e: Exception) {
@@ -100,9 +103,11 @@ private fun addNotificationToStore(notification: CommentStore) {
     val notificationStore = PrefManager.getNullableVal<List<CommentStore>>(            PrefName.CommentNotificationStore,            null        ) ?: listOf()        
 val newStore = notificationStore.toMutableList()
 if (newStore.size > 30) {
-        newStore.remove(newStore.minByOrNull { it.time })
+        newStore.remove(newStore.minByOrNull {
+        it.time })
         }
-if (newStore.any { it.content == notification.content }) {
+if (newStore.any {
+        it.content == notification.content }) {
 return        }
 newStore.add(notification)
         PrefManager.setVal(PrefName.CommentNotificationStore, newStore)
@@ -167,6 +172,8 @@ private fun getBitmapFromUrl(url: String): Bitmap? {
 return try {
     val inputStream = java.net.URL(url).openStream()
         BitmapFactory.decodeStream(inputStream)
+        }
+        
         }
         catch (e: Exception) {
         null        }

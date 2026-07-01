@@ -11,6 +11,8 @@ try {
         catch (ignored: Exception) {
         code                }
 }
+        
+}
         else {
 try {
 if (code == "all") {
@@ -21,7 +23,8 @@ Locale(code).displayName                }
 }
 
 fun getLanguageCode(language: String): String {
-return codeMap.filterValues { it.lowercase() == language.lowercase() }.keys.firstOrNull()                ?: "all"        }
+return codeMap.filterValues {
+        it.lowercase() == language.lowercase() }.keys.firstOrNull()                ?: "all"        }
 
 enum class Language(
 val code: String) {            

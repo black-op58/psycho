@@ -17,6 +17,9 @@ object CustomThemeManager {
             as? List<CustomTheme>) ?: CustomTheme.PRESETS
     }
 
+    
+    }
+
     fun saveTheme(theme: CustomTheme) {
     val current = getAllThemes().toMutableList()
         val existing = current.indexOfFirst { 
@@ -24,37 +27,58 @@ object CustomThemeManager {
         if (existing >= 0) current[existing] = theme else current.add(theme)
         PrefManager.setCustomVal(KEY_THEMES, current)
       }
+    
+      }
     fun deleteTheme(themeId: String) {
     val current = getAllThemes().toMutableList()
-        current.removeAll { it.id == themeId }
+        current.removeAll {
+        it.id == themeId }
         PrefManager.setCustomVal(KEY_THEMES, current);
         if (getActiveThemeId() == themeId) clearActiveTheme()
       }
+    
+      }
     fun setActiveTheme(themeId: String) {
         PrefManager.setVal(KEY_ACTIVE_THEME, themeId)
+      }
+    
       }
     fun getActiveThemeId(): String? =
         PrefManager.getNullableCustomVal(KEY_ACTIVE_THEME, null, String::class.java)
 
     fun getActiveTheme(): CustomTheme? {
     val id = getActiveThemeId() ?: return null
-        return getAllThemes().find { it.id == id }
+        return getAllThemes().find {
+        it.id == id }
+    }
+
+    
     }
 
     fun clearActiveTheme() {
         PrefManager.removeVal(KEY_ACTIVE_THEME)
       }
+    
+      }
     /** Parse a hex color string safely, returning the default if invalid. */
     fun parseColor(hex: String, default: Int = Color.WHITE): Int = try {
         Color.parseColor(hex)
+     }
+        
      }
         catch (e: IllegalArgumentException) {
         default
     }
 
+    
+    }
+
     /** Export a theme to a shareable JSON-like string. */
     fun exportTheme(theme: CustomTheme): String {
     return """{"name":"${theme.name}","primary":"${theme.primaryColor}","secondary":"${theme.secondaryColor}","background":"${theme.backgroundColor}","surface":"${theme.surfaceColor}","accent":"${theme.accentColor}"}"""
+    }
+
+    
     }
 
     /** Import a theme from an exported JSON string. Returns null on parse failure. */
@@ -69,8 +93,12 @@ object CustomThemeManager {
             CustomTheme(name = name, primaryColor = primary, secondaryColor = secondary,
                 backgroundColor = background, surfaceColor = surface, accentColor = accent)
          }
+        
+         }
         catch (e: Exception) {
         null
+        }
+    
         }
     }
 }

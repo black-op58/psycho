@@ -24,7 +24,8 @@ object : AAChartView.AAChartViewCallBack {
 
 override fun chartViewMoveOverEventMessage(                aaChartView: AAChartView,                messageModel: AAMoveOverEventMessageModel            ) {            
         }
-binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)        binding.chartView.callBack = callback
+binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        binding.chartView.callBack = callback
         binding.chartView.reload()
         binding.chartView.aa_drawChartWithChartOptions(aaOptions)
         binding.openButton.setOnClickListener {

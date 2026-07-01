@@ -19,7 +19,10 @@ class FAQActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFaqBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.devsTitle2.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+        binding.devsTitle2.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+  }
+        
   }
         val faqItems = listOf(
             FAQItem(R.string.faq_question_1, R.string.faq_answer_1),
@@ -46,14 +49,25 @@ class FAQActivity : AppCompatActivity() {
                         setPadding(32.dpToPx(), 0, 64.dpToPx(), 0)
                         typeface = androidx.core.content.res.ResourcesCompat.getFont(parent.context, R.font.poppins_bold)
                      }
+                    
+                     }
                     return FAQViewHolder(button)
+                 }
+                
                  }
                 override fun onBindViewHolder(holder: FAQViewHolder, position: Int) {
                     holder.bind(faqItems[position])
                  }
+                
+                 }
                 override fun getItemCount() = faqItems.size
             }
+        
+            }
         }
+    }
+
+    
     }
 
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
@@ -72,6 +86,8 @@ class FAQViewHolder(itemView: android.view.View) : androidx.recyclerview.widget.
                 .setMessage(itemView.context.getString(item.answerResId))
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
+         }
+    
          }
     }
 }

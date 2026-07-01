@@ -56,37 +56,54 @@ fun mediaDetails(media: Media): Media {
 if (response != null) {
     fun parse() {
     val fetchedMedia = response?.data?.media ?: return
-val user = response?.data?.page                        media.isFav = fetchedMedia.isFavourite ?: false                        media.source = fetchedMedia.source?.toString()                        media.countryOfOrigin = fetchedMedia.countryOfOrigin
-                        media.format = fetchedMedia.format?.toString()                        media.cover = fetchedMedia.coverImage?.large ?: media.cover
+val user = response?.data?.page                        media.isFav = fetchedMedia.isFavourite ?: false                        media.source = fetchedMedia.source?.toString();
+        media.countryOfOrigin = fetchedMedia.countryOfOrigin
+                        media.format = fetchedMedia.format?.toString();
+        media.cover = fetchedMedia.coverImage?.large ?: media.cover
                         media.banner = fetchedMedia.bannerImage ?: media.banner                        media.favourites = fetchedMedia.favourites                        media.popularity = fetchedMedia.popularity                        media.startDate = fetchedMedia.startDate                        media.endDate = fetchedMedia.endDate                        media.streamingEpisodes = fetchedMedia.streamingEpisodes
 if (fetchedMedia.genres != null) {
-        media.genres = arrayListOf()                            fetchedMedia.genres?.forEach { i ->
+        media.genres = arrayListOf();
+        fetchedMedia.genres?.forEach {
+        i ->
                                 media.genres.add(i)                            }}
-media.trailer = fetchedMedia.trailer?.let { i ->
+media.trailer = fetchedMedia.trailer?.let {
+        i ->
 if (i.site != null && i.site.toString() == "youtube")
         i.id.toString().trim('"')
 else null                        }
 fetchedMedia.synonyms?.apply {
-        media.synonyms = arrayListOf()                            this.forEach { i ->
+        media.synonyms = arrayListOf();
+        this.forEach {
+        i ->
                                 media.synonyms.add(                                    i                                )}}
 fetchedMedia.tags?.apply {
-        media.tags = arrayListOf()                            this.forEach { i ->
+        media.tags = arrayListOf();
+        this.forEach {
+        i ->
 if (i.isMediaSpoiler == false)
         media.tags.add("${i.name} : ${i.rank.toString()}%")
+                             }
+                            
                              }
                             }
 media.description = fetchedMedia.description.toString()
 if (fetchedMedia.characters != null) {
-        media.characters = arrayListOf()                            fetchedMedia.characters?.edges?.forEach { i ->
+        media.characters = arrayListOf();
+        fetchedMedia.characters?.edges?.forEach {
+        i ->
                                 i.node?.apply {
         media.characters?.add(                                        Character(                                            id = id,                                            name = i.node?.name?.userPreferred,                                            image = i.node?.image?.medium,                                            banner = media.banner ?: media.cover,                                            isFav = i.node?.isFavourite ?: false,                                            role = when (i.role.toString()) {                                                "MAIN" -> currContext()?.getString(R.string.main_role)                                                    ?: "MAIN"                                                "SUPPORTING" -> currContext()?.getString(R.string.supporting_role)                                                    ?: "SUPPORTING"
 else -> i.role.toString()                                            },                                            voiceActor = i.voiceActors?.map {
-        Author(                                                    id = it.id,                                                    name = it.name?.userPreferred,                                                    image = it.image?.large,                                                    role = it.languageV2                                                )                                            }?.distinctBy { it.id }?.let { ArrayList(it)
+        Author(                                                    id = it.id,                                                    name = it.name?.userPreferred,                                                    image = it.image?.large,                                                    role = it.languageV2                                                )                                            }?.distinctBy {
+        it.id }?.let {
+        ArrayList(it)
  }
 )                                    )}}
 }
 if (fetchedMedia.staff != null) {
-        media.staff = arrayListOf()                            fetchedMedia.staff?.edges?.forEach { i ->
+        media.staff = arrayListOf();
+        fetchedMedia.staff?.edges?.forEach {
+        i ->
                                 i.node?.apply {
         media.staff?.add(                                        Author(                                            id = id,                                            name = i.node?.name?.userPreferred,                                            image = i.node?.image?.large,                                            role = when (i.role.toString()) {                                                "MAIN" -> currContext()?.getString(R.string.main_role)                                                    ?: "MAIN"                                                "SUPPORTING" -> currContext()?.getString(R.string.supporting_role)                                                    ?: "SUPPORTING"
 else -> i.role.toString()
@@ -94,21 +111,29 @@ else -> i.role.toString()
 )                                    )}}
 }
 if (fetchedMedia.relations != null) {
-        media.relations = arrayListOf()                            fetchedMedia.relations?.edges?.forEach { mediaEdge ->
+        media.relations = arrayListOf();
+        fetchedMedia.relations?.edges?.forEach {
+        mediaEdge ->
                                 
-val m = Media(mediaEdge)                                media.relations?.add(m)
+val m = Media(mediaEdge);
+        media.relations?.add(m)
 if (m.relation == "SEQUEL") {
         media.sequel =
 if ((media.sequel?.popularity ?: 0) < (m.popularity                                                ?: 0)                                        ) m else media.sequel
 } else if (m.relation == "PREQUEL") {
         media.prequel =
 if ((media.prequel?.popularity ?: 0) < (m.popularity                                                ?: 0)                                        ) m else media.prequel                                }}
-media.relations?.sortByDescending { it.popularity}
-media.relations?.sortByDescending { it.startDate?.year}
-media.relations?.sortBy { it.relation}
+media.relations?.sortByDescending {
+        it.popularity}
+media.relations?.sortByDescending {
+        it.startDate?.year}
+media.relations?.sortBy {
+        it.relation}
 }
 if (fetchedMedia.recommendations != null) {
-        media.recommendations = arrayListOf()                            fetchedMedia.recommendations?.nodes?.forEach { i ->
+        media.recommendations = arrayListOf();
+        fetchedMedia.recommendations?.nodes?.forEach {
+        i ->
                                 i.mediaRecommendation?.apply {
         media.recommendations?.add(                                        Media(this)                                    )                                }}
 }
@@ -116,7 +141,8 @@ if (fetchedMedia.reviews?.nodes != null) {
         media.review = fetchedMedia.reviews!!.nodes as ArrayList<Query.Review>                        }
 if (user?.mediaList?.isNotEmpty() == true) {
         media.users = user.mediaList?.mapNotNull {
-        it.user?.let { user ->
+        it.user?.let {
+        user ->
 if (user.id != Anilist.userid) {
         User(                                            user.id,                                            user.name ?: "Unknown",                                            user.avatar?.large,                                            "",                                            it.status?.toString(),                                            it.score,                                            it.progress,                                            fetchedMedia.episodes ?: fetchedMedia.chapters,                                        )
 } else null                                }
@@ -125,37 +151,52 @@ if (user.id != Anilist.userid) {
 if (fetchedMedia.mediaListEntry != null) {
         fetchedMedia.mediaListEntry?.apply {
         media.userProgress = progress                                media.userProgressVolumes = progressVolumes                                media.isListPrivate =private ?: false
-                                media.notes = notes                                media.userListId = id                                media.userScore = score?.toInt() ?: 0                                media.userStatus = status?.toString()                                media.inCustomListsOf = customLists?.toMutableMap()
+                                media.notes = notes                                media.userListId = id                                media.userScore = score?.toInt() ?: 0                                media.userStatus = status?.toString();
+        media.inCustomListsOf = customLists?.toMutableMap()
                                 media.userRepeat = repeat ?: 0
-                                media.userUpdatedAt = updatedAt?.toString()?.toLong()?.times(1000)                                media.userCompletedAt = completedAt ?: FuzzyDate()
+                                media.userUpdatedAt = updatedAt?.toString()?.toLong()?.times(1000);
+        media.userCompletedAt = completedAt ?: FuzzyDate()
                                 media.userStartedAt = startedAt ?: FuzzyDate()
+                             }
+                                
                              }
                                 }
         else {
-        media.isListPrivate = false                            media.userStatus = null                            media.userListId = null                            media.userProgress = null                            media.userProgressVolumes = null                            media.userScore = 0                            media.userRepeat = 0                            media.userUpdatedAt = null                            media.userCompletedAt = FuzzyDate()                            media.userStartedAt = FuzzyDate()
+        media.isListPrivate = false                            media.userStatus = null                            media.userListId = null                            media.userProgress = null                            media.userProgressVolumes = null                            media.userScore = 0                            media.userRepeat = 0                            media.userUpdatedAt = null                            media.userCompletedAt = FuzzyDate();
+        media.userStartedAt = FuzzyDate()
+                         }
+                                
                          }
                                 if (media.anime != null) {
-        media.anime.episodeDuration = fetchedMedia.duration                            media.anime.season = fetchedMedia.season?.toString()                            media.anime.seasonYear = fetchedMedia.seasonYear
+        media.anime.episodeDuration = fetchedMedia.duration                            media.anime.season = fetchedMedia.season?.toString();
+        media.anime.seasonYear = fetchedMedia.seasonYear
                             fetchedMedia.studios?.nodes?.apply {
     if (isNotEmpty()) {
     val animStudio = firstOrNull { 
         i
 
-val studioNode = animStudio ?: get(0)                                    media.anime.mainStudio = Studio(
+val studioNode = animStudio ?: get(0);
+        media.anime.mainStudio = Studio(
                                         studioNode.id.toString(),                                        studioNode.name ?: "N/A",                                        studioNode.isFavourite ?: false,                                        studioNode.favourites ?: 0,                                        null                                    )                                }}
 // Map non-main studios (isMain: false) as producers                            fetchedMedia.producers?.nodes?.apply {
 if (isNotEmpty()) {
         media.anime.producers = map {
         Studio(                                            it.id.toString(),                                            it.name ?: "N/A",                                            it.isFavourite ?: false,                                            it.favourites ?: 0,                                            null                                        )                                    } as ArrayList<Studio>                                }}
-fetchedMedia.staff?.edges?.find { authorRoles.contains(it.role?.trim()) }?.node?.let {
+fetchedMedia.staff?.edges?.find {
+        authorRoles.contains(it.role?.trim()) }?.node?.let {
         media.anime.author = Author(                                    it.id,                            fullMediaInformation(media.id),                            force = true,                            useToken = false                        )
 if (response?.data?.media != null) parse()
 else snackString(currContext()?.getString(R.string.what_did_you_open))
                     }
 }
+        
+}
         else {
-if (currContext()?.let { isOnline(it) } == true) {
+if (currContext()?.let {
+        isOnline(it) } == true) {
         snackString(currContext()?.getString(R.string.error_getting_data))
+ }
+        
  }
         else {                    }}
 }
@@ -178,14 +219,21 @@ if (response != null) {
 if (fetchedMedia.mediaListEntry != null) {
         fetchedMedia.mediaListEntry?.apply {
         media.userProgress = progress                                media.userProgressVolumes = progressVolumes                                media.isListPrivate =private ?: false
-                                media.userListId = id                                media.userStatus = status?.toString()                                media.inCustomListsOf = customLists?.toMutableMap()
+                                media.userListId = id                                media.userStatus = status?.toString();
+        media.inCustomListsOf = customLists?.toMutableMap()
                                 media.userRepeat = repeat ?: 0
-                                media.userUpdatedAt = updatedAt?.toString()?.toLong()?.times(1000)                                media.userCompletedAt = completedAt ?: FuzzyDate()
+                                media.userUpdatedAt = updatedAt?.toString()?.toLong()?.times(1000);
+        media.userCompletedAt = completedAt ?: FuzzyDate()
                                 media.userStartedAt = startedAt ?: FuzzyDate()
+                             }
+                                
                              }
                                 }
         else {
-        media.isListPrivate = false                            media.userStatus = null                            media.userListId = null                            media.userProgress = null                            media.userProgressVolumes = null                            media.userRepeat = 0                            media.userUpdatedAt = null                            media.userCompletedAt = FuzzyDate()                            media.userStartedAt = FuzzyDate()
+        media.isListPrivate = false                            media.userStatus = null                            media.userListId = null                            media.userProgress = null                            media.userProgressVolumes = null                            media.userRepeat = 0                            media.userUpdatedAt = null                            media.userCompletedAt = FuzzyDate();
+        media.userStartedAt = FuzzyDate()
+                         }
+                                
                          }
                                 }
                                 if (response.data?.media != null) parse()
@@ -193,6 +241,8 @@ if (fetchedMedia.mediaListEntry != null) {
         response = executeQuery(query, force = true, useToken = false);
         if (response?.data?.media != null) parse()                    }}}
                                 awaitAll(anilist)
+        }
+                                
         }
                                 return media    }
 
@@ -205,34 +255,56 @@ fun getNextPage(page: Int): List<Media> {
 val favourites = response?.data?.user?.favourites    }
 
 private fun recommendationQuery(): String {
-    return """ Page(page: 1, perPage:30) { $standardPageInformation recommendations(sort: RATING_DESC, onList: true) { rating userRating mediaRecommendation { id idMal isAdult mediaListEntry { progress progressVolumes 
+    return """ Page(page: 1, perPage:30) { $standardPageInformation recommendations(sort: RATING_DESC, onList: true) {
+        rating userRating mediaRecommendation {
+        id idMal isAdult mediaListEntry {
+        progress progressVolumes 
 private score(format:POINT_100) status } chapters volumes isFavourite format episodes nextAiringEpisode {episode} popularity meanScore isFavourite format title {english romaji userPreferred } type status(version: 2) bannerImage coverImage { 
         l
 
 private fun missingSequelsCompletedSourceQuery(): String {
-    return """ MediaListCollection( userId: ${Anilist.userid}, type: ANIME, status: COMPLETED, sort: UPDATED_TIME_DESC ) { lists { entries { media { id relations { edges { relationType(version: 2) node { id } } } } } } } """.trimIndent()
+    return """ MediaListCollection( userId: ${Anilist.userid}, type: ANIME, status: COMPLETED, sort: UPDATED_TIME_DESC ) {
+        lists {
+        entries {
+        media {
+        id relations {
+        edges {
+        relationType(version: 2) node {
+        id } } } } } } } """.trimIndent()
      }
 private fun missingSequelsAllListSourceQuery(): String {
-    return """            MediaListCollection( userId: ${Anilist.userid}, type: ANIME ) { lists { entries { media { id } } } } """.trimIndent()
+    return """            MediaListCollection( userId: ${Anilist.userid}, type: ANIME ) {
+        lists {
+        entries {
+        media {
+        id } } } } """.trimIndent()
      }
 private val batchSize = 50    
 private fun missingSequelsLookupQuery(ids: List<Int>): String {
     val idsString = ids.joinToString(",")
-return """ { Page(page: 1, perPage: $batchSize) { media( id_in: [$idsString], type: ANIME, status_in: [RELEASING, FINISHED], onList: false ) { id mediaListEntry { progress progressVolumes 
+return """ {
+        Page(page: 1, perPage: $batchSize) {
+        media( id_in: [$idsString], type: ANIME, status_in: [RELEASING, FINISHED], onList: false ) {
+        id mediaListEntry {
+        progress progressVolumes 
 private score(format: POINT_100) status } idMal type isAdult popularity status(version: 2) chapters volumes episodes nextAiringEpisode { 
         e
 
 private fun extractMissingSequelIds(completedEntries: List<MediaList>?): Set<Int> {
-    val sequelIds = mutableSetOf<Int>()        completedEntries?.forEach { 
+    val sequelIds = mutableSetOf<Int>();
+        completedEntries?.forEach { 
         e
-            entry.media?.relations?.edges?.forEach { edge ->
+            entry.media?.relations?.edges?.forEach {
+        edge ->
 if (edge.relationType?.name == "SEQUEL") {
-        edge.node?.id?.let { sequelIds.add(it) }}}
+        edge.node?.id?.let {
+        sequelIds.add(it) }}}
 }
 return sequelIds    }
 
 private fun extractAnimeIds(entries: List<MediaList>?): Set<Int> {
-return entries            ?.mapNotNull { it.media?.id }
+return entries            ?.mapNotNull {
+        it.media?.id }
 ?.toSet()            ?: emptySet()
      }
 private suspend 
@@ -243,7 +315,9 @@ val batchResults: List<List<Media>> = coroutineScope {
         b
 if (media.mediaListEntry == null) Media(media) else null                        }
 ?: emptyList()
-}}
+
+}
+}
 .awaitAll()
         }
 return ArrayList(batchResults.flatten())
@@ -275,7 +349,10 @@ val fresh = fetchMissingSequelMedia(ids)
 return fresh    }
 
 private fun continueMediaQuery(type: String, status: String): String {
-    return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress 
+    return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) {
+        lists {
+        entries {
+        progress 
 private score(format:POINT_100) status updatedAt media { 
         i
 fun initHomePage(): Map<String, ArrayList<Media>> {
@@ -290,6 +367,8 @@ if (toShow.getOrNull(0) == true) {
 val response = if (queries.isEmpty()) {            
         n
 }
+        
+}
         else {
     val query = "{${queries.joinToString(",")}}"            executeQuery<Query.HomePageMedia>(query, show = true)
          }
@@ -302,12 +381,17 @@ val media = Media(entry)
 if (media.id !in removeList && (!hidePrivate || !media.isListPrivate)) {
         media.cameFromContinue = true                    subMap[media.id] = media
 }
+        
+}
         else {
         removedMedia.add(media)                }}
-(repeatingMedia ?: emptyList()).forEach { entry ->
+(repeatingMedia ?: emptyList()).forEach {
+        entry ->
 val media = Media(entry)
 if (media.id !in removeList && (!hidePrivate || !media.isListPrivate)) {
         media.cameFromContinue = true                    subMap[media.id] = media
+}
+        
 }
         else {
         removedMedia.add(media)
@@ -324,14 +408,20 @@ var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else         
         i
 if (genres.isNullOrEmpty()) {
         executeQuery<Query.GenreCollection>(                """{GenreCollection}""",                force = true,                useToken = false            )?.data?.genreCollection?.apply {
-        genres = arrayListOf()                forEach {
+        genres = arrayListOf();
+        forEach {
                     genres?.add(it)                };PrefManager.setVal(PrefName.GenresList, genres?.toSet())
+            }
+        
             }
         }
         if (tags == null) {
-        executeQuery<Query.MediaTagCollection>(                """{ MediaTagCollection { name isAdult } }""",                force = true            )?.data?.mediaTagCollection?.apply {
+        executeQuery<Query.MediaTagCollection>(                """{
+        MediaTagCollection {
+        name isAdult } }""",                force = true            )?.data?.mediaTagCollection?.apply {
     val adult = mutableListOf<String>()                
-val good = mutableListOf<String>()                forEach { 
+val good = mutableListOf<String>();
+        forEach { 
         n
 if (node.isAdult == true) adult.add(node.name)
 else good.add(node.name)
@@ -342,7 +432,8 @@ tags = mapOf(                    true to adult,                    false to good
 }
 }
 return if (!genres.isNullOrEmpty() && tags != null) {
-        Anilist.genres = genres?.sortedBy { it }?.toMutableList() as ArrayList<String>            Anilist.tags = tags            true
+        Anilist.genres = genres?.sortedBy {
+        it }?.toMutableList() as ArrayList<String>            Anilist.tags = tags            true
 } else false    }
 suspend
 fun getGenres(genres: ArrayList<String>, listener: ((Pair<String, String>) -> Unit)) {        
@@ -351,13 +442,16 @@ fun getGenres(genres: ArrayList<String>, listener: ((Pair<String, String>) -> Un
 if (thumbnail != null) {
         listener.invoke(it to thumbnail.thumbnail)
  }
+        
+ }
         else {
         listener.invoke(it to "")            }}
 }
 
 private fun <K, V : Serializable> saveSerializableMap(prefKey: String, map: Map<K, V>) {
     val byteStream = ByteArrayOutputStream()
-        ObjectOutputStream(byteStream).use { outputStream ->            outputStream.writeObject(map)
+        ObjectOutputStream(byteStream).use {
+        outputStream ->            outputStream.writeObject(map)
          }
 val serializedMap = Base64.encodeToString(byteStream.toByteArray(), Base64.DEFAULT)
         PrefManager.setCustomVal(prefKey, serializedMap)
@@ -369,7 +463,10 @@ try {
 if (serializedMap.isEmpty()) return null
 val bytes = Base64.decode(serializedMap, Base64.DEFAULT)            
 val byteArrayStream = ByteArrayInputStream(bytes)
-return ObjectInputStream(byteArrayStream).use { inputStream ->                inputStream.readObject() as? Map<K, V>            }
+return ObjectInputStream(byteArrayStream).use {
+        inputStream ->                inputStream.readObject() as? Map<K, V>            }
+}
+        
 }
         catch (e: Exception) {
         return null        }
@@ -387,20 +484,29 @@ try {
         saveSerializableMap("genre_thumb", genres)
 return genres[genre]                    }}
     }
+        
+    }
         catch (e: Exception) {
         logError(e)
+}
+    
 }
     }
         else {
     return genres[genre]        }
         return null    }               $standardPageInformation               characters(search: "$search") {                  ${characterInformation(false)
 }
+        
+}
         }
+    }
+        
     }
         }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.characters != null) {
-    val responseArray = arrayListOf<Character>()            response.characters?.forEach { 
+    val responseArray = arrayListOf<Character>();
+        response.characters?.forEach { 
         i
                 responseArray.add(                    Character(                        i.id,                        i.name?.full,                        i.image?.medium ?: i.image?.large,                        null,                        null.toString(),                        i.isFavourite ?: false,                        i.description,                        i.age,                        i.gender,                        i.dateOfBirth,                    )                )
              }
@@ -414,13 +520,18 @@ if (search.isNullOrBlank()) return null
 val query = """           {             
         P
         }
+    
+        }
     }
+        }        
         }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.studios != null) {
-    val responseArray = arrayListOf<Studio>()            response.studios?.forEach { 
+    val responseArray = arrayListOf<Studio>();
+        response.studios?.forEach { 
         i
-                responseArray.add(                    Studio(                        i.id.toString(),                        i.name ?: return null,                        i.isFavourite ?: false,                        i.favourites,                        i.media?.edges?.firstOrNull()?.node?.let { it.coverImage?.large }
+                responseArray.add(                    Studio(                        i.id.toString(),                        i.name ?: return null,                        i.isFavourite ?: false,                        i.favourites,                        i.media?.edges?.firstOrNull()?.node?.let {
+        it.coverImage?.large }
     )                )
              }
 val pageInfo = response.pageInfo ?: return null
@@ -433,11 +544,15 @@ if (search.isNullOrBlank()) return null
 val query = """           {             
         P
         }
+    
+        }
     }
+        }        
         }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.staff != null) {
-    val responseArray = arrayListOf<Author>()            response.staff?.forEach { 
+    val responseArray = arrayListOf<Author>();
+        response.staff?.forEach { 
         i
                 responseArray.add(                    Author(                        i.id,                        i.name?.userPreferred ?: return null,                        i.image?.large,                        null,                        null,                        null                    )                )
              }
@@ -450,7 +565,10 @@ fun searchUsers(page: Int, search: String?): UserSearchResults? {
     val query = """           {             
         P
         }
+    
+        }
     }
+        }        
         }        """.prepare()        
 val response = executeQuery<Query.Page>(query, force = true)?.data?.page
 if (response?.users != null) {
@@ -468,14 +586,17 @@ fun next() {
         r
                 j.media?.let {
 if (it.countryOfOrigin == "JP" && (if (!Anilist.adult) it.isAdult == false else true)) {
-        Media(it).apply { relation = "${j.episode},${j.airingAt}" }
+        Media(it).apply {
+        relation = "${j.episode},${j.airingAt}" }
 } else null                }
 } ?: listOf())
+
 
 }
 next()
 while (res?.pageInfo?.hasNextPage == true) {
-        next()            i++        }
+        next();
+        i++        }
 return list.reversed().toMutableList()
     }
 suspend
@@ -483,10 +604,12 @@ fun getCharacterDetails(character: Character): Character {
     val query = """ {  
         C
             return Character(                i.id,                i.name?.full,                i.image?.large ?: i.image?.medium,                null,                null.toString(),                i.isFavourite ?: false,                i.description,                i.age,                i.gender,                i.dateOfBirth,                i.media?.edges?.map {
-    val m = Media(it)                    m.relation = it.characterRole.toString()                    m                }?.let { 
+    val m = Media(it);
+        m.relation = it.characterRole.toString();
+        m                }?.let { 
         A
-    )
-        }
+)
+    }
 return character    }
 suspend
 fun getStudioDetails(studio: Studio): Studio {
@@ -500,19 +623,25 @@ while (hasNextPage) {
         page++;
         hasNextPage =
                 executeQuery<Query.Studio>(query(page), force = true)?.data?.studio?.media?.let {
-        it.edges?.forEach { i ->                        i.node?.apply {
+        it.edges?.forEach {
+        i ->                        i.node?.apply {
 if (id !in seenMediaIds) {
         seenMediaIds.add(id)                                
 val status = status.toString()                                
 val year = startDate?.year?.toString() ?: "TBA"                                
 val title = if (status != "CANCELLED") year else status
-if (!yearMedia.containsKey(title))                                    yearMedia[title] = arrayListOf()
+if (!yearMedia.containsKey(title));
+        yearMedia[title] = arrayListOf()
                                 yearMedia[title]?.add(Media(this))
                             }}}
 it.pageInfo?.hasNextPage == true                } ?: false        
+
 }
 if (yearMedia.contains("CANCELLED")) {
-    val a = yearMedia["CANCELLED"]!!            yearMedia.remove("CANCELLED")            yearMedia["CANCELLED"] = a
+    val a = yearMedia["CANCELLED"]!!            yearMedia.remove("CANCELLED");
+        yearMedia["CANCELLED"] = a
+        }
+    
         }
     studio.yearMedia = yearMedia
 return studio    }
@@ -520,6 +649,8 @@ suspend
 fun getAuthorDetails(author: Author): Author {
     fun query(page: Int = 0) = """ {  
         S
+        }
+    
         }
     }  }}""".prepare()        
 var hasNextPage = true
@@ -529,19 +660,25 @@ val characters = arrayListOf<Character>()
 while (hasNextPage) {
         page++            
 val query = executeQuery<Query.Author>(                query(page), force = true            )?.data?.author            author.age = query?.age            author.yearsActive =
-if (query?.yearsActive?.isEmpty() == true) null else query?.yearsActive            author.homeTown = if (query?.homeTown?.isBlank() == true) null else query?.homeTown            author.dateOfDeath = if (query?.dateOfDeath?.toStringOrEmpty()                    ?.isBlank() == true            ) null else query?.dateOfDeath?.toStringOrEmpty()            author.dateOfBirth = if (query?.dateOfBirth?.toStringOrEmpty()
+if (query?.yearsActive?.isEmpty() == true) null else query?.yearsActive            author.homeTown = if (query?.homeTown?.isBlank() == true) null else query?.homeTown            author.dateOfDeath = if (query?.dateOfDeath?.toStringOrEmpty()                    ?.isBlank() == true            ) null else query?.dateOfDeath?.toStringOrEmpty();
+        author.dateOfBirth = if (query?.dateOfBirth?.toStringOrEmpty()
                     ?.isBlank() == true            ) null else query?.dateOfBirth?.toStringOrEmpty();
         hasNextPage = query?.staffMedia?.let {
-                it.edges?.forEach { i ->                    i.node?.apply {
+                it.edges?.forEach {
+        i ->                    i.node?.apply {
     val status = status.toString()                        
 val year = startDate?.year?.toString() ?: "TBA"                        
 val title = if (status != "CANCELLED") year else status
-if (!yearMedia.containsKey(title))                            yearMedia[title] = arrayListOf()
+if (!yearMedia.containsKey(title));
+        yearMedia[title] = arrayListOf()
                         
-val media = Media(this)                        media.relation = i.staffRole
+val media = Media(this);
+        media.relation = i.staffRole
                         yearMedia[title]?.add(media)                    }}
 it.pageInfo?.hasNextPage == true            } ?: false            query?.characters?.let {
-        it.nodes?.forEach { i ->                    characters.add(                        Character(                            i.id,                            i.name?.userPreferred,                            i.image?.large,                            i.image?.medium,                            "",                            false                        )                    )
+        it.nodes?.forEach {
+        i ->                    characters.add(                        Character(                            i.id,                            i.name?.userPreferred,                            i.image?.large,                            i.image?.medium,                            "",                            false                        )                    )
+
 
 }
 }

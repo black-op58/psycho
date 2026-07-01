@@ -32,9 +32,13 @@ try {
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         alarmManager.setExactAndAllowWhileIdle(                    AlarmManager.RTC_WAKEUP,                    triggerAtMillis,                    pendingIntent                )
  }
+        
+ }
         else {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
             }
+}
+        
 }
         catch (e: SecurityException) {
         PrefManager.setVal(PrefName.UseAlarmManager, false)

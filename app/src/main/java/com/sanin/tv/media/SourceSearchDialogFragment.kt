@@ -33,15 +33,22 @@ class SourceSearchDialogFragment : DialogFragment() {
         return binding.root
     }
 
+    
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = true
 
-        binding.sourceSearchInput.setOnEditorActionListener { _, actionId, _ ->
+        binding.sourceSearchInput.setOnEditorActionListener {
+        _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
         performSearch(binding.sourceSearchInput.text.toString())
                 true
             } else false
+        }
+
+        
         }
 
         binding.sourceSearchResults.layoutManager = LinearLayoutManager(requireContext())
@@ -58,14 +65,25 @@ class SourceSearchDialogFragment : DialogFragment() {
                     setTextColor(androidx.core.content.ContextCompat.getColor(parent.context, com.sanin.tv.R.color.bg_white))
                     setBackgroundResource(com.sanin.tv.R.drawable.ui_bg)
                  }
+                
+                 }
                 return SearchResultViewHolder(textView)
+             }
+            
              }
             override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
                 holder.bind(searchResults[position])
              }
+            
+             }
             override fun getItemCount() = searchResults.size
         }
+        
+        }
         binding.sourceSearchResults.adapter = adapter
+    }
+
+    
     }
 
     private fun performSearch(query: String) {
@@ -80,10 +98,17 @@ class SourceSearchDialogFragment : DialogFragment() {
                 searchResults.addAll(results)
                 adapter?.notifyDataSetChanged()
              }
+        
+             }
         catch (e: Exception) {
         // Silently handle
             }
+        
+            }
         }
+    }
+
+    
     }
 
     private fun searchAnilist(query: String): List<SearchResultItem> {
@@ -95,9 +120,12 @@ class SourceSearchDialogFragment : DialogFragment() {
                 header("Content-Type", "application/json")
                 header("Accept", "application/json")
              }
+            
+             }
             val json = Mapper.json.parseToJsonElement(response.text)
             val mediaList = json.jsonObject["data"]?.jsonObject?.get("Page")?.jsonObject?.get("media")?.jsonArray
-            mediaList?.map { element ->
+            mediaList?.map {
+        element ->
                 val obj = element.jsonObject
                 val id = obj["id"]?.jsonPrimitive?.content?.toIntOrNull() ?: 0
                 val titles = obj["title"]?.jsonObject
@@ -108,9 +136,15 @@ class SourceSearchDialogFragment : DialogFragment() {
                 SearchResultItem(title, cover, id)
             } ?: emptyList()
          
+
+}
+        
+         
 }
         catch (e: Exception) {
         emptyList()
+         }
+    
          }
     }
 
@@ -119,8 +153,13 @@ class SourceSearchDialogFragment : DialogFragment() {
         _binding = null
     }
 
+    
+    }
+
     override fun dismiss() {
         super.dismiss()
+      }
+    
       }
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
   }
@@ -131,6 +170,8 @@ class SearchResultViewHolder(itemView: View) : androidx.recyclerview.widget.Recy
             // Notify parent of selection
             // The source search dialog result would be handled by the caller
             dismiss()
+         }
+    
          }
     }
 

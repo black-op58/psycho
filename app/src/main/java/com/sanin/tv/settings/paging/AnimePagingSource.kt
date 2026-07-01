@@ -74,20 +74,26 @@ val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)
 val filteredExtensions = if (query.isEmpty()) {            
         a
 }
+        
+}
         else {
-        availableExtensions.filter { it.name.contains(query, ignoreCase = true)
+        availableExtensions.filter {
+        it.name.contains(query, ignoreCase = true)
  }
 }
 
 val lang: String = PrefManager.getVal(PrefName.LangSort)        
 val langFilter =
-if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
+if (lang != "all") filteredExtensions.filter {
+        it.lang == lang } else filteredExtensions
 val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { 
         i
 return try {
     val sublist = filternfsw.subList(                fromIndex = position,                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)            )
         LoadResult.Page(
 data = sublist,                prevKey = if (position == 0) null else position - params.loadSize,                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize            )
+        }
+        
         }
         catch (e: Exception) {
         LoadResult.Error(e)
@@ -127,7 +133,8 @@ inner
 class AnimeExtensionViewHolder(
 private val binding: ItemExtensionAllBinding) :        RecyclerView.ViewHolder(binding.root) {
     private val job = Job()        
-private val scope = CoroutineScope(Dispatchers.Main + job)        init {
+private val scope = CoroutineScope(Dispatchers.Main + job);
+        init {
             binding.closeTextView.setOnClickListener {
 if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
 val extension = getItem(bindingAdapterPosition)
@@ -145,7 +152,8 @@ delay(1000)}}}}
 val extensionIconImageView: ImageView = binding.extensionIconImageView
 fun bind(extension: AnimeExtension.Available) {
     val nsfw = if (extension.isNsfw) "(18+)" else ""            
-val lang = LanguageMapper.getLanguageName(extension.lang)            binding.extensionNameTextView.text = extension.name
+val lang = LanguageMapper.getLanguageName(extension.lang);
+        binding.extensionNameTextView.text = extension.name
 val versionText = "$lang ${extension.versionName} $nsfw"            binding.extensionVersionTextView.text = versionText        }
 
 fun clear() {            
@@ -154,6 +162,8 @@ fun clear() {
 
 override fun onViewRecycled(holder: AnimeExtensionViewHolder) {        
         s
+    }
+    
     }
     }
 interface OnAnimeInstallClickListener {

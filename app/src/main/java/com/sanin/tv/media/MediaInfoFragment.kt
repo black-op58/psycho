@@ -51,6 +51,8 @@ class MediaInfoFragment : Fragment() {
             .setDuration(duration)
             .start()
       }
+    
+      }
     fun View.fadeOut(duration: Long = 200) {
         if (visibility != View.VISIBLE) return
         animate()
@@ -62,7 +64,11 @@ class MediaInfoFragment : Fragment() {
                 alpha = 1f
                 translationY = 0f
             }
+            
+            }
             .start()
+     }
+    
      }
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,10 +86,16 @@ class MediaInfoFragment : Fragment() {
             binding.mediaInfoScroll.clipToPadding = false
         }
 
+        
+        }
+
         model.scrolledToTop.observe(viewLifecycleOwner) {
             if (it) binding.mediaInfoScroll.scrollTo(0, 0)
           }
-        model.getMedia().observe(viewLifecycleOwner) { media ->
+        
+          }
+        model.getMedia().observe(viewLifecycleOwner) {
+        media ->
             if (media != null) {
         loaded = true
 
@@ -95,6 +107,8 @@ class MediaInfoFragment : Fragment() {
                     copyToClipboard(media.name ?: media.nameRomaji)
                     true
                 }
+                
+                }
                 if (media.name != null) binding.mediaInfoNameRomajiContainer.visibility =
                     View.VISIBLE
                 val infoNameRomaji = tripleTab + media.nameRomaji
@@ -102,6 +116,8 @@ class MediaInfoFragment : Fragment() {
                 binding.mediaInfoNameRomaji.setOnLongClickListener {
                     copyToClipboard(media.nameRomaji)
                     true
+                }
+                
                 }
                 binding.mediaInfoMeanScore.text =
                     media.meanScore?.let { (it / 10.0).toString() } ?: "??"
@@ -125,18 +141,29 @@ class MediaInfoFragment : Fragment() {
         append("$hours hour");
         if (hours > 1) append("s")
                                   
+
+}
+                                
+                                  
 }
                                 if (minutes > 0) {
         if (hours > 0) append(", ")
                                     append("$minutes min");
         if (minutes > 1) append("s")
                                  }
+                            
+                                 }
                             }
 
                             formattedDuration
                         }
 
+                        
+                        }
+
                         else -> "??"
+                    }
+                    
                     }
                     binding.mediaInfoDurationContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeasonContainer.visibility = View.VISIBLE
@@ -155,7 +182,8 @@ class MediaInfoFragment : Fragment() {
                                     media.anime.mainStudio!! as Serializable
                                 ),
                                 null
-                            )
+)
+                            }
                          }
                     }
                     // Show producers as a chip group (same style as External Links);
@@ -172,7 +200,8 @@ class MediaInfoFragment : Fragment() {
                             bind.root.tag = "dynamic_view"
                             binding.mediaInfoContainer.addView(bind.root, 1)
 
-                            validProducers.forEach { producer ->
+                            validProducers.forEach {
+        producer ->
                                 val chip = ItemChipBinding.inflate(
                                     LayoutInflater.from(context),
                                     bind.itemChipGroup,
@@ -187,12 +216,16 @@ class MediaInfoFragment : Fragment() {
                                             producer as Serializable
                                         ),
                                         null
-                                    )
+)
+                                    }
                                  }
                                 bind.itemChipGroup.addView(chip)
                              }
+                        
+                             }
                         }
-                        )
+)
+                        }
                      }
                     ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
@@ -209,6 +242,8 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
+                     }
+                
                      }
                 }
                 if (media.trailer != null && !offline) {
@@ -229,6 +264,9 @@ class MediaInfoFragment : Fragment() {
                             mCustomViewCallback = null
                         }
 
+                        
+                        }
+
                         override fun onShowCustomView(
                             paramView: View,
                             paramCustomViewCallback: CustomViewCallback
@@ -236,6 +274,8 @@ class MediaInfoFragment : Fragment() {
                             if (mCustomView != null) {
         onHideCustomView()
                                 return
+                            }
+                            
                             }
                             mCustomView = paramView
                             mOriginalSystemUiVisibility =
@@ -247,6 +287,8 @@ class MediaInfoFragment : Fragment() {
                             )
                             requireActivity().window.decorView.systemUiVisibility =
                                 3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        }
+                    
                         }
                     }
 
@@ -265,6 +307,8 @@ class MediaInfoFragment : Fragment() {
                         settings.mediaPlaybackRequiresUserGesture = false
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                        }
+                        
                         }
                         settings.userAgentString = null
                         isSoundEffectsEnabled = true
@@ -287,17 +331,23 @@ class MediaInfoFragment : Fragment() {
                                                 box-sizing: border-box;
                                                 -webkit-tap-highlight-color: transparent;
                                             }
+                                            
+                                            }
                                             html, body {
                                                 width: 100%;
                                                 height: 100%;
                                                 background: #000;
                                                 overflow: hidden;
                                             }
+                                            
+                                            }
                                             iframe {
                                                 width: 100%;
                                                 height: 100%;
                                                 border: none;
                                                 display: block;
+                                            }
+                                        
                                             }
                                         </style>
                                     </head>
@@ -314,7 +364,11 @@ class MediaInfoFragment : Fragment() {
                                      (it as? android.app.Activity)?.runOnUiThread {
                                          loadDataWithBaseURL("https://www.youtube-nocookie.com", trailerHtml, "text/html", "utf-8", null)
                                       }
+                                
+                                      }
                                 }
+                            }
+                        
                             }
                         }, "Android")
 
@@ -333,11 +387,15 @@ class MediaInfoFragment : Fragment() {
                                         -webkit-user-select: none;
                                         user-select: none;
                                     }
+                                    
+                                    }
                                     body, html {
                                         width: 100%;
                                         height: 100%;
                                         background: #000;
                                         overflow: hidden;
+                                    }
+                                    
                                     }
                                     .thumbnail-container {
                                         position: relative;
@@ -348,10 +406,14 @@ class MediaInfoFragment : Fragment() {
                                         justify-content: center;
                                         background: #000;
                                     }
+                                    
+                                    }
                                     .thumbnail {
                                         width: 100%;
                                         height: 100%;
                                         object-fit: contain;
+                                    }
+                                    
                                     }
                                     .play-button {
                                         position: absolute;
@@ -364,8 +426,12 @@ class MediaInfoFragment : Fragment() {
                                         justify-content: center;
                                         transition: transform 0.2s;
                                     }
+                                    
+                                    }
                                     .thumbnail-container:active .play-button {
                                         transform: scale(0.95);
+                                    }
+                                    
                                     }
                                     .play-icon {
                                         width: 0;
@@ -374,6 +440,8 @@ class MediaInfoFragment : Fragment() {
                                         border-top: 12px solid transparent;
                                         border-bottom: 12px solid transparent;
                                         margin-left: 4px;
+                                    }
+                                
                                     }
                                 </style>
                             </head>
@@ -390,8 +458,12 @@ class MediaInfoFragment : Fragment() {
                         """.trimIndent()
                         loadDataWithBaseURL("https://www.youtube-nocookie.com", placeholderHtml, "text/html", "utf-8", null)
                      }
+                    
+                     }
                     bind.root.tag = "dynamic_view"
                     parent.addView(bind.root)
+                  }
+                
                   }
                 if (media.anime != null && (media.anime.op.isNotEmpty() || media.anime.ed.isNotEmpty()) && !offline) {
                     val markWon = Markwon.builder(requireContext())
@@ -413,11 +485,16 @@ class MediaInfoFragment : Fragment() {
                                 "${a.subSequence(end, a.length)}"
                     }
 
+                    
+                    }
+
                     fun makeText(textView: TextView, arr: ArrayList<String>) {
                         var op = ""
                         arr.forEach {
                             op += "\n"
                             op += makeLink(it)
+                         }
+                        
                          }
                         op = op.removePrefix("\n")
                         textView.setOnClickListener {
@@ -425,12 +502,18 @@ class MediaInfoFragment : Fragment() {
         ObjectAnimator.ofInt(textView, "maxLines", 100)
                                     .setDuration(950).start()
                              }
+        
+                             }
         else {
                                 ObjectAnimator.ofInt(textView, "maxLines", 4)
                                     .setDuration(400).start()
                              }
+                        
+                             }
                         }
                         markWon.setMarkdown(textView, op)
+                      }
+                    
                       }
                     if (media.anime.op.isNotEmpty()) {
                         val bind = ItemTitleTextBinding.inflate(
@@ -443,6 +526,8 @@ class MediaInfoFragment : Fragment() {
                         bind.root.tag = "dynamic_view"
                         parent.addView(bind.root)
                        }
+                    
+                       }
                     if (media.anime.ed.isNotEmpty()) {
                         val bind = ItemTitleTextBinding.inflate(
                             LayoutInflater.from(context),
@@ -453,6 +538,8 @@ class MediaInfoFragment : Fragment() {
                         makeText(bind.itemText, media.anime.ed)
                         bind.root.tag = "dynamic_view"
                         parent.addView(bind.root)
+                     }
+                
                      }
                 }
 
@@ -473,27 +560,40 @@ class MediaInfoFragment : Fragment() {
                             MainScope().launch {
                                 bind.mediaInfoGenresProgressBar.visibility = View.GONE
                             }
+                        
+                            }
                         }
                         if (genreModel.genres != null) {
         adapter.genres = genreModel.genres!!
                             adapter.pos = ArrayList(genreModel.genres!!.keys);
         if (genreModel.done) genreModel.doneListener?.invoke()
                          }
+                        
+                         }
                         lifecycleScope.launch(Dispatchers.IO) {
                             genreModel.loadGenres(media.genres) {
                                 MainScope().launch {
                                     adapter.addGenre(it)
                                  }
+                            
+                                 }
                             }
+                        }
+                    
                         }
                     }
         else {
                         bind.mediaInfoGenresProgressBar.visibility = View.GONE
-                        media.genres.forEach { genre ->
+                        media.genres.forEach {
+        genre ->
                              adapter.addGenre(Pair(genre, ""))
+                         }
+                    
                          }
                     }
                     parent.addView(bind.root)
+                  }
+                
                   }
                 if (media.tags.isNotEmpty() && !offline) {
                     val bind = ItemTitleChipgroupBinding.inflate(
@@ -527,14 +627,22 @@ class MediaInfoFragment : Fragment() {
                                             ).show()
                                             it.putExtra("hentai", true)
                                          }
+                                    
+                                         }
                                     },
                                 null
-                            )
+)
+                            }
                          }
-                        chip.setOnLongClickListener { copyToClipboard(media.tags[position]);true }
+                        chip.setOnLongClickListener {
+        copyToClipboard(media.tags[position]);true }
                         bind.itemChipGroup.addView(chip)
                      }
+                    
+                     }
                     parent.addView(bind.root)
+                  }
+                
                   }
                 if (!media.externalLinks.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleChipgroupBinding.inflate(
@@ -554,11 +662,18 @@ class MediaInfoFragment : Fragment() {
                         chip.setSafeOnClickListener {
                             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                          }
-                        chip.setOnLongClickListener { copyToClipboard(url); true }
+                        
+                         }
+                        chip.setOnLongClickListener {
+        copyToClipboard(url); true }
                         bind.itemChipGroup.addView(chip)
+                     }
+                    
                      }
                     bind.root.tag = "dynamic_view"
                     parent.addView(bind.root)
+                  }
+                
                   }
                 if ((!media.relations.isNullOrEmpty() || media.sequel != null || media.prequel != null) && !offline) {
                     if (media.sequel != null || media.prequel != null) {
@@ -583,7 +698,8 @@ class MediaInfoFragment : Fragment() {
                                             "media",
                                             media.sequel as Serializable
                                         ), null
-                                    )
+)
+                                    }
                                  }
                             }
                             if (media.prequel != null) {
@@ -601,11 +717,14 @@ class MediaInfoFragment : Fragment() {
                                             "media",
                                             media.prequel as Serializable
                                         ), null
-                                    )
+)
+                                    }
                                  }
                             }
                             root.tag = "dynamic_view"
                             parent.addView(root)
+                         }
+                    
                          }
                     }
 
@@ -616,7 +735,10 @@ class MediaInfoFragment : Fragment() {
                             false
                         ).apply {
                             val adapter = GroupieAdapter()
-                            media.review!!.forEach { adapter.add(ReviewAdapter(it))
+                            media.review!!.forEach {
+        adapter.add(ReviewAdapter(it))
+ }
+                            
  }
                             itemTitle.setText(R.string.reviews)
                             itemRecycler.adapter = adapter
@@ -626,10 +748,13 @@ class MediaInfoFragment : Fragment() {
                                 startActivity(
                                     Intent(requireContext(), ReviewActivity::class.java)
                                         .putExtra("mediaId", media.id)
-                                )
+)
+                                }
                              }
                             root.tag = "dynamic_view"
                             parent.addView(root)
+                         }
+                    
                          }
                     }
 
@@ -649,6 +774,8 @@ class MediaInfoFragment : Fragment() {
                         root.tag = "dynamic_view"
                         parent.addView(root)
                      }
+                
+                     }
                 }
                 if (!media.characters.isNullOrEmpty() && !offline) {
                     ItemTitleRecyclerBinding.inflate(
@@ -666,6 +793,8 @@ class MediaInfoFragment : Fragment() {
                         )
                         root.tag = "dynamic_view"
                         parent.addView(root)
+                     }
+                
                      }
                 }
                 if (!media.staff.isNullOrEmpty() && !offline) {
@@ -685,6 +814,8 @@ class MediaInfoFragment : Fragment() {
                         root.tag = "dynamic_view"
                         parent.addView(root)
                      }
+                
+                     }
                 }
                 if (!media.recommendations.isNullOrEmpty() && !offline) {
                     ItemTitleRecyclerBinding.inflate(
@@ -703,7 +834,11 @@ class MediaInfoFragment : Fragment() {
                         root.tag = "dynamic_view"
                         parent.addView(root)
                      }
+                
+                     }
                 }
+            }
+        
             }
         }
 
@@ -713,11 +848,14 @@ class MediaInfoFragment : Fragment() {
                 ObjectAnimator.ofFloat(binding.root, "radius", 32f, 0f).setDuration(200)
             var cornered = true
             cornerTop.start()
-            binding.mediaInfoScroll.setOnScrollChangeListener { v, _, _, _, _ ->
+            binding.mediaInfoScroll.setOnScrollChangeListener {
+        v, _, _, _, _ ->
                 if (!v.canScrollVertically(-1)) {
                     if (!cornered) {
         cornered = true
                         cornerTop.start()
+                     }
+                
                      }
                 }
         else {
@@ -725,15 +863,23 @@ class MediaInfoFragment : Fragment() {
         cornered = false
                         cornerNotTop.start()
                      }
+                
+                     }
                 }
+            }
+        
             }
         }
 
         super.onViewCreated(view, null)
       }
+    
+      }
     override fun onResume() {
         binding.mediaInfoProgressBar.isGone = loaded
         super.onResume()
+      }
+    
       }
     override fun onDestroy() {
         timer?.cancel()

@@ -39,10 +39,13 @@ override fun defaultValue(): T {
 return defaultValue    }
 
 override fun changes(): Flow<T> {
-return keyFlow            .filter { it == key || it == null }
-.onStart { emit("ignition")
+return keyFlow            .filter {
+        it == key || it == null }
+.onStart {
+        emit("ignition")
 }
-.map { get()
+.map {
+        get()
 }
 .conflate()
      }
@@ -66,6 +69,8 @@ class LongPrimitive(        preferences: SharedPreferences,        keyFlow: Flow
 return try {
         preferences.getLong(key, defaultValue)
             }
+        
+            }
         catch (e: ClassCastException) {
         defaultValue            }
 }
@@ -78,6 +83,8 @@ class IntPrimitive(        preferences: SharedPreferences,        keyFlow: Flow<
     override fun read(preferences: SharedPreferences, key: String, defaultValue: Int): Int {
 return try {
         preferences.getInt(key, defaultValue)
+            }
+        
             }
         catch (e: ClassCastException) {
         defaultValue            }
@@ -92,6 +99,8 @@ class FloatPrimitive(        preferences: SharedPreferences,        keyFlow: Flo
 return try {
         preferences.getFloat(key, defaultValue)
             }
+        
+            }
         catch (e: ClassCastException) {
         defaultValue            }
 }
@@ -104,6 +113,8 @@ class BooleanPrimitive(        preferences: SharedPreferences,        keyFlow: F
     override fun read(            preferences: SharedPreferences,            key: String,            defaultValue: Boolean        ): Boolean {
 return try {
         preferences.getBoolean(key, defaultValue)
+            }
+        
             }
         catch (e: ClassCastException) {
         defaultValue            }

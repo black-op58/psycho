@@ -37,21 +37,30 @@ fun onCreate(icicle: Bundle?) {
         appWidgetId = intent.getIntExtra(
             AppWidgetManager.EXTRA_APPWIDGET_ID,            AppWidgetManager.INVALID_APPWIDGET_ID        )        
 val prefs =            getSharedPreferences(ProfileStatsWidget.getPrefsName(appWidgetId), Context.MODE_PRIVATE)        
-val topBackground =            prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))        (binding.topBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(topBackground)        binding.topBackgroundButton.setOnClickListener {
+val topBackground =            prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))        (binding.topBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(topBackground);
+        binding.topBackgroundButton.setOnClickListener {
     val tag = ProfileStatsWidget.PREF_BACKGROUND_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
          }
-val bottomBackground =            prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))        (binding.bottomBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(bottomBackground)        binding.bottomBackgroundButton.setOnClickListener {
+val bottomBackground =            prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))        (binding.bottomBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(bottomBackground);
+        binding.bottomBackgroundButton.setOnClickListener {
     val tag = ProfileStatsWidget.PREF_BACKGROUND_FADE            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
          }
-val titleColor = prefs.getInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)        (binding.titleColorButton as MaterialButton).iconTint = ColorStateList.valueOf(titleColor)        binding.titleColorButton.setOnClickListener {
+val titleColor = prefs.getInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)        (binding.titleColorButton as MaterialButton).iconTint = ColorStateList.valueOf(titleColor);
+        binding.titleColorButton.setOnClickListener {
     val tag = ProfileStatsWidget.PREF_TITLE_TEXT_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
          }
-val statsColor = prefs.getInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, Color.WHITE)        (binding.statsColorButton as MaterialButton).iconTint = ColorStateList.valueOf(statsColor)        binding.statsColorButton.setOnClickListener {
+val statsColor = prefs.getInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, Color.WHITE)        (binding.statsColorButton as MaterialButton).iconTint = ColorStateList.valueOf(statsColor);
+        binding.statsColorButton.setOnClickListener {
     val tag = ProfileStatsWidget.PREF_STATS_TEXT_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
         }
-    binding.useAppTheme.setOnCheckedChangeListener { _, isChecked ->            isMonetEnabled = isChecked
+    
+        }
+    binding.useAppTheme.setOnCheckedChangeListener {
+        _, isChecked ->            isMonetEnabled = isChecked
 if (isChecked) {
         binding.topBackgroundButton.visibility = View.GONE                binding.bottomBackgroundButton.visibility = View.GONE                binding.titleColorButton.visibility = View.GONE                binding.statsColorButton.visibility = View.GONE                themeColors()
+ }
+        
  }
         else {
         binding.topBackgroundButton.visibility = View.VISIBLE                binding.bottomBackgroundButton.visibility = View.VISIBLE                binding.titleColorButton.visibility = View.VISIBLE                binding.statsColorButton.visibility = View.VISIBLE            }}

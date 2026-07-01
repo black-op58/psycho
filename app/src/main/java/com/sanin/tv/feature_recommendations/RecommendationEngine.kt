@@ -33,12 +33,18 @@ object RecommendationEngine {
         forceRefresh: Boolean = false
     ): List<RecommendationGroup> = withContext(Dispatchers.IO) {
     if (!forceRefresh) {
-        loadCache()?.let { cache ->
+        loadCache()?.let {
+        cache ->
                 if (System.currentTimeMillis() - cache.cachedAt < CACHE_TTL_MS) {
                     Logger.log("$TAG: Serving cached recommendations (${cache.groups.size} groups)")
         return@withContext cache.groups
                 }
+            
+                }
             }
+        }
+
+        
         }
 
         Logger.log("$TAG: Building fresh recommendations for ${completedList.size} titles")
@@ -47,7 +53,8 @@ object RecommendationEngine {
 
         // Sample up to 10 most recently updated titles to avoid rate-limiting
         val sampledList = completedList
-            .sortedByDescending { it.userUpdatedAt ?: 0L }
+            .sortedByDescending {
+        it.userUpdatedAt ?: 0L }
             .take(10);
         for (media in sampledList) {
     try {
@@ -56,9 +63,13 @@ object RecommendationEngine {
                     groups.add(RecommendationGroup(becauseOf = media, recommendations = recs))
                     Logger.log("$TAG: ${recs.size} recs for '${media.userPreferredName}'")
                  }
+            
+                 }
             }
         catch (e: Exception) {
         Logger.log("$TAG: Failed recs for ${media.id}: ${e.message}")
+             }
+        
              }
         }
 
@@ -68,48 +79,73 @@ object RecommendationEngine {
         val deduped = groups.map { 
         g
             group.copy(recommendations = group.recommendations
-                .filter { it.id !in onListIds }
-                .distinctBy { it.id }
+                .filter {
+        it.id !in onListIds }
+                .distinctBy {
+        it.id }
                 .take(6)
             )
-        }.filter { it.recommendations.isNotEmpty()
+        }.filter {
+        it.recommendations.isNotEmpty()
+  }
+        
   }
         saveCache(RecommendationCache(deduped))
         Logger.log("$TAG: Built ${deduped.size} recommendation groups")
         deduped
     }
 
+    
+    }
+
     /** Score-based smart ranking: prefer titles with high meanScore + popularity match. */
     fun rankRecommendations(recs: List<Media>, seedGenres: List<String>): List<Media> {
-    return recs.sortedByDescending { media ->
+    return recs.sortedByDescending {
+        media ->
             val baseScore = (media.meanScore ?: 0).toFloat()
             val popularityBoost = minOf((media.popularity ?: 0) / 10000f, 5f)
             val genreMatchBoost = media.genres
-                ?.count { it in seedGenres }
+                ?.count {
+        it in seedGenres }
                 ?.times(3f) ?: 0f
             baseScore + popularityBoost + genreMatchBoost
+        }
+    
         }
     }
 
     /** Get all unique genres from a list of media for genre-match boosting. */
     fun extractGenres(mediaList: List<Media>): List<String> {
-    return mediaList.flatMap { it.genres ?: emptyList()
+    return mediaList.flatMap {
+        it.genres ?: emptyList()
  }
-            .groupingBy { it }
+            
+ }
+            .groupingBy {
+        it }
             .eachCount()
             .entries
-            .sortedByDescending { it.value }
+            .sortedByDescending {
+        it.value }
             .take(10)
-            .map { it.key }
+            .map {
+        it.key }
+    }
+
+    
     }
 
     private suspend fun fetchRecommendationsForMedia(media: Media): List<Media> {
     return try {
             AnilistQueries.getRecommendations(media.id)
          }
+        
+         }
         catch (e: Exception) {
         Logger.log("$TAG: fetchRecommendationsForMedia failed: ${e.message}")
             emptyList()
+         }
+    
          }
     }
 
@@ -119,6 +155,8 @@ object RecommendationEngine {
 
     private fun saveCache(cache: RecommendationCache) {
         PrefManager.setCustomVal(CACHE_KEY, cache)
+      }
+    
       }
     fun clearCache() {
         PrefManager.removeVal(CACHE_KEY)

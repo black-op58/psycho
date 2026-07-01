@@ -53,6 +53,9 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val rescueMode = PrefManager.getVal<Boolean>(PrefName.RescueMode);
         if (rescueMode) {
@@ -63,20 +66,34 @@ class LoginFragment : Fragment() {
             binding.loginButton.setOnClickListener {
                 com.sanin.tv.connections.mal.MAL.loginIntent(requireActivity())
              }
+            
+             }
             binding.loginQrButton.visibility = View.GONE
+        }
+        
         }
         else {
             // AniList mode — browser button + QR button
-            binding.loginButton.setOnClickListener { Anilist.loginIntent(requireActivity())
+            binding.loginButton.setOnClickListener {
+        Anilist.loginIntent(requireActivity())
+ }
+            
  }
             binding.loginQrButton.visibility = View.VISIBLE
-            binding.loginQrButton.setOnClickListener { showAnilistQrDialog()
+            binding.loginQrButton.setOnClickListener {
+        showAnilistQrDialog()
+ }
+        
  }
         }
-        binding.loginTelegram.setOnClickListener { openLinkInBrowser(getString(R.string.telegram))
+        binding.loginTelegram.setOnClickListener {
+        openLinkInBrowser(getString(R.string.telegram))
+  }
+        
   }
         val openDocumentLauncher =
-            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+        uri ->
                 if (uri != null) {
         try {
                         val jsonString =
@@ -85,41 +102,60 @@ class LoginFragment : Fragment() {
                         val name =
                             DocumentFile.fromSingleUri(requireActivity(), uri)?.name ?: "settings"
                         when {
-                            name.endsWith(".sani") -> passwordAlertDialog { password ->
+                            name.endsWith(".sani") -> passwordAlertDialog {
+        password ->
                                 if (password != null) {
         val salt = jsonString.copyOfRange(0, 16)
                                     val encrypted = jsonString.copyOfRange(16, jsonString.size)
                                     val decryptedJson = try {
                                         PreferenceKeystore.decryptWithPassword(
                                             password, encrypted, salt
-                                        )
+)
+                                        }
                                      }
         catch (e: Exception) {
         toast("Incorrect password")
         return@passwordAlertDialog
                                     }
+                                    
+                                    }
                                     if (PreferencePackager.unpack(decryptedJson)) restartApp()
+                                 }
+        
                                  }
         else {
                                     toast("Password cannot be empty")
+                                 }
+                            
                                  }
                             }
                             name.endsWith(".ani") -> {
                                 val json = jsonString.toString(Charsets.UTF_8);
         if (PreferencePackager.unpack(json)) restartApp()
                              }
+                            
+                             }
                             else -> toast("Invalid file type")
+                         }
+                    
                          }
                     }
         catch (e: Exception) {
         Logger.log(e)
                         toast("Error importing settings")
                      }
+                
+                     }
                 }
+            }
+
+        
             }
 
         binding.importSettingsButton.setOnClickListener {
             openDocumentLauncher.launch(arrayOf("*/*"))
+         }
+    
          }
     }
 
@@ -151,7 +187,8 @@ class LoginFragment : Fragment() {
         var dialogRef: AlertDialog? = null
 
         fun isValidToken(s: String) =
-            s.length >= 40 && s.all { it.isLetterOrDigit() || it == '_' || it == '-' }
+            s.length >= 40 && s.all {
+        it.isLetterOrDigit() || it == '_' || it == '-' }
 
         fun submitToken(token: String) {
             if (dismissing) return
@@ -163,6 +200,8 @@ class LoginFragment : Fragment() {
             toast(getString(R.string.qr_login_save_token))
             startMainActivity(requireActivity())
           }
+        
+          }
         fun startCountdown(token: String) {
             pollJob?.cancel()
             pollJob = lifecycleScope.launch {
@@ -172,11 +211,21 @@ class LoginFragment : Fragment() {
                         dialogBinding.qrCountdownText.text =
                             getString(R.string.qr_login_auto_submit, i)
                      }
+                    
+                     }
                     delay(1000L)
                  }
-                withContext(Dispatchers.Main) { submitToken(token)
+                
+                 }
+                withContext(Dispatchers.Main) {
+        submitToken(token)
+ }
+            
  }
             }
+        }
+
+        
         }
 
         // ── Manual paste fallback ─────────────────────────────────────────────
@@ -190,7 +239,11 @@ class LoginFragment : Fragment() {
                     pollJob?.cancel()
                     dialogBinding.qrCountdownText.visibility = View.GONE
                 }
+            
+                }
             }
+        }
+        
         }
         dialogBinding.qrTokenInput.addTextChangedListener(watcher)
 
@@ -209,13 +262,24 @@ class LoginFragment : Fragment() {
                     toast(getString(R.string.qr_login_invalid_token))
         return@setPosButton
                 }
+                
+                }
                 submitToken(token)
              }
-            .setNegButton(R.string.cancel) { pollJob?.cancel()
+            
+             }
+            .setNegButton(R.string.cancel) {
+        pollJob?.cancel()
  }
-            .onDismiss { pollJob?.cancel()
+            
  }
-            .attach { d -> dialogRef = d }
+            .onDismiss {
+        pollJob?.cancel()
+ }
+            
+ }
+            .attach {
+        d -> dialogRef = d }
             .setOnShowListener {
                 // Clipboard paste button — keep dialog open
                 dialogRef?.getButton(AlertDialog.BUTTON_NEUTRAL)?.setOnClickListener {
@@ -224,6 +288,8 @@ class LoginFragment : Fragment() {
                     val text = cb.primaryClip?.getItemAt(0)?.text?.toString()?.trim() ?: ""
                     if (text.isNotBlank()) dialogBinding.qrTokenInput.setText(text)
                     else toast(getString(R.string.qr_login_clipboard_empty))
+                  }
+                
                   }
                 // ── Try relay server for auto-login ──────────────────────────
                 pollJob = lifecycleScope.launch(Dispatchers.IO) {
@@ -238,11 +304,19 @@ class LoginFragment : Fragment() {
                                 dialogBinding.qrInstructions.text =
                                     getString(R.string.qr_login_anilist_instructions)
                              }
+                            
+                             }
                             // Poll until token arrives, dialog is dismissed, or session expires
-                            pollForToken(sessionId) { token ->
-                                withContext(Dispatchers.Main) { submitToken(token)
+                            pollForToken(sessionId) {
+        token ->
+                                withContext(Dispatchers.Main) {
+        submitToken(token)
+ }
+                            
  }
                             }
+                        }
+        
                         }
         else {
                             // Relay unavailable — fall back to the direct OAuth URL
@@ -251,9 +325,12 @@ class LoginFragment : Fragment() {
                             withContext(Dispatchers.Main) {
                                 dialogBinding.qrCodeImage.setImageBitmap(
                                     QrUtils.generateQrBitmap(fallbackUrl, 512)
-                                )
+)
+                                }
                              }
                         }
+                    }
+        
                     }
         catch (e: Exception) {
         Logger.log("QR relay error: ${e.message}")
@@ -263,12 +340,17 @@ class LoginFragment : Fragment() {
                         withContext(Dispatchers.Main) {
                             dialogBinding.qrCodeImage.setImageBitmap(
                                 QrUtils.generateQrBitmap(fallbackUrl, 512)
-                            )
+)
+                            }
                          }
                     }
                 }
+            
+                }
             }
             .show()
+      }
+    
       }
     /** POST /api/qr-session → returns sessionId, or null if the relay is unreachable. */
     private fun createQrSession(): String? = try {
@@ -277,16 +359,25 @@ class LoginFragment : Fragment() {
             .url("$QR_RELAY_HOST/api/qr-session")
             .post(body)
             .build()
-        okHttpClient.newCall(request).execute().use { resp ->
+        okHttpClient.newCall(request).execute().use {
+        resp ->
             if (!resp.isSuccessful) return null
             val json = JSONObject(resp.body?.string() ?: return null)
-            json.optString("sessionId").takeIf { it.isNotBlank()
+            json.optString("sessionId").takeIf {
+        it.isNotBlank()
+ }
+        
  }
         }
+    }
+        
     }
         catch (e: Exception) {
         Logger.log("createQrSession error: ${e.message}")
         null
+    }
+
+    
     }
 
     /**
@@ -309,6 +400,8 @@ class LoginFragment : Fragment() {
                         200      -> resp.body?.string()
                         else     -> null
                     }
+                
+                    }
                 } ?: continue
 
                 val json = JSONObject(responseText)
@@ -318,14 +411,25 @@ class LoginFragment : Fragment() {
         onToken(token)
                     return
                 
+
+}
+                
+                
 }
                 // json.optBoolean("waiting") == true → keep polling
+            }
+        
             }
         catch (e: Exception) {
         Logger.log("pollForToken error: ${e.message}")
                 // Network hiccup — retry after next interval
             }
+        
+            }
         }
+    }
+
+    
     }
 
     // ── Shared helpers ────────────────────────────────────────────────────────
@@ -338,6 +442,8 @@ class LoginFragment : Fragment() {
             subtitle.visibility = View.VISIBLE
             subtitle.text = getString(R.string.enter_password_to_decrypt_file)
          }
+        
+         }
         requireActivity().customAlertDialog().apply {
             setTitle("Enter Password")
             setCustomView(dialogView.root)
@@ -347,22 +453,36 @@ class LoginFragment : Fragment() {
                     editText.text?.toString()?.trim()?.toCharArray(password)
                     callback(password)
                  }
+        
+                 }
         else {
                     toast("Password cannot be empty")
                  }
+            
+                 }
             }
-            setNegButton(R.string.cancel) { password.fill('0'); callback(null)
+            setNegButton(R.string.cancel) {
+        password.fill('0'); callback(null)
+ }
+        
  }
         }.show()
+      }
+    
       }
     private fun restartApp() {
         val intent = Intent(requireActivity(), requireActivity().javaClass)
         requireActivity().finish()
         startActivity(intent)
       }
+    
+      }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    
     }
 
     companion object {

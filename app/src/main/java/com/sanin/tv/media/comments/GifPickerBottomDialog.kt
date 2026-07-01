@@ -55,11 +55,16 @@ private fun loadTrending() {
     val response = client.get(                    "$baseUrl/v2/featured?key=$apiKey&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )
         parseGifs(response.text)
             }
+        
+            }
         catch (_: Exception) {
         emptyList()
             }
+    
+            }
     withContext(Dispatchers.Main) {
-        binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)
+        binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) {
+        url ->                    onGifSelected?.invoke(url)
         dismiss()}}}
     }
 
@@ -70,11 +75,14 @@ private fun searchGifs(query: String) {
 val response = client.get(                    "$baseUrl/v2/search?key=$apiKey&q=$encodedQuery&media_filter=tinygif&limit=20&contentfilter=high",                    headers = mapOf("Content-Type" to "application/json")                )
         parseGifs(response.text)
             }
+        
+            }
         catch (_: Exception) {
         emptyList()
             }
 withContext(Dispatchers.Main) {
-        binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) { url ->                    onGifSelected?.invoke(url)
+        binding.gifProgressBar.visibility = View.GONE                binding.gifRecycler.visibility = View.VISIBLE                binding.gifRecycler.adapter = GifAdapter(gifs) {
+        url ->                    onGifSelected?.invoke(url)
         dismiss()}}}
 }
 
@@ -110,7 +118,8 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GifViewHolder
 return GifViewHolder(binding)
          }
 override fun onBindViewHolder(holder: GifViewHolder, position: Int) {
-    val url = gifs[position]            holder.binding.gifImage.loadImage(url)            holder.binding.root.setOnClickListener { 
+    val url = gifs[position]            holder.binding.gifImage.loadImage(url);
+        holder.binding.root.setOnClickListener { 
         o
     }
 

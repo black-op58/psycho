@@ -22,7 +22,8 @@ return StudioViewHolder(binding)
      }
 override fun onBindViewHolder(holder: StudioViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
-val studio = studioList.getOrNull(position) ?: return        binding.itemCompactRelation.isVisible = false        binding.itemCompactImage.loadImage(studio.imageUrl)        binding.itemCompactTitle.text = studio.name
+val studio = studioList.getOrNull(position) ?: return        binding.itemCompactRelation.isVisible = false        binding.itemCompactImage.loadImage(studio.imageUrl);
+        binding.itemCompactTitle.text = studio.name
     }
 
 override fun getItemCount(): Int = studioList.size    inner 
@@ -30,6 +31,8 @@ class StudioViewHolder(
 val binding: ItemCharacterBinding) :        RecyclerView.ViewHolder(binding.root) {        
         i
     val studio = studioList[bindingAdapterPosition]                ContextCompat.startActivity(                    itemView.context,                    Intent(                        itemView.context,                        StudioActivity::class.java                    ).putExtra("studio", studio as Serializable),                    ActivityOptionsCompat.makeSceneTransitionAnimation(                        itemView.context as Activity,                        Pair.create(                            binding.itemCompactImage,                            ViewCompat.getTransitionName(binding.itemCompactImage)!!                        ),                    ).toBundle()                )
+            }
+    
             }
     itemView.setOnLongClickListener {
         copyToClipboard(                    studioList[bindingAdapterPosition].name                )

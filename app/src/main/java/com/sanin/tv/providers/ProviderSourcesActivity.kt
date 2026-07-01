@@ -55,6 +55,8 @@ class ProviderSourcesActivity : AppCompatActivity() {
         setupRecycler()
         setupButtons()
       }
+    
+      }
     // ── RecyclerView setup ────────────────────────────────────────────────────
 
     private fun setupRecycler() {
@@ -62,9 +64,14 @@ class ProviderSourcesActivity : AppCompatActivity() {
 
         adapter = ProviderSourcesAdapter(
             providers      = providers,
-            onChanged      = { ProviderRepository.save(it) },
-            onEditUrl      = { pos, config -> showEditUrlDialog(pos, config) },
-            onTestProvider = { config -> testSingleProvider(config)
+            onChanged      = {
+        ProviderRepository.save(it) },
+            onEditUrl      = {
+        pos, config -> showEditUrlDialog(pos, config) },
+            onTestProvider = {
+        config -> testSingleProvider(config)
+ }
+        
  }
         )
 
@@ -82,17 +89,27 @@ class ProviderSourcesActivity : AppCompatActivity() {
                 adapter.move(from.bindingAdapterPosition, to.bindingAdapterPosition)
                 return true
             }
+            
+            }
             override fun onSwiped(vh: RecyclerView.ViewHolder, dir: Int) {}
         })
         touchHelper.attachToRecyclerView(binding.providerRecycler)
         adapter.attachTouchHelper(touchHelper)
       }
+    
+      }
     // ── Button wiring ─────────────────────────────────────────────────────────
 
     private fun setupButtons() {
-        binding.providerBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+        binding.providerBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
   }
-        binding.providerAddCustom.setOnClickListener { showAddCustomDialog()
+        
+  }
+        binding.providerAddCustom.setOnClickListener {
+        showAddCustomDialog()
+  }
+        
   }
         binding.providerReset.setOnClickListener {
             customAlertDialog().apply {
@@ -103,12 +120,19 @@ class ProviderSourcesActivity : AppCompatActivity() {
                     adapter.replaceAll(ProviderRepository.load())
                     snackString(getString(R.string.provider_reset_done))
                  }
+                
+                 }
                 setNegButton(getString(R.string.cancel))
                 show()
              }
+        
+             }
         }
 
-        binding.providerTestAll.setOnClickListener { testAllProviders()
+        binding.providerTestAll.setOnClickListener {
+        testAllProviders()
+ }
+    
  }
     }
 
@@ -120,6 +144,8 @@ class ProviderSourcesActivity : AppCompatActivity() {
             hint = "https://api.consumet.org"
             setPadding(48, 24, 48, 24)
          }
+        
+         }
         customAlertDialog().apply {
             setTitle(getString(R.string.provider_edit_url_title, config.name))
             setCustomView(input)
@@ -128,12 +154,18 @@ class ProviderSourcesActivity : AppCompatActivity() {
         if (newUrl.startsWith("http")) {
                     adapter.updateUrl(position, newUrl)
                  }
+        
+                 }
         else {
                     snackString(getString(R.string.provider_invalid_url))
+                 }
+            
                  }
             }
             setNegButton(getString(R.string.cancel))
             show()
+         }
+    
          }
     }
 
@@ -163,10 +195,16 @@ class ProviderSourcesActivity : AppCompatActivity() {
                         )
                         snackString(getString(R.string.provider_added, name))
                      }
+                
+                     }
                 }
+            }
+            
             }
             setNegButton(getString(R.string.cancel))
             show()
+         }
+    
          }
     }
 
@@ -180,13 +218,22 @@ class ProviderSourcesActivity : AppCompatActivity() {
                     StreamFetcher.fetchFromProvider(config, testTitle, testMalId, testEpisode, false)
                 }.getOrNull()
              }
+            
+             }
             if (result != null) {
         snackString(getString(R.string.provider_test_ok, config.name, result.quality))
+             }
+        
              }
         else {
                 snackString(getString(R.string.provider_test_fail, config.name))
              }
+        
+             }
         }
+    }
+
+    
     }
 
     // ── Test all enabled providers ────────────────────────────────────────────
@@ -199,12 +246,18 @@ class ProviderSourcesActivity : AppCompatActivity() {
                     StreamFetcher.fetchStreamUrl(testTitle, testMalId, testEpisode, false)
                 }.getOrNull()
              }
+            
+             }
             if (result != null) {
         val preview = result.url.take(60) + if (result.url.length > 60) "…" else ""
                 snackString(getString(R.string.provider_test_all_ok, result.providerName, preview))
              }
+        
+             }
         else {
                 snackString(getString(R.string.provider_test_all_fail))
+             }
+        
              }
         }
     }

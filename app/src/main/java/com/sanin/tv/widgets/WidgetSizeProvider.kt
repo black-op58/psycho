@@ -16,12 +16,16 @@ private fun getWidgetWidth(isPortrait: Boolean, widgetId: Int): Int =
 if (isPortrait) {
         getWidgetSizeInDp(widgetId, AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
  }
+        
+ }
         else {
         getWidgetSizeInDp(widgetId, AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
          }
 private fun getWidgetHeight(isPortrait: Boolean, widgetId: Int): Int =
 if (isPortrait) {
         getWidgetSizeInDp(widgetId, AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+ }
+        
  }
         else {
         getWidgetSizeInDp(widgetId, AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)

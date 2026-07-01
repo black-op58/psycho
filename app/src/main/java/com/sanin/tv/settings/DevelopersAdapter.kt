@@ -19,6 +19,7 @@ return DeveloperViewHolder(            ItemDeveloperBinding.inflate(            
      }
 override fun onBindViewHolder(holder: DeveloperViewHolder, position: Int) {
     val b = holder.binding        setAnimation(b.root.context, b.root)        
-val dev = developers[position]        b.devName.text = dev.name        b.devProfile.loadImage(dev.pfp)        b.devRole.text = dev.role    }
+val dev = developers[position]        b.devName.text = dev.name        b.devProfile.loadImage(dev.pfp);
+        b.devRole.text = dev.role    }
 
 override fun getItemCount(): Int = developers.size}

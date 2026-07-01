@@ -31,11 +31,17 @@ class RecommendationsViewModel : ViewModel() {
         return@launch
                 }
 
+                
+                }
+
                 val completedList = AnilistQueries.getWatchingMedia(userId);
         if (completedList.isNullOrEmpty()) {
                     error.postValue("No watch history found. Start watching some anime!")
                     isLoading.postValue(false)
         return@launch
+                }
+
+                
                 }
 
                 val groups = RecommendationEngine.buildRecommendations(completedList, forceRefresh)
@@ -49,10 +55,13 @@ class RecommendationsViewModel : ViewModel() {
                             group.recommendations,
                             topGenres
                         )
-                    )
+)
+                    }
                   }
                 recommendationGroups.postValue(rankedGroups)
                 Logger.log("RecommendationsViewModel: ${rankedGroups.size} groups loaded")
+             }
+        
              }
         catch (e: Exception) {
         Logger.log("RecommendationsViewModel: Error — ${e.message}")
@@ -60,7 +69,12 @@ class RecommendationsViewModel : ViewModel() {
             } finally {
                 isLoading.postValue(false)
              }
+        
+             }
         }
+    }
+
+    
     }
 
     fun refresh() = loadRecommendations(forceRefresh = true)

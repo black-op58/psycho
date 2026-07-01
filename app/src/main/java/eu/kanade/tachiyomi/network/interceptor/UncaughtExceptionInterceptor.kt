@@ -9,6 +9,8 @@ class UncaughtExceptionInterceptor : Interceptor {
 return try {
         chain.proceed(chain.request())
         }
+        
+        }
         catch (e: SocketTimeoutException) {
         Logger.log(e)
 throw IOException("Request timed out")  // there's some odd behavior throwing a SocketTimeoutException        }
@@ -16,6 +18,8 @@ throw IOException("Request timed out")  // there's some odd behavior throwing a 
         Logger.log(e)
 if (e is IOException) {
 throw e
+}
+        
 }
         else {
 throw IOException(e)            }}

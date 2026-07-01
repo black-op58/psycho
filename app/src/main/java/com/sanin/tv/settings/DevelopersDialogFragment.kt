@@ -19,12 +19,16 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         s
         binding.devsRecyclerView.visibility = View.GONE        lifecycleScope.launch {
 try {
-    val contributors = emptyList()                binding.devsRecyclerView.adapter = DevelopersAdapter(contributors)
+    val contributors = emptyList();
+        binding.devsRecyclerView.adapter = DevelopersAdapter(contributors)
                 binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.devsRecyclerView.visibility = View.VISIBLE
                 binding.devsProgressBar.visibility = View.GONE            }
         catch (e: Exception) {
-        e.printStackTrace()                binding.devsProgressBar.visibility = View.GONE
+        e.printStackTrace();
+        binding.devsProgressBar.visibility = View.GONE
+            }
+            
             }
             }
     }

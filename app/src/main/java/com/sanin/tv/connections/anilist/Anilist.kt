@@ -55,7 +55,9 @@ val sign = if (hours >= 0) "+" else "-"
 val formattedHours = String.format(Locale.US, "%02d", abs(hours))        
 val formattedMinutes = String.format(Locale.US, "%02d", minutes)        
 val searchString = "(GMT$sign$formattedHours:$formattedMinutes)"
-return timeZone.find { it.contains(searchString) } ?: noTimezone    
+return timeZone.find {
+        it.contains(searchString) } ?: noTimezone    
+
 }
 
 fun getApiTimezone(displayTimezone: String): String {
@@ -64,6 +66,8 @@ val matchResult = regex.find(displayTimezone)
 return if (matchResult != null) {
     val (sign, hours, minutes) = matchResult.destructured
 val formattedSign = if (sign == "+") "" else "-"            "$formattedSign$hours:$minutes"
+}
+        
 }
         else {            "00:00"        }
 }
@@ -83,6 +87,8 @@ fun loginIntent(context: Context) {
 try {
         CustomTabsIntent.Builder().build().launchUrl(                context,                "https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token".toUri()            )
         }
+        
+        }
         catch (_: ActivityNotFoundException) {
         openLinkInBrowser("https://anilist.co/api/v2/oauth/authorize?client_id=$clientID&response_type=token")
         }
@@ -98,6 +104,8 @@ fun getSavedToken(): Boolean {
             token = null
             PrefManager.removeVal(PrefName.AnilistToken)
             return false
+        }
+        
         }
         return true
     }
@@ -117,6 +125,8 @@ val expSeconds = json.getLong("exp")
 val nowSeconds = System.currentTimeMillis() / 1000            (expSeconds - nowSeconds) / 86400        }
         catch (e: Exception) {
         L
+        }
+        
         }
         }
 suspend inline
@@ -149,11 +159,14 @@ if (json.code == 403 || json.code == 400) {
 val message = obj?.optJSONArray("errors")?.let { 
         e
 if (errors.length() > 0) errors.getJSONObject(0)                            .getString("message") else "Forbidden (error ${json.code})"                    } ?: "Forbidden (error ${json.code
+
 })"
 if (message.contains("disabled", ignoreCase = true)) {
         anilistDisabledSignal = true
 } else if (message.contains("Invalid token")) {
 if (!show) snackString("Anilist token expired, please login again")
+ }
+        
  }
         else {
 if (!show) snackString("Error fetching Anilist data: $message")
@@ -170,7 +183,8 @@ anilistDisabledSignal = false                json.parsed()
         if (e is java.net.UnknownHostException ||                e is java.net.ConnectException ||                e is java.net.SocketTimeoutException ||                e.cause is java.net.UnknownHostException ||                e.cause is java.net.ConnectException ||                e.cause is java.net.SocketTimeoutException) {
         anilistDisabledSignal = true            }
 if (show) snackString("Error fetching Anilist data: ${e.message}")
-        Logger.log("Anilist Query Error: ${e.message}")            null
+        Logger.log("Anilist Query Error: ${e.message}");
+        null
         }
 }
 }

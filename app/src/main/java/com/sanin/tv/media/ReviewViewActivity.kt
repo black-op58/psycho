@@ -40,11 +40,13 @@ binding.reviewContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         bottomMargin += navBarHeight}
 setContentView(binding.root);
         review = intent.getSerializableExtra("review") as Query.Review
-        binding.userName.text = review.user?.name        binding.userAvatar.loadImage(review.user?.avatar?.medium)        binding.userTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
+        binding.userName.text = review.user?.name        binding.userAvatar.loadImage(review.user?.avatar?.medium);
+        binding.userTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
         binding.userContainer.setOnClickListener {
             startActivity(                Intent(this, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id)            )
 }
-binding.userAvatar.openImage(            binding.root.context.getString(R.string.avatar, review.user?.name),            review.user?.avatar?.medium ?: ""        )        binding.userAvatar.setOnClickListener {
+binding.userAvatar.openImage(            binding.root.context.getString(R.string.avatar, review.user?.name),            review.user?.avatar?.medium ?: ""        );
+        binding.userAvatar.setOnClickListener {
         startActivity(                Intent(this, ProfileActivity::class.java)                    .putExtra("userId", review.user?.id)            )
 }
 binding.profileUserBio.settings.loadWithOverviewMode = true        binding.profileUserBio.settings.useWideViewPort = true        binding.profileUserBio.setInitialScale(1)
@@ -89,12 +91,15 @@ private fun rateReview(rating: String) {
     val result = Anilist.mutation.rateReview(review.id, rating)
 if (result != null) {
         withContext(Dispatchers.Main) {
-    val res = result.data.rateReview                    review.rating = res.rating                    review.ratingAmount = res.ratingAmount                    review.userRating = res.userRating                    userVote(review.userRating)                    binding.voteCount.text = review.rating.toString()
+    val res = result.data.rateReview                    review.rating = res.rating                    review.ratingAmount = res.ratingAmount                    review.userRating = res.userRating                    userVote(review.userRating);
+        binding.voteCount.text = review.rating.toString()
                     binding.voteText.text = getString(
                         R.string.vote_out_of_total,                        review.rating.toString(),                        review.ratingAmount.toString()                    )
         userVote(review.userRating)
         enableVote()
                  }
+}
+        
 }
         else {
         withContext(Dispatchers.Main) {
@@ -112,6 +117,8 @@ private fun enableVote() {
 if (review.userRating == "UP_VOTE") {
         rateReview("NO_VOTE")
  }
+        
+ }
         else {
         rateReview("UP_VOTE")
             }
@@ -120,6 +127,8 @@ disableVote()
 binding.downvote.setOnClickListener {
 if (review.userRating == "DOWN_VOTE") {
         rateReview("NO_VOTE")
+ }
+        
  }
         else {
         rateReview("DOWN_VOTE")

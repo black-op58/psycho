@@ -28,6 +28,8 @@ val secondColor = context.getThemeColor(com.google.android.material.R.attr.color
 fun setColor(int: Int) {            
         p
 }
+        
+}
         else {
 if (isUser) secondColor else primaryColor            }
 canvas.drawPath(path, paint)
@@ -37,6 +39,8 @@ if (parts <= 1) {
         path.addArc(
                 centerX - radius,                centerY - radius,                centerX + radius,                centerY + radius,                0f,                360f            )
         setColor(0)
+ }
+        
  }
         else {            // Scale gap angle down so total gaps never exceed 30% of the circle
 val maxTotalGap = 360f * 0.30f

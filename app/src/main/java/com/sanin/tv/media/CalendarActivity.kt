@@ -35,14 +35,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
         
 val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)        
 val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)        
-val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)        window.statusBarColor = primaryColor
+val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline);
+        window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor        binding.listTabLayout.setBackgroundColor(primaryColor)
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
         binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
 if (!(PrefManager.getVal(PrefName.ImmersiveMode) as Boolean)) {
-        this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg_inv)            binding.root.fitsSystemWindows = true
+        this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg_inv);
+        binding.root.fitsSystemWindows = true
+}
+        
 }
         else {
         binding.root.fitsSystemWindows = false            requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -61,10 +65,12 @@ object : TabLayout.OnTabSelectedListener {
 override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
 override fun onTabReselected(tab: TabLayout.Tab?) {}
-})        binding.listed.setOnClickListener {
+});
+        binding.listed.setOnClickListener {
             showOnlyLibrary = !showOnlyLibrary            binding.listed.setImageResource(
 if (showOnlyLibrary) R.drawable.ic_round_collections_bookmark_24
-else R.drawable.ic_round_library_books_24            )            scope.launch {
+else R.drawable.ic_round_library_books_24            );
+        scope.launch {
         model.loadCalendar(showOnlyLibrary)            }}
 model.getCalendar().observe(this) {
 if (it != null) {
@@ -81,7 +87,8 @@ val live = Refresh.activity.getOrPut(this.hashCode()) {
 live.observe(this) {
 if (it) {
         scope.launch {
-        withContext(Dispatchers.IO) { model.loadCalendar(showOnlyLibrary)
+        withContext(Dispatchers.IO) {
+        model.loadCalendar(showOnlyLibrary)
  }
 live.postValue(false)}}}
 }

@@ -5,7 +5,8 @@ class ColorEditor {
 companion object {
     fun oppositeColor(color: Int): Int {
     val hsv = FloatArray(3)
-        Color.colorToHSV(color, hsv)            hsv[0] = (hsv[0] + 180) % 360
+        Color.colorToHSV(color, hsv);
+        hsv[0] = (hsv[0] + 180) % 360
 return adjustColorForContrast(Color.HSVToColor(hsv), color)
          }
 fun generateColorPalette(            baseColor: Int,            size: Int,            hueDelta: Float = 8f,            saturationDelta: Float = 2.02f,            valueDelta: Float = 2.02f        ): List<Int> {

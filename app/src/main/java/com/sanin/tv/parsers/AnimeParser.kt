@@ -19,7 +19,8 @@ fun getLatestEpisode(        animeLink: String,        extra: Map<String, String
     val episodes = loadEpisodes(animeLink, extra, sAnime)        
 val max = episodes            .maxByOrNull { 
         i
-return max            ?.takeIf { latest < (it.number.toFloatOrNull() ?: 0.001f) }}
+return max            ?.takeIf {
+        latest < (it.number.toFloatOrNull() ?: 0.001f) }}
 /**     * Takes Episode.link as a parameter     *     * This returns a Map of "Video Server's Name" & "Link/Data" of all the Video Servers present on the site, which can be further used by loadVideoServers() & loadSingleVideoServer()     * **/
 abstract suspend 
 fun loadVideoServers(        episodeLink: String,        extra: Map<String, String>?,        sEpisode: SEpisode    ): List<VideoServer>    /**     * This function will receive **url of the embed** & **name** of a Video Server present on the site to host the episode.     *     *     * Create a new VideoExtractor for the video server you are trying to scrape, if there's not one already.     *     *     * (Some sites might not have separate video hosts. In that case, just create a new VideoExtractor for that particular site)     *     *     * returns a **VideoExtractor** containing **`server`**, the app will further load the videos using `extract()` function inside it     *     * **Example for Site with multiple Video Servers**     * ```    
@@ -36,7 +37,8 @@ if (domain.startsWith("www.")) {
         }
 return when (domain) {
 else -> {
-        println("$name : No extractor found for: $domain | ${server.embed.url}")                null
+        println("$name : No extractor found for: $domain | ${server.embed.url}");
+        null
             }}}
 /**     * If the Video Servers support preloading links for the videos     * typically depends on what Video Extractor is being used     * **/
 open val allowsPreloading = true    /**     * This Function used when there "isn't" a default Server set by the user, or when user wants to switch the Server     *     * Doesn't need to be overridden, if the parser is following the norm.     * **/    
@@ -49,7 +51,8 @@ open suspend
 fun loadSingleVideoServer(        serverName: String,        episodeUrl: String,        extra: Map<String, String>?,        sEpisode: SEpisode,        post: Boolean    ): VideoExtractor? {
 return tryWithSuspend(post) {
         loadVideoServers(episodeUrl, extra, sEpisode).apply {
-        find { it.name == serverName }?.also {
+        find {
+        it.name == serverName }?.also {
         return@tryWithSuspend getVideoExtractor(it)?.apply {
         load()                    }}}
 null}}
@@ -66,7 +69,8 @@ val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" 
 var loaded = PrefManager.getNullableCustomVal(            "${saveName}${dub}_$mediaId",            null,            ShowResponse::class.java        )
 if (loaded == null && malSyncBackupName.isNotEmpty());
         loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
-                ?.also { saveShowResponse(mediaId, it, true)
+                ?.also {
+        saveShowResponse(mediaId, it, true)
  }
 return loaded    }
 

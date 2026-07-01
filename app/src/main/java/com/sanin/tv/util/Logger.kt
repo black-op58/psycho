@@ -27,13 +27,19 @@ fun init(context: Context) {
 try {
 if (!PrefManager.getVal<Boolean>(PrefName.LogToFile) || file != null) return            file = File(context.getExternalFilesDir(null), "log.txt")
 if (file?.exists() == true) {
-if (file!!.length() > 1024 * 1024 * 5) { // 5 MB                    file?.delete()                    file?.createNewFile()
+if (file!!.length() > 1024 * 1024 * 5) { // 5 MB                    file?.delete();
+        file?.createNewFile()
                  }
+}
+        
 }
         else {
         file?.createNewFile()
             }
-file?.appendText("log started\n")            file?.appendText(getDeviceAndAppInfo(context))
+file?.appendText("log started\n");
+        file?.appendText(getDeviceAndAppInfo(context))
+         }
+        
          }
         catch (e: Exception) {
         Injekt.get<CrashlyticsInterface>().logException(e);
@@ -46,7 +52,10 @@ if (file == null) Log.d("Internal Logger", message)
 else {
     val className = trace.className
 val methodName = trace.methodName
-val lineNumber = trace.lineNumber                file?.appendText("date/time: ${Date()} | $className.$methodName($lineNumber)\n")                file?.appendText("message: $message\n-\n")
+val lineNumber = trace.lineNumber                file?.appendText("date/time: ${Date()} | $className.$methodName($lineNumber)\n");
+        file?.appendText("message: $message\n-\n")
+             }
+            
              }
             }
 }
@@ -57,7 +66,10 @@ if (file == null) Log.println(level, tag, message)
 else {
     val className = trace.className
 val methodName = trace.methodName
-val lineNumber = trace.lineNumber                file?.appendText("date/time: ${Date()} | $className.$methodName($lineNumber)\n")                file?.appendText("message: $message\n-\n")
+val lineNumber = trace.lineNumber                file?.appendText("date/time: ${Date()} | $className.$methodName($lineNumber)\n");
+        file?.appendText("message: $message\n-\n")
+             }
+            
              }
             }
 }
@@ -65,8 +77,11 @@ val lineNumber = trace.lineNumber                file?.appendText("date/time: ${
 fun log(e: Exception) {        
         l
 if (file == null) e.printStackTrace() else {
-        file?.appendText("---------------------------Exception---------------------------\n")                file?.appendText("date/time: ${Date()} |  ${e.message}\n")
+        file?.appendText("---------------------------Exception---------------------------\n");
+        file?.appendText("date/time: ${Date()} |  ${e.message}\n")
                 file?.appendText("trace: ${e.stackTraceToString()}\n")
+             }
+            
              }
             }
 }
@@ -74,8 +89,11 @@ if (file == null) e.printStackTrace() else {
 fun log(e: Throwable) {        
         l
 if (file == null) e.printStackTrace() else {
-        file?.appendText("---------------------------Exception---------------------------\n")                file?.appendText("date/time: ${Date()} |  ${e.message}\n")
+        file?.appendText("---------------------------Exception---------------------------\n");
+        file?.appendText("date/time: ${Date()} |  ${e.message}\n")
                 file?.appendText("trace: ${e.stackTraceToString()}\n")
+             }
+            
              }
             }
 }
@@ -83,9 +101,12 @@ if (file == null) e.printStackTrace() else {
 fun uncaughtException(t: Thread, e: Throwable) {        
         l
 if (file == null) e.printStackTrace() else {
-        file?.appendText("---------------------------Uncaught Exception---------------------------\n")                file?.appendText("thread: ${t.name}\n")
+        file?.appendText("---------------------------Uncaught Exception---------------------------\n");
+        file?.appendText("thread: ${t.name}\n")
                 file?.appendText("date/time: ${Date()} |  ${e.message}\n")
                 file?.appendText("trace: ${e.stackTraceToString()}\n")
+             }
+            
              }
             }
 }
@@ -95,7 +116,8 @@ if (file == null) {
         snackString("No log file found")
 return        }
 
-val shareIntent = Intent(Intent.ACTION_SEND)        shareIntent.type = "text/plain"
+val shareIntent = Intent(Intent.ACTION_SEND);
+        shareIntent.type = "text/plain"
         shareIntent.putExtra(            Intent.EXTRA_STREAM,            FileProvider.getUriForFile(                context,                "${BuildConfig.APPLICATION_ID}.provider",                file!!            )        )
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Log file")
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Log file")
@@ -113,8 +135,11 @@ val versionName = pkgInfo.versionName
 val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         p
 }
+        
+}
         else {            
-@Suppress("DEPRECATION")            pkgInfo.versionCode
+@Suppress("DEPRECATION");
+        pkgInfo.versionCode
         }
 return buildString {
         append("Date/time: ${Date()}\n")
@@ -144,6 +169,8 @@ return buildString {
             append("Is emulator: ${Build.FINGERPRINT.contains("generic")}\n")
             append("--------------------------------\n")
          }
+        
+         }
         }
 /**     * Reads recent logcat output for the current process.     * Capped at [maxLines] to avoid blowing past the Intent size limit.     */
 fun readLogcat(maxLines: Int = 500): String {
@@ -156,6 +183,8 @@ val lines = reader.readLines()
             process.destroy()
             // Keep the tail so we get the lines closest to the crash            lines.takeLast(maxLines).joinToString("\n")
         }
+        
+        }
         catch (e: Exception) {
         "Failed to read logcat: ${e.message}"        }
 }
@@ -165,9 +194,11 @@ class FinalExceptionHandler : Thread.UncaughtExceptionHandler {
     private val defaultUEH = Thread.getDefaultUncaughtExceptionHandler()    
 private val MAX_STACK_TRACE_SIZE = 131071 //128 KB - 1    
 override fun uncaughtException(t: Thread, e: Throwable) {
-    val stackTraceString = Log.getStackTraceString(e)        Injekt.get<CrashlyticsInterface>().logException(e)
+    val stackTraceString = Log.getStackTraceString(e);
+        Injekt.get<CrashlyticsInterface>().logException(e)
 if (App.instance?.applicationContext != null) {
-        App.instance?.applicationContext?.let { ctx ->                
+        App.instance?.applicationContext?.let {
+        ctx ->                
 val lastLoadedActivity = App.instance?.mFTActivityLifecycleCallbacks?.lastActivity                // --- crash report (same as before) ---                
 val report = StringBuilder()
         report.append(getDeviceAndAppInfo(ctx))
@@ -192,6 +223,8 @@ else logcatString                intent.putExtra("stackTrace", trimmedReport)
                 ctx.startActivity(intent)
             }
 }
+        
+}
         else {
         Logger.log("App context is null")
         Logger.uncaughtException(t, e)
@@ -199,5 +232,7 @@ else logcatString                intent.putExtra("stackTrace", trimmedReport)
 defaultUEH?.uncaughtException(t, e)
         android.os.Process.killProcess(android.os.Process.myPid())
         exitProcess(10)
+     }
+    
      }
     }

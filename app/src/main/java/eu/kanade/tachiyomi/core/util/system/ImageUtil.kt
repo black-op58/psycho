@@ -51,7 +51,8 @@ fun splitAndMerge(imageStream: InputStream, upperSide: Side): InputStream {
 val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)        
 val height = imageBitmap.height
 val width = imageBitmap.width
-val result = createBitmap(width / 2, height * 2)        result.applyCanvas {
+val result = createBitmap(width / 2, height * 2);
+        result.applyCanvas {
             // right -> upper
 val rightPart = when (upperSide) {
         S

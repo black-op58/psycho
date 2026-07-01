@@ -12,8 +12,12 @@ class ExtensionInstallReceiver : BroadcastReceiver() {
     fun isReplacing(intent: Intent): Boolean {
     return intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)
          }
+        
+         }
         fun getPackageNameFromIntent(intent: Intent?): String? {
     return intent?.data?.encodedSchemeSpecificPart
+        }
+    
         }
     }
 }

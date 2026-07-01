@@ -43,7 +43,8 @@ fun getAppIconForSource(sourceId: Long): Drawable? {
     val pkgName =            _installedAnimeExtensionsFlow.value.find { 
         e
 if (pkgName != null) {
-return iconMap[pkgName]                ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName)
+return iconMap[pkgName]                ?: iconMap.getOrPut(pkgName) {
+        context.packageManager.getApplicationIcon(pkgName)
  }
 }
 return null    }
@@ -52,8 +53,11 @@ private val _availableAnimeExtensionsFlow =        MutableStateFlow(emptyList<An
 val availableExtensionsFlow = _availableAnimeExtensionsFlow.asStateFlow()    
 private var availableAnimeExtensionsSourcesData: Map<Long, AnimeSourceData> = emptyMap()    
 private fun setupAvailableAnimeExtensionsSourcesDataMap(animeextensions: List<AnimeExtension.Available>) {
-if (animeextensions.isEmpty()) return        availableAnimeExtensionsSourcesData = animeextensions            .flatMap { ext -> ext.sources.map { it.toAnimeSourceData() } }
-.associateBy { it.id}
+if (animeextensions.isEmpty()) return        availableAnimeExtensionsSourcesData = animeextensions            .flatMap {
+        ext -> ext.sources.map {
+        it.toAnimeSourceData() } }
+.associateBy {
+        it.id}
 }
 
 fun getSourceData(id: Long) = availableAnimeExtensionsSourcesData[id]    
@@ -62,9 +66,12 @@ val untrustedExtensionsFlow = _untrustedAnimeExtensionsFlow.asStateFlow()    ini
         i
 /**     * Loads and registers the installed animeextensions.     */
 private fun initAnimeExtensions() {
-    val animeextensions = ExtensionLoader.loadAnimeExtensions(context)        _installedAnimeExtensionsFlow.value = animeextensions
-            .filterIsInstance<AnimeLoadResult.Success>()            .map { it.extension }
-    _untrustedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Untrusted>()            .map { it.extension}
+    val animeextensions = ExtensionLoader.loadAnimeExtensions(context);
+        _installedAnimeExtensionsFlow.value = animeextensions
+            .filterIsInstance<AnimeLoadResult.Success>()            .map {
+        it.extension }
+    _untrustedAnimeExtensionsFlow.value = animeextensions            .filterIsInstance<AnimeLoadResult.Untrusted>()            .map {
+        it.extension}
     isInitialized = true}
     /**     * Finds the available anime extensions in the [api] and updates [availableExtensions].     */    suspend
 fun findAvailableExtensions() {
@@ -72,9 +79,14 @@ fun findAvailableExtensions() {
         a
     emptyList()
 }
-    enableAdditionalSubLanguages(extensions)        _availableAnimeExtensionsFlow.value = extensions
+    
+}
+    enableAdditionalSubLanguages(extensions);
+        _availableAnimeExtensionsFlow.value = extensions
         updatedInstalledAnimeExtensionsStatuses(extensions)
         setupAvailableAnimeExtensionsSourcesDataMap(extensions)
+}
+    
 }
     /**     * Enables the additional sub-languages in the app first run. This addresses     * the issue where users still need to enable some specific languages even when     * the device language is inside that major group. As an example, if a user     * has a zh device language, the app will also enable zh-Hans and zh-Hant.     *     * If the user have already changed the enabledLanguages preference value once,     * the new languages will not be added to respect the user enabled choices.     */
 private fun enableAdditionalSubLanguages(animeextensions: List<AnimeExtension.Available>) {
@@ -108,6 +120,8 @@ if (!installedExt.isUnofficial && availableExt == null && !installedExt.isObsole
 if (installedExt.hasUpdate != hasUpdate) {
         mutInstalledAnimeExtensions[index] = installedExt.copy(hasUpdate = hasUpdate);
         changed = true
+                }
+                
                 }
                 }
 }
@@ -145,11 +159,15 @@ override fun onExtensionUntrusted(extension: AnimeExtension.Untrusted) {
 override fun onPackageUninstalled(pkgName: String) {            
         u
         }
+        
+        }
         }
 /**     * AnimeExtension method to set the update field of an installed anime extension.     */
 private fun AnimeExtension.Installed.withUpdateCheck(): AnimeExtension.Installed {
 return if (updateExists()) {
         copy(hasUpdate = true)
+ }
+        
  }
         else {
         this        }

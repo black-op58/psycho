@@ -36,10 +36,16 @@ object EpisodeAiringNotificationService {
         return@withContext
         }
 
+        
+        }
+
         val subscriptions = SubscriptionHelper.getSubscriptions();
         if (subscriptions.isEmpty()) {
             Logger.log("$TAG: No subscriptions, skipping airing check")
         return@withContext
+        }
+
+        
         }
 
         ensureNotificationChannel(context)
@@ -50,7 +56,9 @@ object EpisodeAiringNotificationService {
 
         Logger.log("$TAG: Checking ${subscriptions.size} subscribed titles for new episodes")
 
-        subscriptions.values.filter { it.isAnime }.forEach { sub ->
+        subscriptions.values.filter {
+        it.isAnime }.forEach {
+        sub ->
             try {
     val media = AnilistQueries.getAiringData(sub.id) ?: return@forEach
                 val nextAiring = media.nextAiringEpisode ?: return@forEach
@@ -69,17 +77,22 @@ object EpisodeAiringNotificationService {
                         title = "📺 New Episode — ${sub.name}",
                         text = "Episode ${nextAiring.episode} $timeLabel!",
                         coverUrl = sub.image
-                    )
+)
+                    }
                  }
             }
         catch (e: Exception) {
         Logger.log("$TAG: Error checking ${sub.name}: ${e.message}")
+             }
+        
              }
         }
 
         saveSeenEpisodes(seenSet)
         PrefManager.setVal(PREFS_LAST_CHECK, now)
         Logger.log("$TAG: Airing check complete")
+      }
+    
       }
     private fun fireNotification(
         context: Context,
@@ -99,13 +112,18 @@ object EpisodeAiringNotificationService {
 
         nm.notify(notifId, builder.build())
       }
+    
+      }
     private fun ensureNotificationChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     val channel = NotificationChannel(
                 CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
-            ).apply { description = "Alerts when subscribed anime episodes air" }
+            ).apply {
+        description = "Alerts when subscribed anime episodes air" }
             val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             nm.createNotificationChannel(channel)
+         }
+    
          }
     }
 

@@ -58,6 +58,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             ItemAnimePageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AnimePageViewHolder(binding)
       }
+    
+      }
     override fun onBindViewHolder(holder: AnimePageViewHolder, position: Int) {
         binding = holder.binding
         trendingBinding = LayoutTrendingBinding.bind(binding.root)
@@ -76,19 +78,29 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
         trendingBinding.titleContainer.updatePadding(top = statusBarHeight)
 
-        trendingBinding.searchBar.setOnLongClickListener { view ->
+        trendingBinding.searchBar.setOnLongClickListener {
+        view ->
             if (!PrefManager.getVal<Boolean>(PrefName.RescueMode)) {
                 if (PrefManager.getVal(PrefName.SmallView)) trendingBinding.trendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 }
+        
+                }
         else {
                     com.sanin.tv.toast(view.context.getString(R.string.rescue_mode_active))
+                 }
+            
                  }
             }
             false
         }
 
+        
+        }
+
         trendingBinding.searchBar.setEndIconOnClickListener {
             trendingBinding.searchBar.performClick()
+          }
+        
           }
         val isRescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
         trendingBinding.notificationCount.isVisible = !isRescueMode && Anilist.unreadNotificationCount > 0
@@ -99,10 +111,17 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             binding.animePreviousSeason,
             binding.animeThisSeason,
             binding.animeNextSeason
-        ).forEachIndexed { i, it ->
-            it.setSafeOnClickListener { onSeasonClick.invoke(i)
+        ).forEachIndexed {
+        i, it ->
+            it.setSafeOnClickListener {
+        onSeasonClick.invoke(i)
  }
-            it.setOnLongClickListener { onSeasonLongClick.invoke(i)
+            
+ }
+            it.setOnLongClickListener {
+        onSeasonLongClick.invoke(i)
+ }
+        
  }
         }
 
@@ -114,27 +133,34 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 it.context,
                 Intent(it.context, GenreActivity::class.java).putExtra("type", "ANIME"),
                 null
-            )
+)
+            }
          }
         binding.animeCalendar.setOnClickListener {
             ContextCompat.startActivity(
                 it.context,
                 Intent(it.context, CalendarActivity::class.java),
                 null
-            )
+)
+            }
           }
         val rescueMode = PrefManager.getVal<Boolean>(PrefName.RescueMode)
         binding.animeIncludeList.isVisible = if (rescueMode) MAL.token != null else Anilist.token != null
 
         binding.animeIncludeList.isChecked = PrefManager.getVal(PrefName.PopularAnimeList)
 
-        binding.animeIncludeList.setOnCheckedChangeListener { _, isChecked ->
+        binding.animeIncludeList.setOnCheckedChangeListener {
+        _, isChecked ->
             onIncludeListClick.invoke(isChecked)
 
             PrefManager.setVal(PrefName.PopularAnimeList, isChecked)
          }
+        
+         }
         if (ready.value == false)
             ready.postValue(true)
+      }
+    
       }
     lateinit var onSeasonClick: ((Int) -> Unit)
     lateinit var onSeasonLongClick: ((Int) -> Boolean)
@@ -143,7 +169,11 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     override fun getItemCount(): Int = 1
 
     fun updateHeight() {
-        trendingViewPager!!.updateLayoutParams { height += statusBarHeight }
+        trendingViewPager!!.updateLayoutParams {
+        height += statusBarHeight }
+    }
+
+    
     }
 
     fun updateTrending(adaptor: MediaAdaptor) {
@@ -157,6 +187,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         trendRun = Runnable {
             trendingBinding.trendingViewPager.currentItem += 1
         }
+        
+        }
         trendingBinding.trendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -165,7 +197,11 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         if (PrefManager.getVal(PrefName.TrendingScroller)) {
                         trendHandler!!.postDelayed(trendRun, 4000)
                      }
+                
+                     }
                 }
+            }
+        
             }
         )
 
@@ -176,6 +212,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             LayoutAnimationController(setSlideIn(), 0.25f)
         binding.animeSeasonsCont.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
+      }
+    
       }
     fun updateRecent(adaptor: MediaAdaptor, media: MutableList<Media>) {
         binding.apply {
@@ -193,7 +231,13 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         if (adaptor.itemCount == 0) {
         animeRecentlyContainer.visibility = View.GONE
             }
+        
+            }
         }
+
+    }
+
+    
 
     }
 
@@ -207,7 +251,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 animeMoviesMore,
                 getAppString(R.string.trending_movies),
                 media
-            )
+)
+            }
          }
     }
 
@@ -221,7 +266,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 animeTopRatedMore,
                 getAppString(R.string.top_rated),
                 media
-            )
+)
+            }
          }
     }
 
@@ -235,7 +281,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 animeMostFavMore,
                 getAppString(R.string.most_favourite),
                 media
-            )
+)
+            }
          }
     }
 
@@ -263,7 +310,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 it.context, Intent(it.context, MediaListViewActivity::class.java)
                     .putExtra("title", string),
                 null
-            )
+)
+            }
          }
         recyclerView.visibility = View.VISIBLE
         title.visibility = View.VISIBLE
@@ -273,12 +321,16 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         recyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
       }
+    
+      }
     fun updateAvatar() {
         val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
         val avatarUrl = if (rescueMode) MAL.avatar else Anilist.avatar
         if (avatarUrl != null && ready.value == true) {
         trendingBinding.userAvatar.loadImage(avatarUrl)
             trendingBinding.userAvatar.imageTintList = null
+        }
+    
         }
     }
 
@@ -288,6 +340,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             trendingBinding.notificationCount.isVisible = !isRescueMode && Anilist.unreadNotificationCount > 0
                     && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
+         }
+    
          }
     }
 

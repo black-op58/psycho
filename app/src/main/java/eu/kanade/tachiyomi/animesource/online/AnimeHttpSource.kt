@@ -39,7 +39,8 @@ open val client: OkHttpClient        get() = network.client    /**     * Generat
 protected fun generateId(name: String, lang: String, versionId: Int): Long {
     val key = "${name.lowercase()}/$lang/$versionId"        
 val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())
-return (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }.reduce(Long::or) and Long.MAX_VALUE    }
+return (0..7).map {
+        bytes[it].toLong() and 0xff shl 8 * (7 - it) }.reduce(Long::or) and Long.MAX_VALUE    }
 /**     * Headers builder for requests. Implementations can
 override this method for custom headers.     */    
 protected open 
@@ -50,7 +51,8 @@ override fun toString() = "$name (${lang.uppercase()})"    /**     * Returns an 
 override this method.     *     * @param page the page number to retrieve.     */    
 @Deprecated(        "Use the non-RxJava API instead",        ReplaceWith("getPopularAnime"),    )    
 override fun fetchPopularAnime(page: Int): Observable<AnimesPage> {
-return client.newCall(popularAnimeRequest(page))            .asObservableSuccess()            .map { response ->                popularAnimeParse(response)            }}
+return client.newCall(popularAnimeRequest(page))            .asObservableSuccess()            .map {
+        response ->                popularAnimeParse(response)            }}
 /**     * Returns the request for the popular anime given the page.     *     * @param page the page number to retrieve.     */
 protected abstract 
 fun popularAnimeRequest(page: Int): Request    /**     * Parses the response from the site and returns a [AnimesPage] object.     *     * @param response the response from the site.     */    
@@ -63,10 +65,13 @@ return Observable.defer {
 try {
         client.newCall(searchAnimeRequest(page, query, filters)).asObservableSuccess()
             }
+        
+            }
         catch (e: NoClassDefFoundError) {
         // RxJava doesn't handle Errors, which tends to happen during global searches                // if an old extension using non-existent classes is still around
 throw RuntimeException(e)            }}
-.map { response ->                searchAnimeParse(response)}}
+.map {
+        response ->                searchAnimeParse(response)}}
 /**     * Returns the request for the search anime given the page.     *     * @param page the page number to retrieve.     * @param query the search query.     * @param filters the list of filters to apply.     */
 protected abstract 
 fun searchAnimeRequest(page: Int, query: String, filters: AnimeFilterList): Request    /**     * Parses the response from the site and returns a [AnimesPage] object.     *     * @param response the response from the site.     */    
@@ -74,7 +79,8 @@ protected abstract
 fun searchAnimeParse(response: Response): AnimesPage    /**     * Returns an observable containing a page with a list of latest anime updates.     *     * @param page the page number to retrieve.     */    
 @Deprecated(        "Use the non-RxJava API instead",        ReplaceWith("getLatestUpdates"),    )    
 override fun fetchLatestUpdates(page: Int): Observable<AnimesPage> {
-return client.newCall(latestUpdatesRequest(page))            .asObservableSuccess()            .map { response ->                latestUpdatesParse(response)            }}
+return client.newCall(latestUpdatesRequest(page))            .asObservableSuccess()            .map {
+        response ->                latestUpdatesParse(response)            }}
 /**     * Returns the request for latest anime given the page.     *     * @param page the page number to retrieve.     */
 protected abstract 
 fun latestUpdatesRequest(page: Int): Request    /**     * Parses the response from the site and returns a [AnimesPage] object.     *     * @param response the response from the site.     */    
@@ -88,7 +94,9 @@ return fetchAnimeDetails(anime).awaitSingle()
      }
 @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getAnimeDetails"))    
 override fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> {
-return client.newCall(animeDetailsRequest(anime))            .asObservableSuccess()            .map { response ->                animeDetailsParse(response).apply { initialized = true }}}
+return client.newCall(animeDetailsRequest(anime))            .asObservableSuccess()            .map {
+        response ->                animeDetailsParse(response).apply {
+        initialized = true }}}
 /**     * Returns the request for the details of an anime. Override only if it's needed to change the     * url, send different headers or request method like POST.     *     * @param anime the anime to be updated.     */
 open fun animeDetailsRequest(anime: SAnime): Request {    /**     * Parses the response from the site and returns a list of episodes.     *     * @param response the response from the site.     */    
 protected abstract 
@@ -98,7 +106,8 @@ fun episodeVideoParse(response: Response): SEpisode    /**     * Get all the ava
 override this method.     *     * @since extensions-lib 16     * @param anime the anime to look for seasons.     * @return the seasons for the anime.     */    
 override suspend 
 fun getSeasonList(anime: SAnime): List<SAnime> {
-return client.newCall(seasonListRequest(anime))            .awaitSuccess()            .let { response ->                seasonListParse(response)            }}
+return client.newCall(seasonListRequest(anime))            .awaitSuccess()            .let {
+        response ->                seasonListParse(response)            }}
 /**     * Returns the request for updating the season list. Override only if it's needed to
 override     * the url, send different headers or request method like POST.     *     * @since extensions-lib 16     * @param anime the anime to look for seasons.     * @return the request for getting the seasons.     */    
 protected open 
@@ -110,7 +119,8 @@ protected abstract
 fun seasonListParse(response: Response): List<SAnime>    /**     * Get the list of hoster for an episode. The first hoster in the list should     * be the preferred hoster.     *     * @since extensions-lib 16     * @param episode the episode.     * @return the hosters for the episode.     */    
 override suspend 
 fun getHosterList(episode: SEpisode): List<Hoster> {
-return client.newCall(hosterListRequest(episode))            .awaitSuccess()            .let { response ->                hosterListParse(response)            }}
+return client.newCall(hosterListRequest(episode))            .awaitSuccess()            .let {
+        response ->                hosterListParse(response)            }}
 /**     * Returns the request for getting the hosters. Override only if it's needed to
 override     * the url, send different headers or request method like POST.     *     * @since extensions-lib 16     * @param episode the episode to look for hosters.     * @return the request for getting the hosters.     */    
 protected open 
@@ -122,7 +132,8 @@ protected abstract
 fun hosterListParse(response: Response): List<Hoster>    /**     * Get the list of videos for a hoster.     *     * @since extensions-lib 16     * @param hoster the hoster.     * @return the videos for the hoster.     */    
 override suspend 
 fun getVideoList(hoster: Hoster): List<Video> {
-return client.newCall(videoListRequest(hoster))            .awaitSuccess()            .let { response ->                videoListParse(response, hoster)            }}
+return client.newCall(videoListRequest(hoster))            .awaitSuccess()            .let {
+        response ->                videoListParse(response, hoster)            }}
 /**     * Returns the request for getting the hosters. Override only if it's needed to
 override     * the url, send different headers or request method like POST.     *     * @since extensions-lib 16     * @param hoster the hoster to look for videos.     * @return the request for getting the videos.     */    
 protected open 
@@ -144,7 +155,8 @@ return fetchVideoList(episode).awaitSingle()
      }
 @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getVideoList"))    
 override fun fetchVideoList(episode: SEpisode): Observable<List<Video>> {
-return client.newCall(videoListRequest(episode))            .asObservableSuccess()            .map { response ->                videoListParse(response)            }}
+return client.newCall(videoListRequest(episode))            .asObservableSuccess()            .map {
+        response ->                videoListParse(response)            }}
 /**     * Returns the request for getting the episode link. Override only if it's needed to
 override     * the url, send different headers or request method like POST.     *     * @param episode the episode to look for links.     */    
 protected open 
@@ -174,7 +186,8 @@ return fetchVideoUrl(video).awaitSingle()
      }
 @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getVideoUrl"))    
 open fun fetchVideoUrl(video: Video): Observable<String> {
-return client.newCall(videoUrlRequest(video))            .asObservableSuccess()            .map { videoUrlParse(it) }}
+return client.newCall(videoUrlRequest(video))            .asObservableSuccess()            .map {
+        videoUrlParse(it) }}
 /**     * Returns the request for getting the url to the source image. Override only if it's needed to     *
 override the url, send different headers or request method like POST.     *     * @param video the chapter whose page list has to be fetched     */    
 protected open 
@@ -191,6 +204,8 @@ if (end - start > 0L) {
         Headers.Builder().addAll(headers).add("Range", "bytes=$start-$end").build()
 } else if (start >= 0L) {
         Headers.Builder().addAll(headers).add("Range", "bytes=$start-").build()
+ }
+        
  }
         else {                // logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
 null            }

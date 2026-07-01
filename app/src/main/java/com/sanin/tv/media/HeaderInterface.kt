@@ -25,6 +25,8 @@ if (visible) {
             binding.searchResultLayout.visibility = View.GONE
             binding.searchHistoryList.visibility = View.VISIBLE            binding.searchByImage.visibility = View.VISIBLE            updateClearHistoryVisibility()
  }
+        
+ }
         else {
 if (binding.searchResultLayout.visibility != View.VISIBLE) {
         binding.searchResultLayout.startAnimation(fadeInAnimation())

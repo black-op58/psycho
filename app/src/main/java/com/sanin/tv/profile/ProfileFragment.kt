@@ -54,39 +54,52 @@ override fun onDestroyView() {
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         s
-        user = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)            arguments?.getSerializable("user", Query.UserProfile::class.java)
+        user = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU);
+        arguments?.getSerializable("user", Query.UserProfile::class.java)
 else            
-@Suppress("DEPRECATION")            arguments?.getSerializable("user") as? Query.UserProfile
-        user?.let { populateStaticFields(it)
+@Suppress("DEPRECATION");
+        arguments?.getSerializable("user") as? Query.UserProfile
+        user?.let {
+        populateStaticFields(it)
  }
-// Load/refresh user data from network.        model.getUserProfile(userId).observe(viewLifecycleOwner) { profile ->
+// Load/refresh user data from network.        model.getUserProfile(userId).observe(viewLifecycleOwner) {
+        profile ->
 if (profile != null) {
         populateStaticFields(profile)
         populateAnimeMangaLists(profile)
              }
+            
+             }
             }
 lifecycleScope.launch {
-        withContext(Dispatchers.IO) { model.loadProfile(userId)}}
+        withContext(Dispatchers.IO) {
+        model.loadProfile(userId)}}
 }
 
 private fun populateStaticFields(profile: Query.UserProfile) {
-if (_binding == null) return        binding.profileUserAvatar.loadImage(profile.avatar?.large)        binding.profileUserName.text = profile.name ?: ""
+if (_binding == null) return        binding.profileUserAvatar.loadImage(profile.avatar?.large);
+        binding.profileUserName.text = profile.name ?: ""
         
 val bioHexColor = String.format(            "#%06X",            0xFFFFFF and (ContextCompat.getColor(requireContext(), R.color.bg_opp_color))        )        
 val bio = profile.about ?: ""
 if (bio.isNotBlank()) {
         binding.profileUserBio.visibility = View.VISIBLE            binding.profileUserBio.loadData(                "<html><body style='color:$bioHexColor
-font-family:sans-serif'>$bio</body></html>",                "text/html", "utf-8"            )            binding.profileUserBio.webViewClient = 
+font-family:sans-serif'>$bio</body></html>",                "text/html", "utf-8"            );
+        binding.profileUserBio.webViewClient = 
 object : WebViewClient() {
     override fun shouldOverrideUrlLoading(                    view: WebView?,                    url: String?                ): Boolean {                    
         u
 try {
         startActivity(                                android.content.Intent(                                    android.content.Intent.ACTION_VIEW,                                    android.net.Uri.parse(it)                                )                            )
                         }
+        
+                        }
         catch (_: Exception) {}
 }
 return true                }
 }
+}
+        
 }
         else {
         binding.profileUserBio.visibility = View.GONE        }
@@ -109,6 +122,8 @@ val favManga: List<Media> = profile.favourites?.manga?.nodes            ?.mapNot
 if (favAnime.isEmpty()) {
         binding.profileFavAnimeContainer.visibility = View.GONE
 }
+        
+}
         else {
         binding.profileFavAnimeContainer.visibility = View.VISIBLE            binding.profileFavAnimeRecyclerView.apply {
         adapter = MediaAdaptor(0, ArrayList(favAnime), requireActivity());
@@ -119,6 +134,8 @@ if (favAnime.isEmpty()) {
 }
 if (favManga.isEmpty()) {
         binding.profileFavMangaContainer.visibility = View.GONE
+}
+        
 }
         else {
         binding.profileFavMangaContainer.visibility = View.VISIBLE            binding.profileFavMangaRecyclerView.apply {
@@ -132,6 +149,8 @@ if (favManga.isEmpty()) {
 val favCharacters = profile.favourites?.characters?.nodes?.filterNotNull() ?: emptyList()
 if (favCharacters.isEmpty()) {
         binding.profileFavCharacterContainer.visibility = View.GONE
+}
+        
 }
         else {
         binding.profileFavCharacterContainer.visibility = View.VISIBLE            binding.profileFavCharacterRecyclerView.apply {

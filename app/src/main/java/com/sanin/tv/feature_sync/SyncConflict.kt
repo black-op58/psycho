@@ -41,4 +41,5 @@ data class SyncConflict(
      }
 }
 
-enum class SyncResolution { USE_ANILIST, USE_MAL, USE_HIGHER, USE_LOWER, MANUAL }
+enum class SyncResolution {
+        USE_ANILIST, USE_MAL, USE_HIGHER, USE_LOWER, MANUAL }

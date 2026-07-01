@@ -13,6 +13,8 @@ object UniFileCompat {
     fun fromFile(file: File, context: Context): DocumentFile? {
     return DocumentFile.fromFile(file)
       }
+    
+      }
     /**
      * Returns a [DocumentFile] for the given [Uri].
      */
@@ -21,6 +23,8 @@ object UniFileCompat {
             uri.scheme == "file" -> DocumentFile.fromFile(File(uri.path!!))
             else -> DocumentFile.fromSingleUri(context, uri)
          }
+    
+         }
     }
 
     /**
@@ -28,6 +32,8 @@ object UniFileCompat {
      */
     fun fromTreeUri(uri: Uri, context: Context): DocumentFile? {
     return DocumentFile.fromTreeUri(context, uri)
+      }
+    
       }
     /**
      * Returns the child [DocumentFile] with the given [name] under [parent], or null.

@@ -55,9 +55,13 @@ object ProviderRepository {
         return try {
             Mapper.json.decodeFromString(json)
          }
+        
+         }
         catch (e: Exception) {
         Logger.log("ProviderRepository: load failed — ${e.message}")
             defaults
+        }
+    
         }
     }
 
@@ -67,8 +71,12 @@ object ProviderRepository {
                 ?.putString(KEY_PROVIDERS, Mapper.json.encodeToString(providers))
                 ?.apply()
          }
+        
+         }
         catch (e: Exception) {
         Logger.log("ProviderRepository: save failed — ${e.message}")
+         }
+    
          }
     }
 

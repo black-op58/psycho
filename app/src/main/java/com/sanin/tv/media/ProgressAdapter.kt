@@ -33,9 +33,12 @@ object : GesturesListener() {
 override fun onScrollYClick(y: Float) {}
 
 override fun onSingleClick(event: MotionEvent) {}
-})        progressBar.setOnTouchListener { v, event ->
+});
+        progressBar.setOnTouchListener {
+        v, event ->
             doubleClickDetector.onTouchEvent(event)
-        v.performClick()            true
+        v.performClick();
+        true
         }
 if (ready.value == false) {
         ready.postValue(true)

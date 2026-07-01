@@ -24,7 +24,10 @@ override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
         initActivity(this)
 if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
-        this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg_inv)            binding.root.fitsSystemWindows = true
+        this.window.statusBarColor =                ContextCompat.getColor(this, R.color.nav_bg_inv);
+        binding.root.fitsSystemWindows = true
+}
+        
 }
         else {
         binding.root.fitsSystemWindows = false            requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -34,7 +37,8 @@ if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
 setContentView(binding.root)
 val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)        
 val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)        
-val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)        window.statusBarColor = primaryColor
+val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline);
+        window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor        binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
         
@@ -60,7 +64,8 @@ binding.mediaList.setOnClickListener {
 binding.mediaGrid.setOnClickListener {
         changeView(0, binding.mediaGrid)
          }
-val text = "${intent.getStringExtra("title")} (${mediaList.count()})"        binding.listTitle.text = text        binding.mediaRecyclerView.adapter = MediaAdaptor(view, mediaList, this)        binding.mediaRecyclerView.layoutManager = GridLayoutManager(
+val text = "${intent.getStringExtra("title")} (${mediaList.count()})"        binding.listTitle.text = text        binding.mediaRecyclerView.adapter = MediaAdaptor(view, mediaList, this);
+        binding.mediaRecyclerView.layoutManager = GridLayoutManager(
             this,
 if (view == 1) 1 else (screenWidth / 120f).toInt()        )
      }

@@ -38,17 +38,24 @@ if ((a ?: 0) > (media.userProgress ?: -1)) {
 if (media.userStatus == "REPEATING") media.userStatus ?: "CURRENT" else "CURRENT"                    )
         toast(currContext()?.getString(R.string.setting_progress, a))
                     // ── Streak tracking ──────────────────────────────────────
-                    currContext()?.let { ctx ->
+                    currContext()?.let {
+        ctx ->
                         val newStreak = StreakManager.recordWatchToday(ctx)
                         StreakToastHelper.showIfMilestone(ctx, newStreak)
+                     }
+                
                      }
                 }
                 media.userProgress = a                Refresh.all()
             }
 }
+        
+}
         else {
         toast(currContext()?.getString(R.string.login_anilist_account))
         }
+}
+        
 }
         else {
         toast("Sneaky sneaky :3")    }}/** Sync all pending progress updates (cached during rescue mode) to AniList. */
@@ -62,7 +69,11 @@ fun syncPendingProgressUpdates() {
         try {
                 Anilist.mutation.editList(update.mediaId, update.progress, status = update.status)
              }
+        
+             }
         catch (_: Exception) {}
+        }
+        
         }
         PrefManager.setVal(PrefName.PendingProgressUpdates, listOf<PendingProgressUpdate>())
         val deletions: List<PendingDeletion> = PrefManager.getVal(PrefName.PendingDeletions, listOf())
@@ -72,7 +83,10 @@ fun syncPendingProgressUpdates() {
                 val anilistId = deletion.mediaId
                 val fakeMedia = emptyMedia().copy(id = anilistId, idMAL = deletion.idMAL)
                 val listId = Anilist.query.userMediaDetails(fakeMedia).userListId
-                if (listId != null) { Anilist.mutation.deleteList(listId)
+                if (listId != null) {
+        Anilist.mutation.deleteList(listId)
+ }
+                
  }
                 val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
                 PrefManager.setCustomVal("removeList", removeList.minus(anilistId))
@@ -83,19 +97,31 @@ fun syncPendingProgressUpdates() {
                     u.mediaId == deletion.mediaId ||
                         (deletion.idMAL != null && u.idMAL == deletion.idMAL && u.mediaId == u.idMAL)
                  }
+                
+                 }
                 if (filteredUpdates.size != progressUpdates.size) {
         PrefManager.setVal(PrefName.PendingProgressUpdates, filteredUpdates)
                  }
+                
+                 }
                 if (!Anilist.anilistDisabledSignal) remaining.remove(deletion)
              }
+        
+             }
         catch (_: Exception) {}
+        }
+        
         }
         PrefManager.setVal(PrefName.PendingDeletions, remaining);
         if (remaining.isEmpty()) {
             toast(currContext()?.getString(R.string.sync_complete))
          }
+        
+         }
         else {
             toast(currContext()?.getString(R.string.sync_partial, remaining.size))
+         }
+        
          }
         Refresh.all()
      }

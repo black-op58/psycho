@@ -9,6 +9,8 @@ if (hours > 0 || days > 0) append("$hours hour${if (hours > 1) "s" else ""} ")
         append("$minutes minute${if (minutes > 1) "s" else ""}")
             }.trim()
  }
+        
+ }
         else {
     val elapsedDays = -days
 val elapsedHours = -hours
@@ -45,7 +47,8 @@ if (timeSinceLastUpdate > 1000 * 60 * 60 * 4 || serializedMedia.isNullOrEmpty() 
         runBlocking(Dispatchers.IO) {
         Anilist.getSavedToken()                
 val upcoming = Anilist.query.getUpcomingAnime(userId)                
-val seen = mutableSetOf<Int>()                upcoming.forEach { 
+val seen = mutableSetOf<Int>();
+        upcoming.forEach { 
         m
 if (seen.add(mediaItem.id)) {
     val timeUntilAiring = mediaItem.timeUntilAiring ?: 0
@@ -58,16 +61,21 @@ val serialized = serializeMedia(upcoming)
 if (serialized != null) {
         prefs.edit().putString(UpcomingWidget.PREF_SERIALIZED_MEDIA, serialized).apply()
  }
+        
+ }
         else {
         prefs.edit().putString(UpcomingWidget.PREF_SERIALIZED_MEDIA, "").apply()
         Logger.log("Error serializing media")
                 }
 refreshing = false            }
 }
+        
+}
         else {
         refreshing = false
 if (media != null) {
-    val seen = mutableSetOf<Int>()                media.forEach { 
+    val seen = mutableSetOf<Int>();
+        media.forEach { 
         m
 if (seen.add(mediaItem.id)) {
     val timeUntilAiring = (mediaItem.timeUntilAiring?.minus(timeSinceLastUpdate) ?: 0)
@@ -77,11 +85,15 @@ if (timeUntilAiring > 0) {
     widgetItems.add(                                WidgetItem(                                    title = mediaItem.userPreferredName,                                    countdown = formatTime(timeUntilAiring),                                    image = mediaItem.cover ?: "",                                    id = mediaItem.id,                                    episode = episodeNumber                                )                            )}}
     }
 }
+        
+}
         else {
         prefs.edit().putString(UpcomingWidget.PREF_SERIALIZED_MEDIA, "").apply()
         prefs.edit().putLong(UpcomingWidget.LAST_UPDATE, 0).apply()
                 Logger.log("Error deserializing media")
         fillWidgetItems()
+             }
+            
              }
             }
 }
@@ -91,9 +103,14 @@ return try {
     val gson = GsonBuilder()                .registerTypeAdapter(SAnime::class.java, InstanceCreator<SAnime> {                    
         S
         }
+        
+        }
         catch (e: Exception) {
         Logger.log("Error serializing media: $e")
-        Logger.log(e)            null
+        Logger.log(e);
+        null
+        }
+    
         }
     }
 
@@ -102,9 +119,14 @@ return try {
     val gson = GsonBuilder()                .registerTypeAdapter(SAnime::class.java, InstanceCreator<SAnime> {                    
         S
         }
+        
+        }
         catch (e: Exception) {
         Logger.log("Error deserializing media: $e")
-        Logger.log(e)            null
+        Logger.log(e);
+        null
+        }
+    
         }
     }
 

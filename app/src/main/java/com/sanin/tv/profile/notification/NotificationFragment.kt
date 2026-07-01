@@ -46,8 +46,10 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             getID = it.getInt("id");
         type = it.getSerializableCompat<NotificationType>("type") as NotificationType
         }
-binding.notificationRecyclerView.adapter = adapter        binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)        binding.notificationProgressBar.isVisible = true
-        binding.emptyTextView.text = getString(R.string.nothing_here)        lifecycleScope.launch {
+binding.notificationRecyclerView.adapter = adapter        binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context);
+        binding.notificationProgressBar.isVisible = true
+        binding.emptyTextView.text = getString(R.string.nothing_here);
+        lifecycleScope.launch {
             getList()
         resetCountIfNeeded()
             binding.notificationProgressBar.isVisible = false}
@@ -64,7 +66,8 @@ object :            RecyclerView.OnScrollListener() {
         s
 if (shouldLoadMore()) {
         lifecycleScope.launch {
-        binding.notificationRefresh.isVisible = true                        getList()                        binding.notificationRefresh.isVisible = false
+        binding.notificationRefresh.isVisible = true                        getList();
+        binding.notificationRefresh.isVisible = false
                     }}}
 })
      }
@@ -90,11 +93,17 @@ private suspend
 fun getList() {
     val list = when (type) {
         O
-    MEDIA -> getNotificationsFiltered(type = true) { it.media != null || it.notificationType == com.sanin.tv.connections.anilist.api.NotificationType.MEDIA_DELETION.value}
-    USER -> getNotificationsFiltered { it.media == null && it.notificationType != com.sanin.tv.connections.anilist.api.NotificationType.RELATED_MEDIA_ADDITION.value}
-    SUBSCRIPTION -> getSubscriptions()            COMMENT -> getComments()
+    MEDIA -> getNotificationsFiltered(type = true) {
+        it.media != null || it.notificationType == com.sanin.tv.connections.anilist.api.NotificationType.MEDIA_DELETION.value}
+    USER -> getNotificationsFiltered {
+        it.media == null && it.notificationType != com.sanin.tv.connections.anilist.api.NotificationType.RELATED_MEDIA_ADDITION.value}
+    SUBSCRIPTION -> getSubscriptions();
+        COMMENT -> getComments()
 }
-    adapter.addAll(list.map { NotificationItem(it, type, adapter, ::onClick) })
+    
+}
+    adapter.addAll(list.map {
+        NotificationItem(it, type, adapter, ::onClick) })
 if (adapter.itemCount == 0) {
         binding.emptyTextView.isVisible = true        }
 }
@@ -109,7 +118,8 @@ private fun getSubscriptions(): List<Notification> {
     val list = PrefManager.getNullableVal<List<SubscriptionStore>>(            PrefName.SubscriptionNotificationStore,            null        ) ?: listOf()
 return list            .sortedByDescending { (it.time / 1000L).toInt()
  }
-.filter { it.image != null } // to remove old data            .map {
+.filter {
+        it.image != null } // to remove old data            .map {
         Notification(                    it.type,                    System.currentTimeMillis().toInt(),                    commentId = it.mediaId,                    mediaId = it.mediaId,                    notificationType = it.type,                    context = it.title + ": " + it.content,                    createdAt = (it.time / 1000L).toInt(),                    image = it.image,                    banner = it.banner ?: it.image                )
 }
 }
@@ -134,17 +144,25 @@ fun onClick(id: Int, optional: Int?, type: NotificationClickType) {
     NotificationClickType.MEDIA -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {
         putExtra("mediaId", id)
 }
+    
+}
     NotificationClickType.ACTIVITY -> Intent(                requireContext(),                FeedActivity::class.java            ).apply {
         putExtra("activityId", id)
+}
+    
 }
     NotificationClickType.COMMENT -> Intent(                requireContext(),                MediaDetailsActivity::class.java            ).apply {
         putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
         putExtra("mediaId", id)
                 putExtra("commentId", optional ?: -1)
 }
+    
+}
     NotificationClickType.UNDEFINED -> null}
     intent?.let {
         ContextCompat.startActivity(requireContext(), it, null)
+}
+    
 }
     }
 
@@ -159,9 +177,11 @@ fun onVisible() {
         r
 
 companion object {        
-enum class NotificationClickType { USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
+enum class NotificationClickType {
+        USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED }
 
-enum class NotificationType { MEDIA, USER, SUBSCRIPTION, COMMENT, ONE }
+enum class NotificationType {
+        MEDIA, USER, SUBSCRIPTION, COMMENT, ONE }
 
 fun newInstance(            type: NotificationType,             id: Int = -1,            countResetCallback: ((NotificationType, Boolean) -> Unit)? = null        ): NotificationFragment {
 return NotificationFragment().apply {

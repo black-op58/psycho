@@ -65,13 +65,17 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         var mediaSingleton: Media? = null
     }
 
+    
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMediaBinding.inflate(layoutInflater)
 
         media = intent.getSerializableExtra("media") as? Media
             ?: mediaSingleton
-            ?: run { finish(); return }
+            ?: run {
+        finish(); return }
         mediaSingleton = null
 
         setContentView(binding.root)
@@ -80,19 +84,28 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         // Ui init
         binding.mediaBottomBarContainer?.setPadding(0, 0, 0, navBarHeight)
-        AndroidBug5497Workaround.assistActivity(this) { keyboardVisible ->
+        AndroidBug5497Workaround.assistActivity(this) {
+        keyboardVisible ->
             navBar.visibility = if (keyboardVisible) View.GONE else View.VISIBLE
         }
-        binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
-        binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
-        binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
-        binding.incognito.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+        
+        }
+        binding.mediaBanner.updateLayoutParams {
+        height += statusBarHeight }
+        binding.mediaBannerNoKen.updateLayoutParams {
+        height += statusBarHeight }
+        binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight }
+        binding.incognito.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight }
         binding.mediaCollapsing.minimumHeight = statusBarHeight
         binding.mediaTitle.isSelected = true
         mMaxScrollSize = binding.mediaAppBar.totalScrollRange
         binding.mediaAppBar.addOnOffsetChangedListener(this)
         binding.mediaClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+          }
+        
           }
         val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations);
         if (bannerAnimations) {
@@ -103,12 +116,18 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             )
             binding.mediaBanner.setTransitionGenerator(generator)
           }
+        
+          }
         val gestureListener = object : GesturesListener() {}
         gestureDetector = GestureDetector(this, gestureListener)
         val banner = binding.mediaBanner
-        banner.setOnTouchListener { _, motionEvent ->
+        banner.setOnTouchListener {
+        _, motionEvent ->
             gestureDetector.onTouchEvent(motionEvent)
             true
+        }
+
+        
         }
 
         if (PrefManager.getVal(PrefName.Incognito)) {
@@ -116,17 +135,25 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             binding.mediaTitle.text = mediaTitle
             binding.incognito.visibility = View.VISIBLE
         }
+        
+        }
         else {
             binding.mediaTitle.text = media.userPreferredName
+        }
+        
         }
         binding.mediaTitle.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
         }
+        
+        }
         binding.mediaTitleCollapse.text = media.userPreferredName
         binding.mediaTitleCollapse.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
+        }
+        
         }
         binding.mediaStatus.text = media.status ?: ""
 
@@ -145,9 +172,15 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     R.color.bg_opp,
                     R.color.violet_400,
                     media.isFav
-                ) { isFav -> Anilist.toggleFav(media)
+                ) {
+        isFav -> Anilist.toggleFav(media)
+ }
+            
  }
             } else null
+        }
+
+        
         }
 
         fun total() {
@@ -155,8 +188,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             if (userStatus != null) {
         binding.mediaAddToList.text = userStatus
             }
+        
+            }
         else {
                 binding.mediaAddToList.setText(R.string.add_list)
+             }
+        
              }
         }
 
@@ -172,10 +209,15 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     MediaListDialogFragment().show(supportFragmentManager, "dialog")
             } else snackString(getString(R.string.please_login_anilist))
          }
+        
+         }
         binding.mediaAddToList.setOnLongClickListener {
             PrefManager.setCustomVal("${media.id}_progressDialog", true)
             snackString(getString(R.string.auto_update_reset))
             true
+        }
+
+        
         }
 
         fun progress() {}
@@ -195,12 +237,17 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                             folderName = folderName,
                             isAnime = isAnime,
                             isNovel = isNovel
-                        ) { _ ->
+                        ) {
+        _ ->
                             val updatedMedia = media.copy(id = 0)
                             model.loading = false
                             model.loadMedia(updatedMedia)
                          }
+                        
+                         }
                         dialog.show(supportFragmentManager, "localMapping")
+                     }
+                
                      }
                 }
                 scope.launch {
@@ -208,18 +255,26 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     syncMediaFavStateIfNeeded(favIcon);
         if (media.isFav != favIcon?.clicked) favIcon?.clicked()
                  }
+                
+                 }
                 binding.mediaNotify.setOnClickListener {
                     val i = Intent(Intent.ACTION_SEND)
                     i.type = "text/plain"
                     i.putExtra(Intent.EXTRA_TEXT, media.shareLink)
                     startActivity(Intent.createChooser(i, media.userPreferredName))
                  }
+                
+                 }
                 binding.mediaNotify.setOnLongClickListener {
                     openLinkInBrowser(media.shareLink)
                     true
                 }
+                
+                }
                 binding.mediaCover.setOnClickListener {
                     openLinkInBrowser(media.shareLink)
+                 }
+                
                  }
                 if (oldId == 0 && media.id != 0) {
         if (media.format?.startsWith("LOCAL") == true) {
@@ -227,11 +282,17 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                         blurImage(
                             if (bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen,
                             media.banner ?: media.cover
-                        )
+)
+                        }
                      }
                 }
             }
+        
+            }
         }
+    }
+
+    
     }
 
     private fun syncMediaFavStateIfNeeded(favIcon: PopImageButton?) {}
@@ -250,6 +311,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", screenWidth).setDuration(duration).start()
             binding.mediaBanner.pause()
          }
+        
+         }
         if (percentage <= percent && isCollapsed) {
         isCollapsed = false
             ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", -screenWidth).setDuration(duration).start()
@@ -258,8 +321,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", 0f).setDuration(duration).start();
         if (PrefManager.getVal(PrefName.BannerAnimations)) binding.mediaBanner.resume()
          }
+        
+         }
         if (percentage == 1 && model.scrolledToTop.value != false) model.scrolledToTop.postValue(false);
         if (percentage == 0 && model.scrolledToTop.value != true) model.scrolledToTop.postValue(true)
+      }
+    
       }
     class PopImageButton(
         private val scope: CoroutineScope,
@@ -279,7 +346,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         init {
             enabled(true);
         if (needsInitialClick) {
-        scope.launch { clicked()
+        scope.launch {
+        clicked()
+ }
+            
  }
             }
             image.setOnClickListener {
@@ -287,12 +357,19 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         pressable = false
                     clicked = !clicked
                     scope.launch {
-                        launch(Dispatchers.IO) { callback.invoke(clicked)
+                        launch(Dispatchers.IO) {
+        callback.invoke(clicked)
+ }
+                        
  }
                         clicked()
                         pressable = true
                     }
+                
+                    }
                 }
+            }
+        
             }
         }
 
@@ -309,8 +386,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 ).setDuration(120).start()
                 image.setImageDrawable(AppCompatResources.getDrawable(context, d1))
              }
+        
+             }
         else {
                 image.setImageDrawable(AppCompatResources.getDrawable(context, d2))
+             }
+            
              }
             ObjectAnimator.ofFloat(image, "scaleX", 0f, 1.5f).setDuration(120).start()
             ObjectAnimator.ofFloat(image, "scaleY", 0f, 1.5f).setDuration(100).start()
@@ -326,18 +407,23 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     ContextCompat.getColor(context, c1)
                 ).setDuration(200).start()
              }
+        
+             }
         }
 
         fun enabled(enabled: Boolean) {
             disabled = !enabled
             image.alpha = if (disabled) 0.33f else 1f
         }
+    
+        }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val viewPager = binding.mediaViewPager
         val tabCount = navBar.tabCount
-        if (DpadHelper.handleTabDpad(event.keyCode, event, viewPager.currentItem, tabCount) { idx ->
+        if (DpadHelper.handleTabDpad(event.keyCode, event, viewPager.currentItem, tabCount) {
+        idx ->
                 navBar.selectTabAt(idx)
                 viewPager.setCurrentItem(idx, true)
             }) return true

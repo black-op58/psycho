@@ -19,6 +19,7 @@ binding.extensionIconImageView.layoutParams = layoutParams        parserIcon?.le
         binding.extensionIconImageView.setImageDrawable(it)        } ?: run {
         binding.extensionIconImageView.setImageResource(R.drawable.control_background_40dp)
         
+
 }
 binding.extensionPinImageView.visibility = View.GONE        binding.extensionVersionTextView.visibility = View.GONE        binding.deleteTextView.visibility = View.VISIBLE        binding.deleteTextView.setOnClickListener {
         showRemoveAllSubscriptionsDialog(it.context)
@@ -30,7 +31,8 @@ private fun updateSubscriptionCount() {
 if (subscriptions.isEmpty()) View.GONE else View.VISIBLE    }
 private fun showRemoveAllSubscriptionsDialog(context: Context) {        
         c
-            setPosButton(R.string.ok) { removeAllSubscriptions()
+            setPosButton(R.string.ok) {
+        removeAllSubscriptions()
  }
 setNegButton(R.string.cancel)
         show()
@@ -51,6 +53,8 @@ updateSubscriptionCount()
 if (subscriptions.isEmpty()) {
         onGroupRemoved(this)
  }
+        
+ }
         else {
         adapter.notifyItemChanged(adapter.getAdapterPosition(this))
         }
@@ -58,8 +62,12 @@ if (subscriptions.isEmpty()) {
 private fun toggleSubscriptions() {
     val startPosition = adapter.getAdapterPosition(this) + 1
 if (isExpanded) {
-        subscriptions.forEachIndexed { index, subscribeMedia ->                adapter.add(                    startPosition + index,                    SubscriptionItem(subscribeMedia.id, subscribeMedia, adapter) { removedId ->                        removeSubscription(removedId)                    })
+        subscriptions.forEachIndexed {
+        index, subscribeMedia ->                adapter.add(                    startPosition + index,                    SubscriptionItem(subscribeMedia.id, subscribeMedia, adapter) {
+        removedId ->                        removeSubscription(removedId)                    })
             }
+}
+        
 }
         else {
         repeat(subscriptions.size) {

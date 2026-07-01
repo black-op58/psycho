@@ -46,6 +46,9 @@ class LibraryFragment : Fragment() {
         return binding.root
     }
 
+    
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,8 +63,12 @@ class LibraryFragment : Fragment() {
         binding.openFullListButton.isFocusableInTouchMode = false
     }
 
+    
+    }
+
     private fun setupStatusChips() {
-        statusLabels.forEachIndexed { index, label ->
+        statusLabels.forEachIndexed {
+        index, label ->
             val chip = Chip(requireContext()).apply {
                 text = label
                 isCheckable = true
@@ -72,8 +79,12 @@ class LibraryFragment : Fragment() {
                     selectedStatus = statusKeys[index]
                     refreshDisplay()
                  }
+            
+                 }
             }
             binding.statusChipGroup.addView(chip)
+         }
+    
          }
     }
 
@@ -82,14 +93,20 @@ class LibraryFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 3)
             isFocusable = true
             isFocusableInTouchMode = false
-            setOnKeyListener { _, keyCode, event ->
+            setOnKeyListener {
+        _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_BACK) {
         requireActivity().onBackPressedDispatcher.onBackPressed()
                     true
                 } else false
             }
+        
+            }
         }
+    }
+
+    
     }
 
     private fun setupOpenListButton() {
@@ -98,7 +115,8 @@ class LibraryFragment : Fragment() {
                 requireContext(),
                 Intent(requireContext(), ListActivity::class.java),
                 null
-            )
+)
+            }
          }
     }
 
@@ -107,27 +125,48 @@ class LibraryFragment : Fragment() {
             // Observe all user anime lists
             val allMedia = mutableListOf<Media>()
 
-            model.getAnimeContinue().observe(viewLifecycleOwner) { continuing ->
-                allMedia.removeAll { it.userProgress != null || it.userStatus == "CURRENT" }
+            model.getAnimeContinue().observe(viewLifecycleOwner) {
+        continuing ->
+                allMedia.removeAll {
+        it.userProgress != null || it.userStatus == "CURRENT" }
                 allMedia.addAll(continuing ?: emptyList())
                 refreshDisplay()
               }
-            model.getAnimeFav().observe(viewLifecycleOwner) { favs ->
+            
+              }
+            model.getAnimeFav().observe(viewLifecycleOwner) {
+        favs ->
                 // Merge favourites without duplicating
                 val existingIds = allMedia.map { 
         i
-                favs?.filter { it.id !in existingIds }?.let { allMedia.addAll(it)
+                favs?.filter {
+        it.id !in existingIds }?.let {
+        allMedia.addAll(it)
+ }
+                
  }
                 refreshDisplay()
               }
-            model.getAnimePlanned().observe(viewLifecycleOwner) { planned ->
+            
+              }
+            model.getAnimePlanned().observe(viewLifecycleOwner) {
+        planned ->
                 val existingIds = allMedia.map { 
         i
-                planned?.filter { it.id !in existingIds }?.let { allMedia.addAll(it)
+                planned?.filter {
+        it.id !in existingIds }?.let {
+        allMedia.addAll(it)
+ }
+                
  }
                 refreshDisplay()
              }
+        
+             }
         }
+    }
+
+    
     }
 
     private fun refreshDisplay() {
@@ -135,10 +174,15 @@ class LibraryFragment : Fragment() {
         val filtered = if (selectedStatus == null) {
         allMedia
         }
+        
+        }
         else {
-            allMedia.filter { media ->
+            allMedia.filter {
+        media ->
                 media.userStatus == selectedStatus ||
                         (selectedStatus == "CURRENT" && media.userProgress != null)
+             }
+        
              }
         }
 
@@ -151,12 +195,18 @@ class LibraryFragment : Fragment() {
         binding.libraryCountText.text = "${filtered.size} titles"
     }
 
+    
+    }
+
     private fun collectAllMedia(): List<Media> {
         val seen = mutableSetOf<Int>()
         val result = mutableListOf<Media>()
 
         fun addUnique(list: List<Media>?) {
-            list?.forEach { if (seen.add(it.id)) result.add(it)
+            list?.forEach {
+        if (seen.add(it.id)) result.add(it)
+ }
+        
  }
         }
 
@@ -166,6 +216,9 @@ class LibraryFragment : Fragment() {
         addUnique(model.getMissingSequels().value)
 
         return result
+    }
+
+    
     }
 
     override fun onDestroyView() {

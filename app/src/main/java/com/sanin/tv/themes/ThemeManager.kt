@@ -42,9 +42,14 @@ class ThemeManager(
         val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = customTheme);
         if (!returnedEarly) return
         }
+        
+        }
         else {
             val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null);
         if (!returnedEarly) return
+        }
+
+        
         }
 
         val theme: String = PrefManager.getVal(PrefName.Theme)
@@ -64,10 +69,15 @@ class ThemeManager(
             else -> if (useOLED) R.style.Theme_SaninTV_SaninOLED else R.style.Theme_SaninTV_Sanin
         }
 
+        
+        }
+
         val window = context.window
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
         @Suppress("DEPRECATION")
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+         }
+        
          }
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = 0x00000000
@@ -80,6 +90,8 @@ class ThemeManager(
             context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, tv, true)
             val gradientDir: Int = PrefManager.getVal(PrefName.GradientDirection)
             OledBackgroundManager.apply(context, oledMode, tv.data, gradientDir)
+         }
+    
          }
     }
 
@@ -112,6 +124,8 @@ class ThemeManager(
         // Scale all child views recursively
         scaleChildViews(rootView, scaleFactor)
       }
+    
+      }
     private fun scaleChildViews(view: View, scaleFactor: Float) {
         view.scaleX *= scaleFactor
         view.scaleY *= scaleFactor
@@ -121,7 +135,12 @@ class ThemeManager(
                 val child = view.getChildAt(i)
                 scaleChildViews(child, scaleFactor)
              }
+        
+             }
         }
+    }
+
+    
     }
 
     fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {
@@ -130,10 +149,17 @@ class ThemeManager(
         if (on) {
         winParams.flags = winParams.flags or bits
         }
+        
+        }
         else {
             winParams.flags = winParams.flags and bits.inv()
          }
+        
+         }
         win.attributes = winParams
+    }
+
+    
     }
 
     private fun applyDynamicColors(
@@ -154,8 +180,12 @@ class ThemeManager(
         builder.setContentBasedSource(useCustom)
             needMaterial = false
         }
+        
+        }
         if (useOLED) {
         builder.setThemeOverlay(R.style.AppTheme_Amoled)
+         }
+        
          }
         if (needMaterial && !useMaterialYou) return true
 
@@ -170,7 +200,12 @@ class ThemeManager(
                 .build()
             DynamicColors.applyToActivityIfAvailable(activity, options2)
          }
+        
+         }
         return false
+    }
+
+    
     }
 
     private fun isDarkThemeActive(context: Context): Boolean {
@@ -179,6 +214,8 @@ class ThemeManager(
             Configuration.UI_MODE_NIGHT_NO -> false
             Configuration.UI_MODE_NIGHT_UNDEFINED -> false
             else -> false
+        }
+    
         }
     }
 
@@ -201,10 +238,17 @@ class ThemeManager(
 
             companion object {
                 fun fromString(value: String): Theme {
-                    return entries.find { it.theme == value } ?: SANIN
+                    return entries.find {
+        it.theme == value } ?: SANIN
+                
+
+}
+            
                 
 }
             }
+        }
+    
         }
     }
 }

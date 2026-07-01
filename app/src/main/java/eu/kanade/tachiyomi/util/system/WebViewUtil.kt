@@ -18,9 +18,13 @@ object WebViewUtil {
             // is not installed
             CookieManager.getInstance()
          }
+        
+         }
         catch (e: Throwable) {
         Logger.log(e)
             return false
+        }
+        
         }
         return context.packageManager.hasSystemFeature(PackageManager.FEATURE_WEBVIEW)
      }
@@ -50,6 +54,8 @@ private fun WebView.getWebViewMajorVersion(): Int {
     val uaRegexMatch = """.*Chrome/(\d+)\..*""".toRegex().matchEntire(getDefaultUserAgentString())
     return if (uaRegexMatch != null && uaRegexMatch.groupValues.size > 1) {
         uaRegexMatch.groupValues[1].toInt()
+     }
+        
      }
         else {
         0

@@ -10,7 +10,8 @@ val names: List<String> get() = list.map {
 
 fun flushText() {        
         l
-if (it.get.isInitialized())                it.get.value?.showUserText = ""
+if (it.get.isInitialized());
+        it.get.value?.showUserText = ""
         }
 }
 

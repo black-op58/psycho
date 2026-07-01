@@ -26,15 +26,22 @@ class DiscordDialogFragment : DialogFragment() {
         return binding.root
     }
 
+    
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mode = arguments?.getString("mode") ?: "nothing"
         setupButtons()
       }
+    
+      }
     private fun setupButtons() {
         if (mode == "nothing") {
         binding.previewButton1.visibility = View.GONE
             binding.previewButton2.visibility = View.GONE
+        }
+        
         }
         else {
             binding.previewButton1.visibility = View.VISIBLE
@@ -43,11 +50,18 @@ class DiscordDialogFragment : DialogFragment() {
         "mal" -> "VIEW ON MYANIMELIST"
                 else  -> "VIEW ON ANILIST"
             }
+            
+            }
             binding.previewButton2.text = when (mode) {
         "sanintv" -> "SANINTV PROFILE"
                 else      -> "VIEW PROFILE"
             }
+        
+            }
         }
+    }
+
+    
     }
 
     override fun onDestroyView() {
@@ -55,17 +69,26 @@ class DiscordDialogFragment : DialogFragment() {
         _binding = null
         super.onDestroyView()
       }
+    
+      }
     override fun onDestroy() {
         tokenRefreshJob?.cancel()
         _binding = null
         super.onDestroy()
       }
+    
+      }
     companion object {
         fun newInstance(mode: String = "nothing"): DiscordDialogFragment {
             val f = DiscordDialogFragment()
-            f.arguments = Bundle().apply { putString("mode", mode)
+            f.arguments = Bundle().apply {
+        putString("mode", mode)
+ }
+            
  }
             return f
+        }
+    
         }
     }
 }

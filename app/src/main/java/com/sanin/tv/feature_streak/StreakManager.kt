@@ -42,15 +42,21 @@ object StreakManager {
             last == today -> {
                 // Already recorded today — no change to streak count
             }
+            
+            }
             last == yesterday() -> {
                 // Consecutive day!
                 current++
                 total++
             }
+            
+            }
             else -> {
                 // Streak broken (or first ever watch)
                 current = 1
                 total++
+            }
+        
             }
         }
 
@@ -65,18 +71,27 @@ object StreakManager {
         return current
     }
 
+    
+    }
+
     fun getCurrentStreak(context: Context): Int {
         PrefManager.init(context)
         ensureNotBroken(context)
         return PrefManager.getCustomVal(KEY_CURRENT, 0, Int::class.java)
       }
+    
+      }
     fun getLongestStreak(context: Context): Int {
         PrefManager.init(context)
         return PrefManager.getCustomVal(KEY_LONGEST, 0, Int::class.java)
       }
+    
+      }
     fun getTotalWatchDays(context: Context): Int {
         PrefManager.init(context)
         return PrefManager.getCustomVal(KEY_TOTAL_DAYS, 0, Int::class.java)
+      }
+    
       }
     /**
      * Returns a milestone message if [newStreak] hits a notable number,
@@ -94,6 +109,9 @@ object StreakManager {
         else -> if (newStreak > 0 && newStreak % 50 == 0) "🎖️ ${newStreak}-day streak!" else null
     }
 
+    
+    }
+
     // ── Private helpers ───────────────────────────────────────────────────
 
     /** Resets streak to 0 if more than one day has passed since last watch. */
@@ -103,6 +121,8 @@ object StreakManager {
         if (current > 0 && last.isNotBlank() && last != todayStr() && last != yesterday()) {
             PrefManager.setCustomVal(KEY_CURRENT, 0)
             Logger.log("StreakManager: streak broken (last=$last)")
+         }
+    
          }
     }
 

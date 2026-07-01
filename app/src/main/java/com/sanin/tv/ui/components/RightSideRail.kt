@@ -45,15 +45,23 @@ fun RightSideRail(
                 .background(Color.Black.copy(alpha = 0.55f))
                 .clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource()
+                    interactionSource = remember {
+        MutableInteractionSource()
  }
-                ) { onDismiss()
+                
+ }
+                ) {
+        onDismiss()
+ }
+        
  }
         ) {
             AnimatedVisibility(
                 visible = visible,
-                enter = slideInHorizontally(initialOffsetX = { it }),
-                exit = slideOutHorizontally(targetOffsetX = { it }),
+                enter = slideInHorizontally(initialOffsetX = {
+        it }),
+                exit = slideOutHorizontally(targetOffsetX = {
+        it }),
                 modifier = Modifier.align(Alignment.CenterEnd)
             ) {
                 Column(
@@ -66,7 +74,10 @@ fun RightSideRail(
                         )
                         .clickable(
                             indication = null,
-                            interactionSource = remember { MutableInteractionSource()
+                            interactionSource = remember {
+        MutableInteractionSource()
+ }
+                        
  }
                         ) {}
                         .padding(top = 64.dp, bottom = 32.dp, start = 16.dp, end = 16.dp)
@@ -85,7 +96,8 @@ fun RightSideRail(
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             maxLines = 1
-                        )
+)
+                        }
                       }
                     Spacer(modifier = Modifier.height(4.dp))
                     HorizontalDivider(color = Color.White.copy(alpha = 0.12f))
@@ -99,7 +111,8 @@ fun RightSideRail(
                         context.startActivity(
                             Intent(context, NotificationActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
+)
+                        }
                       }
                     SideRailItem(
                         iconRes = R.drawable.ic_round_person_24,
@@ -111,7 +124,8 @@ fun RightSideRail(
                             Intent(context, ProfileActivity::class.java)
                                 .putExtra("userId", userId)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
+)
+                        }
                       }
                     SideRailItem(
                         iconRes = R.drawable.ic_round_extension_24,
@@ -121,7 +135,8 @@ fun RightSideRail(
                         context.startActivity(
                             Intent(context, SettingsExtensionsActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
+)
+                        }
                       }
                     SideRailItem(
                         iconRes = R.drawable.ic_round_manage_accounts_24,
@@ -131,9 +146,12 @@ fun RightSideRail(
                         context.startActivity(
                             Intent(context, SettingsActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
+)
+                        }
                      }
                 }
+            }
+        
             }
         }
     }
@@ -148,7 +166,10 @@ private fun SideRailItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick()
+            .clickable {
+        onClick()
+ }
+            
  }
             .padding(vertical = 14.dp, horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -165,6 +186,6 @@ private fun SideRailItem(
             color = Color.White,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium
-        )
-     }
+)
+        }
 }

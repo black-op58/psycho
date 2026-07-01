@@ -18,4 +18,5 @@ data class Anime(
     val updateStrategy: UpdateStrategy = UpdateStrategy.ALWAYS_UPDATE,
 )
 
-enum class UpdateStrategy { ALWAYS_UPDATE, ONLY_FETCH_ONCE }
+enum class UpdateStrategy {
+        ALWAYS_UPDATE, ONLY_FETCH_ONCE }

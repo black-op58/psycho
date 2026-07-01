@@ -38,6 +38,8 @@ object ConsumetScraper {
         val episodeId = gogoanimeEpisodeId("$baseUrl/anime/gogoanime/info/$id", episode) ?: return null
         return streamFromWatch("$baseUrl/anime/gogoanime/watch/$episodeId", "Gogoanime")
       }
+    
+      }
     // ── Zoro / Aniwatch ───────────────────────────────────────────────────────
 
     suspend fun fetchZoro(
@@ -50,6 +52,8 @@ object ConsumetScraper {
         val episodeId = zoroEpisodeId("$baseUrl/anime/zoro/info/$id", episode, isDub) ?: return null
         return streamFromWatch("$baseUrl/anime/zoro/watch/$episodeId", "Zoro")
       }
+    
+      }
     // ── Shared helpers ────────────────────────────────────────────────────────
 
     private suspend fun searchId(searchBase: String, title: String): String? {
@@ -59,11 +63,15 @@ object ConsumetScraper {
         if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<ConsumetSearchResp>(resp.text).results.firstOrNull()?.id
         }
+        
+        }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("ConsumetScraper.searchId: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -72,14 +80,19 @@ object ConsumetScraper {
             val resp = client.get(infoUrl);
         if (resp.statusCode != 200) return null
             val episodes = Mapper.json.decodeFromString<ConsumetInfoResp>(resp.text).episodes
-            episodes.find { it.number == episodeNumber }?.id
+            episodes.find {
+        it.number == episodeNumber }?.id
                 ?: episodes.getOrNull(episodeNumber - 1)?.id
+        }
+        
         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("ConsumetScraper.gogoanimeEpisodeId: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -90,14 +103,19 @@ object ConsumetScraper {
             val episodes = Mapper.json.decodeFromString<ConsumetInfoResp>(resp.text).episodes
             val pool = if (isDub) episodes.filter { 
         i
-            pool.find { it.number == episodeNumber }?.id
+            pool.find {
+        it.number == episodeNumber }?.id
                 ?: episodes.getOrNull(episodeNumber - 1)?.id
+        }
+        
         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("ConsumetScraper.zoroEpisodeId: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -113,13 +131,16 @@ object ConsumetScraper {
                 quality      = best.quality ?: "auto",
                 headers      = body.headers ?: emptyMap(),
                 providerName = providerName
-            )
+)
+            }
          }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("ConsumetScraper.streamFromWatch[$providerName]: ${e.message}")
               null
+          }
+    
           }
     }
 

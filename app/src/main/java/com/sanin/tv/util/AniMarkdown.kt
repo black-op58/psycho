@@ -5,7 +5,8 @@ class AniMarkdown { //istg anilist has the worst api
 companion object {
     private fun String.convertNestedImageToHtml(): String {
     val regex = """\[!\[(.*?)]\((.*?)\)]\((.*?)\)""".toRegex()
-return regex.replace(this) { matchResult ->                
+return regex.replace(this) {
+        matchResult ->                
 val altText = matchResult.groupValues[1]                
 val imageUrl = matchResult.groupValues[2]                
 val linkUrl = matchResult.groupValues[3]                """<a href="$linkUrl"><img src="$imageUrl" alt="$altText"></a>"""            }
@@ -18,25 +19,32 @@ val markdownImage = regex.replace(this) {
         m
 val altText = matchResult.groupValues[1]                
 val imageUrl = matchResult.groupValues[2]                """<img src="$imageUrl" alt="$altText">"""            }
-        return anilistRegex.replace(markdownImage) { matchResult ->                
+        return anilistRegex.replace(markdownImage) {
+        matchResult ->                
 val imageUrl = matchResult.groupValues[1]                """<img src="$imageUrl" alt="Image">"""            }
         }
 
 private fun String.convertLinkToHtml(): String {
     val regex = """\[(.*?)]\((.*?)\)""".toRegex()
-return regex.replace(this) { matchResult ->                
+return regex.replace(this) {
+        matchResult ->                
 val linkText = matchResult.groupValues[1]                
 val linkUrl = matchResult.groupValues[2]                """<a href="$linkUrl">$linkText</a>"""            }
         }
 
 private fun String.convertYoutubeToHtml(): String {
     val regex = """<div class='youtube' id='(.*?)'></div>""".toRegex()
-return regex.replace(this) { matchResult ->                
+return regex.replace(this) {
+        matchResult ->                
 val url = matchResult.groupValues[1]                
 val id = getYoutubeId(url)
 if (id.isNotEmpty()) {                    """<div>                    <a href="https://www.youtube.com/watch?v=$id"><img src="https://i3.ytimg.com/vi/$id/maxresdefault.jpg" alt="$url"></a>                    <align center>                    <a href="https://www.youtube.com/watch?v=$id">Youtube Link</a>                    </align>                    </div>""".trimIndent()
                 }
+        
+                }
         else {                    """<a href="$url">Youtube Video</a>"""                }
+        }
+    
         }
     }
 
@@ -54,7 +62,8 @@ return this.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></e
          }
 private fun String.convertCenterToHtml(): String {
     val regex = """~~~(.*?)~~~""".toRegex()
-return regex.replace(this) { matchResult ->                
+return regex.replace(this) {
+        matchResult ->                
 val centerText = matchResult.groupValues[1]                """<align center>$centerText</align>"""            }
         }
 
@@ -69,16 +78,22 @@ margin: 0
 padding: 0
 max-width: 100%
 overflow-x: hidden
-/* Prevent horizontal scrolling */            }            img {
+/* Prevent horizontal scrolling */            }
+            img {
         max-width: 100%
 height: auto
-/* Maintain aspect ratio */            }            video {
+/* Maintain aspect ratio */            }
+            video {
         max-width: 100%
 height: auto
-/* Maintain aspect ratio */            }            a {
+/* Maintain aspect ratio */            }
+            a {
         color: ${textColor.toCssColor()
 }
+}            
 }            /* Add responsive design elements for other content as needed */        </style></head><body>$basicHtml</body></html>    """.trimIndent()
 return returnHtml        }
+        }
+        
         }
         }

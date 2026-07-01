@@ -4,7 +4,8 @@ class NumberConverter {
 companion object {
     fun Number.toBinary(): String {
 return when (this) {
-        is Int -> Integer.toBinaryString(this)                is Long -> java.lang.Long.toBinaryString(this)
+        is Int -> Integer.toBinaryString(this);
+        is Long -> java.lang.Long.toBinaryString(this)
                 is Short -> Integer.toBinaryString(this.toInt())
                 is Byte -> Integer.toBinaryString(this.toInt())
                 is Double -> doubleToBinary(this)
@@ -15,7 +16,8 @@ else -> throw IllegalArgumentException("Unsupported number type")
 
 fun Number.toHex(): String {
 return when (this) {
-        is Int -> Integer.toHexString(this)                is Long -> java.lang.Long.toHexString(this)
+        is Int -> Integer.toHexString(this);
+        is Long -> java.lang.Long.toHexString(this)
                 is Short -> Integer.toHexString(this.toInt())
                 is Byte -> Integer.toHexString(this.toInt())
                 is Double -> doubleToHex(this)

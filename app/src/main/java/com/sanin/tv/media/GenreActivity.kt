@@ -26,7 +26,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
         setContentView(binding.root)
         initActivity(this)
-        binding.genreContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight
+        binding.genreContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight
 bottomMargin += navBarHeight }
 
 val screenWidth = resources.displayMetrics.run { 
@@ -34,13 +35,15 @@ val screenWidth = resources.displayMetrics.run {
 
 val type = intent.getStringExtra("type")
 if (type != null) {
-    val adapter = GenreAdapter(type, true)            model.doneListener = {
+    val adapter = GenreAdapter(type, true);
+        model.doneListener = {
                 MainScope().launch {
         binding.mediaInfoGenresProgressBar.visibility = View.GONE                }
     }
 if (model.genres != null) {
         adapter.genres = model.genres!!                adapter.pos = ArrayList(model.genres!!.keys)
-if (model.done)                    model.doneListener?.invoke()
+if (model.done);
+        model.doneListener?.invoke()
              }
 binding.mediaInfoGenresRecyclerView.adapter = adapter            binding.mediaInfoGenresRecyclerView.layoutManager =                GridLayoutManager(this, (screenWidth / 156f).toInt())
         lifecycleScope.launch(Dispatchers.IO) {
@@ -54,6 +57,9 @@ private fun loadLocalGenres(): ArrayList<String>? {
 return if (genres.isEmpty()) {
         null
 }
-        else {            //sort alphabetically            genres.sort().let { genres as ArrayList<String> }}
+        
+}
+        else {            //sort alphabetically            genres.sort().let {
+        genres as ArrayList<String> }}
 }
 }

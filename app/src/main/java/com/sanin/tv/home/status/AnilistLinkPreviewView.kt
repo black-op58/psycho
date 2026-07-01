@@ -28,6 +28,8 @@ private fun showPreview(media: Media) {
 if (episodesOrChapters != null) {
         previewEpisodes.text = episodesOrChapters                previewEpisodes.isVisible = true
 }
+        
+}
         else {
         previewEpisodes.isVisible = false            }
 previewCard.setOnClickListener {

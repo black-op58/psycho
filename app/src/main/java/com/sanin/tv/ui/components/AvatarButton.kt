@@ -24,8 +24,10 @@ fun AvatarButton(    avatarUrl: String?,    onClick: () -> Unit) {
 val settings by settingsViewModel.settings.collectAsState()    
 var isFocused by remember { 
         m
-Surface(        modifier = Modifier            .size(40.dp)            .focusable()            .onFocusChanged { isFocused = it.isFocused}
-.clickable { onClick()
+Surface(        modifier = Modifier            .size(40.dp)            .focusable()            .onFocusChanged {
+        isFocused = it.isFocused}
+.clickable {
+        onClick()
 }
 .navigationPillFocusEffect(isFocused, settings.focusEffect)            .border(                width = if (isFocused) 2.dp else 0.dp,                color = if (isFocused) Color(0xFF87CEEB) else Color.Transparent,                shape = RoundedCornerShape(50)            ),        shape = RoundedCornerShape(50),        color = Color.Transparent    ) {
         AsyncImage(            model = avatarUrl,            contentDescription = "Profile",            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(50))        )    }}

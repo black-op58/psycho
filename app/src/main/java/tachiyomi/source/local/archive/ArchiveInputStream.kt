@@ -20,9 +20,13 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
             Archive.readSupportFormatAll(archive)
             Archive.readOpenMemoryUnsafe(archive, buffer, size)
          }
+        
+         }
         catch (e: ArchiveException) {
         close()
             throw e
+        }
+    
         }
     }
 
@@ -33,10 +37,16 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
         return if (oneByteBuffer.hasRemaining()) oneByteBuffer.get().toUByte().toInt() else -1
     }
 
+    
+    }
+
     override fun read(b: ByteArray, off: Int, len: Int): Int {
         val buffer = ByteBuffer.wrap(b, off, len)
         read(buffer)
         return if (buffer.hasRemaining()) buffer.remaining() else -1
+    }
+
+    
     }
 
     private fun read(buffer: ByteBuffer) {
@@ -44,12 +54,18 @@ class ArchiveInputStream(buffer: Long, size: Long) : InputStream() {
         Archive.readData(archive, buffer)
         buffer.flip()
       }
+    
+      }
     override fun close() {
         synchronized(lock) {
             if (isClosed) return
             isClosed = true
         }
+        
+        }
         Archive.readFree(archive)
+      }
+    
       }
     fun getNextEntry() = Archive.readNextHeader(archive).takeUnless { 
         i

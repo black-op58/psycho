@@ -9,7 +9,9 @@ companion object {
     private fun queryBuilder(mediaIds: List<Int>): String {
     var query = "{"            mediaIds.forEachIndexed { 
         i
-        }            """.trimIndent()            }            query += "}"            return query        }
+        }            
+        }            """.trimIndent()            }
+            query += "}"            return query        }
         suspend 
 fun fetchMediaTitles(ids: List<Int>): Map<Int, ReturnedData> {
 return try {
@@ -19,14 +21,18 @@ val data = mapOf(                    "query" to queryBuilder(ids),              
     val response = client.post(                        url,                        headers = mapOf(                            "Content-Type" to "application/json",                            "Accept" to "application/json"                        ),
 data = data                    )                    
 val mediaResponse = parseMediaResponseWithGson(response.text)                    
-val mediaMap = mutableMapOf<Int, ReturnedData>()                    mediaResponse.data.forEach { 
+val mediaMap = mutableMapOf<Int, ReturnedData>();
+        mediaResponse.data.forEach { 
         (
                         mediaMap[mediaItem.id] = ReturnedData(                            mediaItem.title.romaji,                            mediaItem.coverImage.medium,                            mediaItem.coverImage.color                        )
                     }
 mediaMap}
 }
+        
+}
         catch (e: Exception) {
-        val errorMap = mutableMapOf<Int, ReturnedData>()                ids.forEach { 
+        val errorMap = mutableMapOf<Int, ReturnedData>();
+        ids.forEach { 
         e
     errorMap}
     }

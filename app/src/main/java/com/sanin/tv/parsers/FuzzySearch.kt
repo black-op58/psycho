@@ -13,6 +13,8 @@ object FuzzySearch {
         val maxLen = longer.length.toDouble()
         return ((1.0 - distance / maxLen) * 100).toInt()
       }
+    
+      }
     private fun levenshtein(s1: String, s2: String): Double {
         val m = s1.length
         val n = s2.length
@@ -25,10 +27,16 @@ object FuzzySearch {
                 dp[i][j] = if (s1[i - 1] == s2[j - 1]) {
         dp[i - 1][j - 1]
                 }
+        
+                }
         else {
                     1 + minOf(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
                  }
+            
+                 }
             }
+        }
+        
         }
         return dp[m][n].toDouble()
      }

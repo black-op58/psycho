@@ -46,7 +46,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 @SuppressLint("ClickableViewAccessibility")
-class CommentsFragment : Fragment() {    lateinit var binding: FragmentCommentsBinding    lateinit var activity: MediaDetailsActivity    
+class CommentsFragment : Fragment() {
+        lateinit var binding: FragmentCommentsBinding    lateinit var activity: MediaDetailsActivity    
 private var interactionState = InteractionState.NONE    
 private var commentWithInteraction: CommentItem? = null    
 private val section = Section()    
@@ -87,7 +88,8 @@ val markwon = buildMarkwon(activity, fragment = this
 val markwonEditor = MarkwonEditor.create(markwon)
         activity.binding.commentInput.addTextChangedListener(
             MarkwonEditorTextWatcher.withProcess(                markwonEditor            )        )        
-val isOfflineOrLocal = !com.sanin.tv.isOnline(activity)        binding.commentsRefresh.setOnRefreshListener {
+val isOfflineOrLocal = !com.sanin.tv.isOnline(activity);
+        binding.commentsRefresh.setOnRefreshListener {
     val refreshOffline = !com.sanin.tv.isOnline(activity)
 if (refreshOffline) {
         binding.commentsRefresh.isRefreshing = false                return@setOnRefreshListener            }
@@ -98,26 +100,34 @@ binding.commentsOfflineText.visibility = View.GONE                        bindin
 if (commentId != null && commentId > 0) {
         loadSingleComment(commentId)
  }
+        
+ }
         else {
         loadAndDisplayComments()
                             }
 }
 }
+        
+}
         else {
         activity.binding.commentMessageContainer.visibility = View.GONE                    }}}}
-binding.commentSort.setOnClickListener { sortView ->
+binding.commentSort.setOnClickListener {
+        sortView ->
 fun sortComments(sortOrder: String) {
     val groups = section.groups
 when (sortOrder) {
-        "newest" -> groups.sortByDescending { CommentItem.timestampToMillis((it as CommentItem).comment.timestamp)
+        "newest" -> groups.sortByDescending {
+        CommentItem.timestampToMillis((it as CommentItem).comment.timestamp)
  }
-"oldest" -> groups.sortBy { CommentItem.timestampToMillis((it as CommentItem).comment.timestamp)
+"oldest" -> groups.sortBy {
+        CommentItem.timestampToMillis((it as CommentItem).comment.timestamp)
 }
 "highest_rated" -> groups.sortByDescending { (it as CommentItem).comment.upvotes - it.comment.downvotes}
 "lowest_rated" -> groups.sortBy { (it as CommentItem).comment.upvotes - it.comment.downvotes}}
 section.update(groups)
              }
-val popup = PopupMenu(activity, sortView)            popup.setOnMenuItemClickListener { 
+val popup = PopupMenu(activity, sortView);
+        popup.setOnMenuItemClickListener { 
         i
                 
 val sortOrder = when (item.itemId) {
@@ -126,13 +136,17 @@ else -> return@setOnMenuItemClickListener false                }
 PrefManager.setVal(PrefName.CommentSortOrder, sortOrder)
 if (totalPages > pagesLoaded) {
         lifecycleScope.launch {
-        loadAndDisplayComments()                        activity.binding.commentReplyToContainer.visibility = View.GONE
+        loadAndDisplayComments();
+        activity.binding.commentReplyToContainer.visibility = View.GONE
                     }
+}
+        
 }
         else {
         sortComments(sortOrder)
                 }
-binding.commentsList.scrollToPosition(0)                true}
+binding.commentsList.scrollToPosition(0);
+        true}
 popup.inflate(R.menu.comments_sort_menu)
         popup.show()
 }
@@ -153,7 +167,8 @@ binding.commentFilter.setOnClickListener {
                     lifecycleScope.launch {
                         loadAndDisplayComments()                    }}
     setNeutralButton("Clear") {
-        filterTag = null                    updateCurrentProgressButton()                    lifecycleScope.launch {
+        filterTag = null                    updateCurrentProgressButton();
+        lifecycleScope.launch {
                         loadAndDisplayComments()}}
     setNegButton("Cancel") {}
     show()}}
@@ -163,9 +178,12 @@ if (progress <= 0) return@setOnClickListener
 if (filterTag != null && filterTag != progress) {
         filterTag = null                isAutoFilterOn = false
 }
+        
+}
         else {
         isAutoFilterOn = !isAutoFilterOn            }
-updateCurrentProgressButton()            lifecycleScope.launch {
+updateCurrentProgressButton();
+        lifecycleScope.launch {
                 loadAndDisplayComments()}}
 binding.commentCurrentProgress.setOnLongClickListener {
     val progress = userProgress ?: return@setOnLongClickListener false
@@ -178,7 +196,8 @@ val items = Array(maxEp) {
 
 val currentSelection = if (filterTag != null) filterTag!! - 1 else progress - 1            activity.customAlertDialog().apply {                
         s
-                    filterTag = selected + 1                    isAutoFilterOn = true                    updateCurrentProgressButton()                    lifecycleScope.launch {
+                    filterTag = selected + 1                    isAutoFilterOn = true                    updateCurrentProgressButton();
+        lifecycleScope.launch {
                         loadAndDisplayComments()                    }}
 show()
 }
@@ -190,11 +209,14 @@ object : View.OnTouchListener {
 if (event?.action == MotionEvent.ACTION_UP) {
 if (!binding.commentsList.canScrollVertically(1) && !isFetching &&                            (binding.commentsList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.commentsList.adapter!!.itemCount - 1)                        ) {
 if (pagesLoaded < totalPages && totalPages > 1) {
-        binding.commentBottomRefresh.visibility = View.VISIBLE                                loadMoreComments()                                lifecycleScope.launch {
+        binding.commentBottomRefresh.visibility = View.VISIBLE                                loadMoreComments();
+        lifecycleScope.launch {
                                     kotlinx.coroutines.delay(1000)
         withContext(Dispatchers.Main) {
                                         binding.commentBottomRefresh.visibility = View.GONE                                    }
 }
+}
+        
 }
         else {                                //snackString("No more comments") fix spam?                                Logger.log("No more comments")                            }}
 }
@@ -202,9 +224,12 @@ return false                }
 
 private fun loadMoreComments() {                    
         i
-    val comments = fetchComments()                        comments?.comments?.forEach { 
+    val comments = fetchComments();
+        comments?.comments?.forEach { 
         c
                             updateUIWithComment(comment)
+                        }
+    
                         }
     totalPages = comments?.totalPages ?: 1                        pagesLoaded++;
         isFetching = false}
@@ -233,14 +258,18 @@ override fun afterTextChanged(s: android.text.Editable?) {
 if ((activity.binding.commentInput.text.length) > 300) {
         activity.binding.commentInput.text.delete(                        300,                        activity.binding.commentInput.text.length                    )
         snackString("Comment cannot be longer than 300 characters")                }}
-})        activity.binding.commentInput.setOnFocusChangeListener { _, hasFocus ->
+});
+        activity.binding.commentInput.setOnFocusChangeListener {
+        _, hasFocus ->
 if (hasFocus) {
     val targetWidth = activity.binding.commentInputLayout.width -                        activity.binding.commentLabel.width -                        activity.binding.commentSend.width -                        activity.binding.commentUserAvatar.width - 12 + 16
-val anim = ValueAnimator.ofInt(activity.binding.commentInput.width, targetWidth)                anim.addUpdateListener { 
+val anim = ValueAnimator.ofInt(activity.binding.commentInput.width, targetWidth);
+        anim.addUpdateListener { 
         v
                     
 val layoutParams = activity.binding.commentInput.layoutParams                    layoutParams.width = valueAnimator.animatedValue as Int                    activity.binding.commentInput.layoutParams = layoutParams                }
-anim.duration = 300                anim.start()                anim.doOnEnd {
+anim.duration = 300                anim.start();
+        anim.doOnEnd {
                     activity.binding.commentLabel.visibility = View.VISIBLE                    activity.binding.commentSend.visibility = View.VISIBLE                    activity.binding.commentSpoiler.visibility = View.VISIBLE                    activity.binding.commentGif.visibility = View.VISIBLE                    activity.binding.commentLabel.animate().translationX(0f).setDuration(300)                        .start()
         activity.binding.commentSend.animate().translationX(0f).setDuration(300).start()}}
 activity.binding.commentLabel.setOnClickListener {                //alert dialog to enter a number, with a cancel and ok button                activity.customAlertDialog().apply {
@@ -252,6 +281,8 @@ activity.binding.commentLabel.setOnClickListener {                //alert dialog
         tag = text.toIntOrNull()
 if (tag == null) {
         activity.binding.commentLabel.background = ResourcesCompat.getDrawable(                                resources,                                R.drawable.ic_label_off_24,                                null                            )
+ }
+        
  }
         else {
         activity.binding.commentLabel.background = ResourcesCompat.getDrawable(                                resources,                                R.drawable.ic_label_24,                                null                            )                        }}
@@ -268,7 +299,8 @@ if (isSpoilerMode) R.drawable.format_spoiler_24
 else R.drawable.ic_round_remove_red_eye_24            )
         }
 // GIF picker button        activity.binding.commentGif.setOnClickListener {
-    val gifPicker = GifPickerBottomDialog.newInstance()            gifPicker.setOnGifSelectedListener { 
+    val gifPicker = GifPickerBottomDialog.newInstance();
+        gifPicker.setOnGifSelectedListener { 
         g
                 
 val currentText = activity.binding.commentInput.text.toString()                
@@ -285,6 +317,8 @@ if (CommentsAPI.isBanned) {
             }
 if (PrefManager.getVal(PrefName.FirstComment)) {
         showCommentRulesDialog()
+ }
+        
  }
         else {
         showTagDialogThenProcess()            }}
@@ -309,9 +343,13 @@ if (isAnime) {
 if (ep != null) {
         model.onEpisodeClick(currentMedia, tag, childFragmentManager, true)
  }
+        
+ }
         else {
         snackString("Episode $tag not found for this provider")
             }
+}
+        
 }
         else {
     val selected = currentMedia.selected
@@ -331,17 +369,20 @@ when {
         badge.text = "$label $activeFilter  ✕"                badge.alpha = 1f
 val primaryColor = resolveColorAttr(com.google.android.material.R.attr.colorPrimary)
         badge.setTextColor(
-                    resolveColorAttr(com.google.android.material.R.attr.colorOnPrimary)                )                badge.background = android.graphics.drawable.GradientDrawable().apply {
+                    resolveColorAttr(com.google.android.material.R.attr.colorOnPrimary)                );
+        badge.background = android.graphics.drawable.GradientDrawable().apply {
         shape = android.graphics.drawable.GradientDrawable.RECTANGLE                    cornerRadius = 16f * resources.displayMetrics.density                    setColor(primaryColor)                }}
 isAutoFilterOn -> {
-        badge.text = "$label $progress"                badge.alpha = 1f                badge.setTextColor(                    resolveColorAttr(android.R.attr.textColorPrimary)                )                badge.background = android.graphics.drawable.GradientDrawable().apply {
+        badge.text = "$label $progress"                badge.alpha = 1f                badge.setTextColor(                    resolveColorAttr(android.R.attr.textColorPrimary)                );
+        badge.background = android.graphics.drawable.GradientDrawable().apply {
         shape = android.graphics.drawable.GradientDrawable.RECTANGLE                    cornerRadius = 16f * resources.displayMetrics.density                    setColor(android.graphics.Color.TRANSPARENT)
         setStroke(
                         (1f * resources.displayMetrics.density).toInt(),                        android.graphics.Color.WHITE                    )
                 }
 }
 else -> {
-        badge.text = "$label $progress"                badge.alpha = 0.33f                badge.setTextColor(                    resolveColorAttr(android.R.attr.textColorPrimary)                )                badge.background = android.graphics.drawable.GradientDrawable().apply {
+        badge.text = "$label $progress"                badge.alpha = 0.33f                badge.setTextColor(                    resolveColorAttr(android.R.attr.textColorPrimary)                );
+        badge.background = android.graphics.drawable.GradientDrawable().apply {
         shape = android.graphics.drawable.GradientDrawable.RECTANGLE                    cornerRadius = 16f * resources.displayMetrics.density                    setColor(android.graphics.Color.TRANSPARENT)
         setStroke(
                         (1f * resources.displayMetrics.density).toInt(),                        android.graphics.Color.WHITE                    )                }}}
@@ -379,6 +420,8 @@ if (entered != null && total != null && total > 0 && entered > total) {
         snackString("Tag cannot exceed total ${label}s ($total)");
         tag = null
 }
+        
+}
         else {
         tag = entered                }
 activity.binding.commentLabel.background = if (tag != null)
@@ -402,7 +445,8 @@ val sortOrder = PrefManager.getVal(PrefName.CommentSortOrder, "newest")
 val effectiveFilter = getEffectiveFilter()                
 val comments = withContext(Dispatchers.IO) {            
         C
-comments?.comments?.forEach { comment ->            withContext(Dispatchers.Main) {
+comments?.comments?.forEach {
+        comment ->            withContext(Dispatchers.Main) {
         section.add(                    CommentItem(                        comment,                        buildMarkwon(activity, fragment = this
 @CommentsFragment),                        section,                        this
 @CommentsFragment,                        backgroundColor,                        0                    )                )            }}
@@ -422,12 +466,16 @@ binding.commentsProgressBar.visibility = View.GONE        binding.commentsList.v
 
 private fun sortComments(comments: List<Comment>?): List<Comment> {
 if (comments == null) return emptyList()
-return when (PrefManager.getVal(PrefName.CommentSortOrder, "newest")) {            "newest" -> comments.sortedByDescending { CommentItem.timestampToMillis(it.timestamp)
+return when (PrefManager.getVal(PrefName.CommentSortOrder, "newest")) {            "newest" -> comments.sortedByDescending {
+        CommentItem.timestampToMillis(it.timestamp)
  }
-"oldest" -> comments.sortedBy { CommentItem.timestampToMillis(it.timestamp)
+"oldest" -> comments.sortedBy {
+        CommentItem.timestampToMillis(it.timestamp)
 }
-"highest_rated" -> comments.sortedByDescending { it.upvotes - it.downvotes}
-"lowest_rated" -> comments.sortedBy { it.upvotes - it.downvotes }
+"highest_rated" -> comments.sortedByDescending {
+        it.upvotes - it.downvotes}
+"lowest_rated" -> comments.sortedBy {
+        it.upvotes - it.downvotes }
 else -> comments        }}
 /**     * Resets the old state of the comment input     * @return the old state     */
 private fun resetOldState(): InteractionState {
@@ -435,11 +483,13 @@ private fun resetOldState(): InteractionState {
 return when (oldState) {
         InteractionState.EDIT -> {
         activity.binding.commentReplyToContainer.visibility = View.GONE                activity.binding.commentInput.setText("")                
-val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager                imm.hideSoftInputFromWindow(activity.binding.commentInput.windowToken, 0)                commentWithInteraction?.editing(false)
+val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager                imm.hideSoftInputFromWindow(activity.binding.commentInput.windowToken, 0);
+        commentWithInteraction?.editing(false)
                 InteractionState.EDIT            }
 InteractionState.REPLY -> {
         activity.binding.commentReplyToContainer.visibility = View.GONE                activity.binding.commentInput.setText("")
-val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager                imm.hideSoftInputFromWindow(activity.binding.commentInput.windowToken, 0)                commentWithInteraction?.replying(false)
+val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager                imm.hideSoftInputFromWindow(activity.binding.commentInput.windowToken, 0);
+        commentWithInteraction?.replying(false)
                 InteractionState.REPLY
 }
 else -> {
@@ -464,11 +514,14 @@ val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager 
 
 fun replyTo(comment: CommentItem, username: String) {
 if (comment.isReplying) {
-        activity.binding.commentReplyToContainer.visibility = View.VISIBLE            activity.binding.commentReplyTo.text = getString(R.string.replying_to, username)            activity.binding.commentReplyToCancel.setOnClickListener {
+        activity.binding.commentReplyToContainer.visibility = View.VISIBLE            activity.binding.commentReplyTo.text = getString(R.string.replying_to, username);
+        activity.binding.commentReplyToCancel.setOnClickListener {
                 comment.replying(false)
         replyCallback(comment)
                 activity.binding.commentReplyToContainer.visibility = View.GONE
             }
+}
+        
 }
         else {
         activity.binding.commentReplyToContainer.visibility = View.GONE        }}
@@ -510,6 +563,8 @@ val finalText = commentText        lifecycleScope.launch {
 if (interactionState == InteractionState.EDIT) {
         handleEditComment(finalText)
  }
+        
+ }
         else {
         handleNewComment(finalText);
         tag = null
@@ -535,12 +590,15 @@ if (item is CommentItem && item.comment.commentId == commentWithInteraction?.com
         updateCommentItem(item, commentText)
         snackString("Comment edited")
              }
+            
+             }
             }
 }
 
 private fun updateCommentItem(item: CommentItem, commentText: String) {        
         i
-val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         item.comment.timestamp = dateFormat.format(System.currentTimeMillis())
         item.notifyChanged()
      }
@@ -558,10 +616,13 @@ val section =
 if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction?.parentSection else commentWithInteraction?.repliesSection
 val depth =
 if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.commentDepth else commentWithInteraction!!.commentDepth + 1
-if (depth >= commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.registerSubComment(                    it.commentId                )                section?.add(
+if (depth >= commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.registerSubComment(                    it.commentId                );
+        section?.add(
 if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) 0 else section.itemCount,                    CommentItem(                        it,                        buildMarkwon(activity, fragment = this
 @CommentsFragment),                        section,                        this
 @CommentsFragment,                        backgroundColor,                        depth                    )
+                 }
+        
                  }
         else {
         section.add(                    0,                    CommentItem(                        it,                        buildMarkwon(activity, fragment = this

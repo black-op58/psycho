@@ -29,9 +29,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 navBar = binding.notificationNavBar        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         bottomMargin = navBarHeight        }
 
-val tabs = listOf(            Pair(R.drawable.ic_round_person_24, "Following"),            Pair(R.drawable.ic_globe_24, "Global"),        )        tabs.forEach { 
+val tabs = listOf(            Pair(R.drawable.ic_round_person_24, "Following"),            Pair(R.drawable.ic_globe_24, "Global"),        );
+        tabs.forEach { 
         (
-binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+binding.notificationBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
   }
 val getOne = intent.getIntExtra("activityId", -1)
 if (getOne != -1) {

@@ -44,6 +44,8 @@ val file: FileUrl,    /**     * format of the Subtitle     *     * Supports VTT,
 val type: SubtitleType = SubtitleType.VTT,) : Serializable {    
         c
 
-enum class VideoType {    CONTAINER, M3U8, DASH}
+enum class VideoType {
+        CONTAINER, M3U8, DASH}
 
-enum class SubtitleType {    VTT, ASS, SRT, UNKNOWN}
+enum class SubtitleType {
+        VTT, ASS, SRT, UNKNOWN}

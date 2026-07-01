@@ -38,7 +38,8 @@ var isMod: Boolean = false
 var totalVotes: Int = 0    suspend 
 fun getCommentsForId(        id: Int,        page: Int = 1,        tag: Int?,        sort: String?    ): CommentResponse? {
     var url = "$ADDRESS/comments/$id/$page"        
-val request = requestBuilder()        tag?.let {
+val request = requestBuilder();
+        tag?.let {
             url += "?tag=$it"        }
 sort?.let {
         url += if (tag != null) "&sort=$it" else "?sort=$it"        }
@@ -240,6 +241,8 @@ return
 } else if (json.code != 429) {
         errorReason(json.code, json.text)
 return                }
+}
+        
 }
         catch (e: IOException) {
         Logger.log(e)

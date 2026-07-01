@@ -42,9 +42,13 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             _results.value = emptyList()
             return
         }
+        
+        }
         debounceJob = viewModelScope.launch {
             delay(400)
             search(text)
+         }
+    
          }
     }
 
@@ -54,7 +58,10 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         debounceJob?.cancel();
         if (text.isBlank()) return
         addToHistory(text)
-        viewModelScope.launch { search(text)
+        viewModelScope.launch {
+        search(text)
+ }
+    
  }
     }
 
@@ -62,23 +69,37 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         _filter.value = newFilter
         val q = _query.value
         if (q.isNotBlank()) {
-            viewModelScope.launch { search(q)
+            viewModelScope.launch {
+        search(q)
+ }
+        
  }
         }
     }
 
+    
+    }
+
     fun removeFromHistory(entry: String) {
-        _history.value = _history.value.filter { it != entry }
+        _history.value = _history.value.filter {
+        it != entry }
+    }
+
+    
     }
 
     fun clearHistory() {
         _history.value = emptyList()
+      }
+    
       }
     private fun addToHistory(entry: String) {
         val current = _history.value.toMutableList()
         current.remove(entry)
         current.add(0, entry)
         _history.value = current.take(20)
+      }
+    
       }
     private suspend fun search(queryText: String) {
         _isLoading.value = true
@@ -90,11 +111,15 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             )
             _results.value = mediaList ?: emptyList()
          }
+        
+         }
         catch (e: Exception) {
         Logger.log(e)
             _results.value = emptyList()
         } finally {
             _isLoading.value = false
+        }
+    
         }
     }
 }

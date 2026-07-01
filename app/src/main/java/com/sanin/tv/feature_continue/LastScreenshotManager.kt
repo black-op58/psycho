@@ -16,7 +16,8 @@ import java.io.FileOutputStream
  *
  * Integration point in the player:
  *   // When playback pauses / stops, capture the current frame:
- *   player.createMessage { _, _ ->
+ *   player.createMessage {
+        _, _ ->
  *       val bitmap = playerView.videoSurfaceView?.drawToBitmap() ?: return@createMessage
  *       LastScreenshotManager.save(context, mediaId, bitmap)
  *   }
@@ -24,7 +25,10 @@ import java.io.FileOutputStream
 object LastScreenshotManager {
 
     private fun screenshotDir(context: Context): File =
-        File(context.filesDir, "screenshots").also { it.mkdirs()
+        File(context.filesDir, "screenshots").also {
+        it.mkdirs()
+  }
+    
   }
     private fun screenshotFile(context: Context, mediaId: Int): File =
         File(screenshotDir(context), "$mediaId.jpg")
@@ -33,12 +37,17 @@ object LastScreenshotManager {
     fun save(context: Context, mediaId: Int, bitmap: Bitmap) {
         try {
             val file = screenshotFile(context, mediaId)
-            FileOutputStream(file).use { out ->
+            FileOutputStream(file).use {
+        out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
+             }
+        
              }
         }
         catch (_: Exception) {
         // Silently ignore I/O errors — screenshot is non-critical
+        }
+    
         }
     }
 
@@ -52,8 +61,12 @@ object LastScreenshotManager {
         return try {
             BitmapFactory.decodeFile(file.absolutePath)
          }
+        
+         }
         catch (_: Exception) {
         null
+        }
+    
         }
     }
 
@@ -65,9 +78,14 @@ object LastScreenshotManager {
     fun clear(context: Context, mediaId: Int) {
         screenshotFile(context, mediaId).delete()
       }
+    
+      }
     /** Delete all saved screenshots. */
     fun clearAll(context: Context) {
-        screenshotDir(context).listFiles()?.forEach { it.delete()
+        screenshotDir(context).listFiles()?.forEach {
+        it.delete()
+ }
+    
  }
     }
 }

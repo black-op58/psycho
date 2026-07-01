@@ -44,6 +44,9 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
+    
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,6 +63,8 @@ class SearchFragment : Fragment() {
             binding.searchEditText.setText(currentQuery)
             binding.searchEditText.setSelection(currentQuery.length)
          }
+    
+         }
     }
 
     private fun setupSearchBar() {
@@ -70,9 +75,12 @@ class SearchFragment : Fragment() {
                 searchViewModel.onQueryChanged(s?.toString() ?: "")
                 updateHistoryVisibility()
              }
+        
+             }
         })
 
-        binding.searchEditText.setOnEditorActionListener { v, actionId, event ->
+        binding.searchEditText.setOnEditorActionListener {
+        v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 event?.keyCode == KeyEvent.KEYCODE_ENTER
             ) {
@@ -81,14 +89,20 @@ class SearchFragment : Fragment() {
             } else false
         }
 
+        
+        }
+
         binding.searchClearButton.setOnClickListener {
             binding.searchEditText.text?.clear()
             searchViewModel.onQueryChanged("")
          }
+    
+         }
     }
 
     private fun setupGenreChips() {
-        animeGenres.forEach { genre ->
+        animeGenres.forEach {
+        genre ->
             val chip = Chip(requireContext()).apply {
                 text = genre
                 isCheckable = true
@@ -98,19 +112,28 @@ class SearchFragment : Fragment() {
                     searchViewModel.applyFilter(current.copy(genre = newGenre))
                     isChecked = newGenre != null
                 }
+            
+                }
             }
             binding.genreChipGroup.addView(chip)
+         }
+    
          }
     }
 
     private fun setupFilterButton() {
         binding.filterButton.setOnClickListener {
             val sheet = AdvancedSearchFilterBottomSheet.newInstance(searchViewModel.filter.value)
-            sheet.onFiltersApplied = { filter ->
+            sheet.onFiltersApplied = {
+        filter ->
                 searchViewModel.applyFilter(filter)
                 updateFilterBadge(filter)
              }
+            
+             }
             sheet.show(childFragmentManager, "filter")
+         }
+    
          }
     }
 
@@ -119,12 +142,18 @@ class SearchFragment : Fragment() {
         binding.filterBadge.isVisible = count > 0
         binding.filterBadge.text = count.toString()
       }
+    
+      }
     private fun setupResultsGrid() {
         binding.resultsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+      }
+    
       }
     private fun setupHistoryList() {
         binding.historyClearButton.setOnClickListener {
             searchViewModel.clearHistory()
+         }
+    
          }
     }
 
@@ -134,15 +163,22 @@ class SearchFragment : Fragment() {
         binding.resultsSection.isVisible = !showHistory
     }
 
+    
+    }
+
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.isLoading.collect { loading ->
+            searchViewModel.isLoading.collect {
+        loading ->
                 binding.searchProgressBar.isVisible = loading
+            }
+        
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.results.collect { media ->
+            searchViewModel.results.collect {
+        media ->
                 binding.resultsRecyclerView.swapAdapter(
                     MediaAdaptor(0, media.toMutableList(), requireActivity()),
                     false
@@ -151,26 +187,38 @@ class SearchFragment : Fragment() {
                         !searchViewModel.isLoading.value &&
                         binding.searchEditText.text?.isNotBlank() == true
             }
+        
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.history.collect { history ->
+            searchViewModel.history.collect {
+        history ->
                 updateHistoryList(history)
                 updateHistoryVisibility()
+             }
+        
              }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.filter.collect { filter ->
+            searchViewModel.filter.collect {
+        filter ->
                 updateFilterBadge(filter)
                 syncGenreChips(filter.genre)
+             }
+        
              }
         }
     }
 
+    
+    }
+
     private fun updateHistoryList(history: List<String>) {
         binding.historyContainer.removeAllViews()
-        history.forEach { entry ->
+        history.forEach {
+        entry ->
             val chip = Chip(requireContext()).apply {
                 text = entry
                 isCloseIconVisible = true
@@ -178,11 +226,17 @@ class SearchFragment : Fragment() {
                     binding.searchEditText.setText(entry)
                     searchViewModel.onSearchSubmit(entry)
                  }
+                
+                 }
                 setOnCloseIconClickListener {
                     searchViewModel.removeFromHistory(entry)
                  }
+            
+                 }
             }
             binding.historyContainer.addView(chip)
+         }
+    
          }
     }
 
@@ -190,6 +244,8 @@ class SearchFragment : Fragment() {
         for (i in 0 until binding.genreChipGroup.childCount) {
         val chip = binding.genreChipGroup.getChildAt(i) as? Chip ?: continue
             chip.isChecked = chip.text == activeGenre
+        }
+    
         }
     }
 

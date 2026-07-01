@@ -35,7 +35,8 @@ val context = binding.root.context
 val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         binding.activityUserAvatar.loadImage(reply.user.avatar?.medium)
         binding.activityUserName.text = reply.user.name
-        binding.activityTime.text = ActivityItemBuilder.getDateTime(reply.createdAt)        binding.activityLikeCount.text = reply.likeCount.toString()
+        binding.activityTime.text = ActivityItemBuilder.getDateTime(reply.createdAt);
+        binding.activityLikeCount.text = reply.likeCount.toString()
         
 val likeColor = ContextCompat.getColor(context, R.color.yt_red)        
 val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
@@ -44,7 +45,8 @@ val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
 val markwon = buildMarkwon(context)
         markwon.setMarkdown(binding.activityContent, getBasicAniHTML(reply.text))
         
-val userList = arrayListOf<User>()        reply.likes?.forEach { 
+val userList = arrayListOf<User>();
+        reply.likes?.forEach { 
         i
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage, isFollowing = i.isFollowing, isFollower = i.isFollower))
         }
@@ -62,11 +64,16 @@ if (res != null) {
 if (reply.isLiked) {
         reply.likeCount = reply.likeCount.minus(1)
  }
+        
+ }
         else {
         reply.likeCount = reply.likeCount.plus(1)
                         }
-binding.activityLikeCount.text = (reply.likeCount).toString()                        reply.isLiked = !reply.isLiked
+binding.activityLikeCount.text = (reply.likeCount).toString();
+        reply.isLiked = !reply.isLiked
                         binding.activityLike.setColorFilter(if (reply.isLiked) likeColor else notLikeColor)
+ }
+        
  }
         else {
         snackString("Failed to like activity")                    }}}}
@@ -84,6 +91,8 @@ if (res) {
         snackString("Deleted")
         parentAdapter.remove(this
 @ActivityReplyItem)
+ }
+        
  }
         else {
         snackString("Failed to delete")                    }}}}

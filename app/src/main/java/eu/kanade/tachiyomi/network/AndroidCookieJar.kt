@@ -10,7 +10,8 @@ class AndroidCookieJar : CookieJar {
     }
 
 override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-    val urlString = url.toString()        cookies.forEach { 
+    val urlString = url.toString();
+        cookies.forEach { 
         m
     }
 
@@ -21,8 +22,11 @@ fun get(url: HttpUrl): List<Cookie> {
     val cookies = manager?.getCookie(url.toString())
 return if (!cookies.isNullOrEmpty()) {
         cookies.split("
-").mapNotNull { Cookie.parse(url, it)
+").mapNotNull {
+        Cookie.parse(url, it)
  }
+}
+        
 }
         else {
         emptyList()
@@ -34,15 +38,20 @@ fun remove(url: HttpUrl, cookieNames: List<String>? = null, maxAge: Int = -1): I
 val cookies = manager?.getCookie(urlString) ?: return 0
 fun List<String>.filterNames(): List<String> {
 return if (cookieNames != null) {
-        this.filter { it in cookieNames }
+        this.filter {
+        it in cookieNames }
+}
+        
 }
         else {
         this            }
 }
 return cookies.split("
-")            .map { it.substringBefore("=")
+")            .map {
+        it.substringBefore("=")
  }
-.filterNames()            .onEach { manager.setCookie(urlString, "$it=
+.filterNames()            .onEach {
+        manager.setCookie(urlString, "$it=
 Max-Age=$maxAge")
  }
 .count()

@@ -26,6 +26,8 @@ if (percent != prevVal) {
 override fun onFinish() {                
         o
             }
+            
+            }
             }
 timer.start()
      }

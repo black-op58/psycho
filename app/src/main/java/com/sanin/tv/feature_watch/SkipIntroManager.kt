@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
  *   // 1. Create once after inflating the view
  *   val skipManager = SkipIntroManager(
  *       skipButton = binding.skipIntroButton,   // a Button/TextView in your layout
- *       onSkip = { seconds -> player.seekTo((seconds * 1000).toLong())
+ *       onSkip = {
+        seconds -> player.seekTo((seconds * 1000).toLong())
  }
  *   )
  *
@@ -54,6 +55,8 @@ class SkipIntroManager(
         fetchJob = scope.launch {
             result = AniSkipApi.getSkipTimes(malId, episodeNumber)
          }
+    
+         }
     }
 
     fun onPlayerProgress(currentSeconds: Double) {
@@ -70,6 +73,8 @@ class SkipIntroManager(
         currentInterval = null
             hideButton()
          }
+    
+         }
     }
 
     private fun showButton(interval: AniSkipApi.SkipInterval) {
@@ -78,6 +83,8 @@ class SkipIntroManager(
             AniSkipApi.SkipType.MIXED_OPENING -> skipButton.context.getString(R.string.skip_intro)
             AniSkipApi.SkipType.ENDING,
             AniSkipApi.SkipType.MIXED_ENDING  -> skipButton.context.getString(R.string.skip_ending)
+         }
+        
          }
         if (skipButton is android.widget.TextView) skipButton.text = label
 
@@ -89,6 +96,8 @@ class SkipIntroManager(
             onSkip(interval.endTime)
             hideButton()
          }
+    
+         }
     }
 
     private fun hideButton() {
@@ -98,6 +107,8 @@ class SkipIntroManager(
         )
         skipButton.visibility = View.GONE
         skipButton.setOnClickListener(null)
+      }
+    
       }
     fun reset() {
         fetchJob?.cancel()

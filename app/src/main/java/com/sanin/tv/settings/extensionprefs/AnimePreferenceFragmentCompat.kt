@@ -25,6 +25,8 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {        
         p
         }
+    
+        }
     }
 
 override fun onCreate(savedInstanceState: Bundle?) {        
@@ -39,24 +41,30 @@ private fun populateAnimePreferenceScreen(): PreferenceScreen {
     val sourceId = requireArguments().getLong(SOURCE_ID)        
 val source = Injekt.get<AnimeSourceManager>().get(sourceId) as? ConfigurableAnimeSource            ?: error("Source with id: $sourceId not found!")        
 val sharedPreferences =            requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)        
-val dataStore = SharedPreferencesDataStore(sharedPreferences)        preferenceManager.preferenceDataStore = dataStore
+val dataStore = SharedPreferencesDataStore(sharedPreferences);
+        preferenceManager.preferenceDataStore = dataStore
 val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
         source.setupPreferenceScreen(sourceScreen)
-        sourceScreen.forEach { pref ->
+        sourceScreen.forEach {
+        pref ->
             pref.isIconSpaceReserved = false
 if (pref is DialogPreference) {
         pref.dialogTitle = pref.title            }
 if (pref is EditTextPreference) {
-    val setListener = pref.getOnBindEditTextListener()                pref.setOnBindEditTextListener {
+    val setListener = pref.getOnBindEditTextListener();
+        pref.setOnBindEditTextListener {
                     setListener?.onBindEditText(it)
         it.setIncognito(lifecycleScope)
+                 }
+                
                  }
                 }
     }
 return sourceScreen    }
 
 fun getInstance(        sourceId: Long,        onCloseAction: (() -> Unit)? = null    ): AnimeSourcePreferencesFragment {
-    val fragment = AnimeSourcePreferencesFragment()        fragment.arguments = bundleOf(SOURCE_ID to sourceId)
+    val fragment = AnimeSourcePreferencesFragment();
+        fragment.arguments = bundleOf(SOURCE_ID to sourceId)
         fragment.onCloseAction = onCloseAction
 return fragment    }
 
@@ -70,11 +78,15 @@ val currContext: Context) : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {        
         p
         }
+    
+        }
     //set background color
-val color =            requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor)        view?.setBackgroundColor(color)
+val color =            requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor);
+        view?.setBackgroundColor(color)
       }
 fun populateAnimePreferenceScreen(): PreferenceScreen {
-    val dataStore = SharedPreferencesDataStore(sharedPreferences)        preferenceManager.preferenceDataStore = dataStore
+    val dataStore = SharedPreferencesDataStore(sharedPreferences);
+        preferenceManager.preferenceDataStore = dataStore
 val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
         source.setupPreferenceScreen(sourceScreen)
 return sourceScreen    }}

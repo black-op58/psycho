@@ -1,7 +1,9 @@
 package com.sanin.tv.media
 
 init {
-        searchHistoryLiveData =            PrefManager.getLiveVal(historyType, mutableListOf<SearchHistory>()).asLiveClass()        searchHistoryLiveData?.observeForever { data ->
+        searchHistoryLiveData =            PrefManager.getLiveVal(historyType, mutableListOf<SearchHistory>()).asLiveClass();
+        searchHistoryLiveData?.observeForever {
+        data ->
             searchHistory = data.toMutableList()
         submitList(searchHistory?.sorted())
          }
@@ -14,7 +16,8 @@ PrefManager.setVal(historyType, searchHistory)
       }
 fun add(item: String) {
     val maxSize = 25
-if (searchHistory?.any { it.search == item } == true || item.isBlank()) return
+if (searchHistory?.any {
+        it.search == item } == true || item.isBlank()) return
 if (PrefManager.getVal(PrefName.Incognito)) return        searchHistory?.add(SearchHistory(item, System.currentTimeMillis()))
 if ((searchHistory?.size ?: 0) > maxSize) {
         searchHistory?.removeAt(                searchHistory?.sorted()?.lastIndex ?: 0            )
@@ -31,7 +34,8 @@ override fun onCreateViewHolder(        parent: ViewGroup,        viewType: Int 
 return SearchHistoryViewHolder(view)
      }
 override fun onBindViewHolder(        holder: SearchHistoryAdapter.SearchHistoryViewHolder,        position: Int    ) {
-    val item = getItem(position)        holder.binding.searchHistoryTextView.text = item
+    val item = getItem(position);
+        holder.binding.searchHistoryTextView.text = item
         holder.binding.closeTextView.setOnClickListener {
     val currentPosition = holder.bindingAdapterPosition
 if (currentPosition >= itemCount || currentPosition < 0) return@setOnClickListener            remove(getItem(currentPosition))

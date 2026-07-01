@@ -42,7 +42,10 @@ return Object(            preferences = sharedPreferences,            keyFlow = 
 private val SharedPreferences.keyFlow    get() = callbackFlow {
     val listener =            SharedPreferences.OnSharedPreferenceChangeListener { 
         _
-    registerOnSharedPreferenceChangeListener(listener)        awaitClose {
+    registerOnSharedPreferenceChangeListener(listener);
+        awaitClose {
             unregisterOnSharedPreferenceChangeListener(listener)
+}
+    
 }
     }

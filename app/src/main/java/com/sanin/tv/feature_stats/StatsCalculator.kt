@@ -38,15 +38,21 @@ object StatsCalculator {
             val duration = media.anime?.episodeDuration ?: AVG_EPISODE_DURATION_MINS
             (eps * duration).toLong()
           }
+        
+          }
         val scores = mediaList.mapNotNull { 
         i
         val avgScore = if (scores.isEmpty()) 0f else scores.average().toFloat()
 
         // Genre breakdown
         val genreMap = mutableMapOf<String, Int>()
-        mediaList.forEach { media ->
-            media.genres?.forEach { genre ->
+        mediaList.forEach {
+        media ->
+            media.genres?.forEach {
+        genre ->
                 genreMap[genre] = (genreMap[genre] ?: 0) + 1
+            }
+        
             }
         }
         val topGenres = genreMap.entries.sortedByDescending { 
@@ -54,12 +60,16 @@ object StatsCalculator {
 
         // Year breakdown based on when episodes were updated
         val yearMap = mutableMapOf<Int, Int>()
-        mediaList.forEach { media ->
-            media.userUpdatedAt?.let { updatedAt ->
+        mediaList.forEach {
+        media ->
+            media.userUpdatedAt?.let {
+        updatedAt ->
                 val year = java.util.Calendar.getInstance().also {
                     it.timeInMillis = updatedAt
                 }.get(java.util.Calendar.YEAR)
                 yearMap[year] = (yearMap[year] ?: 0) + (media.userProgress ?: 0)
+             }
+        
              }
         }
 
@@ -91,6 +101,9 @@ object StatsCalculator {
         return stats
     }
 
+    
+    }
+
     fun loadCached(): WatchStats? {
     val cached = PrefManager.getNullableCustomVal(CACHE_KEY, null, WatchStats::class.java)
             ?: return null
@@ -98,17 +111,28 @@ object StatsCalculator {
         return cached
     }
 
+    
+    }
+
     private fun saveCache(stats: WatchStats) {
         PrefManager.setCustomVal(CACHE_KEY, stats)
+      }
+    
       }
     fun clearCache() {
         PrefManager.removeVal(CACHE_KEY)
       }
+    
+      }
     private fun calculateStreaks(mediaList: List<Media>): Pair<Int, Int> {
     val dayFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val watchDays = mediaList
-            .mapNotNull { it.userUpdatedAt }
-            .map { dayFormat.format(Date(it))
+            .mapNotNull {
+        it.userUpdatedAt }
+            .map {
+        dayFormat.format(Date(it))
+ }
+            
  }
             .toSortedSet()
             .toList();
@@ -128,8 +152,12 @@ object StatsCalculator {
         temp++
                 if (temp > longest) longest = temp
             }
+        
+            }
         else {
                 temp = 1
+            }
+        
             }
         }
 
@@ -145,7 +173,12 @@ object StatsCalculator {
                 val curr = dayFormat.parse(watchDays[i]) ?: break
                 if (((curr.time - prev.time) / (1000 * 60 * 60 * 24)).toInt() == 1) streak++ else break
             }
+            
+            }
             streak
+        }
+
+        
         }
 
         return Pair(longest, current)

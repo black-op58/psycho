@@ -29,9 +29,11 @@ if (sourceLanguage >= extension.sources.size) {
 
 val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return false        currContext()?.let { 
         c
-val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues { 
+val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                );
+        sharedPreferences.all.filterValues { 
         M
-.forEach { value ->
+.forEach {
+        value ->
 return when (MediaNameAdapter.getSubDub(value.value.toString())) {
         MediaNameAdapter.SubDubType.SUB -> false                        MediaNameAdapter.SubDubType.DUB -> true                        MediaNameAdapter.SubDubType.NULL -> false                    }}
 }
@@ -44,10 +46,13 @@ if (sourceLanguage >= extension.sources.size) {
 val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return
 val type = when (setDub) {
         t
-currContext()?.let { context ->
-val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues { 
+currContext()?.let {
+        context ->
+val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                );
+        sharedPreferences.all.filterValues { 
         M
-.forEach { value ->
+.forEach {
+        value ->
 val setValue = MediaNameAdapter.setSubDub(value.value.toString(), type)
 if (setValue != null) {
         sharedPreferences.edit().putString(value.key, setValue).apply()                    }}}
@@ -56,9 +61,11 @@ if (setValue != null) {
 override fun isDubAvailableSeparately(sourceLang: Int?): Boolean {
     val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource            ?: return false        currContext()?.let { 
         c
-val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                )            sharedPreferences.all.filterValues {                
+val sharedPreferences =                context.getSharedPreferences(                    configurableSource.getPreferenceKey(),                    Context.MODE_PRIVATE                );
+        sharedPreferences.all.filterValues {                
         M
-.forEach { _ -> return true}
+.forEach {
+        _ -> return true}
 }
 return false    }
 
@@ -79,28 +86,41 @@ if (it.episode_number == Float.MAX_VALUE) {
         it.episode_number =                            incrementingNumber++  // Update episode_number with the incrementing number                    }
 it                }
 } else if (episodesAreIncrementing(res)) {
-        res.sortedBy { it.episode_number }
+        res.sortedBy {
+        it.episode_number }
+}
+        
 }
         else {
     var episodeCounter = 1f                // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
 val seasonGroups =                    res.groupBy { 
         M
-seasonGroups.keys.sortedBy { it}
-.flatMap { season ->                        seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
+seasonGroups.keys.sortedBy {
+        it}
+.flatMap {
+        season ->                        seasonGroups[season]?.sortedBy {
+        it.episode_number }?.map {
+        episode ->
 if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
 val potentialNumber =                                    MediaNameAdapter.findEpisodeNumber(episode.name)
 if (potentialNumber != null) {
         episode.episode_number = potentialNumber
+}
+        
 }
         else {
         episode.episode_number = episodeCounter                                }
 episodeCounter++}
 episode                        } ?: emptyList()
 
+
 }
 }
-return sortedEpisodes.map { sEpisodeToEpisode(it)
+return sortedEpisodes.map {
+        sEpisodeToEpisode(it)
  }
+}
+        
 }
         catch (e: Exception) {
         Logger.log("Exception: $e")
@@ -111,9 +131,12 @@ private fun episodesAreIncrementing(episodes: List<SEpisode>): Boolean {
     val sortedEpisodes = episodes.sortedBy { 
         i
 
-val takenNumbers = mutableListOf<Float>()        sortedEpisodes.forEach {
+val takenNumbers = mutableListOf<Float>();
+        sortedEpisodes.forEach {
 if (it.episode_number !in takenNumbers) {
         takenNumbers.add(it.episode_number)
+ }
+        
  }
         else {
 return false            }
@@ -125,8 +148,11 @@ fun loadVideoServers(        episodeLink: String,        extra: Map<String, Stri
     val source = try {            
         e
 return try {
-    val videos = getVideoList(source,sEpisode)            videos.map { 
+    val videos = getVideoList(source,sEpisode);
+        videos.map { 
         v
+    }
+        
     }
         catch (e: Exception) {
         Logger.log("Exception occurred: ${e.message}")
@@ -137,6 +163,8 @@ fun getVideoList(        source: AnimeHttpSource,        episode: SEpisode    ):
 val directVideos = if (!hasHosters) {
         r
 }
+        
+}
         else {
         emptyList()
          }
@@ -144,20 +172,27 @@ val hosterVideos = if (hasHosters) {
     val hosters = runCatching {                
         s
     coroutineScope {
-        hosters.map { hoster ->                    async(Dispatchers.IO) {
+        hosters.map {
+        hoster ->                    async(Dispatchers.IO) {
     val videos = when {                            
         !
 else -> runCatching {
-        source.getVideoList(hoster)                            }.getOrElse { emptyList() }}
-videos.map { video ->
+        source.getVideoList(hoster)                            }.getOrElse {
+        emptyList() }}
+videos.map {
+        video ->
 val resolved = resolveVideo(source, video)                            
 val title = if (                                hoster.hosterName.isBlank() ||                                hoster.hosterName == NO_HOSTER_LIST                            ) {                                
         r
+}
+        
 }
         else {                                "${hoster.hosterName} - ${resolved.videoTitle}"                            }
 resolved.copy(                                videoTitle = title,                                initialized = true                            )}}
 }.awaitAll().flatten()
             }
+}
+        
 }
         else {
         emptyList()
@@ -166,8 +201,10 @@ val resolvedDirect = coroutineScope {
         d
 }.awaitAll()
         }
-return source.run {            (resolvedDirect + hosterVideos)                .distinctBy { it.videoUrl }
-.filter { it.videoUrl.isNotEmpty() && it.videoUrl != "null"}
+return source.run {            (resolvedDirect + hosterVideos)                .distinctBy {
+        it.videoUrl }
+.filter {
+        it.videoUrl.isNotEmpty() && it.videoUrl != "null"}
 .sortVideos()
 }
 }
@@ -214,23 +251,32 @@ return try {
         Logger.log("query: $query")
         convertAnimesPageToShowResponse(res)
          }
+        
+         }
         catch (e: CloudflareBypassException) {
         Logger.log("Exception in search: $e")
         Logger.log(e)
         withContext(Dispatchers.Main) {
                 snackString("Failed to bypass Cloudflare")
             }
+    
+            }
     emptyList()
+        }
+        
         }
         catch (e: Exception) {
         Logger.log("General exception in search: $e")
         Logger.log(e)
         emptyList()
 }
+    
+}
     }
 
 private fun convertAnimesPageToShowResponse(animesPage: AnimesPage): List<ShowResponse> {
-return animesPage.animes.map { sAnime ->            // Extract required fields from sAnime
+return animesPage.animes.map {
+        sAnime ->            // Extract required fields from sAnime
 val name = sAnime.title
 val link = sAnime.url
 val coverUrl = sAnime.thumbnail_url ?: ""            // Create a new ShowResponse            ShowResponse(name, link, coverUrl, sAnime)
@@ -243,6 +289,8 @@ val episodeNumberInt =
 if (sEpisode.episode_number % 1 == 0f) {
         sEpisode.episode_number.toInt()
  }
+        
+ }
         else {
         sEpisode.episode_number            }
 return Episode(
@@ -250,9 +298,13 @@ if (episodeNumberInt.toInt() != -1) {
 if (sEpisode.episode_number % 1 == 0f) {
         episodeNumberInt.toInt().toString()
  }
+        
+ }
         else {
         sEpisode.episode_number.toString()
                 }
+}
+        
 }
         else {
         sEpisode.name            },            sEpisode.url,            sEpisode.name,            null,            null,            false,            null,            sEpisode        )
@@ -262,6 +314,8 @@ return VideoServer(            video.quality,            video.url,            n
     }
 return if (vidList.isNotEmpty()) {
         VideoContainer(vidList, subList, audioList)
+ }
+        
  }
         else {
 throw Exception("No videos found")
@@ -294,6 +348,8 @@ if (format == null) {
         format = VideoType.CONTAINER
             }
 }
+        
+}
         catch (malformed: MalformedURLException) {
         if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent"));
         format = VideoType.CONTAINER
@@ -315,7 +371,8 @@ private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoTy
 return try {
         Logger.log("attempting head request for $fileName")            
 val request = Request.Builder()                .url(fileName)                .head()                .build()
-        networkHelper.client.newCall(request).execute().use { response ->
+        networkHelper.client.newCall(request).execute().use {
+        response ->
                 
 val contentType = response.header("Content-Type")                
 val contentDisposition = response.header("Content-Disposition")
@@ -328,13 +385,21 @@ when {
         contentDisposition.contains("mpegurl", ignoreCase = true) -> VideoType.M3U8                        contentDisposition.contains("dash", ignoreCase = true) -> VideoType.DASH                        contentDisposition.contains("mp4", ignoreCase = true) -> VideoType.CONTAINER
 else -> null                    }
 }
+        
+}
         else {
-        Logger.log("failed head request for $fileName")                    null
+        Logger.log("failed head request for $fileName");
+        null
+                }
+                
                 }
                 }
 }
+        
+}
         catch (e: Exception) {
-        Logger.log("Exception in headRequest: $e")            null}
+        Logger.log("Exception in headRequest: $e");
+        null}
 }
 
 val lower = value.lowercase(Locale.ROOT)
@@ -345,5 +410,6 @@ else -> SubtitleType.UNKNOWN        }
 
 private fun hasExtensionMarker(value: String, vararg extensions: String): Boolean {
     val base = value.substringBefore('#').substringBefore('?').substringBefore('&')
-return extensions.any { ext ->            base.endsWith(ext)
+return extensions.any {
+        ext ->            base.endsWith(ext)
          }

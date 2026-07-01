@@ -25,7 +25,8 @@ import com.sanin.tv.settings.saving.PrefName
 import com.sanin.tv.statusBarHeight
 import com.sanin.tv.themes.ThemeManager
 import nl.joery.animatedbottombar.AnimatedBottomBar
-class NotificationActivity : AppCompatActivity() {    lateinit var binding: ActivityNotificationBinding    
+class NotificationActivity : AppCompatActivity() {
+        lateinit var binding: ActivityNotificationBinding    
 private var selected: Int = 0    lateinit var navBar: AnimatedBottomBar    
 private val CommentsEnabled = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1    
 private var userCount: Int = 0    
@@ -50,7 +51,8 @@ val tabs = mutableListOf(            Pair(R.drawable.ic_round_person_24, "User")
 if (CommentsEnabled) {
         tabs.add(Pair(R.drawable.ic_round_comment_24, "Comments"))
         }
-tabs.forEachIndexed { index, (icon, title) ->
+tabs.forEachIndexed {
+        index, (icon, title) ->
 val tab = navBar.createTab(icon, title)
 when (index) {
         0 -> {
@@ -70,10 +72,12 @@ if (subsCount > 0) tab.badge = AnimatedBottomBar.Badge("$subsCount")
 if (commentCount > 0) tab.badge = AnimatedBottomBar.Badge("$commentCount")                }}
 navBar.addTab(tab)
 }
-binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+binding.notificationBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
   }
 val getOne = intent.getIntExtra("activityId", -1)
-if (getOne != -1) navBar.isVisible = false        binding.notificationViewPager.isUserInputEnabled = false        binding.notificationViewPager.adapter =            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne, CommentsEnabled) { type, reset ->
+if (getOne != -1) navBar.isVisible = false        binding.notificationViewPager.isUserInputEnabled = false        binding.notificationViewPager.adapter =            ViewPagerAdapter(supportFragmentManager, lifecycle, getOne, CommentsEnabled) {
+        type, reset ->
 if (reset) {
 when (type) {
         USER -> {
@@ -91,6 +95,8 @@ binding.notificationViewPager.registerOnPageChangeCallback(
 object : ViewPager2 .OnPageChangeCallback() {
     override fun onPageSelected(position: Int) {                    
         s
+                }
+                
                 }
                 }
     )

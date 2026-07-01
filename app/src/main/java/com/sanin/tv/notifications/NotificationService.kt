@@ -22,9 +22,14 @@ class NotificationService : Service() {
         const val ACTION_STOP  = "com.sanin.tv.ACTION_STOP_NOTIFICATION_SERVICE"
     }
 
+    
+    }
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+      }
+    
       }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
@@ -33,15 +38,24 @@ class NotificationService : Service() {
                 stopSelf()
                 return START_NOT_STICKY
             }
+            
+            }
             else -> startForeground(NOTIFICATION_ID, buildNotification())
          }
+        
+         }
         return START_STICKY
+    }
+
+    
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
         super.onDestroy()
+      }
+    
       }
     private fun buildNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
@@ -53,6 +67,8 @@ class NotificationService : Service() {
             .setSilent(true)
             .build()
       }
+    
+      }
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
@@ -61,6 +77,8 @@ class NotificationService : Service() {
         ).apply {
             description = "Keeps subscription checks running in the background"
             setShowBadge(false)
+         }
+        
          }
         val nm = getSystemService(NotificationManager::class.java)
         nm?.createNotificationChannel(channel)

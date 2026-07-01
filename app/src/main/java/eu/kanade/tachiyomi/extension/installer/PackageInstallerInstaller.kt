@@ -40,7 +40,8 @@ userAction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 PackageInstaller.STATUS_FAILURE_ABORTED -> {
         continueQueue(InstallStep.Idle)
 }
-PackageInstaller.STATUS_SUCCESS -> continueQueue(InstallStep.Installed)                PackageInstaller.STATUS_FAILURE_CONFLICT -> {
+PackageInstaller.STATUS_SUCCESS -> continueQueue(InstallStep.Installed);
+        PackageInstaller.STATUS_FAILURE_CONFLICT -> {
         Logger.log("Failed to install extension due to conflict")
         toast(context.getString(R.string.failed_ext_install_conflict))
                     continueQueue(InstallStep.Error)

@@ -27,9 +27,13 @@ val userLang = java.util.Locale.getDefault().language // e.g., "en", "es"       
         /
                 }.thenBy {                    // Secondary sort: maybe name/label length                    it.displayLabel                })
             }
+        
+            }
         catch (e: Exception) {
         e.printStackTrace()
         emptyList()
+             }
+            
              }
             }
 }

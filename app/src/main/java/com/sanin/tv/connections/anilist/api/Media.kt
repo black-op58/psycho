@@ -64,7 +64,8 @@ override fun toString(): String {
 return super.toString().replace("_", " ")    }}
 
 @Serializable
-enum class MediaStatus {    FINISHED, RELEASING, NOT_YET_RELEASED, CANCELLED, HIATUS;    
+enum class MediaStatus {
+        FINISHED, RELEASING, NOT_YET_RELEASED, CANCELLED, HIATUS;    
 override fun toString(): String {        
         c
 return when (super.toString()) {                "FINISHED" -> it.getString(R.string.status_finished)                "RELEASING" -> it.getString(R.string.status_releasing)                "NOT_YET_RELEASED" -> it.getString(R.string.status_not_yet_released)                "CANCELLED" -> it.getString(R.string.status_cancelled)                "HIATUS" -> it.getString(R.string.status_hiatus)
@@ -206,7 +207,8 @@ var voiceActorRoles: List<StaffRoleType>?,    // The order the media should be d
 @SerialName("favouriteOrder") 
 var favouriteOrder: Int?,)
 @Serializable
-enum class MediaRelation {    ADAPTATION, PREQUEL, SEQUEL, PARENT, SIDE_STORY, CHARACTER, SUMMARY, ALTERNATIVE, SPIN_OFF, OTHER, SOURCE, COMPILATION, CONTAINS;    
+enum class MediaRelation {
+        ADAPTATION, PREQUEL, SEQUEL, PARENT, SIDE_STORY, CHARACTER, SUMMARY, ALTERNATIVE, SPIN_OFF, OTHER, SOURCE, COMPILATION, CONTAINS;    
 override fun toString(): String {        
         c
 return when (super.toString()) {                "ADAPTATION" -> it.getString(R.string.type_adaptation)                "PARENT" -> it.getString(R.string.type_parent)                "CHARACTER" -> it.getString(R.string.type_character)                "SUMMARY" -> it.getString(R.string.type_summary)                "ALTERNATIVE" -> it.getString(R.string.type_alternative)                "OTHER" -> it.getString(R.string.type_other)                "SOURCE" -> it.getString(R.string.type_source)                "CONTAINS" -> it.getString(R.string.type_contains)
@@ -216,7 +218,8 @@ else -> super.toString().replace("_", " ")
 return super.toString().replace("_", " ")    }}
 
 @Serializable
-enum class MediaSeason {    WINTER, SPRING, SUMMER, FALL
+enum class MediaSeason {
+        WINTER, SPRING, SUMMER, FALL
 }
 
 @Serializable
@@ -240,7 +243,8 @@ var icon: String?,    // isDisabled: Boolean
 @SerialName("notes") 
 var notes: String?,) : java.io.Serializable
 @Serializable
-enum class ExternalLinkType {    INFO, STREAMING, SOCIAL;    
+enum class ExternalLinkType {
+        INFO, STREAMING, SOCIAL;    
 override fun toString(): String {
 return super.toString().replace("_", " ")    }}
 

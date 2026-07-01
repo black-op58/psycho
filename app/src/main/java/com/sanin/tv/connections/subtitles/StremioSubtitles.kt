@@ -29,6 +29,8 @@ if (wyzieSubs.isNotEmpty()) {
         S
     allSubs.addAll(mapped)}}
     }
+        
+    }
         catch (e: Exception) {
         e.printStackTrace()}}
     // 2. Try OpenSubtitles (Stremio) if enabled
@@ -41,6 +43,8 @@ if (imdbId != null) {
 val url = if (isMovie) {
         "
 }
+        
+}
         else {                            "$BASE_URL/series/$imdbId:$season:$episode.json"                        }
 
 val request = Request.Builder().url(url).build()                        
@@ -50,7 +54,11 @@ if (response.isSuccessful && response.body != null) {
 val data = Mapper.json.decodeFromString<StremioResponse>(text)
         allSubs.addAll(data.subtitles)
                          }
+                        
+                         }
                         }
+}
+        
 }
         catch (e: Exception) {
         e.printStackTrace()}}

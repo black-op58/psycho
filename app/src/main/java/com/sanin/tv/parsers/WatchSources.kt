@@ -14,6 +14,8 @@ abstract class WatchSources : BaseSources() {
         if (saved == null) parser.saveShowResponse(media.id, response, true)
         return loadEpisodes(i, response.link, response.extra, response.sAnime)
       }
+    
+      }
     open suspend fun loadEpisodes(
         i: Int,
         link: String,
@@ -22,7 +24,8 @@ abstract class WatchSources : BaseSources() {
     ): MutableMap<String, Episode> {
         val parser = get(i) as? AnimeParser ?: return mutableMapOf()
         return parser.loadEpisodes(link, extra, sAnime ?: SAnime.create())
-            .associateBy { it.number }
+            .associateBy {
+        it.number }
             .toMutableMap()
      }
 }

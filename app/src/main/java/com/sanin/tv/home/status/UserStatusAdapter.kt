@@ -31,6 +31,8 @@ itemView.setOnLongClickListener {
 if (user[bindingAdapterPosition].id == Anilist.userid) {
         ContextCompat.startActivity(                        itemView.context,                        Intent(itemView.context, ActivityMarkdownCreator::class.java)                            .putExtra("type", "activity"),                        null                    )
  }
+        
+ }
         else {
         ContextCompat.startActivity(                        itemView.context,                        Intent(                            itemView.context,                            ProfileActivity::class.java                        ).putExtra("userId", user[bindingAdapterPosition].id),                        null                    )
                 }
@@ -42,7 +44,8 @@ return UsersViewHolder(            ItemUserStatusBinding.inflate(               
      }
 override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
     val b = holder.binding        setAnimation(b.root.context, b.root)        
-val user = user[position]        b.profileUserAvatar.loadImage(user.pfp)        b.profileUserName.text =
+val user = user[position]        b.profileUserAvatar.loadImage(user.pfp);
+        b.profileUserName.text =
 if (Anilist.userid == user.id) getAppString(R.string.your_story) else user.name
 val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())        
 val booleanList = user.activity.map { 

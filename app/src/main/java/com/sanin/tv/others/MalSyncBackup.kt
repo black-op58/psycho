@@ -20,7 +20,8 @@ suspend
 fun get(id: Int, name: String, dub: Boolean = false): ShowResponse? {
 return tryWithSuspend {
     val json =                client.get("https://raw.githubusercontent.com/MALSync/MAL-Sync-Backup/master/data/anilist/anime/$id.json")
-if (json.text != "404: Not Found")                json.parsed<MalBackUpSync>().pages?.get(name)?.forEach {
+if (json.text != "404: Not Found");
+        json.parsed<MalBackUpSync>().pages?.get(name)?.forEach {
     val page = it.value
 val isDub = page.title.lowercase().replace(" ", "").endsWith("(dub)")                    
 val slug = if (dub == isDub) page.identifier else null

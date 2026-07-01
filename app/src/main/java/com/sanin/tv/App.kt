@@ -19,11 +19,15 @@ class App : Application() {
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
         scheduleBackgroundTasks()
       }
+    
+      }
     private fun scheduleBackgroundTasks() {
         PrefManager.init(this)
         NewEpisodeBadgeManager.init(this);
         if (PrefManager.getVal<Boolean>(PrefName.NewEpisodeNotifications)) {
             EpisodeNotificationWorker.schedule(this)
+         }
+    
          }
     }
 
@@ -33,19 +37,30 @@ class App : Application() {
         override fun onActivityCreated(p0: Activity, p1: Bundle?) {
             lastActivity = p0.javaClass.simpleName
         }
+        
+        }
         override fun onActivityStarted(p0: Activity) {
             currentActivity = p0
         }
+        
+        }
         override fun onActivityResumed(p0: Activity) {
             currentActivity = p0
+        }
+        
         }
         override fun onActivityPaused(p0: Activity) {}
         override fun onActivityStopped(p0: Activity) {
             // Persist current episode counts so the next session can detect new episodes.
             NewEpisodeBadgeManager.onAppBackground(p0.applicationContext)
          }
+        
+         }
         override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {}
         override fun onActivityDestroyed(p0: Activity) {}
+    }
+
+    
     }
 
     companion object {
@@ -61,8 +76,13 @@ class App : Application() {
     return instance?.mFTActivityLifecycleCallbacks?.currentActivity ?: context
         }
 
+        
+        }
+
         fun currentActivity(): Activity? {
     return instance?.mFTActivityLifecycleCallbacks?.currentActivity
+        }
+    
         }
     }
 }

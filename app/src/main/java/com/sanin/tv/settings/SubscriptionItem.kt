@@ -19,7 +19,8 @@ override fun bind(viewBinding: ItemSubscriptionBinding, position: Int) {
         b
 val context = binding.root.context        binding.subscriptionName.text = media.name        binding.root.setOnClickListener {            
         C
-binding.subscriptionCover.loadImage(media.image)        binding.deleteSubscription.setOnClickListener {
+binding.subscriptionCover.loadImage(media.image);
+        binding.deleteSubscription.setOnClickListener {
             SubscriptionHelper.deleteSubscription(id, true)
         adapter.remove(this)
             onItemRemoved(id)

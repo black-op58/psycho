@@ -37,6 +37,8 @@ return chain.proceed(request)
 catch (e: CloudflareBypassException) {
         throw IOException("Failed to bypass Cloudflare")
         }
+        
+        }
         catch (e: Exception) {
         throw IOException(e)
         }
@@ -51,13 +53,17 @@ var challengeFound = false
 var cloudflareBypassed = false
 var isWebViewOutdated = false
 val origRequestUrl = originalRequest.url.toString()        
-val headers = parseHeaders(originalRequest.headers)        executor.execute {
-            webview = createWebView(originalRequest)            webview?.webViewClient = 
+val headers = parseHeaders(originalRequest.headers);
+        executor.execute {
+            webview = createWebView(originalRequest);
+        webview?.webViewClient = 
 object : WebViewClientCompat() {
     override fun onPageFinished(view: WebView, url: String) {
     fun isCloudFlareBypassed(): Boolean {
-return cookieManager.get(origRequestUrl.toHttpUrl())                            .firstOrNull { it.name == "cf_clearance" }
-.let { it != null && it != oldCookie}
+return cookieManager.get(origRequestUrl.toHttpUrl())                            .firstOrNull {
+        it.name == "cf_clearance" }
+.let {
+        it != null && it != oldCookie}
 }
 if (isCloudFlareBypassed()) {
         cloudflareBypassed = true                        latch.countDown()
@@ -72,10 +78,13 @@ if (isMainFrame) {
 if (errorCode in ERROR_CODES) {
         // Found the Cloudflare challenge page.                            challengeFound = true
 }
+        
+}
         else {                            // Unlock thread, the challenge wasn't found.                            latch.countDown()                        }}}}
 webview?.loadUrl(origRequestUrl, headers)
 }
-latch.awaitFor30Seconds()        executor.execute {
+latch.awaitFor30Seconds();
+        executor.execute {
 if (!cloudflareBypassed) {
         isWebViewOutdated = webview?.isOutdated() == true            }
 webview?.run {

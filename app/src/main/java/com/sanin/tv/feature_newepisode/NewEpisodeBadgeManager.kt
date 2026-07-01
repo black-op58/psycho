@@ -35,6 +35,9 @@ object NewEpisodeBadgeManager {
         initialized = true
     }
 
+    
+    }
+
     /**
      * Returns true when the card should display the "New Episode" badge:
      *   - anime is currently being tracked (CURRENT or REPEATING)
@@ -62,6 +65,9 @@ object NewEpisodeBadgeManager {
         return available > lastKnown
     }
 
+    
+    }
+
     /**
      * Call from MediaDetailsActivity when the user taps into a show.
      * Clears the badge for that show immediately (next card-bind will hide it)
@@ -71,11 +77,14 @@ object NewEpisodeBadgeManager {
         // currentSessionCounts[mediaId] holds the available-episode count that triggered
         // the badge. Lifting the snapshot baseline to that count kills the badge condition.
         val current = currentSessionCounts[mediaId] ?: return // not tracked — nothing to dismiss
-        lastSessionSnapshot = lastSessionSnapshot.toMutableMap().also { it[mediaId] = current }
+        lastSessionSnapshot = lastSessionSnapshot.toMutableMap().also {
+        it[mediaId] = current }
         // Persist immediately — merge snapshot + current session so nothing is lost.
         val merged = lastSessionSnapshot.toMutableMap().also { 
         i
         saveSnapshot(context, merged)
+      }
+    
       }
     /**
      * Call from App when all activities stop (app goes to background).
@@ -87,6 +96,8 @@ object NewEpisodeBadgeManager {
             val merged = lastSessionSnapshot.toMutableMap()
             merged.putAll(currentSessionCounts)
             saveSnapshot(context, merged)
+         }
+    
          }
     }
 
@@ -105,6 +116,9 @@ object NewEpisodeBadgeManager {
             media.anime?.totalEpisodes ?: media.anime?.nextAiringEpisode ?: 0
     }
 
+    
+    }
+
     /** Deserialise "id1:count1,id2:count2,..." from SharedPreferences. */
     private fun loadSnapshot(context: Context): Map<Int, Int> {
         val raw = context
@@ -112,15 +126,23 @@ object NewEpisodeBadgeManager {
             .getString(KEY_SNAPSHOT, null) ?: return emptyMap()
         return try {
             raw.split(",")
-                .filter { it.contains(":")
+                .filter {
+        it.contains(":")
  }
-                .associate { entry ->
+                
+ }
+                .associate {
+        entry ->
                     val (k, v) = entry.split(":")
                     k.trim().toInt() to v.trim().toInt()
+                 }
+        
                  }
         }
         catch (_: Exception) {
         emptyMap()
+         }
+    
          }
     }
 

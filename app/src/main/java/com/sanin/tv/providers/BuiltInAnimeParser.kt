@@ -42,7 +42,8 @@ class BuiltInAnimeParser : AnimeParser() {
         // Best-effort episode count: use nextAiringEpisode - 1 if available,
         // otherwise fall back to a safe default of 24 (user will see all stubs).
         val epCount = (mediaObj.anime?.nextAiringEpisode?.minus(1))
-            ?.takeIf { it > 0 }
+            ?.takeIf {
+        it > 0 }
             ?: 24
 
         val extra = mutableMapOf(
@@ -57,8 +58,12 @@ class BuiltInAnimeParser : AnimeParser() {
             extra = extra,
             sAnime = SAnime.create().apply {
         this.title = title 
+
 }
-        )
+        
+}
+)
+        }
       }
     // ──────────────────────────────────────────────────────────────────────
     // Episode list — return numbered stubs 1..lastEp.  The heavy lifting
@@ -75,7 +80,8 @@ class BuiltInAnimeParser : AnimeParser() {
 
         Logger.log("BuiltInAnimeParser: generating $lastEp episode stubs for \"$animeLink\"")
 
-        return (1..lastEp).map { epNum ->
+        return (1..lastEp).map {
+        epNum ->
             Episode(
                 number = epNum.toString(),
                 link = epNum.toString(),
@@ -85,7 +91,8 @@ class BuiltInAnimeParser : AnimeParser() {
                     "title" to animeLink,
                     "malId" to malId
                 )
-            )
+)
+            }
          }
     }
 
@@ -114,7 +121,8 @@ class BuiltInAnimeParser : AnimeParser() {
                 embed = FileUrl(url = result.url, headers = result.headers),
                 extraData = mapOf("providerName" to result.providerName)
             )
-        )
+)
+        }
       }
     // ──────────────────────────────────────────────────────────────────────
     // Video extractor — since we already have the direct stream URL from
@@ -145,6 +153,9 @@ class BuiltInVideoExtractor(private val videoServer: VideoServer) : VideoExtract
             url.contains(".mkv", ignoreCase = true) -> VideoType.CONTAINER
             url.contains(".dash", ignoreCase = true) -> VideoType.DASH
             else -> VideoType.M3U8
+        }
+
+        
         }
 
         val video = Video(

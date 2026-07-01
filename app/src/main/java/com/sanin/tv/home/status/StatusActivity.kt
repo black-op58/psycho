@@ -29,7 +29,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityStatusBinding.inflate(layoutInflater)
         setContentView(binding.root)
         activity = user
-        position = intent.getIntExtra("position", -1)        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        position = intent.getIntExtra("position", -1);
+        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight            bottomMargin = navBarHeight        }
 slideInLeft = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
         slideOutRight = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
@@ -40,6 +41,8 @@ val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
 if (activity.getOrNull(position) != null) {
     val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity)            
 val startIndex = if (startFrom > 0) startFrom else 0            binding.stories.setStoriesList(                activityList = activity[position].activity,                startIndex = startIndex + 1            )
+ }
+        
  }
         else {
         Logger.log("index out of bounds for position $position of size ${activity.size}")
@@ -69,6 +72,8 @@ override fun onWindowFocusChanged(hasFocus: Boolean) {
 if (hasFocus) {
         binding.stories.resume()
  }
+        
+ }
         else {
         binding.stories.pause()
         }
@@ -84,6 +89,8 @@ val startIndex = if (startFrom > 0) startFrom else 0            binding.stories.
         binding.stories.setStoriesList(activity[position].activity, startIndex + 1)
             binding.stories.startAnimation(slideInRight)
  }
+        
+ }
         else {
         finish()
         }
@@ -98,6 +105,8 @@ val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity)
 val startIndex = if (startFrom > 0) startFrom else 0            binding.stories.startAnimation(slideOutRight)
         binding.stories.setStoriesList(activity[position].activity, startIndex + 1)
             binding.stories.startAnimation(slideInLeft)
+ }
+        
  }
         else {
         finish()

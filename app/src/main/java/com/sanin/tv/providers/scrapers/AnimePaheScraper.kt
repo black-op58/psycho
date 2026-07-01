@@ -32,7 +32,8 @@ object AnimePaheScraper {
             url          = streamUrl,
             quality      = "720",
             providerName = "AnimePahe"
-        )
+)
+        }
       }
     // ── Step 1: search ────────────────────────────────────────────────────────
 
@@ -46,11 +47,15 @@ object AnimePaheScraper {
         if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<AnimePaheSearchResp>(resp.text).data.firstOrNull()
          }
+        
+         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("AnimePaheScraper.searchShow: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -65,13 +70,18 @@ object AnimePaheScraper {
             );
         if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<AnimePaheReleaseResp>(resp.text)
-                .data.find { it.episode == episode }?.session
+                .data.find {
+        it.episode == episode }?.session
+        }
+        
         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("AnimePaheScraper.findEpisodeSession: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -90,11 +100,15 @@ object AnimePaheScraper {
                 ?: return null
             extractKwikStream(base, best)
          }
+        
+         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("AnimePaheScraper.resolveStream: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -111,10 +125,15 @@ object AnimePaheScraper {
             val m3u8Regex = Regex("""source\s*=\s*['"]([^'"]+\.m3u8[^'"]*)['"]""")
             m3u8Regex.find(resp.text)?.groupValues?.getOrNull(1)
          }
+        
+         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         null }
+    }
+
+    
     }
 
     private fun qualityScore(q: String?): Int = when {

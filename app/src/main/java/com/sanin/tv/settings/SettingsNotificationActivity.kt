@@ -32,12 +32,19 @@ class SettingsNotificationActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
             
+            
+            }
+            
             notificationsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
+                          }
+            
                           }
             onBackPressedDispatcher.addCallback(this@SettingsNotificationActivity,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() = finish()
+                 }
+            
                  }
             )
             
@@ -50,8 +57,11 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         desc = "Receive notifications from AniList",
                         icon = R.drawable.ic_round_notifications_none_24,
                         isChecked = PrefManager.getVal(PrefName.AnilistNotifications),
-                        switch = { isChecked, _ ->
+                        switch = {
+        isChecked, _ ->
                             PrefManager.setVal(PrefName.AnilistNotifications, isChecked)
+                         }
+                    
                          }
                     ),
                     Settings(
@@ -60,12 +70,17 @@ class SettingsNotificationActivity : AppCompatActivity() {
                         desc = "Get notified when new episodes air",
                         icon = R.drawable.ic_round_new_releases_24,
                         isChecked = PrefManager.getVal(PrefName.EpisodeNotifications),
-                        switch = { isChecked, _ ->
+                        switch = {
+        isChecked, _ ->
                             PrefManager.setVal(PrefName.EpisodeNotifications, isChecked)
+                         }
+                    
                          }
                     ),
                 ))
                 layoutManager = LinearLayoutManager(this@SettingsNotificationActivity)
+             }
+        
              }
         }
     }

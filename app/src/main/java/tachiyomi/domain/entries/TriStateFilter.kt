@@ -12,6 +12,8 @@ enum class TriStateFilter {
             ENABLED_IS -> ENABLED_NOT
             ENABLED_NOT -> DISABLED
         }
+    
+        }
     }
 }
 

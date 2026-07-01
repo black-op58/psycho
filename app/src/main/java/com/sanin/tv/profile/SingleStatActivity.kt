@@ -21,6 +21,8 @@ if (chartOptions != null) {
         binding.chartView.aa_drawChartWithChartOptions(chartOptions)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 }
+        
+}
         else {
         toast("No chart data")
         finish()

@@ -78,7 +78,8 @@ return binding.root    }
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         s
         binding.mediaSourceRecycler.apply {
-        isFocusable = true            isFocusableInTouchMode = false            descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS            // D-pad key handler on the RecyclerView itself (catches unhandled keys).            setOnKeyListener { _, keyCode, event ->
+        isFocusable = true            isFocusableInTouchMode = false            descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS            // D-pad key handler on the RecyclerView itself (catches unhandled keys).            setOnKeyListener {
+        _, keyCode, event ->
 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val lm = gridLayoutManager
 val itemCount = adapter?.itemCount ?: 0
@@ -103,7 +104,10 @@ object : RecyclerView.OnScrollListener() {
         s
 val position = gridLayoutManager.findFirstVisibleItemPosition()
 if (position > 2) {
-        binding.ScrollTop.translationY = -(navBarHeight + 12.toPx).toFloat()                    binding.ScrollTop.visibility = View.VISIBLE
+        binding.ScrollTop.translationY = -(navBarHeight + 12.toPx).toFloat();
+        binding.ScrollTop.visibility = View.VISIBLE
+}
+        
 }
         else {
         binding.ScrollTop.visibility = View.GONE                }}
@@ -128,7 +132,11 @@ if (_lastExt > 0 && _lastExt < _srcSize) {
 if (media.format == "LOCAL") {
     val localSourceIndex = AnimeSources.list.indexOfFirst { 
         p
-    .takeIf { parserIndex -> parserIndex >= 0 } ?: 0                    media.selected!!.sourceIndex = localSourceIndex
+    .takeIf {
+        parserIndex -> parserIndex >= 0 } ?: 0                    media.selected!!.sourceIndex = localSourceIndex
+
+}
+    
 }
     subscribed =                    SubscriptionHelper.getSubscriptions().containsKey(media.id);
         style = media.selected!!.recyclerStyle
@@ -136,7 +144,8 @@ if (media.format == "LOCAL") {
 if (loadedEpisodes != null) {
     val episodes = loadedEpisodes[media.selected!!.sourceIndex]
 if (episodes != null) {
-    val metadataPriority = PrefManager.getVal<Int>(PrefName.EpisodeMetadataSource)                        episodes.forEach { 
+    val metadataPriority = PrefManager.getVal<Int>(PrefName.EpisodeMetadataSource);
+        episodes.forEach { 
         (
                             // 1. Jikan (Lowest for metadata, only source for filler flag)
 if (media.anime?.fillerEpisodes != null) {
@@ -162,6 +171,8 @@ if (metadataPriority == 0) {
         applyAniZip()
         applyKitsu()
  }
+        
+ }
         else {
         applyKitsu()
         applyAniZip()
@@ -169,7 +180,8 @@ if (metadataPriority == 0) {
 // Title fallback order: AniZip English -> Kitsu -> Jikan/MAL -> "Episode X"
 val anifyTitle = cleanTitle(media.anime?.anifyEpisodes?.get(i)?.title)                            
 val kitsuTitle = cleanTitle(media.anime?.kitsuEpisodes?.get(i)?.title)                            
-val jikanTitle = cleanTitle(media.anime?.fillerEpisodes?.get(i)?.title)                            episode.title = anifyTitle ?: kitsuTitle ?: jikanTitle ?: buildFallbackEpisodeTitle(i, episode)
+val jikanTitle = cleanTitle(media.anime?.fillerEpisodes?.get(i)?.title);
+        episode.title = anifyTitle ?: kitsuTitle ?: jikanTitle ?: buildFallbackEpisodeTitle(i, episode)
                          }
 media.anime?.episodes = episodes                        // CHIP GROUP
 val total = episodes.size
@@ -193,21 +205,29 @@ override fun onDestroyView() {
 // ──────────────────────────────────────────────────────────────────────────    // Public API called by the host Activity / HeaderAdapter    // ──────────────────────────────────────────────────────────────────────────
 fun onSourceChange(i: Int): AnimeParser {        
         m
-val selected = model.loadSelected(media)        model.watchSources?.get(selected.sourceIndex)?.showUserTextListener = null
-        selected.sourceIndex = i        selected.server = null        model.saveSelected(media.id, selected)        media.selected = selected
+val selected = model.loadSelected(media);
+        model.watchSources?.get(selected.sourceIndex)?.showUserTextListener = null
+        selected.sourceIndex = i        selected.server = null        model.saveSelected(media.id, selected);
+        media.selected = selected
         com.sanin.tv.home.WatchProgressManager.saveLastExtensionIndex(i)
 return model.watchSources?.get(i)!!    }
 
 fun onLangChange(i: Int) {
-    val selected = model.loadSelected(media)        selected.langIndex = i
-        model.saveSelected(media.id, selected)        media.selected = selected
+    val selected = model.loadSelected(media);
+        selected.langIndex = i
+        model.saveSelected(media.id, selected);
+        media.selected = selected
     }
 
 fun onDubClicked(checked: Boolean) {
-    val selected = model.loadSelected(media)        model.watchSources?.get(selected.sourceIndex)?.selectDub = checked
-        selected.preferDub = checked        model.saveSelected(media.id, selected)        media.selected = selected
+    val selected = model.loadSelected(media);
+        model.watchSources?.get(selected.sourceIndex)?.selectDub = checked
+        selected.preferDub = checked        model.saveSelected(media.id, selected);
+        media.selected = selected
         lifecycleScope.launch(Dispatchers.IO) {
         model.forceLoadEpisode(                media,                selected.sourceIndex            )
+        }
+    
         }
     }
 
@@ -249,10 +269,13 @@ if (allSettings.size > 1) {
         L
                     .customAlertDialog()                    .apply {
         setTitle("Select a Source")
-        singleChoiceItems(names) { which ->
+        singleChoiceItems(names) {
+        which ->
                             selectedSetting = allSettings[which]                            itemSelected = true                            requireActivity().runOnUiThread {
     val fragment =                                    AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {                                        
         c
+                                    }
+    
                                     }
     parentFragmentManager.beginTransaction()                                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)                                    .replace(R.id.fragmentExtensionsContainer, fragment)                                    .addToBackStack(null)                                    .commit()}}
     onDismiss {
@@ -261,9 +284,13 @@ if (!itemSelected) {
 show()
                     }
 }
+        
+}
         else {                // If there's only one setting, proceed with the fragment transaction                requireActivity().runOnUiThread {
     val fragment =                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {                            
         c
+                        }
+    
                         }
     changeUIVisibility(false)
         parentFragmentManager.beginTransaction()
@@ -278,4 +305,5 @@ return raw    }
 
 private fun buildFallbackEpisodeTitle(index: Int, episode: com.sanin.tv.media.anime.Episode): String {
 return episode.number?.let { "Episode $it" } ?: "Episode ${index + 1
+
 }"    }}

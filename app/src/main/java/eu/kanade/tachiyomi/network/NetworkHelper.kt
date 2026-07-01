@@ -25,7 +25,8 @@ import okhttp3.Credentials
 import okhttp3.Response
 import okhttp3.Route
 class NetworkHelper(    context: Context) {
-        init {     setupSocks5Proxy()
+        init {
+        setupSocks5Proxy()
     }
 private fun setupSocks5Proxy() {
     val proxyEnabled = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
@@ -42,7 +43,9 @@ object : Authenticator() {
     override fun getPasswordAuthentication(): PasswordAuthentication {
 return PasswordAuthentication(proxyUsername, proxyPassword.toCharArray())                    }}
 )
-            }
+}
+}
+        
 }
         else {
         System.clearProperty("socksProxyHost")

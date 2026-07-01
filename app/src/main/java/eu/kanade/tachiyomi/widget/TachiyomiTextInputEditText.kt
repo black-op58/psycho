@@ -35,10 +35,15 @@ class TachiyomiTextInputEditText
         scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
         setIncognito(scope!!)
       }
+    
+      }
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         scope?.cancel()
         scope = null
+    }
+
+    
     }
 
     companion object {
@@ -52,11 +57,17 @@ class TachiyomiTextInputEditText
                     imeOptions = if (it) {
         imeOptions or EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
                     }
+        
+                    }
         else {
                         imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
                      }
+                
+                     }
                 }
                 .launchIn(viewScope)
+         }
+    
          }
     }
 }

@@ -9,7 +9,8 @@ data class Track(
 val url: String, 
 val lang: String)
 @Serializable
-enum class ChapterType {    Opening,    Ending,    Recap,    MixedOp,    Other,}
+enum class ChapterType {
+        Opening,    Ending,    Recap,    MixedOp,    Other,}
 
 @Serializable
 data class TimeStamp(    
@@ -72,7 +73,8 @@ companion object {
         v
 fun String.toVideoList(): List<Video> =            Json.decodeFromString<List<SerializableVideo>>(this)                .map { 
         s
-?.let { Headers.headersOf(*it.toTypedArray()) },                        sVid.preferred,                        sVid.subtitleTracks,                        sVid.audioTracks,                        sVid.timestamps,                        sVid.mpvArgs,                        sVid.ffmpegStreamArgs,                        sVid.ffmpegVideoArgs,                        sVid.internalData,                        sVid.initialized,                    )
+?.let {
+        Headers.headersOf(*it.toTypedArray()) },                        sVid.preferred,                        sVid.subtitleTracks,                        sVid.audioTracks,                        sVid.timestamps,                        sVid.mpvArgs,                        sVid.ffmpegStreamArgs,                        sVid.ffmpegVideoArgs,                        sVid.internalData,                        sVid.initialized,                    )
 }
 }
 }

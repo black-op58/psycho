@@ -22,7 +22,8 @@ private var review: Query.Review,) : BindableItem<ItemReviewsBinding>() {
     private lateinit var binding: ItemReviewsBinding    
 override fun bind(viewBinding: ItemReviewsBinding, position: Int) {        
         b
-val context = binding.root.context        binding.reviewUserName.text = review.user?.name        binding.reviewUserAvatar.loadImage(review.user?.avatar?.medium)        binding.reviewText.text = review.summary
+val context = binding.root.context        binding.reviewUserName.text = review.user?.name        binding.reviewUserAvatar.loadImage(review.user?.avatar?.medium);
+        binding.reviewText.text = review.summary
         binding.reviewPostTime.text = ActivityItemBuilder.getDateTime(review.createdAt)        
 val text = "[${review.score / 10.0f}]"        binding.reviewTag.text = text        binding.root.setOnClickListener {            
         C
@@ -64,14 +65,18 @@ when (type) {
 
 private fun rateReview(rating: String) {        
         d
-val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())        scope.launch {
+val scope = CoroutineScope(Dispatchers.IO + SupervisorJob());
+        scope.launch {
     val result = Anilist.mutation.rateReview(review.id, rating)
 if (result != null) {
         withContext(Dispatchers.Main) {
-    val res = result.data.rateReview                    review.rating = res.rating                    review.ratingAmount = res.ratingAmount                    review.userRating = res.userRating                    userVote(review.userRating)                    binding.reviewTotalVotes.text = review.rating.toString()
+    val res = result.data.rateReview                    review.rating = res.rating                    review.ratingAmount = res.ratingAmount                    review.userRating = res.userRating                    userVote(review.userRating);
+        binding.reviewTotalVotes.text = review.rating.toString()
                     userVote(review.userRating)
                     enableVote()
                  }
+}
+        
 }
         else {
         withContext(Dispatchers.Main) {
@@ -89,6 +94,8 @@ private fun enableVote() {
 if (review.userRating == "UP_VOTE") {
         rateReview("NO_VOTE")
  }
+        
+ }
         else {
         rateReview("UP_VOTE")
             }
@@ -97,6 +104,8 @@ disableVote()
 binding.reviewDownVote.setOnClickListener {
 if (review.userRating == "DOWN_VOTE") {
         rateReview("NO_VOTE")
+ }
+        
  }
         else {
         rateReview("DOWN_VOTE")

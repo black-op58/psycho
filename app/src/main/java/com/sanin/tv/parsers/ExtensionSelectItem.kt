@@ -19,8 +19,10 @@ if (image != null) {
 } else if (iconUrl != null) {
         Glide.with(binding.root.context)                .load(iconUrl)                .into(binding.extensionIconImageView)
         }
-binding.extensionCheckBox.setOnCheckedChangeListener(null)        binding.extensionCheckBox.isChecked = isSelected
-        binding.extensionCheckBox.setOnCheckedChangeListener { _, isChecked ->            isSelected = isChecked            selectCallback(name, isChecked)
+binding.extensionCheckBox.setOnCheckedChangeListener(null);
+        binding.extensionCheckBox.isChecked = isSelected
+        binding.extensionCheckBox.setOnCheckedChangeListener {
+        _, isChecked ->            isSelected = isChecked            selectCallback(name, isChecked)
 }
 }
 

@@ -23,14 +23,21 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val themeId = intent.getStringExtra("themeId")
-        editingTheme = themeId?.let { id ->
-            CustomThemeManager.getAllThemes().find { it.id == id }
+        editingTheme = themeId?.let {
+        id ->
+            CustomThemeManager.getAllThemes().find {
+        it.id == id }
+        }
+
+        
         }
 
         val scroll = ScrollView(this)
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, statusBarHeight(), 48, 64)
+         }
+        
          }
         scroll.addView(root)
         setContentView(scroll)
@@ -42,7 +49,10 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
 
         val nameField = EditText(this).apply {
             hint = "Theme name"
-            editingTheme?.let { setText(it.name)
+            editingTheme?.let {
+        setText(it.name)
+ }
+        
  }
         }
         root.addView(nameField)
@@ -58,10 +68,13 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
             "onBackground" to (editingTheme?.onBackgroundColor ?: "#FFFFFFFF"),
         )
         colorDefs.forEach { (label, default) ->
-            root.addView(TextView(this).apply { text = label; textSize = 13f; setPadding(0, 16, 0, 0) })
+            root.addView(TextView(this).apply {
+        text = label; textSize = 13f; setPadding(0, 16, 0, 0) })
             val field = EditText(this).apply {
                 hint = "#AARRGGBB"
                 setText(default)
+             }
+            
              }
             colorFields[label] = field
             root.addView(field)
@@ -69,6 +82,8 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
             val preview = View(this).apply {
                 layoutParams = LinearLayout.LayoutParams(48.dp(), 48.dp())
                 setBackgroundColor(CustomThemeManager.parseColor(default))
+             }
+            
              }
             root.addView(preview)
             field.addTextChangedListener(object : android.text.TextWatcher {
@@ -79,21 +94,30 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
         if (hex.length == 7 || hex.length == 9) {
         preview.setBackgroundColor(CustomThemeManager.parseColor(hex))
                      }
+                
+                     }
                 }
             })
+          }
+        
           }
         val saveBtn = Button(this).apply {
             text = "Save Theme"
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            ).also { it.topMargin = 24 }
+            ).also {
+        it.topMargin = 24 }
+        }
+        
         }
         root.addView(saveBtn)
 
         val exportBtn = Button(this).apply {
             text = "Export Theme"
             isEnabled = editingTheme != null
+        }
+        
         }
         root.addView(exportBtn);
         if (editingTheme == null) {
@@ -102,7 +126,8 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
                 textSize = 14f
                 setPadding(0, 32, 0, 8)
             })
-            CustomTheme.PRESETS.forEach { preset ->
+            CustomTheme.PRESETS.forEach {
+        preset ->
                 val btn = Button(this).apply {
                     text = "Use "${preset.name}""
                     setOnClickListener {
@@ -113,8 +138,12 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
                         colorFields["surface"]?.setText(preset.surfaceColor)
                         colorFields["accent"]?.setText(preset.accentColor)
                      }
+                
+                     }
                 }
                 root.addView(btn)
+             }
+        
              }
         }
 
@@ -136,21 +165,31 @@ class CustomThemeBuilderActivity : AppCompatActivity() {
             snackString("Theme \"${theme.name}\" saved!")
             finish()
           }
+        
+          }
         exportBtn.setOnClickListener {
-            editingTheme?.let { t ->
+            editingTheme?.let {
+        t ->
                 val json = CustomThemeManager.exportTheme(t)
                 android.content.ClipboardManager::class.java.let {
     val cm = getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
                     cm.setPrimaryClip(android.content.ClipData.newPlainText("theme", json))
                     snackString("Theme JSON copied to clipboard!")
                  }
+            
+                 }
             }
+        }
+    
         }
     }
 
     private fun statusBarHeight(): Int {
     val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else 0
+    }
+
+    
     }
 
     private fun Int.dp() = (this * resources.displayMetrics.density).toInt()

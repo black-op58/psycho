@@ -54,7 +54,8 @@ fun cancelJob() {
 
 fun startTest() {        
         p
-val searchResult = extension.search(searchString)        searchResultData.time = (System.currentTimeMillis() - searchStart).toInt()
+val searchResult = extension.search(searchString);
+        searchResultData.time = (System.currentTimeMillis() - searchStart).toInt()
         searchResultData.size = searchResult.size
         withContext(Dispatchers.Main) {
         searchResult()
@@ -64,7 +65,8 @@ if (searchResultData.size == 0 || testType == "basic") {
 return        }
 
 val chapterResultTime = System.currentTimeMillis()        
-val chapterResult = extension.loadBook(searchResult.first().link, null)        episodeResultData.time = (System.currentTimeMillis() - chapterResultTime).toInt()
+val chapterResult = extension.loadBook(searchResult.first().link, null);
+        episodeResultData.time = (System.currentTimeMillis() - chapterResultTime).toInt()
         episodeResultData.size = chapterResult.links.size
         withContext(Dispatchers.Main) {
         episodeResult()
@@ -83,6 +85,8 @@ if (::binding.isInitialized.not()) return
 if (pingResult == null) {
         binding.pingResultText.isVisible = false
 return
+}
+        
 }
         else {
         binding.pingResultText.isVisible = true        }
@@ -104,8 +108,10 @@ if (::binding.isInitialized.not()) return
 if (searchResultData.time == 0) {
         binding.searchResultText.isVisible = false
 return        }
-binding.searchResultText.setTextColor(            context.getThemeColor(com.google.android.material.R.attr.colorPrimary)        )        binding.searchResultText.isVisible = true
+binding.searchResultText.setTextColor(            context.getThemeColor(com.google.android.material.R.attr.colorPrimary)        );
+        binding.searchResultText.isVisible = true
 if (searchResultData.size == 0) {
-    val text = context.getString(                R.string.title_search_test,                context.getString(R.string.no_results_found)            )            binding.searchResultText.text = text            binding.searchResultText.setCompoundDrawablesWithIntrinsicBounds(                R.drawable.ic_circle_cancel, 0, 0, 0            )
+    val text = context.getString(                R.string.title_search_test,                context.getString(R.string.no_results_found)            );
+        binding.searchResultText.text = text            binding.searchResultText.setCompoundDrawablesWithIntrinsicBounds(                R.drawable.ic_circle_cancel, 0, 0, 0            )
         binding.searchResultText.setTextColor(
 }}})

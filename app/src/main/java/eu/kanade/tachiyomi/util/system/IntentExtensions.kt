@@ -14,7 +14,8 @@ when (uri.scheme) {
         putExtra(Intent.EXTRA_TEXT, uri.toString())
             }
 "content" -> {
-        message?.let { putExtra(Intent.EXTRA_TEXT, it)
+        message?.let {
+        putExtra(Intent.EXTRA_TEXT, it)
 }
 putExtra(Intent.EXTRA_STREAM, uri)}}
 clipData = ClipData.newRawUri(null, uri)
@@ -29,6 +30,8 @@ fun <reified T : Serializable> Bundle.getSerializableCompat(name: String): T? {
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getSerializable(name, T::class.java)
  }
+        
+ }
         else {        
 @Suppress("DEPRECATION")
         getSerializable(name) as? T
@@ -37,9 +40,13 @@ fun <reified T : Serializable> Intent.getSerializableExtraCompat(name: String): 
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getSerializableExtra(name, T::class.java)
  }
+        
+ }
         else {        
 @Suppress("DEPRECATION")
         getSerializableExtra(name) as? T
+    }
+    
     }
     }
 */

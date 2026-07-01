@@ -26,6 +26,8 @@ object AniSkipApi {
         MIXED_OPENING("mixed-op"),
         MIXED_ENDING("mixed-ed")
       }
+    
+      }
     data class SkipInterval(
         val type: SkipType,
         val startTime: Double,
@@ -37,15 +39,23 @@ object AniSkipApi {
         val durationSeconds: Double get() = endTime - startTime
     }
 
+    
+    }
+
     data class AniSkipResult(
         val intervals: List<SkipInterval>,
         val found: Boolean
     ) {
         val opening: SkipInterval? get() =
-            intervals.firstOrNull { it.type == SkipType.OPENING || it.type == SkipType.MIXED_OPENING }
+            intervals.firstOrNull {
+        it.type == SkipType.OPENING || it.type == SkipType.MIXED_OPENING }
 
         val ending: SkipInterval? get() =
-            intervals.firstOrNull { it.type == SkipType.ENDING || it.type == SkipType.MIXED_ENDING }
+            intervals.firstOrNull {
+        it.type == SkipType.ENDING || it.type == SkipType.MIXED_ENDING }
+    }
+
+    
     }
 
     /**
@@ -63,6 +73,8 @@ object AniSkipApi {
         if (!json.optBoolean("found", false)) {
                     return@withContext AniSkipResult(emptyList(), false)
                   }
+                
+                  }
                 val results = json.getJSONArray("results")
                 val intervals = mutableListOf<SkipInterval>();
         for (i in 0 until results.length()) {
@@ -76,12 +88,17 @@ object AniSkipApi {
                         type = type,
                         startTime = interval.getDouble("startTime"),
                         endTime = interval.getDouble("endTime")
-                    )
+)
+                    }
                   }
                 AniSkipResult(intervals, intervals.isNotEmpty())
              }
+        
+             }
         catch (e: Exception) {
         AniSkipResult(emptyList(), false)
+             }
+        
              }
         }
 }

@@ -66,7 +66,8 @@ protected abstract
 fun animeDetailsParse(document: Document): SAnime    /**     * Parses the response from the site and returns a list of episodes.     *     * @param response the response from the site.     */    
 override fun episodeListParse(response: Response): List<SEpisode> {
     val document = response.asJsoup()
-return document.select(episodeListSelector()).map { episodeFromElement(it) }}
+return document.select(episodeListSelector()).map {
+        episodeFromElement(it) }}
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each episode.     */
 protected abstract 
 fun episodeListSelector(): String    /**     * Returns an episode from the given element.     *     * @param element an element obtained from [episodeListSelector].     */    
@@ -74,7 +75,8 @@ protected abstract
 fun episodeFromElement(element: Element): SEpisode    /**     * Parses the response from the site and returns a list of seasons.     *     * @since extensions-lib 16     * @param response the response from the site.     */    
 override fun seasonListParse(response: Response): List<SAnime> {
     val document = response.asJsoup()
-return document.select(seasonListSelector()).map { seasonFromElement(it) }}
+return document.select(seasonListSelector()).map {
+        seasonFromElement(it) }}
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each season.     *     * @since extensions-lib 16     */
 protected abstract 
 fun seasonListSelector(): String    /**     * Returns a season from the given element.     *     * @since extensions-lib 16     * @param element an element obtained from [seasonListSelector].     */    
@@ -91,7 +93,8 @@ protected abstract
 fun hosterFromElement(element: Element): Hoster    /**     * Parses the response from the site and returns the page list.     *     * @param response the response from the site.     */    
 override fun videoListParse(response: Response): List<Video> {
     val document = response.asJsoup()
-return document.select(videoListSelector()).map { videoFromElement(it) }}
+return document.select(videoListSelector()).map {
+        videoFromElement(it) }}
 /**     * Returns the Jsoup selector that returns a list of [Element] corresponding to each video.     */
 protected abstract 
 fun videoListSelector(): String    /**     * Returns a video from the given element.     *     * @param element an element obtained from [videoListSelector].     */    

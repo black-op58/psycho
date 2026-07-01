@@ -6,14 +6,17 @@ private fun getSubtitleType(path: String): Any {
 return when {
 
 //put the title and episdode number in the extra data
-val extraData = mutableMapOf<String, String>()                extraData["title"] = animeLink
+val extraData = mutableMapOf<String, String>();
+        extraData["title"] = animeLink
                 extraData["episode"] = it.name!!
 if (it.isDirectory) {
     val episode = Episode(                        it.name!!,                        getTaskName(animeLink, it.name!!),                        it.name,                        null,                        null,                        extra = extraData,                        sEpisode = SEpisodeImpl()                    )
         episodes.add(episode)                }}}
     episodes.addAll(loadEpisodesCompat(animeLink, extra, sAnime))        //filter those with the same name
-return episodes.distinctBy { it.number }
-.sortedBy { MediaNameAdapter.findEpisodeNumber(it.number)
+return episodes.distinctBy {
+        it.number }
+.sortedBy {
+        MediaNameAdapter.findEpisodeNumber(it.number)
 }
 }
 

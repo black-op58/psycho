@@ -64,10 +64,12 @@ binding.filter.setOnClickListener {
     val genres =                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()            
 val popup = PopupMenu(this, it)
         popup.menu.add("All")
-            genres.forEach { genre ->
+            genres.forEach {
+        genre ->
                 popup.menu.add(genre)
             }
-popup.setOnMenuItemClickListener { menuItem ->
+popup.setOnMenuItemClickListener {
+        menuItem ->
 val selectedGenre = menuItem.title.toString()
         model.filterLists(selectedGenre)
                 true
@@ -90,6 +92,8 @@ binding.searchViewText.addTextChangedListener {
 private fun toggleSearchView(isVisible: Boolean) {
 if (isVisible) {
         binding.searchView.visibility = View.GONE            binding.searchViewText.text.clear()
+ }
+        
  }
         else {
         binding.searchView.visibility = View.VISIBLE            binding.searchViewText.requestFocus()            

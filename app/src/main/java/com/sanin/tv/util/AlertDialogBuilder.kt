@@ -113,28 +113,36 @@ if (message != null) builder.setMessage(message)
 if (customView != null) builder.setView(customView)
 if (items != null) {
 if (onItemSelected != null) {
-        builder.setSingleChoiceItems(items, selectedItemIndex) { dialog, which ->                    selectedItemIndex = which                    onItemSelected?.invoke(which)
+        builder.setSingleChoiceItems(items, selectedItemIndex) {
+        dialog, which ->                    selectedItemIndex = which                    onItemSelected?.invoke(which)
 if (dismissOnSelect) {
         dialog.dismiss()
                     }
 }
 } else if (checkedItems != null && onItemsSelected != null) {
-        builder.setMultiChoiceItems(items, checkedItems) { _, which, isChecked ->                    checkedItems?.set(which, isChecked)                    onItemsSelected?.invoke(checkedItems!!)
+        builder.setMultiChoiceItems(items, checkedItems) {
+        _, which, isChecked ->                    checkedItems?.set(which, isChecked);
+        onItemsSelected?.invoke(checkedItems!!)
+                 }
+                
                  }
                 }
 }
 if (posButtonTitle != null) {
-        builder.setPositiveButton(posButtonTitle) { dialog, _ ->                onPositiveButtonClick?.invoke()
+        builder.setPositiveButton(posButtonTitle) {
+        dialog, _ ->                onPositiveButtonClick?.invoke()
         dialog.dismiss()
              }
 }
 if (negButtonTitle != null) {
-        builder.setNegativeButton(negButtonTitle) { dialog, _ ->                onNegativeButtonClick?.invoke()
+        builder.setNegativeButton(negButtonTitle) {
+        dialog, _ ->                onNegativeButtonClick?.invoke()
         dialog.dismiss()
              }
 }
 if (neutralButtonTitle != null) {
-        builder.setNeutralButton(neutralButtonTitle) { dialog, _ ->                onNeutralButtonClick?.invoke()
+        builder.setNeutralButton(neutralButtonTitle) {
+        dialog, _ ->                onNeutralButtonClick?.invoke()
         dialog.dismiss()
              }
 }
@@ -142,7 +150,8 @@ if (onCancel != null) {
         builder.setOnCancelListener {
         onCancel?.invoke()            }}
 builder.setCancelable(cancelable)
-val dialog = builder.create()        attach?.invoke(dialog)
+val dialog = builder.create();
+        attach?.invoke(dialog)
         dialog.setOnDismissListener {
             onDismiss?.invoke()
         }
@@ -150,10 +159,13 @@ dialog.setOnShowListener {
         onShow?.invoke()
 }
 dialog.window?.apply {
-        setDimAmount(0.5f)            attributes.windowAnimations = android.R.style.Animation_Dialog
+        setDimAmount(0.5f);
+        attributes.windowAnimations = android.R.style.Animation_Dialog
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     val params = attributes                params.flags = params.flags or WindowManager.LayoutParams.FLAG_BLUR_BEHIND                params.setBlurBehindRadius(20);
         attributes = params
+            }
+            
             }
             }
     dialog.show()    }}

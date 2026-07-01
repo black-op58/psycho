@@ -44,11 +44,15 @@ val component =                        ComponentName(packageName, SettingsActivi
 try {
         startActivity(Intent().setComponent(component))
                     }
+        
+                    }
         catch (e: Exception) {
         startActivity(mainIntent)
                     }
 finishAndRemoveTask();
         reload = false
+}
+        
 }
         else {
         finish()                }}
@@ -73,45 +77,68 @@ settingsUiDark.setOnClickListener {
         uiTheme(2, it)
              }
 val themeString: String = PrefManager.getVal(PrefName.Theme)            
-val themeText = themeString.substring(0, 1) + themeString.substring(1).lowercase()            themeSwitcher.apply {
+val themeText = themeString.substring(0, 1) + themeString.substring(1).lowercase();
+        themeSwitcher.apply {
                 setText(themeText)
         setAdapter(
                     ArrayAdapter(context,                        R.layout.item_dropdown,                        ThemeManager.Companion.Theme.entries.map {
-        it.theme.substring(                                0,                                1                            ) + it.theme.substring(1).lowercase()                        })                )                setOnItemClickListener { _, _, i, _ ->                    PrefManager.setVal(                        PrefName.Theme,                        ThemeManager.Companion.Theme.entries[i].theme                    )
+        it.theme.substring(                                0,                                1                            ) + it.theme.substring(1).lowercase()                        })                );
+        setOnItemClickListener {
+        _, _, i, _ ->                    PrefManager.setVal(                        PrefName.Theme,                        ThemeManager.Companion.Theme.entries[i].theme                    )
         clearFocus()
         reload()
                  }
+                
+                 }
                 }
-settingsRecyclerView.adapter = SettingsAdapter(                arrayListOf(                    Settings(                        type = 1,                        name = getString(R.string.oled_background_mode),                        desc = listOf(                            getString(R.string.oled_mode_off),                            getString(R.string.oled_mode_pure),                            getString(R.string.oled_mode_glow),                            getString(R.string.oled_mode_gradient),                            getString(R.string.oled_mode_vignette)                        ).getOrElse(PrefManager.getVal<Int>(PrefName.OledMode)) { getString(R.string.oled_mode_off) },                        icon = R.drawable.ic_round_brightness_4_24,                        onClick = { b ->                            val modeNames = arrayOf(                                "${getString(R.string.oled_mode_off)}\n${getString(R.string.oled_mode_off_desc)}",                                "${getString(R.string.oled_mode_pure)}\n${getString(R.string.oled_mode_pure_desc)}",                                "${getString(R.string.oled_mode_glow)}\n${getString(R.string.oled_mode_glow_desc)}",                                "${getString(R.string.oled_mode_gradient)}\n${getString(R.string.oled_mode_gradient_desc)}",                                "${getString(R.string.oled_mode_vignette)}\n${getString(R.string.oled_mode_vignette_desc)}"                            )
+settingsRecyclerView.adapter = SettingsAdapter(                arrayListOf(                    Settings(                        type = 1,                        name = getString(R.string.oled_background_mode),                        desc = listOf(                            getString(R.string.oled_mode_off),                            getString(R.string.oled_mode_pure),                            getString(R.string.oled_mode_glow),                            getString(R.string.oled_mode_gradient),                            getString(R.string.oled_mode_vignette)                        ).getOrElse(PrefManager.getVal<Int>(PrefName.OledMode)) {
+        getString(R.string.oled_mode_off) },                        icon = R.drawable.ic_round_brightness_4_24,                        onClick = {
+        b ->                            val modeNames = arrayOf(                                "${getString(R.string.oled_mode_off)}\n${getString(R.string.oled_mode_off_desc)}",                                "${getString(R.string.oled_mode_pure)}\n${getString(R.string.oled_mode_pure_desc)}",                                "${getString(R.string.oled_mode_glow)}\n${getString(R.string.oled_mode_glow_desc)}",                                "${getString(R.string.oled_mode_gradient)}\n${getString(R.string.oled_mode_gradient_desc)}",                                "${getString(R.string.oled_mode_vignette)}\n${getString(R.string.oled_mode_vignette_desc)}"                            )
 val current = PrefManager.getVal<Int>(PrefName.OledMode)
         customAlertDialog().apply {
                                 setTitle(R.string.oled_background_mode)
-        singleChoiceItems(modeNames, current) { idx ->
-                                    PrefManager.setVal(PrefName.OledMode, idx)                                    b.settingsDesc.text = listOf(                                        getString(R.string.oled_mode_off),                                        getString(R.string.oled_mode_pure),                                        getString(R.string.oled_mode_glow),                                        getString(R.string.oled_mode_gradient),                                        getString(R.string.oled_mode_vignette)                                    ).getOrElse(idx) { getString(R.string.oled_mode_off)
+        singleChoiceItems(modeNames, current) {
+        idx ->
+                                    PrefManager.setVal(PrefName.OledMode, idx);
+        b.settingsDesc.text = listOf(                                        getString(R.string.oled_mode_off),                                        getString(R.string.oled_mode_pure),                                        getString(R.string.oled_mode_glow),                                        getString(R.string.oled_mode_gradient),                                        getString(R.string.oled_mode_vignette)                                    ).getOrElse(idx) {
+        getString(R.string.oled_mode_off)
 }
 reload()
 }
 setNegButton(R.string.cancel)
         show()}}
-),                    Settings(                        type = 1,                        name = getString(R.string.gradient_direction),                        desc = listOf(                            getString(R.string.gradient_dir_top_bottom),                            getString(R.string.gradient_dir_bottom_top),                            getString(R.string.gradient_dir_left_right),                            getString(R.string.gradient_dir_right_left)                        ).getOrElse(PrefManager.getVal<Int>(PrefName.GradientDirection)) { getString(R.string.gradient_dir_top_bottom) },                        icon = R.drawable.ic_round_brightness_4_24,                        onClick = { b ->                            val dirNames = arrayOf(                                getString(R.string.gradient_dir_top_bottom),                                getString(R.string.gradient_dir_bottom_top),                                getString(R.string.gradient_dir_left_right),                                getString(R.string.gradient_dir_right_left)                            )
+),                    Settings(                        type = 1,                        name = getString(R.string.gradient_direction),                        desc = listOf(                            getString(R.string.gradient_dir_top_bottom),                            getString(R.string.gradient_dir_bottom_top),                            getString(R.string.gradient_dir_left_right),                            getString(R.string.gradient_dir_right_left)                        ).getOrElse(PrefManager.getVal<Int>(PrefName.GradientDirection)) {
+        getString(R.string.gradient_dir_top_bottom) },                        icon = R.drawable.ic_round_brightness_4_24,                        onClick = {
+        b ->                            val dirNames = arrayOf(                                getString(R.string.gradient_dir_top_bottom),                                getString(R.string.gradient_dir_bottom_top),                                getString(R.string.gradient_dir_left_right),                                getString(R.string.gradient_dir_right_left)                            )
 val current = PrefManager.getVal<Int>(PrefName.GradientDirection)
         customAlertDialog().apply {
                                 setTitle(R.string.gradient_direction)
-        singleChoiceItems(dirNames, current) { idx ->
-                                    PrefManager.setVal(PrefName.GradientDirection, idx)                                    b.settingsDesc.text = dirNames.getOrElse(idx) { dirNames[0]}
+        singleChoiceItems(dirNames, current) {
+        idx ->
+                                    PrefManager.setVal(PrefName.GradientDirection, idx);
+        b.settingsDesc.text = dirNames.getOrElse(idx) {
+        dirNames[0]}
 reload()
 }
 setNegButton(R.string.cancel)
         show()}}
-),                    Settings(                        type = 2,                        name = getString(R.string.swap_colors),                        desc = getString(R.string.swap_colors_desc),                        icon = R.drawable.ic_round_brightness_4_24,                        isChecked = PrefManager.getVal(PrefName.SwapColors),                        switch = { isChecked, _ -> PrefManager.setVal(PrefName.SwapColors, isChecked); reload()
+),                    Settings(                        type = 2,                        name = getString(R.string.swap_colors),                        desc = getString(R.string.swap_colors_desc),                        icon = R.drawable.ic_round_brightness_4_24,                        isChecked = PrefManager.getVal(PrefName.SwapColors),                        switch = {
+        isChecked, _ -> PrefManager.setVal(PrefName.SwapColors, isChecked); reload()
 }
-),                    Settings(                        type = 2,                        name = getString(R.string.use_material3),                        desc = getString(R.string.use_material3_desc),                        icon = R.drawable.ic_round_new_releases_24,                        isChecked = PrefManager.getVal(PrefName.UseMaterial3),                        switch = { isChecked, _ -> PrefManager.setVal(PrefName.UseMaterial3, isChecked); reload()
+),                    Settings(                        type = 2,                        name = getString(R.string.use_material3),                        desc = getString(R.string.use_material3_desc),                        icon = R.drawable.ic_round_new_releases_24,                        isChecked = PrefManager.getVal(PrefName.UseMaterial3),                        switch = {
+        isChecked, _ -> PrefManager.setVal(PrefName.UseMaterial3, isChecked); reload()
 }
-),                    Settings(                        type = 1,                        name = getString(R.string.blend_level),                        desc = "${PrefManager.getVal<Int>(PrefName.BlendLevel)}",                        icon = R.drawable.ic_round_brightness_4_24,                        onClick = { b -> val opts = (0..20).map { "$it" }.toTypedArray(); val cur = PrefManager.getVal<Int>(PrefName.BlendLevel); customAlertDialog().apply { setTitle(R.string.blend_level); singleChoiceItems(opts, cur) { idx -> PrefManager.setVal(PrefName.BlendLevel, idx); b.settingsDesc.text = "$idx" }; setNegButton(R.string.cancel); show() }}
-),                    Settings(                        type = 2,                        name = getString(R.string.use_material_you),                        desc = getString(R.string.use_material_you_desc),                        icon = R.drawable.ic_round_new_releases_24,                        isChecked = PrefManager.getVal(PrefName.UseMaterialYou),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
+),                    Settings(                        type = 1,                        name = getString(R.string.blend_level),                        desc = "${PrefManager.getVal<Int>(PrefName.BlendLevel)}",                        icon = R.drawable.ic_round_brightness_4_24,                        onClick = {
+        b -> val opts = (0..20).map { "$it" }.toTypedArray(); val cur = PrefManager.getVal<Int>(PrefName.BlendLevel); customAlertDialog().apply {
+        setTitle(R.string.blend_level); singleChoiceItems(opts, cur) {
+        idx -> PrefManager.setVal(PrefName.BlendLevel, idx); b.settingsDesc.text = "$idx" }; setNegButton(R.string.cancel); show() }}
+),                    Settings(                        type = 2,                        name = getString(R.string.use_material_you),                        desc = getString(R.string.use_material_you_desc),                        icon = R.drawable.ic_round_new_releases_24,                        isChecked = PrefManager.getVal(PrefName.UseMaterialYou),                        switch = {
+        isChecked, _ ->                            PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
 if (isChecked) PrefManager.setVal(PrefName.UseCustomTheme, false)
         reload()
-                        },                        isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R                    ),                    Settings(                        type = 2,                        name = getString(R.string.use_unique_theme_for_each_item),                        desc = getString(R.string.use_unique_theme_for_each_item_desc),                        icon = R.drawable.ic_palette,                        isChecked = PrefManager.getVal(PrefName.UseSourceTheme),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.UseSourceTheme, isChecked)                        },                        isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R                    ),                    Settings(                        type = 2,                        name = getString(R.string.use_custom_theme),                        desc = getString(R.string.use_custom_theme_desc),                        icon = R.drawable.ic_palette,                        isChecked = PrefManager.getVal(PrefName.UseCustomTheme),                        switch = { isChecked, _ ->                            PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
+                        },                        isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R                    ),                    Settings(                        type = 2,                        name = getString(R.string.use_unique_theme_for_each_item),                        desc = getString(R.string.use_unique_theme_for_each_item_desc),                        icon = R.drawable.ic_palette,                        isChecked = PrefManager.getVal(PrefName.UseSourceTheme),                        switch = {
+        isChecked, _ ->                            PrefManager.setVal(PrefName.UseSourceTheme, isChecked)                        },                        isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R                    ),                    Settings(                        type = 2,                        name = getString(R.string.use_custom_theme),                        desc = getString(R.string.use_custom_theme_desc),                        icon = R.drawable.ic_palette,                        isChecked = PrefManager.getVal(PrefName.UseCustomTheme),                        switch = {
+        isChecked, _ ->                            PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
 if (isChecked) PrefManager.setVal(PrefName.UseMaterialYou, false)
         reload()
                         },                        isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R                    ),                    Settings(                        type = 1,                        name = getString(R.string.color_picker),                        desc = getString(R.string.color_picker_desc),                        icon = R.drawable.ic_palette,                        onClick = {
@@ -122,7 +149,8 @@ SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialog
                         name = getString(R.string.ui_scale),
                         desc = String.format("%.1f×", PrefManager.getVal<Float>(PrefName.UIScale)),
                         icon = R.drawable.ic_round_aspect_ratio_24,
-                        onClick = { b ->
+                        onClick = {
+        b ->
                             val opts = (0..4).map { 
         S
                             val vals = (0..4).map { 
@@ -130,18 +158,26 @@ SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialog
                             val cur = vals.indexOf(PrefManager.getVal<Float>(PrefName.UIScale)).coerceAtLeast(0)
                             customAlertDialog().apply {
                                 setTitle(R.string.ui_scale)
-                                singleChoiceItems(opts, cur) { idx ->
+                                singleChoiceItems(opts, cur) {
+        idx ->
                                     PrefManager.setVal(PrefName.UIScale, vals[idx])
                                     b.settingsDesc.text = String.format("%.1f×", vals[idx])
+                                 }
+                                
                                  }
                                 setNegButton(R.string.cancel)
                                 show()
                              }
+                        
+                             }
                         }
                     )
-                )            )            settingsRecyclerView.apply {
+                )            );
+        settingsRecyclerView.apply {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         setHasFixedSize(true)
+             }
+            
              }
             }
                 }
@@ -152,6 +188,8 @@ if (dialogTag == "colorPicker") {
     val color = extras.getInt(SimpleColorPicker.COLOR)
         PrefManager.setVal(PrefName.CustomThemeInt, color)
         Logger.log("Custom Theme: $color")
+            }
+    
             }
     }
 return true    }

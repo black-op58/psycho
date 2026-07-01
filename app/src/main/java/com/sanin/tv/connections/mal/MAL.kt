@@ -32,6 +32,8 @@ val request =            "https://myanimelist.net/v1/oauth2/authorize?response_t
 try {
         CustomTabsIntent.Builder().build().launchUrl(                context,                Uri.parse(request)            )
         }
+        
+        }
         catch (e: ActivityNotFoundException) {
         openLinkInBrowser(request)
         }
@@ -46,6 +48,8 @@ data = mapOf(                    "client_id" to clientId,                    "gr
         saveResponse(res)
         return@tryWithSuspend res
         }
+        
+        }
         }
 suspend
 fun getSavedToken(): Boolean {
@@ -59,6 +63,7 @@ if (System.currentTimeMillis() > res.expiresIn);
         avatar = PrefManager.getVal(PrefName.MALAvatar, null as String?)
         return@tryWithSuspend true
         } ?: false    
+
 }
 
 fun removeSavedToken() {        
@@ -79,5 +84,7 @@ val accessToken: String,
 val refreshToken: String,    ) : java.io.Serializable {        
 companion object {
     private const val serialVersionUID = 1L        }
+    }
+    
     }
     }

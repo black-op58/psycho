@@ -32,6 +32,8 @@ object AllAnimeScraper {
         val lang   = if (isDub) "dub" else "sub"
         return episodeStream(apiUrl, showId, episode.toString(), lang)
       }
+    
+      }
     // ── Step 1: search ────────────────────────────────────────────────────────
 
     private suspend fun searchShow(apiUrl: String, title: String): String? {
@@ -43,11 +45,15 @@ object AllAnimeScraper {
         if (resp.statusCode != 200) return null
             Mapper.json.decodeFromString<AllAnimeSearchResp>(resp.text).data?.shows?.edges?.firstOrNull()?._id
         }
+        
+        }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("AllAnimeScraper.searchShow: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -70,11 +76,15 @@ object AllAnimeScraper {
             val url = resolveSourceUrl(sources) ?: return null
             StreamFetcher.StreamResult(url = url, quality = "auto", providerName = "AllAnime")
          }
+        
+         }
         catch (e: CancellationException) {
         throw e }
         catch (e: Exception) {
         Logger.log("AllAnimeScraper.episodeStream: ${e.message}")
               null
+          }
+    
           }
     }
 
@@ -92,7 +102,12 @@ object AllAnimeScraper {
             val url = decodeUrl(src.sourceUrl ?: continue) ?: continue
             return url
         }
-        return sources.mapNotNull { decodeUrl(it.sourceUrl ?: return@mapNotNull null) }.firstOrNull()
+        
+        }
+        return sources.mapNotNull {
+        decodeUrl(it.sourceUrl ?: return@mapNotNull null) }.firstOrNull()
+      }
+    
       }
     /**
      * AllAnime encodes some URLs with a simple unicode-escape pattern.
@@ -109,14 +124,23 @@ object AllAnimeScraper {
                         append(hex.toIntOrNull(16)?.toChar() ?: raw[i])
                         i += 6
                     }
+        
+                    }
         else {
                         append(raw[i])
                         i++
                     }
+                
+                    }
                 }
             }
+        
+            }
         } else raw
-        return text.takeIf { it.startsWith("http") && (it.contains(".m3u8") || it.contains(".mp4"))
+        return text.takeIf {
+        it.startsWith("http") && (it.contains(".m3u8") || it.contains(".mp4"))
+ }
+    
  }
     }
 

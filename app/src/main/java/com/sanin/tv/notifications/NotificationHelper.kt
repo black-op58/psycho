@@ -25,8 +25,12 @@ object NotificationHelper {
                 description = CHANNEL_DESC
                 enableVibration(true)
              }
+            
+             }
             val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
+         }
+    
          }
     }
 
@@ -42,6 +46,8 @@ object NotificationHelper {
             ?.apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 putExtra("mediaId", mediaId)
+              }
+        
               }
         val pendingIntent = PendingIntent.getActivity(
             context, mediaId,
@@ -64,6 +70,8 @@ object NotificationHelper {
 
         with(NotificationManagerCompat.from(context)) {
             notify(mediaId, notification)
+         }
+    
          }
     }
 

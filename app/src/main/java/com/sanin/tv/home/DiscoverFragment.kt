@@ -60,9 +60,13 @@ fun selectGenre(genre: String?) {
         _selectedGenre.value = genre
         fetch()
       }
+    
+      }
     fun selectSeason(season: DiscoverSeason) {
         _selectedSeason.value = season
         fetch()
+      }
+    
       }
     fun fetch() {
         fetchJob?.cancel()
@@ -78,10 +82,14 @@ val mediaList = Anilist.query.discoverAnime(
                 )
                 _results.value = mediaList ?: emptyList()
              }
+        
+             }
         catch (e: Exception) {
         Logger.log(e)
             } finally {
                 _isLoading.value = false
+            }
+        
             }
         }
     }
@@ -102,16 +110,21 @@ data class DiscoverSeason(
             else     -> "FALL"
         }
 
+        
+        }
+
         fun current(): DiscoverSeason {
     val cal = Calendar.getInstance()
             val month = cal.get(Calendar.MONTH) + 1
 val year = cal.get(Calendar.YEAR)
             val season = seasonFor(month)
             return DiscoverSeason(
-                label = "${season.lowercase().replaceFirstChar { it.uppercase() }} $year",
+                label = "${season.lowercase().replaceFirstChar {
+        it.uppercase() }} $year",
                 apiValue = season,
                 year = year
-            )
+)
+            }
           }
         fun seasons(): List<DiscoverSeason> {
     val cal = Calendar.getInstance()
@@ -122,16 +135,23 @@ val curYear = cal.get(Calendar.YEAR)
 val nextIdx = SEASON_ORDER.indexOf(seasonFor(curMonth)) + 1
 val nextSeason = SEASON_ORDER[nextIdx % 4]
             val nextYear = if (nextIdx >= 4) curYear + 1 else curYear
-            result.add(DiscoverSeason("${nextSeason.lowercase().replaceFirstChar { it.uppercase() }} $nextYear", nextSeason, nextYear))
+            result.add(DiscoverSeason("${nextSeason.lowercase().replaceFirstChar {
+        it.uppercase() }} $nextYear", nextSeason, nextYear))
             // Current + 4 past seasons
 var idx = SEASON_ORDER.indexOf(seasonFor(curMonth))
             var yr = curYear
             repeat(5) {
-                result.add(DiscoverSeason("${SEASON_ORDER[idx].lowercase().replaceFirstChar { it.uppercase() }} $yr", SEASON_ORDER[idx], yr))
+                result.add(DiscoverSeason("${SEASON_ORDER[idx].lowercase().replaceFirstChar {
+        it.uppercase() }} $yr", SEASON_ORDER[idx], yr))
                 idx = (idx - 1 + 4) % 4
 if (idx == 3) yr--
             }
+            
+            }
             return result
+        }
+
+        
         }
 
         private val SEASON_ORDER = listOf("WINTER", "SPRING", "SUMMER", "FALL")
@@ -149,6 +169,8 @@ class DiscoverFragment : Fragment() {
     private val mediaAdaptor by lazy {
         MediaAdaptor(0, mutableListOf(), requireActivity())
       }
+    
+      }
     // Anime-only genres from AniList
     private val animeGenres = listOf(
         "All", "Action", "Adventure", "Comedy", "Drama", "Ecchi",
@@ -162,6 +184,9 @@ class DiscoverFragment : Fragment() {
     ): View {
         _binding = FragmentDiscoverBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -178,8 +203,11 @@ class DiscoverFragment : Fragment() {
 
         discoverViewModel.fetch()
       }
+    
+      }
     private fun setupGenreChips() {
-        animeGenres.forEach { genre ->
+        animeGenres.forEach {
+        genre ->
             val chip = Chip(requireContext()).apply {
                 text = genre
                 isCheckable = true
@@ -189,15 +217,20 @@ class DiscoverFragment : Fragment() {
                     isChecked = true
                     discoverViewModel.selectGenre(if (genre == "All") null else genre)
                  }
+            
+                 }
             }
             binding.genreChipGroup.addView(chip)
+         }
+    
          }
     }
 
     private fun setupSeasonChips() {
     val seasons = DiscoverSeason.seasons()
         val currentSeason = discoverViewModel.selectedSeason.value
-        seasons.forEach { season ->
+        seasons.forEach {
+        season ->
             val chip = Chip(requireContext()).apply {
                 text = season.label
                 isCheckable = true
@@ -207,8 +240,12 @@ class DiscoverFragment : Fragment() {
                     isChecked = true
                     discoverViewModel.selectSeason(season)
                  }
+            
+                 }
             }
             binding.seasonChipGroup.addView(chip)
+         }
+    
          }
     }
 
@@ -219,42 +256,60 @@ class DiscoverFragment : Fragment() {
             setSlideIn()
             isFocusable = true
             isFocusableInTouchMode = false
-            setOnKeyListener { _, keyCode, event ->
+            setOnKeyListener {
+        _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN &&
                     keyCode == KeyEvent.KEYCODE_BACK) {
         requireActivity().onBackPressedDispatcher.onBackPressed()
                     true
                 } else false
             }
+        
+            }
         }
+    }
+
+    
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            discoverViewModel.isLoading.collect { loading ->
+            discoverViewModel.isLoading.collect {
+        loading ->
                 binding.discoverProgressBar.isVisible = loading
                 binding.discoverRecyclerView.isVisible = !loading
             }
+        
+            }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            discoverViewModel.results.collect { media ->
+            discoverViewModel.results.collect {
+        media ->
                 val list = media.toMutableList()
                 // Refresh adaptor
-                mediaAdaptor.let { adaptor ->
+                mediaAdaptor.let {
+        adaptor ->
                     // Use reflection-free approach: recreate adaptor with new data
                     binding.discoverRecyclerView.swapAdapter(
                         MediaAdaptor(0, list, requireActivity()),
                         false
-                    )
+)
+                    }
                  }
                 if (media.isEmpty() && discoverViewModel.isLoading.value == false) {
                     binding.discoverEmptyText.isVisible = true
                     binding.discoverEmptyText.text = getString(R.string.no_media_found)
                  }
+        
+                 }
         else {
                     binding.discoverEmptyText.isVisible = false
                 }
+            
+                }
             }
+        }
+    
         }
     }
 

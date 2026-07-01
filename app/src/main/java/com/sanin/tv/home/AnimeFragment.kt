@@ -52,8 +52,10 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout
 if (displayCutout != null && displayCutout.boundingRects.size > 0) {
         height = max(                    statusBarHeight,                    min(                        displayCutout.boundingRects[0].width(),                        displayCutout.boundingRects[0].height()                    )                )            }}
-animePageAdapter = AnimePageAdapter(            requireActivity(),            requireActivity().supportFragmentManager,            viewLifecycleOwner.lifecycle        )        binding.animeViewPager.adapter = animePageAdapter        binding.animeViewPager.offscreenPageLimit = 1        binding.animeViewPager.apply {
-        isFocusable = true            getChildAt(0)?.setOnKeyListener { _, keyCode, event ->
+animePageAdapter = AnimePageAdapter(            requireActivity(),            requireActivity().supportFragmentManager,            viewLifecycleOwner.lifecycle        );
+        binding.animeViewPager.adapter = animePageAdapter        binding.animeViewPager.offscreenPageLimit = 1        binding.animeViewPager.apply {
+        isFocusable = true            getChildAt(0)?.setOnKeyListener {
+        _, keyCode, event ->
 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val count = animePageAdapter.itemCount
 when (keyCode) {
@@ -68,6 +70,8 @@ true
 }
 else -> false
                 }
+        
+                }
         }
     }
 }
@@ -77,10 +81,12 @@ object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
         s
 if (dy > 0) {
         // Scrolling down — hide FAB after a short delay.                        rv.postDelayed({
-if (_binding != null)                                binding.animePageScrollTop.visibility = View.GONE
+if (_binding != null);
+        binding.animePageScrollTop.visibility = View.GONE
                         }, 300)                    }}}
 )
-        animePageAdapter.ready.observe(viewLifecycleOwner) { i ->
+        animePageAdapter.ready.observe(viewLifecycleOwner) {
+        i ->
 if (i) {
         model.getUpdated().observe(viewLifecycleOwner) {
 if (it != null)
@@ -112,9 +118,13 @@ binding.animePageScrollTop.translationY = -navBarHeight.toFloat()
 
 fun load() = scope.launch(Dispatchers.Main) {            
         a
-animePageAdapter.onSeasonClick = { i ->            scope.launch(Dispatchers.IO) { model.loadTrending(i)}}
-animePageAdapter.onSeasonLongClick = { i ->
-val (season, year) = Anilist.currentSeasons[i]            ContextCompat.startActivity(                requireContext(),                Intent(requireContext(), SearchActivity::class.java)                    .putExtra("type", "ANIME")                    .putExtra("season", season)                    .putExtra("seasonYear", year.toString())                    .putExtra("search", true),                null            )            true        }
+animePageAdapter.onSeasonClick = {
+        i ->            scope.launch(Dispatchers.IO) {
+        model.loadTrending(i)}}
+animePageAdapter.onSeasonLongClick = {
+        i ->
+val (season, year) = Anilist.currentSeasons[i]            ContextCompat.startActivity(                requireContext(),                Intent(requireContext(), SearchActivity::class.java)                    .putExtra("type", "ANIME")                    .putExtra("season", season)                    .putExtra("seasonYear", year.toString())                    .putExtra("search", true),                null            );
+        true        }
 
 var running = false
 val live = Refresh.activity.getOrPut(this.hashCode()) { 
@@ -125,18 +135,25 @@ if (it && !running) {
         withContext(Dispatchers.IO) {
     val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)
 if (rescueMode) {
-        withContext(Dispatchers.Main) { load()
+        withContext(Dispatchers.Main) {
+        load()
  }
+}
+        
 }
         else {
         Anilist.userid =                                PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)                                    ?.toIntOrNull()
 if (Anilist.userid == null) {
-        getUserId(requireContext()) { load()
+        getUserId(requireContext()) {
+        load()
  }
+}
+        
 }
         else {
         scope.launch(Dispatchers.IO) {
-        getUserId(requireContext()) { load() }}}}}
+        getUserId(requireContext()) {
+        load() }}}}}
 model.loaded = true
 val loadTrending = async(Dispatchers.IO) { 
         m

@@ -26,6 +26,6 @@ data class CustomTheme(
             CustomTheme(name = "Ocean Blue", primaryColor = "#FF1565C0", accentColor = "#FF82B1FF", backgroundColor = "#FF0A0A1A"),
             CustomTheme(name = "Rose Gold", primaryColor = "#FFE91E63", accentColor = "#FFFFAB91", backgroundColor = "#FF1A0A0A"),
             CustomTheme(name = "Forest Green", primaryColor = "#FF2E7D32", accentColor = "#FFA5D6A7", backgroundColor = "#FF0A1A0A"),
-        )
-     }
+)
+        }
 }

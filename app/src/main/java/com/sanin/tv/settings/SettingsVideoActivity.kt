@@ -56,18 +56,26 @@ class SettingsVideoActivity : AppCompatActivity() {
                 Settings(
                     type = 1,
                     name = getString(R.string.quality_profile),
-                    desc = qualityOptions.getOrElse(PrefManager.getVal<Int>(PrefName.QualityProfile)) { qualityOptions[0] },
+                    desc = qualityOptions.getOrElse(PrefManager.getVal<Int>(PrefName.QualityProfile)) {
+        qualityOptions[0] },
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val cur = PrefManager.getVal<Int>(PrefName.QualityProfile)
                         customAlertDialog().apply {
                             setTitle(R.string.quality_profile)
-                            singleChoiceItems(qualityOptions, cur) { idx ->
+                            singleChoiceItems(qualityOptions, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.QualityProfile, idx)
-                                b.settingsDesc.text = qualityOptions.getOrElse(idx) { qualityOptions[0] }
+                                b.settingsDesc.text = qualityOptions.getOrElse(idx) {
+        qualityOptions[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -76,19 +84,25 @@ class SettingsVideoActivity : AppCompatActivity() {
                     name = getString(R.string.auto_hide_timeout),
                     desc = getString(R.string.auto_hide_timeout_desc),
                     icon = R.drawable.ic_round_fast_forward_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val cur = PrefManager.getVal<Int>(PrefName.AutoHideTimeout)
                         val options = (2..10).map { 
         "
                         customAlertDialog().apply {
                             setTitle(R.string.auto_hide_timeout)
-                            singleChoiceItems(options, cur - 2) { idx ->
+                            singleChoiceItems(options, cur - 2) {
+        idx ->
                                 val value = idx + 2
                                 PrefManager.setVal(PrefName.AutoHideTimeout, value)
                                 b.settingsDesc.text = "${value}s"
                             }
+                            
+                            }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -97,19 +111,25 @@ class SettingsVideoActivity : AppCompatActivity() {
                     name = getString(R.string.buffer_size),
                     desc = "${PrefManager.getVal<Int>(PrefName.BufferSize)} MB",
                     icon = R.drawable.ic_round_area_chart_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val cur = PrefManager.getVal<Int>(PrefName.BufferSize)
                         val options = listOf(16, 24, 32, 48, 64, 96, 128).map { 
         "
                         val sizes  = listOf(16, 24, 32, 48, 64, 96, 128)
                         customAlertDialog().apply {
                             setTitle(R.string.buffer_size)
-                            singleChoiceItems(options, sizes.indexOf(cur).coerceAtLeast(0)) { idx ->
+                            singleChoiceItems(options, sizes.indexOf(cur).coerceAtLeast(0)) {
+        idx ->
                                 PrefManager.setVal(PrefName.BufferSize, sizes[idx])
                                 b.settingsDesc.text = "${sizes[idx]} MB"
                             }
+                            
+                            }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -120,44 +140,63 @@ class SettingsVideoActivity : AppCompatActivity() {
                     desc = getString(R.string.hardware_decoding_desc),
                     icon = R.drawable.ic_round_dns_24,
                     isChecked = PrefManager.getVal(PrefName.HardwareDecoding),
-                    switch = { isChecked, _ ->
+                    switch = {
+        isChecked, _ ->
                         PrefManager.setVal(PrefName.HardwareDecoding, isChecked)
+                     }
+                
                      }
                 ),
                 // ── Rendering ─────────────────────────────────────────────────
                 Settings(
                     type = 1,
                     name = getString(R.string.video_output),
-                    desc = videoOutputOptions.getOrElse(PrefManager.getVal<Int>(PrefName.VideoOutput)) { videoOutputOptions[0] },
+                    desc = videoOutputOptions.getOrElse(PrefManager.getVal<Int>(PrefName.VideoOutput)) {
+        videoOutputOptions[0] },
                     icon = R.drawable.ic_round_movie_filter_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val cur = PrefManager.getVal<Int>(PrefName.VideoOutput)
                         customAlertDialog().apply {
                             setTitle(R.string.video_output)
-                            singleChoiceItems(videoOutputOptions, cur) { idx ->
+                            singleChoiceItems(videoOutputOptions, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.VideoOutput, idx)
-                                b.settingsDesc.text = videoOutputOptions.getOrElse(idx) { videoOutputOptions[0] }
+                                b.settingsDesc.text = videoOutputOptions.getOrElse(idx) {
+        videoOutputOptions[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
                 Settings(
                     type = 1,
                     name = getString(R.string.gpu_context),
-                    desc = gpuContextOptions.getOrElse(PrefManager.getVal<Int>(PrefName.GpuContext)) { gpuContextOptions[0] },
+                    desc = gpuContextOptions.getOrElse(PrefManager.getVal<Int>(PrefName.GpuContext)) {
+        gpuContextOptions[0] },
                     icon = R.drawable.ic_round_dns_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val cur = PrefManager.getVal<Int>(PrefName.GpuContext)
                         customAlertDialog().apply {
                             setTitle(R.string.gpu_context)
-                            singleChoiceItems(gpuContextOptions, cur) { idx ->
+                            singleChoiceItems(gpuContextOptions, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.GpuContext, idx)
-                                b.settingsDesc.text = gpuContextOptions.getOrElse(idx) { gpuContextOptions[0] }
+                                b.settingsDesc.text = gpuContextOptions.getOrElse(idx) {
+        gpuContextOptions[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -168,7 +207,10 @@ class SettingsVideoActivity : AppCompatActivity() {
                     desc = getString(R.string.debanding_desc),
                     icon = R.drawable.ic_round_auto_awesome_24,
                     isChecked = PrefManager.getVal(PrefName.Debanding),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Debanding, isChecked)
+                    switch = {
+        isChecked, _ -> PrefManager.setVal(PrefName.Debanding, isChecked)
+ }
+                
  }
                 ),
                 Settings(
@@ -177,24 +219,35 @@ class SettingsVideoActivity : AppCompatActivity() {
                     desc = getString(R.string.interpolation_desc),
                     icon = R.drawable.ic_round_animation_24,
                     isChecked = PrefManager.getVal(PrefName.Interpolation),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.Interpolation, isChecked)
+                    switch = {
+        isChecked, _ -> PrefManager.setVal(PrefName.Interpolation, isChecked)
+ }
+                
  }
                 ),
                 Settings(
                     type = 1,
                     name = getString(R.string.upscaling_algorithm),
-                    desc = upscalingOptions.getOrElse(PrefManager.getVal<Int>(PrefName.UpscalingAlgorithm)) { upscalingOptions[0] },
+                    desc = upscalingOptions.getOrElse(PrefManager.getVal<Int>(PrefName.UpscalingAlgorithm)) {
+        upscalingOptions[0] },
                     icon = R.drawable.ic_round_photo_size_select_actual_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val cur = PrefManager.getVal<Int>(PrefName.UpscalingAlgorithm)
                         customAlertDialog().apply {
                             setTitle(R.string.upscaling_algorithm)
-                            singleChoiceItems(upscalingOptions, cur) { idx ->
+                            singleChoiceItems(upscalingOptions, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.UpscalingAlgorithm, idx)
-                                b.settingsDesc.text = upscalingOptions.getOrElse(idx) { upscalingOptions[0] }
+                                b.settingsDesc.text = upscalingOptions.getOrElse(idx) {
+        upscalingOptions[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -204,10 +257,13 @@ class SettingsVideoActivity : AppCompatActivity() {
                     name = getString(R.string.raw_configuration),
                     desc = getString(R.string.raw_configuration_desc),
                     icon = R.drawable.ic_round_dns_24,
-                    onClick = { _ ->
+                    onClick = {
+        _ ->
                         val container = LinearLayout(this@SettingsVideoActivity).apply {
                             orientation = LinearLayout.VERTICAL
                             setPadding(48, 16, 48, 16)
+                         }
+                        
                          }
                         val editText = EditText(this@SettingsVideoActivity).apply {
                             layoutParams = ViewGroup.LayoutParams(
@@ -219,6 +275,8 @@ class SettingsVideoActivity : AppCompatActivity() {
                             hint = "key=value\nkey2=value2"
                             setText(PrefManager.getVal<String>(PrefName.RawConfiguration))
                          }
+                        
+                         }
                         container.addView(editText)
                         customAlertDialog().apply {
                             setTitle(R.string.raw_configuration)
@@ -226,8 +284,12 @@ class SettingsVideoActivity : AppCompatActivity() {
                             setPosButton(R.string.ok) {
                                 PrefManager.setVal(PrefName.RawConfiguration, editText.text.toString())
                              }
+                            
+                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 )
@@ -237,12 +299,18 @@ class SettingsVideoActivity : AppCompatActivity() {
             settingsRecyclerView.layoutManager = LinearLayoutManager(this@SettingsVideoActivity)
             settingsRecyclerView.isFocusable = true
             settingsRecyclerView.isFocusableInTouchMode = false
-            settingsRecyclerView.setOnKeyListener { _, keyCode, event ->
+            settingsRecyclerView.setOnKeyListener {
+        _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
         finish(); true
                 } else false
             }
-            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+            
+            }
+            settingsBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+ }
+        
  }
         }
     }

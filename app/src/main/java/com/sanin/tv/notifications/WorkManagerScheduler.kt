@@ -21,10 +21,14 @@ when (taskType) {
         androidx.work.WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                     CommentNotificationWorker.WORK_NAME,                    androidx.work.ExistingPeriodicWorkPolicy.UPDATE,                    recurringWork                )
             }
+    
+            }
     TaskType.ANILIST_NOTIFICATION -> {
     val recurringWork = PeriodicWorkRequest.Builder(                    AnilistNotificationWorker::class.java,                    interval,                    java.util.concurrent.TimeUnit.MINUTES,                    PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS,                    java.util.concurrent.TimeUnit.MINUTES                )                    .setConstraints(constraints)                    .build()
         androidx.work.WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                     AnilistNotificationWorker.WORK_NAME,                    androidx.work.ExistingPeriodicWorkPolicy.UPDATE,                    recurringWork                )
+            }
+    
             }
     TaskType.SUBSCRIPTION_NOTIFICATION -> {
     val recurringWork = PeriodicWorkRequest.Builder(                    SubscriptionNotificationWorker::class.java,                    interval,                    java.util.concurrent.TimeUnit.MINUTES,                    PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS,                    java.util.concurrent.TimeUnit.MINUTES                )                    .setConstraints(constraints)                    .build()

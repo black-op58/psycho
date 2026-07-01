@@ -26,10 +26,13 @@ class SearchActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@SearchActivity)
             isFocusable = true
             isFocusableInTouchMode = false
-            setOnKeyListener { _, keyCode, event ->
+            setOnKeyListener {
+        _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
         finish(); true
                 } else false
+            }
+            
             }
             // Placeholder - will display search results
             adapter = object : androidx.recyclerview.widget.RecyclerView.Adapter<SearchHeaderViewHolder>() {
@@ -45,10 +48,15 @@ class SearchActivity : AppCompatActivity() {
                             setTextColor(androidx.core.content.ContextCompat.getColor(this@SearchActivity, R.color.bg_white))
                             typeface = androidx.core.content.res.ResourcesCompat.getFont(this@SearchActivity, R.font.poppins)
                          }
-                    )
+                    
+                         }
+)
+                    }
                  }
                 override fun onBindViewHolder(holder: SearchHeaderViewHolder, position: Int) {}
                 override fun getItemCount() = 1
+            }
+        
             }
         }
     }

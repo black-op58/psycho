@@ -26,13 +26,17 @@ class NoInternet : AppCompatActivity() {
         finishAffinity()
                         return
                     }
+                    
+                    }
                     doubleBackToExitPressedOnce = true
                     Handler(Looper.getMainLooper()).postDelayed(
-                        { doubleBackToExitPressedOnce = false },
+                        {
+        doubleBackToExitPressedOnce = false },
                         2000
-                    )
+)
+                    }
                  }
             }
-        )
-     }
+)
+        }
 }

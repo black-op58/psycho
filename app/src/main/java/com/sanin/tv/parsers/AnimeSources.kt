@@ -32,27 +32,39 @@ object AnimeSources : WatchSources() {
     init {
         startObservingExtensions()
       }
+    
+      }
     @OptIn(DelicateCoroutinesApi::class)
     private fun startObservingExtensions() {
         GlobalScope.launch {
             try {
                 val mgr = Injekt.get<AnimeExtensionManager>()
-                mgr.installedExtensionsFlow.collect { extensions ->
+                mgr.installedExtensionsFlow.collect {
+        extensions ->
                     val nonNsfw = extensions.filter { 
         !
                     currentExtensions = nonNsfw
                     extensionEntries = buildEntries(nonNsfw, pinnedAnimeSources)
                     Logger.log("AnimeSources: updated list — ${list.size} sources")
                  }
+            
+                 }
             }
         catch (e: Exception) {
         Logger.log("AnimeSources: extension observer failed — ${e.message}")
              }
+        
+             }
         }
+    }
+
+    
     }
 
     fun performReorderAnimeSources() {
         extensionEntries = buildEntries(currentExtensions, pinnedAnimeSources)
+      }
+    
       }
     private fun buildEntries(
         extensions: List<AnimeExtension.Installed>,
@@ -61,15 +73,24 @@ object AnimeSources : WatchSources() {
         val ordered = if (pinned.isEmpty()) {
             extensions
         }
+        
+        }
         else {
             val byName = extensions.associateBy { 
         i
             val orderedList = pinned.mapNotNull { 
         b
-            orderedList + extensions.filter { it.name !in pinned }
+            orderedList + extensions.filter {
+        it.name !in pinned }
         }
-        return ordered.map { ext ->
-            Lazier<BaseParser>({ DynamicAnimeParser(ext) }, ext.name)
+        
+        }
+        return ordered.map {
+        ext ->
+            Lazier<BaseParser>({
+        DynamicAnimeParser(ext) }, ext.name)
+         }
+    
          }
     }
 }

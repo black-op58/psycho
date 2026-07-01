@@ -42,8 +42,12 @@ class AnilistContinueAdapter(
         )
         return VH(binding)
       }
+    
+      }
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.bind(getItem(position))
+      }
+    
       }
     inner class VH(private val b: ItemContinueWatchingBinding) :
         RecyclerView.ViewHolder(b.root) {
@@ -70,8 +74,13 @@ class AnilistContinueAdapter(
         b.cwMinutesRemaining.isVisible = true
                 b.cwMinutesRemaining.text = "~$remaining min left"
             }
+        
+            }
         else {
                 b.cwMinutesRemaining.isVisible = false
+            }
+
+            
             }
 
             // ── Next episode air countdown ────────────────────────────
@@ -81,34 +90,51 @@ class AnilistContinueAdapter(
         b.cwNextEp.isVisible = true
                 b.cwNextEp.text = "Ep $nextEpNum in ${formatCountdown(timeUntil)}"
             }
+        
+            }
         else {
                 b.cwNextEp.isVisible = false
+            }
+
+            
             }
 
             // ── Progress bar ──────────────────────────────────────────
             if (totalEps != null && totalEps > 0) {
         b.cwProgressBar.progress = ((progress.toFloat() / totalEps) * 100).toInt()
              }
+        
+             }
         else {
                 b.cwProgressBar.progress = 0
             }
 
+            
+            }
+
             // ── D-pad focus scale ─────────────────────────────────────
-            b.root.setOnFocusChangeListener { v, hasFocus ->
+            b.root.setOnFocusChangeListener {
+        v, hasFocus ->
                 v.animate()
                     .scaleX(if (hasFocus) 1.06f else 1f)
                     .scaleY(if (hasFocus) 1.06f else 1f)
                     .setDuration(120)
                     .start()
               }
+            
+              }
             // ── Click → details (no auto-resume; hero card handles that) ──
             b.root.setOnClickListener {
                 activity.startActivity(
                     Intent(activity, MediaDetailsActivity::class.java)
                         .putExtra("media", m)
-                )
+)
+                }
              }
         }
+    }
+
+    
     }
 
     companion object {
@@ -116,6 +142,8 @@ class AnilistContinueAdapter(
             override fun areItemsTheSame(a: Media, b: Media) = a.id == b.id
             override fun areContentsTheSame(a: Media, b: Media) =
                 a.userProgress == b.userProgress && a.timeUntilAiring == b.timeUntilAiring
+        }
+    
         }
     }
 
@@ -126,6 +154,8 @@ class AnilistContinueAdapter(
             days > 0  -> "${days}d ${hours}h"
             hours > 0 -> "${hours}h"
             else      -> "${TimeUnit.SECONDS.toMinutes(seconds)}m"
+        }
+    
         }
     }
 }

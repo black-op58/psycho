@@ -40,17 +40,24 @@ return binding.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         s
-        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile        binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!)        binding.statisticList.adapter = adapter
-        binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)        binding.statisticList.isNestedScrollingEnabled = true
-        binding.statisticList.layoutManager =            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)        binding.statisticProgressBar.visibility = View.VISIBLE
+        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile        binding.statisticList.setBaseline(activity.binding.profileNavBarContainer!!);
+        binding.statisticList.adapter = adapter
+        binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0);
+        binding.statisticList.isNestedScrollingEnabled = true
+        binding.statisticList.layoutManager =            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+        binding.statisticProgressBar.visibility = View.VISIBLE
         binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE        binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         topMargin = statusBarHeight        }
-binding.sourceType.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                MediaType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")
+binding.sourceType.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                MediaType.entries.map {
+        it.name.uppercase(Locale.ROOT).replace("_", " ")
 }
 )        )
-        binding.sourceFilter.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                StatType.entries.map { it.name.uppercase(Locale.ROOT).replace("_", " ")
+        binding.sourceFilter.setAdapter(            ArrayAdapter(                requireContext(),                R.layout.item_dropdown,                StatType.entries.map {
+        it.name.uppercase(Locale.ROOT).replace("_", " ")
 }
-)        )        binding.compare.setOnCheckedChangeListener { _, isChecked ->
+)        );
+        binding.compare.setOnCheckedChangeListener {
+        _, isChecked ->
 if (isChecked) {
         activity.lifecycleScope.launch {
 if (Anilist.userid != null) {
@@ -61,12 +68,16 @@ val userStats =                            Anilist.query.getUserStatistics(Anili
 if (userStats != null) {
         stats.add(userStats)
         withContext(Dispatchers.Main) {
-                                loadStats(type == MediaType.ANIME)                                binding.statisticProgressBar.visibility = View.GONE
+                                loadStats(type == MediaType.ANIME);
+        binding.statisticProgressBar.visibility = View.GONE
                                 binding.statisticList.visibility = View.VISIBLE                            }}}
 }
 }
+        
+}
         else {
-        stats.removeAll(                    stats.filter { it?.id == Anilist.userid }.toSet()                )
+        stats.removeAll(                    stats.filter {
+        it?.id == Anilist.userid }.toSet()                )
         loadStats(type == MediaType.ANIME)            }}
 binding.filterContainer.visibility = View.GONE    }
 
@@ -84,12 +95,17 @@ if (!loadedFirstTime) {
         stats.clear()
         stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
                     withContext(Dispatchers.Main) {
-                        binding.filterContainer.visibility = View.VISIBLE                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->                            type = MediaType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)
+                        binding.filterContainer.visibility = View.VISIBLE                        binding.sourceType.setOnItemClickListener {
+        _, _, i, _ ->                            type = MediaType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)
                         }
-binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->                            statType = StatType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)
+binding.sourceFilter.setOnItemClickListener {
+        _, _, i, _ ->                            statType = StatType.entries.toTypedArray()[i]                            loadStats(type == MediaType.ANIME)
 }
-loadStats(type == MediaType.ANIME)                        binding.statisticProgressBar.visibility = View.GONE}}
+loadStats(type == MediaType.ANIME);
+        binding.statisticProgressBar.visibility = View.GONE}}
 loadedFirstTime = true
+}
+        
 }
         else {
         loadStats(type == MediaType.ANIME)            }}
@@ -97,7 +113,8 @@ loadedFirstTime = true
 
 private fun standardizeChartPackets(        packets: MutableList<ChartPacket>    ): MutableList<ChartPacket> {
 if (packets.size <= 1) return packets
-val allNames = linkedSetOf<String>()        packets.forEach { 
+val allNames = linkedSetOf<String>();
+        packets.forEach { 
         p
 
 val referenceNames = allNames.toList()        

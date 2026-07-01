@@ -49,9 +49,12 @@ binding.markdownOptionsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams
 setContentView(binding.root)
         AndroidBug5497Workaround.assistActivity(this) {}
 
-val params = binding.createButton.layoutParams as ViewGroup.MarginLayoutParams        params.marginEnd = 16 * resources.displayMetrics.density.toInt()        binding.createButton.layoutParams = params
+val params = binding.createButton.layoutParams as ViewGroup.MarginLayoutParams        params.marginEnd = 16 * resources.displayMetrics.density.toInt();
+        binding.createButton.layoutParams = params
 if (intent.hasExtra("type")) {
         type = intent.getStringExtra("type")!!
+}
+        
 }
         else {
         toast("Error: No type")
@@ -76,10 +79,12 @@ var private = false        binding.privateCheckbox.setOnCheckedChangeListener {
 private = isChecked        }
 ping = intent.getStringExtra("other");
         text = ping ?: ""
-        binding.editText.setText(text)        binding.editText.addTextChangedListener {
+        binding.editText.setText(text);
+        binding.editText.addTextChangedListener {
 if (!isPreviewMode) {
         text = it.toString()            }}
-previewMarkdown(false)        binding.markdownCreatorBack.setOnClickListener {
+previewMarkdown(false);
+        binding.markdownCreatorBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
 }
 binding.createButton.setOnClickListener {
@@ -96,17 +101,23 @@ customAlertDialog().apply {
 val success = when (type) {
         "
 }
+        
+}
         else {
         Anilist.mutation.postActivity(text)
                             }
 //"review" -> Anilist.mutation.postReview(text)                            "replyActivity" -> if (isEdit) {
         Anilist.mutation.postReply(parentId, text, editId)
  }
+        
+ }
         else {
         Anilist.mutation.postReply(parentId, text)
                             }
 "message" -> if (isEdit) {
         Anilist.mutation.postMessage(userId, text, editId)
+ }
+        
  }
         else {
         Anilist.mutation.postMessage(userId, text, isPrivate = private)
@@ -123,6 +134,8 @@ binding.previewCheckbox.setOnClickListener {
         isPreviewMode = !isPreviewMode            previewMarkdown(isPreviewMode)
 if (isPreviewMode) {
         toast("Preview enabled")
+ }
+        
  }
         else {
         toast("Preview disabled")            }}
@@ -142,24 +155,33 @@ val lines = selectedText.split("\n")
 val newText = when (format) {
         M
 MarkdownFormat.ORDERED_LIST -> {
-        lines.mapIndexed { index, line -> "${index + 1}. $line" }.joinToString("\n")
+        lines.mapIndexed {
+        index, line -> "${index + 1}. $line" }.joinToString("\n")
  }
 else -> {
 if (format.syntax.contains("%s")) {
         String.format(format.syntax, selectedText)
+ }
+        
  }
         else {
         format.syntax.substring(0, format.selectionOffset) +                                selectedText +                                format.syntax.substring(format.selectionOffset)                    }}}
 binding.editText.text?.replace(start, end, newText)
         binding.editText.setSelection(start + newText.length)
  }
+        
+ }
         else {
 if (format.syntax.contains("%s")) {
         showInputDialog(format, start)
  }
+        
+ }
         else {
     val newText = format.syntax                binding.editText.text?.insert(start, newText)
         binding.editText.setSelection(start + format.selectionOffset)
+             }
+            
              }
             }
     }
@@ -181,7 +203,8 @@ customAlertDialog().apply {
         setCustomView(container)
             setPosButton(getString(R.string.ok)) {
     val input = inputEditText.text.toString()                
-val formattedText = String.format(format.syntax, input)                binding.editText.text?.insert(position, formattedText)
+val formattedText = String.format(format.syntax, input);
+        binding.editText.text?.insert(position, formattedText)
                 binding.editText.setSelection(position + formattedText.length)
              }
 setNegButton(getString(R.string.cancel))        }.show()
@@ -192,8 +215,11 @@ private fun previewMarkdown(preview: Boolean) {
 if (preview) {
         binding.editText.isVisible = false            binding.editText.isEnabled = false            binding.markdownPreview.isVisible = true            markwon.setMarkdown(binding.markdownPreview, AniMarkdown.getBasicAniHTML(text))
  }
+        
+ }
         else {
-        binding.editText.isVisible = true            binding.markdownPreview.isVisible = false            binding.editText.setText(text)            binding.editText.isEnabled = true
+        binding.editText.isVisible = true            binding.markdownPreview.isVisible = false            binding.editText.setText(text);
+        binding.editText.isEnabled = true
 val markwonEditor = MarkwonEditor.create(markwon)
         binding.editText.addTextChangedListener(
                 MarkwonEditorTextWatcher.withProcess(markwonEditor)            )

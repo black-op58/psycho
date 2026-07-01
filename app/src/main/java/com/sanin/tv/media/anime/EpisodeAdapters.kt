@@ -2,6 +2,8 @@ package com.sanin.tv.media.anime
 
 val params = empty.layoutParams as LinearLayout.LayoutParams        params.weight = 1 - div        empty.layoutParams = params
 }
+        
+}
         else {
         cont.visibility = View.GONE    }}
 
@@ -26,6 +28,8 @@ override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {            
         e
 }
+        
+}
         else {
         ep.number        } ?: ""
 when (holder) {
@@ -36,12 +40,18 @@ if (it.url.isNotEmpty()) {
 if (it.url.startsWith("content://") || it.url.startsWith("file://")) {
         it.url
 
+
+}
+        
+
 }
         else {
-        GlideUrl(it.url) { it.headers }
+        GlideUrl(it.url) {
+        it.headers }
 }
 } else null                }
-Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)                    .into(binding.itemMediaImage)                binding.itemEpisodeNumber.text = ep.number
+Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)                    .into(binding.itemMediaImage);
+        binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = if (ep.number == title) "Episode $title" else title
 if (ep.filler) {
         }
@@ -54,24 +64,34 @@ if (it.url.isNotEmpty()) {
 if (it.url.startsWith("content://") || it.url.startsWith("file://")) {
         it.url
 }
+        
+}
         else {
-        GlideUrl(it.url) { it.headers }
+        GlideUrl(it.url) {
+        it.headers }
 }
 } else null                }
-Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)                    .into(binding.itemMediaImage)                binding.itemEpisodeNumber.text = ep.number
+Glide.with(binding.itemMediaImage).load(thumb ?: media.cover).override(400, 0)                    .into(binding.itemMediaImage);
+        binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = title
 if (ep.rating != null) {
         binding.itemEpisodeRating.visibility = View.VISIBLE                    binding.itemEpisodeRating.text = "★ ${ep.rating}"
+}
+        
 }
         else {
         binding.itemEpisodeRating.visibility = View.GONE                }
 if (ep.date != null) {
         binding.itemEpisodeDate.visibility = View.VISIBLE                    binding.itemEpisodeDate.text = ep.date
 }
+        
+}
         else {
         binding.itemEpisodeDate.visibility = View.GONE                }
 if (ep.filler) {
         binding.itemEpisodeFiller.visibility = View.VISIBLE                    binding.itemEpisodeFillerView.visibility = View.VISIBLE
+}
+        
 }
         else {
         binding.itemEpisodeFiller.visibility = View.GONE                    binding.itemEpisodeFillerView.visibility = View.GONE                }
@@ -79,18 +99,24 @@ if (media.userProgress != null) {
 if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat()) {
         binding.itemEpisodeViewedCover.visibility = View.VISIBLE                        binding.itemEpisodeViewed.visibility = View.VISIBLE
 }
+        
+}
         else {
         binding.itemEpisodeViewedCover.visibility = View.GONE                        binding.itemEpisodeViewed.visibility = View.GONE                        binding.itemEpisodeCont.setOnLongClickListener {
-        updateProgress(media, ep.number)                            true
+        updateProgress(media, ep.number);
+        true
                         }
 }
+}
+        
 }
         else {
         binding.itemEpisodeViewedCover.visibility = View.GONE                    binding.itemEpisodeViewed.visibility = View.GONE                }
 handleProgress(                    binding.itemMediaProgressCont,                    binding.itemMediaProgress,                    binding.itemMediaProgressEmpty,                    media.id,                    ep.number                )
 }
 is EpisodeCompactViewHolder -> {
-    val binding = holder.binding                setAnimation(fragment.requireContext(), holder.binding.root)                binding.itemEpisodeNumber.text = ep.number
+    val binding = holder.binding                setAnimation(fragment.requireContext(), holder.binding.root);
+        binding.itemEpisodeNumber.text = ep.number
         
 private fun isRotationCoroutineRunningFor(episodeNumber: String): Boolean {
 return episodeNumber in activeCoroutines        }

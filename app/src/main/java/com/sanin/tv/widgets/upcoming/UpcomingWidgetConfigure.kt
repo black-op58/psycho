@@ -37,21 +37,30 @@ fun onCreate(icicle: Bundle?) {
         setContentView(binding.root)
         
 val prefs = getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE)        
-val topBackground =            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))        (binding.topBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(topBackground)        binding.topBackgroundButton.setOnClickListener {
+val topBackground =            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))        (binding.topBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(topBackground);
+        binding.topBackgroundButton.setOnClickListener {
     val tag = UpcomingWidget.PREF_BACKGROUND_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
          }
-val bottomBackground =            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))        (binding.bottomBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(bottomBackground)        binding.bottomBackgroundButton.setOnClickListener {
+val bottomBackground =            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))        (binding.bottomBackgroundButton as MaterialButton).iconTint =            ColorStateList.valueOf(bottomBackground);
+        binding.bottomBackgroundButton.setOnClickListener {
     val tag = UpcomingWidget.PREF_BACKGROUND_FADE            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
          }
-val titleTextColor = prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)        (binding.titleColorButton as MaterialButton).iconTint =            ColorStateList.valueOf(titleTextColor)        binding.titleColorButton.setOnClickListener {
+val titleTextColor = prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)        (binding.titleColorButton as MaterialButton).iconTint =            ColorStateList.valueOf(titleTextColor);
+        binding.titleColorButton.setOnClickListener {
     val tag = UpcomingWidget.PREF_TITLE_TEXT_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
          }
-val countdownTextColor = prefs.getInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)        (binding.countdownColorButton as MaterialButton).iconTint =            ColorStateList.valueOf(countdownTextColor)        binding.countdownColorButton.setOnClickListener {
+val countdownTextColor = prefs.getInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)        (binding.countdownColorButton as MaterialButton).iconTint =            ColorStateList.valueOf(countdownTextColor);
+        binding.countdownColorButton.setOnClickListener {
     val tag = UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR            SimpleColorPicker.showColorDialog(this, getString(R.string.custom_theme), dialogTag = tag)
         }
-    binding.useAppTheme.setOnCheckedChangeListener { _, isChecked ->            isMonetEnabled = isChecked
+    
+        }
+    binding.useAppTheme.setOnCheckedChangeListener {
+        _, isChecked ->            isMonetEnabled = isChecked
 if (isChecked) {
         binding.topBackgroundButton.visibility = View.GONE                binding.bottomBackgroundButton.visibility = View.GONE                binding.titleColorButton.visibility = View.GONE                binding.countdownColorButton.visibility = View.GONE                themeColors()
+ }
+        
  }
         else {
         binding.topBackgroundButton.visibility = View.VISIBLE                binding.bottomBackgroundButton.visibility = View.VISIBLE                binding.titleColorButton.visibility = View.VISIBLE                binding.countdownColorButton.visibility = View.VISIBLE            }}

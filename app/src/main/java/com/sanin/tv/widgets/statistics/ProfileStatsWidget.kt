@@ -1,6 +1,7 @@
 package com.sanin.tv.widgets.statistics
 
-appWidgetIds.forEach { appWidgetId ->            context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().clear().apply()
+appWidgetIds.forEach {
+        appWidgetId ->            context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().clear().apply()
         }
 super.onDeleted(context, appWidgetIds)
      }

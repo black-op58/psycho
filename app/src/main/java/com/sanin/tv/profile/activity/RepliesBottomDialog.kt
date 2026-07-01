@@ -34,7 +34,8 @@ return _binding?.root    }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {        
         b
-val context = requireContext()        binding.replyButton.setOnClickListener {
+val context = requireContext();
+        binding.replyButton.setOnClickListener {
             ContextCompat.startActivity(                context,                Intent(context, ActivityMarkdownCreator::class.java)                    .putExtra("type", "replyActivity")                    .putExtra("parentId", activityId),                null            )
         }
 activityId = requireArguments().getInt("activityId")
@@ -54,8 +55,10 @@ if (response != null) {
         replies.addAll(response.data.page.activityReplies)
                 adapter.update(
                     replies.map {
-        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) { i, _ ->                            onClick(i)                        }}
+        ActivityReplyItem(                            it, activityId, requireActivity(), adapter,                        ) {
+        i, _ ->                            onClick(i)                        }}
 )
+}
  }
         else {
         snackString("Failed to load replies")            }}

@@ -30,6 +30,8 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                     overridePendingTransition(0, 0)
                  }
+                
+                 }
                 .start()
         }, 2000)
      }

@@ -19,6 +19,8 @@ if (!resetLock.getAndSet(true)) {
                         timer.purge()
                         resetLock.set(false)
                      }
+                    
+                     }
                     }
 }, delay)
         resetLock.set(false)

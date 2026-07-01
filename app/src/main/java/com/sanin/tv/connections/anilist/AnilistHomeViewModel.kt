@@ -69,6 +69,8 @@ class AnilistHomeViewModel : ViewModel() {
             warmLogos(result["favourites"])
             warmLogos(result["recommended"])
          }
+    
+         }
     }
 
     /**
@@ -77,6 +79,8 @@ class AnilistHomeViewModel : ViewModel() {
     suspend fun setListImages() {
         tryWithSuspend {
             Anilist.query.setListImages()
+         }
+    
          }
     }
 
@@ -91,7 +95,12 @@ class AnilistHomeViewModel : ViewModel() {
                 popularAllTime.postValue(list)
                 warmLogos(list)   // Carousel cards need logos immediately
             }
+        
+            }
         }
+    }
+
+    
     }
 
     /**
@@ -100,11 +109,18 @@ class AnilistHomeViewModel : ViewModel() {
      * Safe to call multiple times — TmdbApi skips items already cached.
      */
     private fun warmLogos(list: List<Media>?) {
-        list?.forEach { media ->
+        list?.forEach {
+        media ->
             val id = media.id ?: return@forEach
-            viewModelScope.launch { TmdbApi.getLogoUrl(id)
+            viewModelScope.launch {
+        TmdbApi.getLogoUrl(id)
+ }
+        
  }
         }
+    }
+
+    
     }
 
     /**
@@ -114,6 +130,8 @@ class AnilistHomeViewModel : ViewModel() {
         tryWithSuspend {
             val users = Anilist.query.getUserStatus()
             userStatus.postValue(users ?: arrayListOf())
+         }
+    
          }
     }
 }

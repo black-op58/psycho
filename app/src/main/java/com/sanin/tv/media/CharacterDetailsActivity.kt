@@ -51,33 +51,46 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
         setContentView(binding.root)
         initActivity(this)
-        screenWidth = resources.displayMetrics.run { widthPixels / density }
+        screenWidth = resources.displayMetrics.run {
+        widthPixels / density }
 if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =            ContextCompat.getColor(this, R.color.transparent)        
 val banner =
-if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams { height += statusBarHeight }
-binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true
-        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {
+if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams {
+        height += statusBarHeight }
+binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight}
+binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight}
+binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight);
+        binding.characterTitle.isSelected = true
+        binding.characterAppBar.addOnOffsetChangedListener(this);
+        binding.characterClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
 }
 binding.authorCharactersRecycler.isVisible = false        binding.AuthorCharactersText.isVisible = false        binding.authorCharacterDesc.isVisible = false        character = intent.getSerialized("character") ?: return        binding.characterTitle.text = character.name        banner.loadImage(character.banner)
         binding.characterCoverImage.loadImage(character.image)
         binding.characterFav.setImageResource(
-if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {
+if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        );
+        binding.characterCoverImage.setOnLongClickListener {
         ImageViewDialog.newInstance(                this,                character.name,                character.image            )
          }
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        
 val link = if (rescueMode) {
         "
 }
+        
+}
         else {            "https://anilist.co/character/${character.id}"        }
 binding.characterShare.setOnClickListener {
-    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)
+    val i = Intent(Intent.ACTION_SEND);
+        i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)
         startActivity(Intent.createChooser(i, character.name))
          }
+    
+         }
     binding.characterShare.setOnLongClickListener {
-        openLinkInBrowser(link)            true
+        openLinkInBrowser(link);
+        true
         }
 if (!rescueMode) {
         lifecycleScope.launch {
@@ -93,9 +106,13 @@ if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)
         character.isFav = !character.isFav                        binding.characterFav.setImageResource(
 if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                        )
  }
+        
+ }
         else {
         snackString("Failed to toggle favorite")                    }}
 }
+}
+        
 }
         else {
         binding.characterFav.visibility = View.GONE        }
@@ -106,7 +123,8 @@ val roles = character.roles ?: arrayListOf()
 val mediaAdaptor = MediaAdaptor(0, roles, this, matchParent = true)                
 val concatAdaptor =                    ConcatAdapter(CharacterDetailsAdapter(character, this), mediaAdaptor)                
 val gridSize = (screenWidth / 124f).toInt()                
-val gridLayoutManager = GridLayoutManager(this, gridSize)                gridLayoutManager.spanSizeLookup = 
+val gridLayoutManager = GridLayoutManager(this, gridSize);
+        gridLayoutManager.spanSizeLookup = 
 object : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
 return when (position) {
@@ -128,7 +146,8 @@ override fun onResume() {
 override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
 if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
 val percentage = abs(i) * 100 / mMaxScrollSize
-val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        binding.characterCover.scaleX = 1f * cap
+val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f);
+        binding.characterCover.scaleX = 1f * cap
         binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
 if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)

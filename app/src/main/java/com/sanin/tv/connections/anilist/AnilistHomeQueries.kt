@@ -28,9 +28,13 @@ suspend fun AnilistQueries.loadPopularAllTime(): List<Media>? = tryWithSuspend {
             english
             userPreferred
           }
+          
+          }
           coverImage {
             extraLarge
             large
+          }
+          
           }
           bannerImage
           genres
@@ -41,16 +45,26 @@ suspend fun AnilistQueries.loadPopularAllTime(): List<Media>? = tryWithSuspend {
           format
           season
           seasonYear
-          nextAiringEpisode { episode airingAt }
-          mediaListEntry { status progress }
+          nextAiringEpisode {
+        episode airingAt }
+          mediaListEntry {
+        status progress }
+        }
+      
         }
       }
+    }
+    
     }
     """.trimIndent().replace("\n", " ")
 
     val response = executeQuery<Query.Page>(query, force = true)?.data?.page
-    response?.medias?.mapNotNull { raw ->
-        try { Media(raw)
+    response?.medias?.mapNotNull {
+        raw ->
+        try {
+        Media(raw)
+ }
+        
  }
         catch (_: Exception) {
         null }

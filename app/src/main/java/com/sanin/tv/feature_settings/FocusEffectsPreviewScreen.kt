@@ -21,10 +21,13 @@ val effects = listOf(        "glow"    to "Glow \u2014 Soft icy-blue halo with b
         R
 Text("Focus Effects Preview", style = MaterialTheme.typography.headlineSmall, color = Color.White)
 }
-Text(            "Select a focus effect to apply it to all navigation pills and interactive elements.",            color = Color.White.copy(alpha = 0.7f),            modifier = Modifier.padding(bottom = 24.dp)        )        effects.forEach { (effectKey, description) ->
+Text(            "Select a focus effect to apply it to all navigation pills and interactive elements.",            color = Color.White.copy(alpha = 0.7f),            modifier = Modifier.padding(bottom = 24.dp)        );
+        effects.forEach { (effectKey, description) ->
 val isSelected = settings.focusEffect == effectKey            Column(modifier = Modifier.padding(bottom = 16.dp)) {                
         T
 )
-        Button(                        onClick = { viewModel.updateFocusEffect(effectKey) },                        colors = ButtonDefaults.buttonColors(                            containerColor = if (isSelected) Color(0xFF87CEEB) else Color.White.copy(alpha = 0.15f)                        )                    ) { Text(if (isSelected) "Applied" else "Apply", color = if (isSelected) Color.Black else Color.White)}}}}
+        Button(                        onClick = {
+        viewModel.updateFocusEffect(effectKey) },                        colors = ButtonDefaults.buttonColors(                            containerColor = if (isSelected) Color(0xFF87CEEB) else Color.White.copy(alpha = 0.15f)                        )                    ) {
+        Text(if (isSelected) "Applied" else "Apply", color = if (isSelected) Color.Black else Color.White)}}}}
 }
 }

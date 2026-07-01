@@ -20,18 +20,23 @@ if (media.relations.isNullOrEmpty() || (fullMapped.relations?.size ?: 0) > (medi
 if (media.prequel == null) media.prequel = fullMapped.prequel
 if (media.sequel == null) media.sequel = fullMapped.sequel                }
 if (!fullMapped.staff.isNullOrEmpty()) {
-        media.staff = ArrayList(                        ((media.staff ?: arrayListOf()) + fullMapped.staff!!).distinctBy { it.id }
+        media.staff = ArrayList(                        ((media.staff ?: arrayListOf()) + fullMapped.staff!!).distinctBy {
+        it.id }
 )
-                }
+}
 if (!fullMapped.recommendations.isNullOrEmpty() &&                    (fullMapped.recommendations?.size ?: 0) > (media.recommendations?.size ?: 0)) {
         media.recommendations = fullMapped.recommendations                }
 if (!fullMapped.trailer.isNullOrBlank()) media.trailer = fullMapped.trailer
 if (isAnime) {
-        fullMapped.anime?.let { anime ->
+        fullMapped.anime?.let {
+        anime ->
 if (anime.op.isNotEmpty()) media.anime?.op = anime.op
-if (anime.ed.isNotEmpty()) media.anime?.ed = anime.ed                        anime.mainStudio?.let { media.anime?.mainStudio = it }
-if (!anime.producers.isNullOrEmpty()) media.anime?.producers = anime.producers                        anime.season?.let { media.anime?.season = it }
-anime.seasonYear?.let { media.anime?.seasonYear = it }
+if (anime.ed.isNotEmpty()) media.anime?.ed = anime.ed                        anime.mainStudio?.let {
+        media.anime?.mainStudio = it }
+if (!anime.producers.isNullOrEmpty()) media.anime?.producers = anime.producers                        anime.season?.let {
+        media.anime?.season = it }
+anime.seasonYear?.let {
+        media.anime?.seasonYear = it }
 if (media.anime?.nextAiringEpisodeTime == null && anime.nextAiringEpisodeTime != null) {
         media.anime?.nextAiringEpisodeTime = anime.nextAiringEpisodeTime                }
 }
@@ -40,12 +45,14 @@ val mappedCharacters = charactersDeferred.await()                .mapNotNull {
         j
 val character = jChar.character ?: return@mapNotNull null                    Character(                        id = character.malId,                        name = character.name,                        image = character.images?.jpg?.largeImageUrl ?: character.images?.jpg?.imageUrl,                        banner = media.banner ?: media.cover,                        role = jChar.role ?: "",                        isFav = false,                        voiceActor = jChar.voiceActors                            ?.mapNotNull { 
         v
-?.let { ArrayList(it)
+?.let {
+        ArrayList(it)
 }
 )
-                }
+}
 if (mappedCharacters.isNotEmpty()) {
-        media.characters = ArrayList(mappedCharacters.distinctBy { it.id })
+        media.characters = ArrayList(mappedCharacters.distinctBy {
+        it.id })
              }
 val mappedStaff = staffDeferred.await()                .mapNotNull { 
         s
@@ -58,8 +65,11 @@ val rawRelation = rel.relation?.substringBefore("\n") ?: ""
 if (rawRelation.isNotEmpty()) {
         rel.relation = "$rawRelation\n$resolvedFmt"                                }}}
 }
+        
+}
         catch (_: Exception) {}
-deferreds.forEach { it.await()
+deferreds.forEach {
+        it.await()
   }
 fun setMedia(m: Media) {        
         m
@@ -69,6 +79,8 @@ try {
 if (m.idIMDB == null) {
         m.idIMDB = com.sanin.tv.others.IdMappers.getImdbId(m.id)
                     }
+}
+        
 }
         catch (e: Exception) {
         com.sanin.tv.util.Logger.log(e)}}}
@@ -122,16 +134,21 @@ fun loadEpisodeVideos(ep: Episode, i: Int, post: Boolean = true) {
     val link = ep.link ?: return
 if (!ep.allStreams || ep.extractors.isNullOrEmpty()) {
     val existingExtractors = ep.extractors?.toMutableList() ?: mutableListOf()            
-val list = mutableListOf<VideoExtractor>()            ep.extractors = list
+val list = mutableListOf<VideoExtractor>();
+        ep.extractors = list
             watchSources?.get(i)?.apply {
 if (!post && !allowsPreloading) return@apply                ep.sEpisode?.let {
-        loadByVideoServers(link, ep.extra, it) { extractor ->
+        loadByVideoServers(link, ep.extra, it) {
+        extractor ->
 if (extractor.videos.isNotEmpty()) {
-        list.add(extractor)                            ep.extractorCallback?.invoke(extractor)
+        list.add(extractor);
+        ep.extractorCallback?.invoke(extractor)
                         }}}
 ep.extractorCallback = null
-if (list.isNotEmpty())                    ep.allStreams = true
-else if (existingExtractors.isNotEmpty())                    ep.extractors = existingExtractors
+if (list.isNotEmpty());
+        ep.allStreams = true
+else if (existingExtractors.isNotEmpty());
+        ep.extractors = existingExtractors
             }
 }
 if (post) {
@@ -153,6 +170,8 @@ val result: List<AniSkip.Stamp>? = if (extensionTimestamps.isNotEmpty()) {
 } else if (malId != null) {
         AniSkip.getResult(malId, episodeNum, duration, useProxyForTimeStamps)
  }
+        
+ }
         else {
         null        }
 timeStampsMap[episodeNum] = result        timeStamps.postValue(result)
@@ -165,13 +184,15 @@ private fun eu.kanade.tachiyomi.animesource.model.TimeStamp.toAniSkipStamp(): An
         eu.kanade.tachiyomi.animesource.model.ChapterType.MixedOp  -> "mixed-op"
         else -> "mixed-ed"
     }
+    
+    }
     return AniSkip.Stamp(
         interval = AniSkipInterval(startTime = start, endTime = end),
         skipType = skipType,
         skipId = "",
         episodeLength = end
-    )
-  }
+)
+    }
 suspend fun searchNovels(query: String, i: Int) {
     val position = if (i >= novelSources.list.size) 0 else i
 val source = novelSources[position]        tryWithSuspend(post = true) {
@@ -210,9 +231,11 @@ val chapterName = fileUrl.headers?.get("X-Chapter-Name") ?: "Chapter ${index + 1
 val releaseTime = fileUrl.headers?.get("X-Release-Time")                    
 val chapterNumber = fileUrl.headers?.get("X-Chapter-Number")
         ShowResponse(                        name = chapterName,                        link = fileUrl.url,                        coverUrl = novelResponse.coverUrl,                        extra = mutableMapOf<String, String>().apply {
-        releaseTime?.let { put("releaseTime", it)
+        releaseTime?.let {
+        put("releaseTime", it)
  }
-chapterNumber?.let { put("chapterNumber", it)
+chapterNumber?.let {
+        put("chapterNumber", it)
 }
 put("sourceName", source.name)
 }
@@ -236,6 +259,9 @@ private val fetchedOnlineSubtitles = mutableMapOf<String, List<Any>>()
 
     fun saveFetchedSubtitles(id: String, subs: List<Any>) {
         fetchedOnlineSubtitles[id] = subs
+    }
+
+    
     }
 
     fun getFetchedSubtitles(id: String): List<Any>? {

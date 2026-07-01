@@ -26,19 +26,27 @@ suspend fun AnilistQueries.searchAnime(
                 $filterPart
             ) {
                 id idMal type isAdult status(version: 2) chapters episodes
-                nextAiringEpisode { episode }
+                nextAiringEpisode {
+        episode }
                 meanScore isFavourite format popularity
                 bannerImage
-                coverImage { large }
-                title { english romaji userPreferred }
-                mediaListEntry { progress private score(format: POINT_100) status }
-                startDate { year }
+                coverImage {
+        large }
+                title {
+        english romaji userPreferred }
+                mediaListEntry {
+        progress private score(format: POINT_100) status }
+                startDate {
+        year }
+            }
+        
             }
         }
     }"""
 
     val response = Anilist.executeQuery<com.sanin.tv.connections.anilist.api.Query.Page>(gql, force = true)
-    response?.data?.page?.media?.map { com.sanin.tv.media.Media(it)
+    response?.data?.page?.media?.map {
+        com.sanin.tv.media.Media(it)
  }
 }
 
@@ -64,18 +72,26 @@ suspend fun AnilistQueries.discoverAnime(
                 $yearPart
             ) {
                 id idMal type isAdult status(version: 2) chapters episodes
-                nextAiringEpisode { episode }
+                nextAiringEpisode {
+        episode }
                 meanScore isFavourite format popularity
                 bannerImage
-                coverImage { large }
-                title { english romaji userPreferred }
-                mediaListEntry { progress private score(format: POINT_100) status }
-                startDate { year }
+                coverImage {
+        large }
+                title {
+        english romaji userPreferred }
+                mediaListEntry {
+        progress private score(format: POINT_100) status }
+                startDate {
+        year }
+            }
+        
             }
         }
     }"""
 
     val response = Anilist.executeQuery<Query.Page>(query, force = true)
-    response?.data?.page?.media?.map { Media(it)
+    response?.data?.page?.media?.map {
+        Media(it)
  }
 }

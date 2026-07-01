@@ -1,7 +1,8 @@
 package eu.kanade.tachiyomi.extension.util
 
 }
-deferred.map { it.await()}}}
+deferred.map {
+        it.await()}}}
 /**     * Attempts to load an extension from the given
 package name. It checks if the extension     * contains the required feature flag before trying to load it.     */    
 fun loadAnimeExtensionFromPkgName(context: Context, pkgName: String): AnimeLoadResult {
@@ -48,6 +49,8 @@ val sources = appInfo.metaData.getString("$ANIME_PACKAGE$XX_METADATA_SOURCE_CLAS
 if (sourceClass.startsWith(".")) {
         pkgInfo.packageName + sourceClass
 }
+        
+}
         else {
         sourceClass                }}
 .flatMap {
@@ -58,6 +61,8 @@ val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()        
 else -> throw Exception("Unknown source 
 class type! ${obj.javaClass}")
                     }
+}
+        
 }
         catch (e: Throwable) {
         Logger.log("Extension load error: $extName ($it)")

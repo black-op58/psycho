@@ -26,6 +26,8 @@ else -> return chain.proceed(request)
 try {
         fairLock.acquire()
         }
+        
+        }
         catch (e: InterruptedException) {
         throw IOException(e)
          }
@@ -45,8 +47,12 @@ throw IOException("Canceled")
 } else if (hasRemovedExpired) {
         break
 }
+        
+}
         else {
 try { // wait for the first entry to expire, or notified by cached response                            (requestQueue as Object).wait(requestQueue.first - periodStart)
+                        }
+        
                         }
         catch (_: InterruptedException) {
         continue                        }}}

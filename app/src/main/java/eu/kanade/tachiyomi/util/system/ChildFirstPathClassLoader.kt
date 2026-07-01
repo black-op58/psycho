@@ -16,11 +16,15 @@ if (c == null && systemClassLoader != null) {
 try {
         c = systemClassLoader.loadClass(name)
             }
+        
+            }
         catch (_: ClassNotFoundException) {}
 }
 if (c == null) {
         c = try {
         findClass(name)
+            }
+        
             }
         catch (_: ClassNotFoundException) {
         super.loadClass(name, resolve)
@@ -60,6 +64,8 @@ override fun nextElement() = iterator.next()
 override fun getResourceAsStream(name: String?): InputStream? {
 return try {
         getResource(name)?.openStream()
+        }
+        
         }
         catch (_: IOException) {
         return null        }

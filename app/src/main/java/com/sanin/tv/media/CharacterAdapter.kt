@@ -23,7 +23,8 @@ return CharacterViewHolder(binding)
 override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
     val binding = holder.binding        setAnimation(binding.root.context, holder.binding.root)        
 val character = characterList.getOrNull(position) ?: return
-val whitespace = "${if (character.role.lowercase() == "null") "" else character.role}  "        binding.itemCompactRelation.text = whitespace        binding.itemCompactImage.loadImage(character.image)        binding.itemCompactTitle.text = character.name
+val whitespace = "${if (character.role.lowercase() == "null") "" else character.role}  "        binding.itemCompactRelation.text = whitespace        binding.itemCompactImage.loadImage(character.image);
+        binding.itemCompactTitle.text = character.name
     }
 
 override fun getItemCount(): Int = characterList.size    inner 

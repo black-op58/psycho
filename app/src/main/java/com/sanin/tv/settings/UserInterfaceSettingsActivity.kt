@@ -85,7 +85,10 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.animation_speed),
                     desc = getString(R.string.animation_speed_desc),
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { showAnimationSpeedDialog()
+                    onClick = {
+        showAnimationSpeedDialog()
+ }
+                
  }
                 ),
                 Settings(
@@ -93,7 +96,10 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.home_layout),
                     desc = getString(R.string.home_layout_desc),
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { showHomeLayoutDialog()
+                    onClick = {
+        showHomeLayoutDialog()
+ }
+                
  }
                 ),
                 // ── Home Banner Mode ──────────────────────────────────────────
@@ -102,7 +108,10 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.home_banner_mode),
                     desc = getString(R.string.home_banner_mode_desc),
                     icon = R.drawable.ic_round_featured_play_list_24,
-                    onClick = { showHomeBannerModeDialog()
+                    onClick = {
+        showHomeBannerModeDialog()
+ }
+                
  }
                 ),
                 // ── Card Image (Cover vs Banner) ──────────────────────────────
@@ -112,9 +121,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = listOf(
                         getString(R.string.card_image_cover),
                         getString(R.string.card_image_banner)
-                    ).getOrElse(PrefManager.getVal<Int>(PrefName.CardImageType)) { getString(R.string.card_image_cover) },
+                    ).getOrElse(PrefManager.getVal<Int>(PrefName.CardImageType)) {
+        getString(R.string.card_image_cover) },
                     icon = R.drawable.ic_round_photo_size_select_actual_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = arrayOf(
                             getString(R.string.card_image_cover),
                             getString(R.string.card_image_banner)
@@ -122,12 +133,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val cur = PrefManager.getVal<Int>(PrefName.CardImageType)
                         customAlertDialog().apply {
                             setTitle(R.string.card_image_type)
-                            singleChoiceItems(opts, cur) { idx ->
+                            singleChoiceItems(opts, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.CardImageType, idx)
-                                b.settingsDesc.text = opts.getOrElse(idx) { opts[0] }
+                                b.settingsDesc.text = opts.getOrElse(idx) {
+        opts[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -138,9 +155,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = listOf(
                         getString(R.string.card_landscape),
                         getString(R.string.card_portrait)
-                    ).getOrElse(PrefManager.getVal<Int>(PrefName.CardOrientation)) { getString(R.string.card_portrait) },
+                    ).getOrElse(PrefManager.getVal<Int>(PrefName.CardOrientation)) {
+        getString(R.string.card_portrait) },
                     icon = R.drawable.ic_round_fullscreen_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = arrayOf(
                             getString(R.string.card_landscape),
                             getString(R.string.card_portrait)
@@ -148,12 +167,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val cur = PrefManager.getVal<Int>(PrefName.CardOrientation)
                         customAlertDialog().apply {
                             setTitle(R.string.card_orientation)
-                            singleChoiceItems(opts, cur) { idx ->
+                            singleChoiceItems(opts, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.CardOrientation, idx)
-                                b.settingsDesc.text = opts.getOrElse(idx) { opts[1] }
+                                b.settingsDesc.text = opts.getOrElse(idx) {
+        opts[1] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -171,11 +196,15 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                             getString(R.string.card_round_pill)
                         )
                         val cur = PrefManager.getVal<Int>(PrefName.CardRoundness)
-                        labels.getOrElse(dpVals.indexOf(cur)) { getString(R.string.card_round_medium)
+                        labels.getOrElse(dpVals.indexOf(cur)) {
+        getString(R.string.card_round_medium)
+ }
+                    
  }
                     },
                     icon = R.drawable.ic_round_art_track_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val dpVals = listOf(0, 8, 16, 24, 50)
                         val opts = arrayOf(
                             getString(R.string.card_round_none),
@@ -188,12 +217,17 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val selIdx = dpVals.indexOf(cur).coerceAtLeast(0)
                         customAlertDialog().apply {
                             setTitle(R.string.card_roundness)
-                            singleChoiceItems(opts, selIdx) { idx ->
+                            singleChoiceItems(opts, selIdx) {
+        idx ->
                                 PrefManager.setVal(PrefName.CardRoundness, dpVals[idx])
                                 b.settingsDesc.text = opts[idx]
                             }
+                            
+                            }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -209,9 +243,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         getString(R.string.card_style_liquid_glass),
                         getString(R.string.card_style_neon),
                         getString(R.string.card_style_compact)
-                    ).getOrElse(PrefManager.getVal<Int>(PrefName.CardStyle)) { getString(R.string.card_style_rounded) },
+                    ).getOrElse(PrefManager.getVal<Int>(PrefName.CardStyle)) {
+        getString(R.string.card_style_rounded) },
                     icon = R.drawable.ic_round_art_track_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = arrayOf(
                             getString(R.string.card_style_rounded),
                             getString(R.string.card_style_minimal),
@@ -224,12 +260,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val cur = PrefManager.getVal<Int>(PrefName.CardStyle)
                         customAlertDialog().apply {
                             setTitle(R.string.card_style)
-                            singleChoiceItems(opts, cur) { idx ->
+                            singleChoiceItems(opts, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.CardStyle, idx)
-                                b.settingsDesc.text = opts.getOrElse(idx) { opts[0] }
+                                b.settingsDesc.text = opts.getOrElse(idx) {
+        opts[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -240,9 +282,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         getString(R.string.spotlight_style_default),
                         getString(R.string.spotlight_style_minimal),
                         getString(R.string.spotlight_style_large)
-                    ).getOrElse(PrefManager.getVal<Int>(PrefName.SpotlightCardStyle)) { getString(R.string.spotlight_style_default) },
+                    ).getOrElse(PrefManager.getVal<Int>(PrefName.SpotlightCardStyle)) {
+        getString(R.string.spotlight_style_default) },
                     icon = R.drawable.ic_round_featured_play_list_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = arrayOf(
                             getString(R.string.spotlight_style_default),
                             getString(R.string.spotlight_style_minimal),
@@ -251,12 +295,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val cur = PrefManager.getVal<Int>(PrefName.SpotlightCardStyle)
                         customAlertDialog().apply {
                             setTitle(R.string.spotlight_card_style)
-                            singleChoiceItems(opts, cur) { idx ->
+                            singleChoiceItems(opts, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.SpotlightCardStyle, idx)
-                                b.settingsDesc.text = opts.getOrElse(idx) { opts[0] }
+                                b.settingsDesc.text = opts.getOrElse(idx) {
+        opts[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -267,9 +317,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         getString(R.string.episode_view_list),
                         getString(R.string.episode_view_grid),
                         getString(R.string.episode_view_compact)
-                    ).getOrElse(PrefManager.getVal<Int>(PrefName.EpisodeViewMode)) { getString(R.string.episode_view_list) },
+                    ).getOrElse(PrefManager.getVal<Int>(PrefName.EpisodeViewMode)) {
+        getString(R.string.episode_view_list) },
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = arrayOf(
                             getString(R.string.episode_view_list),
                             getString(R.string.episode_view_grid),
@@ -278,12 +330,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val cur = PrefManager.getVal<Int>(PrefName.EpisodeViewMode)
                         customAlertDialog().apply {
                             setTitle(R.string.episode_view_mode)
-                            singleChoiceItems(opts, cur) { idx ->
+                            singleChoiceItems(opts, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.EpisodeViewMode, idx)
-                                b.settingsDesc.text = opts.getOrElse(idx) { opts[0] }
+                                b.settingsDesc.text = opts.getOrElse(idx) {
+        opts[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -294,7 +352,10 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = getString(R.string.trending_scroller_desc),
                     icon = R.drawable.ic_round_sync_24,
                     isChecked = PrefManager.getVal(PrefName.TrendingScroller),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.TrendingScroller, isChecked)
+                    switch = {
+        isChecked, _ -> PrefManager.setVal(PrefName.TrendingScroller, isChecked)
+ }
+                
  }
                 ),
                 Settings(
@@ -302,10 +363,14 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.blur_radius),
                     desc = "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px",
                     icon = R.drawable.blur_on,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = (1..50 step 5).map { 
         "
-                            .also { if (!it.contains("${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")) it.add(0, "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")
+                            .also {
+        if (!it.contains("${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")) it.add(0, "${PrefManager.getVal<Int>(PrefName.BlurRadius)} px")
+ }
+                            
  }
                             .toTypedArray()
                         val steps = (listOf(PrefManager.getVal<Int>(PrefName.BlurRadius)) + (1..50 step 5).toList()).distinct().sorted()
@@ -314,12 +379,17 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         "
                         customAlertDialog().apply {
                             setTitle(R.string.blur_radius)
-                            singleChoiceItems(blurOpts, steps.indexOf(cur).coerceAtLeast(0)) { idx ->
+                            singleChoiceItems(blurOpts, steps.indexOf(cur).coerceAtLeast(0)) {
+        idx ->
                                 PrefManager.setVal(PrefName.BlurRadius, steps[idx])
                                 b.settingsDesc.text = "${steps[idx]} px"
                             }
+                            
+                            }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -328,18 +398,24 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     name = getString(R.string.sampling),
                     desc = "${PrefManager.getVal<Int>(PrefName.Sampling)}×",
                     icon = R.drawable.ic_round_photo_size_select_actual_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = (1..8).map { 
         "
                         val cur = PrefManager.getVal<Int>(PrefName.Sampling)
                         customAlertDialog().apply {
                             setTitle(R.string.sampling)
-                            singleChoiceItems(opts, (cur - 1).coerceIn(0, 7)) { idx ->
+                            singleChoiceItems(opts, (cur - 1).coerceIn(0, 7)) {
+        idx ->
                                 PrefManager.setVal(PrefName.Sampling, idx + 1)
                                 b.settingsDesc.text = "${idx + 1}×"
                             }
+                            
+                            }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -350,7 +426,10 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     desc = getString(R.string.hide_notification_dot_desc),
                     icon = R.drawable.ic_round_notifications_none_24,
                     isChecked = !PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot),
-                    switch = { isChecked, _ -> PrefManager.setVal(PrefName.ShowNotificationRedDot, !isChecked)
+                    switch = {
+        isChecked, _ -> PrefManager.setVal(PrefName.ShowNotificationRedDot, !isChecked)
+ }
+                
  }
                 ),
                 // ── Card Indicators ───────────────────────────────────────────
@@ -378,9 +457,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         getString(R.string.focus_pulse),
                         getString(R.string.focus_shaking),
                         getString(R.string.focus_none)
-                    ).getOrElse(PrefManager.getVal<Int>(PrefName.FocusEffect)) { getString(R.string.focus_glow) },
+                    ).getOrElse(PrefManager.getVal<Int>(PrefName.FocusEffect)) {
+        getString(R.string.focus_glow) },
                     icon = R.drawable.ic_round_auto_awesome_24,
-                    onClick = { b ->
+                    onClick = {
+        b ->
                         val opts = arrayOf(
                             getString(R.string.focus_glow),
                             getString(R.string.focus_breathing),
@@ -391,12 +472,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         val cur = PrefManager.getVal<Int>(PrefName.FocusEffect)
                         customAlertDialog().apply {
                             setTitle(R.string.focus_effects)
-                            singleChoiceItems(opts, cur) { idx ->
+                            singleChoiceItems(opts, cur) {
+        idx ->
                                 PrefManager.setVal(PrefName.FocusEffect, idx)
-                                b.settingsDesc.text = opts.getOrElse(idx) { opts[0] }
+                                b.settingsDesc.text = opts.getOrElse(idx) {
+        opts[0] }
+                            }
+                            
                             }
                             setNegButton(R.string.cancel)
                             show()
+                         }
+                    
                          }
                     }
                 ),
@@ -406,15 +493,24 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             settingsRecyclerView.layoutManager = LinearLayoutManager(this@UserInterfaceSettingsActivity)
             settingsRecyclerView.isFocusable = true
             settingsRecyclerView.isFocusableInTouchMode = false
-            settingsRecyclerView.setOnKeyListener { _, keyCode, event ->
+            settingsRecyclerView.setOnKeyListener {
+        _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
         finish()
                     true
                 } else false
             }
-            settingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed()
+            
+            }
+            settingsBack.setOnClickListener {
+        onBackPressedDispatcher.onBackPressed()
+ }
+        
  }
         }
+    }
+
+    
     }
 
     // ── Animation speed dialog ────────────────────────────────────────────────
@@ -425,7 +521,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         slider.value = PrefManager.getVal(PrefName.AnimationSpeed)
         slider.isFocusable = true
         slider.isFocusableInTouchMode = false
-        slider.setOnKeyListener { _, keyCode, event ->
+        slider.setOnKeyListener {
+        _, keyCode, event ->
             if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             when (keyCode) {
         KeyEvent.KEYCODE_DPAD_RIGHT -> {
@@ -434,22 +531,33 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     slider.value = (slider.value + step).coerceAtMost(slider.valueTo)
                     true
                 }
+                
+                }
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
                     val step = slider.stepSize.takeIf { 
         i
                     slider.value = (slider.value - step).coerceAtLeast(slider.valueFrom)
                     true
                 }
+                
+                }
                 else -> false
+            }
+        
             }
         }
         customAlertDialog().apply {
             setTitle(R.string.animation_speed)
             setCustomView(speedView)
-            setPosButton(R.string.ok) { PrefManager.setVal(PrefName.AnimationSpeed, slider.value)
+            setPosButton(R.string.ok) {
+        PrefManager.setVal(PrefName.AnimationSpeed, slider.value)
+ }
+            
  }
             setNegButton(R.string.cancel)
             show()
+         }
+    
          }
     }
 
@@ -475,8 +583,12 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                 PrefManager.setVal(PrefName.HomeLayout, adapter.showList)
                 PrefManager.setVal(PrefName.HomeLayoutOrder, adapter.orderList)
              }
+            
+             }
             setNegButton(R.string.cancel)
             show()
+         }
+    
          }
     }
 
@@ -506,11 +618,17 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                 items             = modeNames,
                 selectedItemIndex = current,
                 dismissOnSelect   = false
-            ) { idx -> selected = idx }
-            setPosButton(R.string.ok) { PrefManager.setVal(PrefName.HomeBannerMode, selected)
+            ) {
+        idx -> selected = idx }
+            setPosButton(R.string.ok) {
+        PrefManager.setVal(PrefName.HomeBannerMode, selected)
+ }
+            
  }
             setNegButton(R.string.cancel)
             show()
+         }
+    
          }
     }
 
@@ -540,6 +658,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             val b = ItemHomeLayoutBinding.inflate(layoutInflater, parent, false)
             return HomeLayoutViewHolder(b)
           }
+        
+          }
         override fun getItemCount() = sectionNames.size
 
         override fun onBindViewHolder(holder: HomeLayoutViewHolder, position: Int) {
@@ -549,18 +669,25 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             b.homeLayoutSectionSwitch.apply {
                 isFocusable = true
                 isFocusableInTouchMode = false
-                isChecked = showList.getOrElse(idx) { true }
-                setOnCheckedChangeListener { _, isChecked ->
+                isChecked = showList.getOrElse(idx) {
+        true }
+                setOnCheckedChangeListener {
+        _, isChecked ->
                     if (idx < showList.size) showList[idx] = isChecked
                 }
+            
+                }
             }
-            b.root.setOnKeyListener { _, keyCode, event ->
+            b.root.setOnKeyListener {
+        _, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_DOWN &&
                     (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER)
                 ) {
                     b.homeLayoutSectionSwitch.toggle()
                     true
                 } else false
+            }
+        
             }
         }
     }

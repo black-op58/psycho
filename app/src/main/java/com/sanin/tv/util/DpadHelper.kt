@@ -12,30 +12,37 @@ object : RecyclerView.OnChildAttachStateChangeListener {
         v
 
 override fun onChildViewDetachedFromWindow(view: View) {}
-})        setOnKeyListener { _, keyCode, event ->
+});
+        setOnKeyListener {
+        _, keyCode, event ->
 if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
 val lm = layoutManager as? LinearLayoutManager ?: return@setOnKeyListener false
 when (keyCode) {
         KeyEvent.KEYCODE_DPAD_UP -> {
     val first = lm.findFirstVisibleItemPosition()
-if (first > 0) smoothScrollToPosition(first - 1)                    true
+if (first > 0) smoothScrollToPosition(first - 1);
+        true
                 }
 KeyEvent.KEYCODE_DPAD_DOWN -> {
     val last = lm.findLastVisibleItemPosition()
-if (last < (adapter?.itemCount ?: 0) - 1) smoothScrollToPosition(last + 1)                    true
+if (last < (adapter?.itemCount ?: 0) - 1) smoothScrollToPosition(last + 1);
+        true
                 }
 KeyEvent.KEYCODE_DPAD_LEFT -> {
 if (lm.orientation == LinearLayoutManager.HORIZONTAL) {
     val first = lm.findFirstVisibleItemPosition()
-if (first > 0) smoothScrollToPosition(first - 1)                        true
+if (first > 0) smoothScrollToPosition(first - 1);
+        true
 } else false                }
 KeyEvent.KEYCODE_DPAD_RIGHT -> {
 if (lm.orientation == LinearLayoutManager.HORIZONTAL) {
     val last = lm.findLastVisibleItemPosition()
-if (last < (adapter?.itemCount ?: 0) - 1) smoothScrollToPosition(last + 1)                        true
+if (last < (adapter?.itemCount ?: 0) - 1) smoothScrollToPosition(last + 1);
+        true
 } else false                }
 KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-    val focused = focusedChild                    focused?.performClick()                    focused != null
+    val focused = focusedChild                    focused?.performClick();
+        focused != null
 }
 else -> false            }}
 }
@@ -50,10 +57,12 @@ fun handleTabDpad(        keyCode: Int,        event: KeyEvent,        currentTa
 if (event.action != KeyEvent.ACTION_DOWN) return false
 return when (keyCode) {
         KeyEvent.KEYCODE_DPAD_LEFT -> {
-if (currentTab > 0) { selectTab(currentTab - 1)
+if (currentTab > 0) {
+        selectTab(currentTab - 1)
 true } else false            }
 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-if (currentTab < tabCount - 1) { selectTab(currentTab + 1)
+if (currentTab < tabCount - 1) {
+        selectTab(currentTab + 1)
 true } else false
 }
 else -> false        }

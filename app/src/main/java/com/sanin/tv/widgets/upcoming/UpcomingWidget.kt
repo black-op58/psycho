@@ -27,6 +27,8 @@ val views = updateAppWidget(context, appWidgetId)
         appWidgetManager.updateAppWidget(appWidgetId, views)
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
              }
+            
+             }
             }
 }
 
@@ -55,6 +57,8 @@ if (context != null && appWidgetManager != null) {
     val views = updateAppWidget(context, appWidgetId)
         appWidgetManager.updateAppWidget(appWidgetId, views)
          }
+    
+         }
     }
 
 companion object {
@@ -75,7 +79,8 @@ val refreshIntent = Intent(context, UpcomingWidget::class.java).apply {
         a
 
 val refreshPendingIntent = PendingIntent.getBroadcast(                context, appWidgetId, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE            )            
-val gradientDrawable = ResourcesCompat.getDrawable(                context.resources,                R.drawable.linear_gradient_black,                null            ) as GradientDrawable            gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)            gradientDrawable.cornerRadius = 0f
+val gradientDrawable = ResourcesCompat.getDrawable(                context.resources,                R.drawable.linear_gradient_black,                null            ) as GradientDrawable            gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade);
+        gradientDrawable.cornerRadius = 0f
 val backgroundBitmap = gradientDrawable.toBitmap(720, 360)            
 fun buildViews(): RemoteViews = RemoteViews(context.packageName, R.layout.upcoming_widget).apply {                
         s
@@ -93,6 +98,8 @@ fun buildViews(): RemoteViews = RemoteViews(context.packageName, R.layout.upcomi
             }
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         RemoteViews(                    mapOf(                        SizeF(0f, 0f) to buildViews(),                        SizeF(200f, 100f) to buildViews()                    )                )
+ }
+        
  }
         else {
         buildViews()            }}

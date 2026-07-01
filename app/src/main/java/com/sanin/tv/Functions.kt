@@ -173,13 +173,21 @@ for (i in activity) {
         activity[i.key]!!.postValue(true)
          }
 }
+    
+}
     val activity = mutableMapOf<Int, MutableLiveData<Boolean>>()
+ }
+    
  }
     fun currContext(): Context? {
 return App.currentContext()
  }
+    
+ }
     fun currActivity(): Activity? {
 return App.currentActivity()
+ }
+    
  }
     var loadMedia: Int? = null
 var loadIsMAL = false
@@ -196,12 +204,14 @@ when (this) {
         2 -> AppCompatDelegate.MODE_NIGHT_YES                1 -> AppCompatDelegate.MODE_NIGHT_NO
 else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM            }
 )
-     }
+}
 if (immersiveMode) {
 if (navBarHeight == 0) {
         ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))                ?.apply {
         navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
+            }
+        
             }
         }
         WindowInsetsControllerCompat(            window,            window.decorView        ).hide(WindowInsetsCompat.Type.statusBars())
@@ -211,7 +221,11 @@ if (boundingRects.size > 0) {
         statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())
                  }
 }
+        
+}
         }
+        }
+        
         }
         else
 if (statusBarHeight == 0) {
@@ -221,29 +235,43 @@ if (windowInsets != null) {
                 navBarHeight =                    windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
             }
+        
+            }
         }
 if (a !is MainActivity) a.setNavigationTheme()
  }
+    
+ }
     fun Activity.hideSystemBars() {
-    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+    WindowInsetsControllerCompat(window, window.decorView).let {
+        controller ->
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
       }
 }
+    
+}
     fun Activity.hideSystemBarsExtendView() {
     WindowCompat.setDecorFitsSystemWindows(window, false)
     hideSystemBars()
   }
+    
+  }
     fun Activity.showSystemBars() {
-    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+    WindowInsetsControllerCompat(window, window.decorView).let {
+        controller ->
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
         controller.show(WindowInsetsCompat.Type.systemBars())
       }
 }
+    
+}
     fun Activity.showSystemBarsRetractView() {
     WindowCompat.setDecorFitsSystemWindows(window, true)
     showSystemBars()
+  }
+    
   }
     fun Activity.setNavigationTheme() {
     val tv = TypedValue()
@@ -257,17 +285,31 @@ val isVerticalSidebar = view.height > view.width && isLandscape
 val baselineHeight = if (view.isVisible && !isVerticalSidebar) view.measuredHeight else 0
         clipToPadding = false
         setPadding(paddingLeft, paddingTop, paddingRight, (if (includeSystemNavBar) navBarHeight else 0) + baselineHeight)
-        updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = 0 }
+        updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        bottomMargin = 0 }
     }
-    post { updateLayout()
+    
+    }
+    post {
+        updateLayout()
   }
-    view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout()
+    
+  }
+    view.addOnLayoutChangeListener {
+        _, _, _, _, _, _, _, _, _ -> post {
+        updateLayout()
  } }
-    rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout()
+    rootView.viewTreeObserver.addOnGlobalLayoutListener {
+        post {
+        updateLayout()
  } }
+}
+    
 }
     fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
     setBaseline(navBar as View)
+  }
+    
   }
     fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, extraPaddingBottom: Int) {
 
@@ -281,13 +323,20 @@ val barHeight = if (navBar.isVisible && !isVerticalSidebar) navBar.measuredHeigh
             bottomMargin = 0
         }
 }
-post { updateLayout()
+post {
+        updateLayout()
  }
-navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout()
+navBar.addOnLayoutChangeListener {
+        _, _, _, _, _, _, _, _, _ -> post {
+        updateLayout()
   }
  }
-rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout()
+rootView.viewTreeObserver.addOnGlobalLayoutListener {
+        post {
+        updateLayout()
  } }
+ }
+    
  }
     fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
     fun updateLayout() {
@@ -301,16 +350,25 @@ val overlayHeight = if (overlayView.isVisible) overlayView.measuredHeight else 0
             bottomMargin = 0
         }
 }
-post { updateLayout()
+post {
+        updateLayout()
  }
-navBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout()
+navBar.addOnLayoutChangeListener {
+        _, _, _, _, _, _, _, _, _ -> post {
+        updateLayout()
   }
  }
-overlayView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> post { updateLayout()
+overlayView.addOnLayoutChangeListener {
+        _, _, _, _, _, _, _, _, _ -> post {
+        updateLayout()
   }
  }
-rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout()
+rootView.viewTreeObserver.addOnGlobalLayoutListener {
+        post {
+        updateLayout()
  } }
+ }
+    
  }
     fun Activity.reloadActivity() {    
         R
@@ -319,6 +377,8 @@ rootView.viewTreeObserver.addOnGlobalLayoutListener { post { updateLayout()
 val component =        ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
 try {
         startActivity(Intent().setComponent(component))
+     }
+        
      }
         catch (e: Exception) {
         startActivity(mainIntent)
@@ -334,15 +394,22 @@ if (immersiveMode) {
         WindowInsetsControllerCompat(                    window, window.decorView                ).hide(WindowInsetsCompat.Type.statusBars())
              }
 if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
-    val behavior = BottomSheetBehavior.from(requireView().parent as View)                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+    val behavior = BottomSheetBehavior.from(requireView().parent as View);
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+    
             }
     window.navigationBarColor =                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
+ }
+    
  }
     }
     override fun show(manager: FragmentManager, tag: String?) {
     val ft = manager.beginTransaction()
         ft.add(this, tag)
         ft.commitAllowingStateLoss()
+       }
+    
        }
     }
     fun isOnline(context: Context): Boolean {
@@ -356,12 +423,19 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 else -> false                }
 } else false
 }
+        
+}
         else {            
 @Suppress("DEPRECATION")
         return@tryWith connectivityManager.activeNetworkInfo?.run {
                 type == ConnectivityManager.TYPE_BLUETOOTH ||                        type == ConnectivityManager.TYPE_ETHERNET ||                        type == ConnectivityManager.TYPE_MOBILE ||                        type == ConnectivityManager.TYPE_MOBILE_DUN ||                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||                        type == ConnectivityManager.TYPE_WIFI ||                        type == ConnectivityManager.TYPE_WIMAX ||                        type == ConnectivityManager.TYPE_VPN            } ?: false        
+
 }
 } ?: false
+
+
+}
+    
 
 }
     fun startMainActivity(activity: Activity, bundle: Bundle? = null) {
@@ -369,6 +443,7 @@ else -> false                }
 if (bundle != null) putExtras(bundle)
          }
 )
+}
  }
     class DatePickerFragment(activity: Activity, 
 var date: FuzzyDate = FuzzyDate().getToday()) :    DialogFragment(),    DatePickerDialog.OnDateSetListener {
@@ -381,9 +456,12 @@ val day = date.day ?: c.get(Calendar.DAY_OF_MONTH);
         dialog = DatePickerDialog(activity, this, year, month, day)
         dialog.setButton(
 if (c == b) {
-        status?.setText(statusStrings, false)            status?.parent?.requestLayout()
+        status?.setText(statusStrings, false);
+        status?.parent?.requestLayout()
           }
 return if (b > a) c in a..b else c in b..a    }
+    }
+    
     }
     class ZoomOutPageTransformer :    ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
@@ -394,14 +472,21 @@ if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {
 }
 
 }
+    
+
+}
     fun setAnimation(    context: Context,    viewToAnimate: View,    duration: Long = 150,    list: FloatArray = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),    pivot: Pair<Float, Float> = 0.5f to 0.5f) {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
-    val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        )        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
+    val anim = ScaleAnimation(            list[0],            list[1],            list[2],            list[3],            Animation.RELATIVE_TO_SELF,            pivot.first,            Animation.RELATIVE_TO_SELF,            pivot.second        );
+        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
         anim.setInterpolator(context, R.anim.over_shoot)
         viewToAnimate.startAnimation(anim)
        }
+    
+       }
     }
-    class FadingEdgeRecyclerView : RecyclerView {    constructor(context: Context) : super(context)    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    )    
+    class FadingEdgeRecyclerView : RecyclerView {
+        constructor(context: Context) : super(context)    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    )    
 override fun isPaddingOffsetRequired(): Boolean {
 return !clipToPadding    }
     override fun getLeftPaddingOffset(): Int {
@@ -412,6 +497,8 @@ return if (clipToPadding) 0 else -paddingTop    }
 return if (clipToPadding) 0 else paddingRight    }
     override fun getBottomPaddingOffset(): Int {
 return if (clipToPadding) 0 else paddingBottom    }
+    }
+    
     }
     fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
 if (lhs == rhs) {
@@ -434,6 +521,8 @@ val costReplace = cost[j - 1] + match
 val costInsert = cost[j] + 1
 val costDelete = newCost[j - 1] + 1            newCost[j] = min(min(costInsert, costDelete), costReplace)
          }
+    
+         }
     val swap = cost        cost = newCost        newCost = swap    }
 return cost[lhsLength - 1]}
     fun List<ShowResponse>.sortByTitle(string: String): List<ShowResponse> {
@@ -444,6 +533,8 @@ return list}
 for (i in 0 until this.size) {
         temp[i] = levenshtein(string.lowercase(), this[i].name.lowercase())
      }
+    
+     }
     val c = temp.toList().sortedBy { 
         (
 val a = ArrayList(c.keys.toList().subList(0, min(this.size, 25)))    
@@ -451,14 +542,21 @@ val b = c.values.toList().subList(0, min(this.size, 25))
 for (i in b.indices.reversed()) {
 if (b[i] > 18 && i < a.size) a.removeAt(i)
      }
+    
+     }
     val temp2 = this.toMutableList()    this.clear()
 for (i in a.indices) {
         this.add(temp2[a[i]])
      }
+    
+     }
     }
     fun String.findBetween(a: String, b: String): String? {
     val string = substringAfter(a, "").substringBefore(b, "")
-return string.ifEmpty { null }
+return string.ifEmpty {
+        null }
+ }
+    
  }
     fun ImageView.loadImage(url: String?, size: Int = 0) {
 if (!url.isNullOrEmpty()) {
@@ -466,10 +564,15 @@ if (!url.isNullOrEmpty()) {
 if (localFile.exists()) {
         loadLocalImage(localFile, size)
   }
+        
+  }
         else {
         loadImage(FileUrl(url), size)
          }
 }
+
+}
+    
 
 }
     fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {    
@@ -479,13 +582,20 @@ if (file?.url?.isNotEmpty() == true) {
 if (file.url.startsWith("content://")) {
         Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())                    .override(size).into(this)
   }
+        
+  }
         else {
     val glideUrl = GlideUrl(file.url) { 
         f
     Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)                    .into(this)
  }
 }
+    
+}
     }
+
+    }
+    
 
     }
     fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {    
@@ -495,13 +605,20 @@ if (file?.url?.isNotEmpty() == true) {
 if (file.url.startsWith("content://")) {
         Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())                    .override(width, height).into(this)
   }
+        
+  }
         else {
     val glideUrl = GlideUrl(file.url) { 
         f
     Glide.with(this.context).load(glideUrl).transition(withCrossFade())                    .override(width, height)                    .into(this)
  }
 }
+    
+}
     }
+
+    }
+    
 
     }
     fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
@@ -510,6 +627,9 @@ if (file?.exists() == true) {
         Glide.with(this.context).load(file).transition(withCrossFade()).override(size)                .into(this)
          }
 }
+
+}
+    
 
 }
     class SafeClickListener(    
@@ -521,6 +641,8 @@ if (SystemClock.elapsedRealtime() - lastTimeClicked < defaultInterval) {
 return        }
 lastTimeClicked = SystemClock.elapsedRealtime()
         onSafeCLick(v)
+       }
+    
        }
     }
     fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
@@ -542,16 +664,24 @@ override fun onSingleTapUp(e: MotionEvent): Boolean {
         p
 return super.onSingleTapUp(e)
      }
+    
+     }
     override fun onLongPress(e: MotionEvent) {        
         p
+    }
+    
     }
     override fun onDoubleTap(e: MotionEvent): Boolean {        
         p
 return super.onDoubleTap(e)
      }
+    
+     }
     override fun onScroll(        e1: MotionEvent?,        e2: MotionEvent,        distanceX: Float,        distanceY: Float    ): Boolean {        
         o
 return super.onScroll(e1, e2, distanceX, distanceY)
+     }
+    
      }
     private fun processSingleClickEvent(e: MotionEvent) {
     val handler = Handler(Looper.getMainLooper())        
@@ -564,14 +694,22 @@ object : TimerTask() {
         h
     }, delay)
  }
+    
+ }
     }
     private fun processDoubleClickEvent(e: MotionEvent) {        
         t
         }
+    
+        }
     onDoubleClick(e)
+     }
+    
      }
     private fun processLongClickEvent(e: MotionEvent) {        
         t
+        }
+    
         }
     onLongClick(e)
       }
@@ -585,9 +723,13 @@ open fun onScrollXClick(y: Float) {}
 
 open fun onLongClick(event: MotionEvent) {}
 }
+    
+}
     fun View.circularReveal(ex: Int, ey: Int, subX: Boolean, time: Long) {    
         V
 if (subX) (ex - x.toInt()) else ex,        ey - y.toInt(),        0f,        max(height, width).toFloat()    ).setDuration(time).start()
+ }
+    
  }
     fun openLinkInBrowser(link: String?) {    
         l
@@ -596,6 +738,8 @@ try {
         activity.finishAffinity()
 data = Uri.fromParts("http", "", null)
              }
+    
+             }
     val sendIntent = Intent().apply {                
         activity.finishAffinity()
 data = Uri.parse(link);
@@ -603,13 +747,20 @@ data = Uri.parse(link);
             }
 currContext()!!.startActivity(sendIntent)
          }
+        
+         }
         catch (e: ActivityNotFoundException) {
         snackString("No browser found")
+         }
+        
          }
         catch (e: Exception) {
         Logger.log(e)
  }
 }
+
+}
+    
 
 }
     fun openLinkInCustomTab(link: String?) {    
@@ -619,10 +770,15 @@ try {
 val customTabsIntent = builder.build()
         customTabsIntent.launchUrl(currContext()!!, android.net.Uri.parse(it))
           }
+        
+          }
         catch (e: Exception) {
         openLinkInBrowser(it)
          }
 }
+
+}
+    
 
 }
     fun openLinkInYouTube(link: String?) {    
@@ -635,8 +791,12 @@ data = Uri.parse(link)
               }
 currContext()!!.startActivity(videoIntent)
          }
+        
+         }
         catch (e: ActivityNotFoundException) {
         openLinkInBrowser(link)
+          }
+    
           }
     }
 
@@ -646,7 +806,8 @@ fun savePrefs(serialized: String, path: String, title: String, context: Context)
     var file = File(path, "$title.ani")    
 var counter = 1
 while (file.exists()) {
-        file = File(path, "${title}_${counter}.ani")        counter++
+        file = File(path, "${title}_${counter}.ani");
+        counter++
     }
 return try {
         file.writeText(serialized)
@@ -654,8 +815,14 @@ return try {
         toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file
     }
+        
+    }
         catch (e: Exception) {
-        snackString("Failed to save settings: ${e.localizedMessage}")        null
+        snackString("Failed to save settings: ${e.localizedMessage}");
+        null
+    }
+
+    
     }
 
     }
@@ -664,7 +831,10 @@ fun savePrefs(    serialized: String,    path: String,    title: String,    cont
     var file = File(path, "$title.sani")    
 var counter = 1
 while (file.exists()) {
-        file = File(path, "${title}_${counter}.sani")        counter++
+        file = File(path, "${title}_${counter}.sani");
+        counter++
+    }
+    
     }
     val salt = generateSalt()
 return try {
@@ -674,8 +844,14 @@ val dataToSave = salt + encryptedData        file.writeBytes(dataToSave)
         toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file
     }
+        
+    }
         catch (e: Exception) {
-        snackString("Failed to save settings: ${e.localizedMessage}")        null
+        snackString("Failed to save settings: ${e.localizedMessage}");
+        null
+    }
+
+    
     }
 
     }
@@ -694,8 +870,14 @@ return try {
         toast(String.format(currContext()!!.getString(R.string.saved_to_path, path)))
         imageFile
     }
+        
+    }
         catch (e: Exception) {
-        snackString("Failed to save image: ${e.localizedMessage}")        null
+        snackString("Failed to save image: ${e.localizedMessage}");
+        null
+    }
+
+    
     }
 
     }
@@ -704,12 +886,17 @@ return try {
     class MediaPageTransformer : ViewPager2.PageTransformer {
     private fun parallax(view: View, position: Float) {
 if (position > -1 && position < 1) {
-    val width = view.width.toFloat()            view.translationX = -(position * width * 0.8f)
+    val width = view.width.toFloat();
+        view.translationX = -(position * width * 0.8f)
+          }
+    
           }
     }
     override fun transformPage(view: View, position: Float) {
     val bannerContainer = view.findViewById<View>(R.id.itemCompactBanner)
         parallax(bannerContainer, position)
+       }
+    
        }
     }
     class NoGestureSubsamplingImageView(context: Context?, attr: AttributeSet?) :    SubsamplingScaleImageView(context, attr) {    
@@ -717,12 +904,16 @@ if (position > -1 && position < 1) {
 override fun onTouchEvent(event: MotionEvent): Boolean {
 return false    }
     }
+    
+    }
     fun copyToClipboard(string: String, toast: Boolean = true) {
     val activity = currContext() ?: return
 val clipboard = getSystemService(activity, ClipboardManager::class.java)    
 val clip = ClipData.newPlainText("label", string)    clipboard?.setPrimaryClip(clip)
 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
 if (toast) snackString(activity.getString(R.string.copied_text, string))
+     }
+    
      }
     }
     private val activeTimers = java.util.Collections.synchronizedMap(java.util.WeakHashMap<android.view.ViewGroup, android.os.CountDownTimer>())
@@ -735,15 +926,23 @@ if (child.tag == "countdown_view") {
         view.removeViewAt(i)
              }
 }
-    val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)        v.root.tag = "countdown_view"        view.addView(v.root, 0)        v.mediaCountdownText.text =            currActivity()?.getString(                R.string.episode_release_countdown,                media.anime.nextAiringEpisode!! + 1            )        
+    
+}
+    val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false);
+        v.root.tag = "countdown_view"        view.addView(v.root, 0);
+        v.mediaCountdownText.text =            currActivity()?.getString(                R.string.episode_release_countdown,                media.anime.nextAiringEpisode!! + 1            )        
 val timer = 
 object : CountDownTimer(            (media.anime.nextAiringEpisodeTime!! + 10000) * 1000 - System.currentTimeMillis(),            1000        ) {
     override fun onTick(millisUntilFinished: Long) {
     val a = millisUntilFinished / 1000                v.mediaCountdown.text = currActivity()?.getString(                    R.string.time_format,                    a / 86400,                    a % 86400 / 3600,                    a % 86400 % 3600 / 60,                    a % 86400 % 3600 % 60                )
              }
+    
+             }
     override fun onFinish() {                
         v
     activeTimers[view] = timer        timer.start()
+     }
+    
      }
     }
     fun displayTimer(media: Media, view: ViewGroup) {
@@ -751,6 +950,9 @@ when {
             media.anime != null -> countDown(media, view)
 else -> {}
 }
+
+}
+    
 
 }
     fun MutableMap<String, Genre>.checkId(id: Int): Boolean {    
@@ -766,23 +968,33 @@ return true}
     fun setSlideIn() = AnimationSet(false).apply {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
     var animation: Animation = AlphaAnimation(0.0f, 1.0f)        
-val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)        animation.duration = (500 * animationSpeed).toLong()
+val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed);
+        animation.duration = (500 * animationSpeed).toLong()
         animation.interpolator = AccelerateDecelerateInterpolator()
         addAnimation(animation)
         animation = TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f        )        animation.duration = (750 * animationSpeed).toLong()        animation.interpolator = OvershootInterpolator(1.1f)
+            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f        );
+        animation.duration = (750 * animationSpeed).toLong();
+        animation.interpolator = OvershootInterpolator(1.1f)
         addAnimation(animation)
+       }
+    
        }
     }
     fun setSlideUp() = AnimationSet(false).apply {
 if (PrefManager.getVal(PrefName.LayoutAnimations)) {
     var animation: Animation = AlphaAnimation(0.0f, 1.0f)        
-val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)        animation.duration = (500 * animationSpeed).toLong()
+val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed);
+        animation.duration = (500 * animationSpeed).toLong()
         animation.interpolator = AccelerateDecelerateInterpolator()
         addAnimation(animation)
         animation = TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f        )        animation.duration = (750 * animationSpeed).toLong()        animation.interpolator = OvershootInterpolator(1.1f)
+            Animation.RELATIVE_TO_SELF, 0.0f,            Animation.RELATIVE_TO_SELF, 0f,            Animation.RELATIVE_TO_SELF, 1.0f,            Animation.RELATIVE_TO_SELF, 0f        );
+        animation.duration = (750 * animationSpeed).toLong();
+        animation.interpolator = OvershootInterpolator(1.1f)
         addAnimation(animation)
+       }
+    
        }
     }
     class EmptyAdapter(
@@ -790,9 +1002,13 @@ private val count: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 return EmptyViewHolder(View(parent.context))
      }
+    
+     }
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
     override fun getItemCount(): Int = count    inner 
 class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+ }
+    
  }
     fun getAppString(res: Int): String {
 return currContext()?.getString(res) ?: ""}
@@ -805,24 +1021,35 @@ if (string != null) {
 }
 
 }
+    
+
+}
     fun toast(res: Int) {    
         t
     fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
 try { //I have no idea why this sometimes crashes for some people...
 if (s != null) {
         (activity ?: currActivity())?.apply {
-    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                )                runOnUiThread {                    
+    val snackBar = Snackbar.make(                    window.decorView.findViewById(android.R.id.content),                    s,                    Snackbar.LENGTH_SHORT                );
+        runOnUiThread {                    
         s
+                        }
+    
                         }
     translationY = -(navBarHeight.dp + 32f);
         translationZ = 32f
-                        updatePadding(16f.px, right = 16f.px)                        setOnClickListener {
+                        updatePadding(16f.px, right = 16f.px);
+        setOnClickListener {
                             snackBar.dismiss()
+ }
+    
  }
     setOnLongClickListener {
         copyToClipboard(clipboard ?: s, false)
         toast(getString(R.string.copied_to_clipboard))
                             true}
+}
+    
 }
     snackBar.show()
                  }
@@ -830,8 +1057,11 @@ return snackBar            }
 Logger.log(s)
  }
 }
+        
+}
         catch (e: Exception) {
-        Logger.log(e)        Injekt.get<CrashlyticsInterface>().logException(e)
+        Logger.log(e);
+        Injekt.get<CrashlyticsInterface>().logException(e)
      }
 return null}
     fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
@@ -850,11 +1080,17 @@ class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
     constructor(context: Context) : super(context) {
         setup()
      }
+    
+     }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         setup()
      }
+    
+     }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(        context,        attrs,        defStyleAttr    ) {
         setup()
+     }
+    
      }
     private fun setup() {        
         m
@@ -864,6 +1100,8 @@ return performClick()
                  }
 })
      }
+    
+     }
     override fun onTouchEvent(event: MotionEvent): Boolean {        
         m
 return true    }
@@ -872,9 +1110,15 @@ return true    }
 class CustomBottomNavBar 
 @JvmOverloads constructor(    context: Context, attrs: AttributeSet? = null) : BottomNavigationView(context, attrs) {
         init {
-        ViewUtils.doOnApplyWindowInsets(            this        ) { view, insets, initialPadding ->            initialPadding.bottom = 0            updateLayoutParams<MarginLayoutParams> { bottomMargin = navBarHeight }
-initialPadding.applyToView(view)            insets}
+        ViewUtils.doOnApplyWindowInsets(            this        ) {
+        view, insets, initialPadding ->            initialPadding.bottom = 0            updateLayoutParams<MarginLayoutParams> {
+        bottomMargin = navBarHeight }
+initialPadding.applyToView(view);
+        insets}
 }
+
+}
+    
 
 }
     fun getCurrentBrightnessValue(context: Context): Float {
@@ -889,12 +1133,16 @@ return try {
         catch (e: IllegalAccessException) {
         255                }
         }
+        
+        }
         }
         return 255    }
     fun getCur(): Float {
 return Settings.System.getInt(            context.contentResolver,            Settings.System.SCREEN_BRIGHTNESS,            127        ).toFloat()
      }
 return brightnessConverter(getCur() / getMax(), true)
+ }
+    
  }
     fun brightnessConverter(it: Float, fromLog: Boolean) =    clamp(
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -905,6 +1153,8 @@ fun checkCountry(context: Context): Boolean {
 return when (telMgr.simState) {
         TelephonyManager.SIM_STATE_ABSENT -> {
     val tz = TimeZone.getDefault().id            tz.equals("Asia/Kolkata", ignoreCase = true)
+         }
+    
          }
     TelephonyManager.SIM_STATE_READY -> {
     val countryCodeValue = telMgr.networkCountryIso            countryCodeValue.equals("in", ignoreCase = true)
@@ -920,16 +1170,24 @@ val pendingIntent = PendingIntent.getBroadcast(            context, 0, intent,  
 val builder = NotificationCompat.Builder(context, Notifications.CHANNEL_INCOGNITO_MODE)            .setSmallIcon(R.drawable.ic_incognito_24)            .setContentTitle("Incognito Mode")            .setContentText("Disable Incognito Mode")            .setPriority(NotificationCompat.PRIORITY_HIGH)            .setContentIntent(pendingIntent)            .setOngoing(true)
         notificationManager.notify(INCOGNITO_CHANNEL_ID, builder.build())
   }
+        
+  }
         else {
         notificationManager.cancel(INCOGNITO_CHANNEL_ID)
+     }
+    
      }
     }
     fun hasNotificationPermission(context: Context): Boolean {
 return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 }
+        
+}
         else {
         NotificationManagerCompat.from(context).areNotificationsEnabled()
+     }
+    
      }
     }
     fun openSettings(context: Context, channelId: String?): Boolean {
@@ -940,7 +1198,8 @@ else Settings.ACTION_APP_NOTIFICATION_SETTINGS        ).apply {
         putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
         putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
           }
-context.startActivity(intent)        true
+context.startActivity(intent);
+        true
 } else false}suspend 
 fun View.pop() {    
         c
@@ -949,6 +1208,8 @@ delay(120)    currActivity()?.runOnUiThread {
         ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()
  }
 delay(100)
+ }
+    
  }
     fun blurImage(imageView: ImageView, banner: String?) {
 if (banner != null) {
@@ -962,11 +1223,17 @@ if (PrefManager.getVal(PrefName.BlurBanners)) {
         Glide.with(context as Context)                    .load(
 if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(                            url                        ) else File(url)                    )                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)                    .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))                    .into(imageView)
   }
+        
+  }
         else {
         Glide.with(context as Context)                    .load(
 if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(                            url                        ) else File(url)                    )                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)                    .into(imageView)
              }
+        
+             }
         }
+        }
+        
         }
         }
         fun openOrCopyAnilistLink(link: String) {
@@ -978,16 +1245,22 @@ if (currContext() != null) {
 if (id != null) {
         intent.putExtra("userId", id)
   }
+        
+  }
         else {
         intent.putExtra("username", username)
              }
 ContextCompat.startActivity(                currContext()!!,                intent,                null            )
+  }
+        
   }
         else {
         copyToClipboard(link, true)
          }
 } else if (getYoutubeId(link).isNotEmpty()) {
         openLinkInYouTube(link)
+  }
+        
   }
         else {
         copyToClipboard(link, true)
@@ -1003,7 +1276,8 @@ val markwon = Markwon.builder(activity)        .usePlugin(
 object : AbstractMarkwonPlugin() {
     override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {                
         b
-    })        .usePlugin(SoftBreakAddsNewLinePlugin.create())        .usePlugin(StrikethroughPlugin.create())        .usePlugin(TablePlugin.create(activity))        .usePlugin(TaskListPlugin.create(activity))        .usePlugin(SpoilerPlugin(anilist))        .usePlugin(HtmlPlugin.create { plugin ->
+    })        .usePlugin(SoftBreakAddsNewLinePlugin.create())        .usePlugin(StrikethroughPlugin.create())        .usePlugin(TablePlugin.create(activity))        .usePlugin(TaskListPlugin.create(activity))        .usePlugin(SpoilerPlugin(anilist))        .usePlugin(HtmlPlugin.create {
+        plugin ->
 if (userInputContent) {
         plugin.addHandler(                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")                )
              }
@@ -1023,12 +1297,18 @@ return false                    }
 return false                    }
 })
              }
+    
+             }
     override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {                
         L
 return requestManager                    .load(drawable.destination)                    .apply(markdownImageRequestOptions)
              }
+    
+             }
     override fun cancel(target: Target<*>) {                
         L
+            }
+    
             }
     }))        .build()
 return markwon}
@@ -1042,6 +1322,8 @@ for (locale in locales) {
 if (locale.displayLanguage.equals(language, ignoreCase = true)) {
     val lang: CharSequence = locale.language
 return lang        }
+}
+    
 }
     val out: CharSequence = "null"
 return out}
@@ -1057,6 +1339,8 @@ return null}
 fun String.decodeBase64ToString(): String {
 return try {
         String(Base64.decode(this), Charsets.UTF_8)
+     }
+        
      }
         catch (e: Exception) {
         Logger.log(e)        ""    }

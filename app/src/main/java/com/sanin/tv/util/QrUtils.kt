@@ -13,9 +13,12 @@ object QrUtils {
             EncodeHintType.CHARACTER_SET to "UTF-8"
         )
         val matrix = MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, size, size, hints)
-        Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888).also { bmp ->
+        Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888).also {
+        bmp ->
             for (x in 0 until size) for (y in 0 until size)
                 bmp.setPixel(x, y, if (matrix[x, y]) Color.BLACK else Color.WHITE)
+         }
+    
          }
     }
         catch (e: Exception) {

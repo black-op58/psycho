@@ -41,11 +41,15 @@ val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManag
 val canScheduleExactAlarms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         a
 }
+        
+}
         else {
         true            }
 if (canScheduleExactAlarms) {
         TaskScheduler.create(context, false).cancelAllTasks()
         TaskScheduler.create(context, true).scheduleAllTasks(context)
+ }
+        
  }
         else {
         TaskScheduler.create(context, true).cancelAllTasks()

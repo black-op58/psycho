@@ -52,6 +52,8 @@ if (ActivityCompat.checkSelfPermission(                                        c
 if (it.notificationType in mediaSectionTypes) {
         mediaCount++
 }
+        
+}
         else {                                    // User section displays all notifications that are not in the media section.                                    userCount++                                }}}
 // Update per-section counts
 if (userCount > 0) {

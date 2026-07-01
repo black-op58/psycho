@@ -54,32 +54,45 @@ override fun onCreate(savedInstanceState: Bundle?) {
         s
         setContentView(binding.root)
         initActivity(this)
-        screenWidth = resources.displayMetrics.run { widthPixels / density }
+        screenWidth = resources.displayMetrics.run {
+        widthPixels / density }
 if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =            ContextCompat.getColor(this, R.color.transparent)        
 val banner =
-if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams { height += statusBarHeight }
-binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight}
-binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight)        binding.characterTitle.isSelected = true
-        binding.characterAppBar.addOnOffsetChangedListener(this)        binding.characterClose.setOnClickListener {
+if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen        banner.updateLayoutParams {
+        height += statusBarHeight }
+binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight}
+binding.characterCollapsing.minimumHeight = statusBarHeight        binding.characterCover.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        topMargin += statusBarHeight}
+binding.characterRecyclerView.updatePadding(bottom = 64f.px + navBarHeight);
+        binding.characterTitle.isSelected = true
+        binding.characterAppBar.addOnOffsetChangedListener(this);
+        binding.characterClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
 }
 author = intent.getSerialized("author") ?: return        binding.characterTitle.text = author.name        binding.characterCoverImage.loadImage(author.image)
         binding.characterFav.setImageResource(
-if (author.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        )        binding.characterCoverImage.setOnLongClickListener {
+if (author.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24        );
+        binding.characterCoverImage.setOnLongClickListener {
         ImageViewDialog.newInstance(                this,                author.name,                author.image            )
          }
 val rescueMode: Boolean = PrefManager.getVal(PrefName.RescueMode)        
 val link = if (rescueMode) {
         "
 }
+        
+}
         else {            "https://anilist.co/staff/${author.id}"        }
 binding.characterShare.setOnClickListener {
-    val i = Intent(Intent.ACTION_SEND)            i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)
+    val i = Intent(Intent.ACTION_SEND);
+        i.type = "text/plain"            i.putExtra(Intent.EXTRA_TEXT, link)
         startActivity(Intent.createChooser(i, author.name))
          }
+    
+         }
     binding.characterShare.setOnLongClickListener {
-        openLinkInBrowser(link)            true
+        openLinkInBrowser(link);
+        true
         }
 if (!rescueMode) {
         lifecycleScope.launch {
@@ -95,9 +108,13 @@ if (Anilist.mutation.toggleFav(AnilistMutations.FavType.STAFF, author.id)) {
         author.isFav = !author.isFav                        binding.characterFav.setImageResource(
 if (author.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24                        )
  }
+        
+ }
         else {
         snackString("Failed to toggle favorite")                    }}
 }
+}
+        
 }
         else {
         binding.characterFav.visibility = View.GONE        }
@@ -113,7 +130,8 @@ val map = author.yearMedia ?: return@observe
 val keys = map.keys.toTypedArray()                
 var pos = 0
 val gridSize = (screenWidth / 124f).toInt()                
-val gridLayoutManager = GridLayoutManager(this, gridSize)                gridLayoutManager.spanSizeLookup = 
+val gridLayoutManager = GridLayoutManager(this, gridSize);
+        gridLayoutManager.spanSizeLookup = 
 object : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
 return when (position in titlePosition) {
@@ -127,16 +145,20 @@ if (desc.isNotBlank()) {
 val markWon = Markwon.builder(this).usePlugin(SoftBreakAddsNewLinePlugin.create())                        .usePlugin(SpoilerPlugin()).build()
         markWon.setMarkdown(binding.authorCharacterDesc, desc)
  }
+        
+ }
         else {
         binding.authorCharacterDesc.visibility = View.GONE                }
 for (i in keys.indices) {
     val medias = map[keys[i]]!!                    
-val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos)                    pos += (empty + medias.size + 1)
+val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size                    titlePosition.add(pos);
+        pos += (empty + medias.size + 1)
                     concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
                     concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
                     concatAdapter.addAdapter(EmptyAdapter(empty))
                  }
-binding.characterRecyclerView.adapter = concatAdapter                binding.characterRecyclerView.layoutManager = gridLayoutManager                binding.authorCharactersRecycler.visibility = View.VISIBLE                binding.AuthorCharactersText.visibility = View.VISIBLE                binding.authorCharactersRecycler.adapter =                    CharacterAdapter(author.character ?: arrayListOf())                binding.authorCharactersRecycler.layoutManager =
+binding.characterRecyclerView.adapter = concatAdapter                binding.characterRecyclerView.layoutManager = gridLayoutManager                binding.authorCharactersRecycler.visibility = View.VISIBLE                binding.AuthorCharactersText.visibility = View.VISIBLE                binding.authorCharactersRecycler.adapter =                    CharacterAdapter(author.character ?: arrayListOf());
+        binding.authorCharactersRecycler.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 if (author.character.isNullOrEmpty()) {
         binding.authorCharactersRecycler.visibility = View.GONE                    binding.AuthorCharactersText.visibility = View.GONE                }}
@@ -147,7 +169,8 @@ val live = Refresh.activity.getOrPut(this.hashCode()) {
 live.observe(this) {
 if (it) {
         scope.launch {
-        withContext(Dispatchers.IO) { model.loadAuthor(author)
+        withContext(Dispatchers.IO) {
+        model.loadAuthor(author)
  }
 live.postValue(false)}}}
 }
@@ -169,6 +192,8 @@ val infoLine = listOf(age, yearsActive, dob, homeTown, dod)            .filter {
 return if (about.isNotBlank()) {
 if (infoLine.isNotBlank()) "$infoLine\n\n$about" else about
 }
+        
+}
         else {
         infoLine        }
 }
@@ -185,7 +210,8 @@ override fun onResume() {
 override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
 if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
 val percentage = abs(i) * 100 / mMaxScrollSize
-val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f)        binding.characterCover.scaleX = 1f * cap
+val cap = clamp((percent - percentage) / percent.toFloat(), 0f, 1f);
+        binding.characterCover.scaleX = 1f * cap
         binding.characterCover.scaleY = 1f * cap        binding.characterCover.cardElevation = 32f * cap        binding.characterCover.visibility =
 if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
 val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)

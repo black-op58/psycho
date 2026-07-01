@@ -21,8 +21,12 @@ private suspend fun <T> Observable<T>.awaitOne(): T = suspendCancellableCoroutin
                 override fun onStart() {
                     request(1)
                   }
+                
+                  }
                 override fun onNext(t: T) {
                     cont.resume(t)
+                  }
+                
                   }
                 override fun onCompleted() {
                     if (cont.isActive) {
@@ -30,10 +34,11 @@ private suspend fun <T> Observable<T>.awaitOne(): T = suspendCancellableCoroutin
                             IllegalStateException(
                                 "Should have invoked onNext",
                             ),
-                        )
+)
+                        }
                      }
                 }
             },
         ),
-    )
-  }
+)
+    }

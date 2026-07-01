@@ -45,6 +45,9 @@ class HeroCarouselAdapter(
         private const val AUTO_ADVANCE_INTERVAL_MS = 5_000L
     }
 
+    
+    }
+
     // ── Auto-advance ──────────────────────────────────────────────────────────
 
     private val handler = Handler(Looper.getMainLooper())
@@ -56,6 +59,8 @@ class HeroCarouselAdapter(
             vp.setCurrentItem(next, true)
             handler.postDelayed(this, AUTO_ADVANCE_INTERVAL_MS)
          }
+    
+         }
     }
 
     fun startAutoAdvance(vp: ViewPager2) {
@@ -63,9 +68,14 @@ class HeroCarouselAdapter(
         handler.removeCallbacks(advanceRunnable)
         handler.postDelayed(advanceRunnable, AUTO_ADVANCE_INTERVAL_MS)
       }
+    
+      }
     fun stopAutoAdvance() {
         handler.removeCallbacks(advanceRunnable)
         viewPager = null
+    }
+
+    
     }
 
     // ── PageChangeCallback (pauses auto-advance during user swipe) ────────────
@@ -77,7 +87,12 @@ class HeroCarouselAdapter(
             } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
         handler.postDelayed(advanceRunnable, AUTO_ADVANCE_INTERVAL_MS)
              }
+        
+             }
         }
+    }
+
+    
     }
 
     // ── Adapter ───────────────────────────────────────────────────────────────
@@ -89,8 +104,12 @@ class HeroCarouselAdapter(
             .inflate(R.layout.item_hero_carousel, parent, false)
         return CarouselViewHolder(view)
       }
+    
+      }
     override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         holder.bind(mediaList[position])
+      }
+    
       }
     inner class CarouselViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -129,7 +148,12 @@ class HeroCarouselAdapter(
                 ?.take(200) ?: ""
 
             // Watch button
-            watchBtn.setOnClickListener { onWatchClicked(media)
+            watchBtn.setOnClickListener {
+        onWatchClicked(media)
+ 
+
+}
+            
  
 }
             watchBtn.isFocusable = true
@@ -148,11 +172,17 @@ class HeroCarouselAdapter(
                     logo.visibility  = View.VISIBLE
                     title.visibility = View.GONE
                 }
+        
+                }
         else {
                     logo.visibility  = View.GONE
                     title.visibility = View.VISIBLE
                 }
+            
+                }
             }
+        }
+    
         }
     }
 }

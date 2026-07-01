@@ -16,8 +16,12 @@ sealed class LibraryDisplayMode(
         fun deserialize(serialized: String): LibraryDisplayMode {
             return Companion.deserialize(serialized)
           }
+        
+          }
         fun serialize(value: LibraryDisplayMode): String {
             return value.serialize()
+         }
+    
          }
     }
 
@@ -30,8 +34,14 @@ sealed class LibraryDisplayMode(
         fun valueOf(flag: Long?): LibraryDisplayMode {
             if (flag == null) return default
             return values
-                .find { mode -> mode.flag == flag and mode.mask }
+                .find {
+        mode -> mode.flag == flag and mode.mask }
                 ?: default
+        
+
+}
+
+        
         
 }
 
@@ -43,7 +53,12 @@ sealed class LibraryDisplayMode(
                 "LIST" -> List
                 else -> default
             }
+        
+            }
         }
+    }
+
+    
     }
 
     fun serialize(): String {
@@ -52,6 +67,8 @@ sealed class LibraryDisplayMode(
             CompactGrid -> "COMPACT_GRID"
             CoverOnlyGrid -> "COVER_ONLY_GRID"
             List -> "LIST"
+        }
+    
         }
     }
 }

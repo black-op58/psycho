@@ -62,8 +62,11 @@ val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)
 if (comment.tag == null) {
         commentUserTagLayout.visibility = View.GONE
 }
+        
+}
         else {
-        commentUserTagLayout.visibility = View.VISIBLE                commentUserTag.text = comment.tag.toString()                commentUserTagLayout.setOnClickListener {
+        commentUserTagLayout.visibility = View.VISIBLE                commentUserTag.text = comment.tag.toString();
+        commentUserTagLayout.setOnClickListener {
                     commentsFragment.onTagClicked(comment.tag.toString())                }}
 replying(isReplying) //sets default text            editing(isEditing)
 if ((comment.replyCount ?: 0) > 0) {
@@ -75,6 +78,8 @@ if (comment.replyCount == 1)
         getString(R.string.view_reply)
 else                            getString(R.string.view_replies_count, comment.replyCount)
                 }
+}
+        
 }
         else {
         commentTotalReplies.visibility = View.GONE                commentRepliesDivider.visibility = View.GONE            }
@@ -89,11 +94,15 @@ else                            getString(R.string.view_replies_count, comment.r
                     }
 repliesVisible = false
 }
+        
+}
         else {
         commentTotalReplies.setText(R.string.hide_replies)
         repliesSection.clear()
                     commentsFragment.viewReplyCallback(item)
                     repliesVisible = true
+                }
+                
                 }
                 }
 commentUserName.setOnClickListener {
@@ -103,7 +112,8 @@ commentUserAvatar.setOnClickListener {
         ContextCompat.startActivity(                    commentsFragment.activity,                    Intent(commentsFragment.activity, ProfileActivity::class.java)                        .putExtra("userId", comment.userId.toInt()),                    null                )
 }
 commentText.setOnLongClickListener {
-        copyToClipboard(comment.content)                true}
+        copyToClipboard(comment.content);
+        true}
 commentEdit.setOnClickListener {
         editing(!isEditing)
         commentsFragment.editCallback(item)
@@ -118,7 +128,8 @@ if (comment.isAdmin == true) View.VISIBLE else View.GONE            commentInfo.
     val popup = PopupMenu(commentsFragment.requireContext(), commentInfo)
         popup.menuInflater.inflate(R.menu.profile_details_menu, popup.menu)
                 popup.menu.findItem(R.id.commentDelete)?.isVisible =
-                    isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod                popup.menu.findItem(R.id.commentBanUser)?.isVisible =                    (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment                popup.menu.findItem(R.id.commentReport)?.isVisible = !isUserComment                popup.setOnMenuItemClickListener { item ->
+                    isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod                popup.menu.findItem(R.id.commentBanUser)?.isVisible =                    (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment                popup.menu.findItem(R.id.commentReport)?.isVisible = !isUserComment                popup.setOnMenuItemClickListener {
+        item ->
 when (item.itemId) {
         R.id.commentReport -> {
         dialogBuilder(                                getAppString(R.string.report_comment),                                getAppString(R.string.report_comment_confirm)                            ) {
@@ -148,10 +159,12 @@ else -> {
         false                        }}}
 popup.show()
 }
-//fill the icon if the user has liked the comment            setVoteButtons(viewBinding)            commentUpVote.setOnClickListener {
+//fill the icon if the user has liked the comment            setVoteButtons(viewBinding);
+        commentUpVote.setOnClickListener {
     val voteType = if (comment.userVoteType == 1) 0 else 1
 val previousVoteType = comment.userVoteType
-val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())                scope.launch {
+val scope = CoroutineScope(Dispatchers.Main + SupervisorJob());
+        scope.launch {
     val success = CommentsAPI.vote(comment.commentId, voteType)
 if (success) {
         comment.userVoteType = voteType
@@ -161,7 +174,8 @@ comment.upvotes += if (voteType == 1) 1 else -1                        notifyCha
 commentDownVote.setOnClickListener {
     val voteType = if (comment.userVoteType == -1) 0 else -1
 val previousVoteType = comment.userVoteType
-val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())                scope.launch {
+val scope = CoroutineScope(Dispatchers.Main + SupervisorJob());
+        scope.launch {
     val success = CommentsAPI.vote(comment.commentId, voteType)
 if (success) {
         comment.userVoteType = voteType
@@ -170,10 +184,13 @@ if (previousVoteType == 1) {
 comment.downvotes += if (voteType == -1) 1 else -1                        notifyChanged()}}}
 commentTotalVotes.text = (comment.upvotes - comment.downvotes).toString()
         commentUserAvatar.openImage(
-                commentsFragment.activity.getString(R.string.avatar, comment.username),                comment.profilePictureUrl ?: ""            )            comment.profilePictureUrl?.let { commentUserAvatar.loadImage(it)
+                commentsFragment.activity.getString(R.string.avatar, comment.username),                comment.profilePictureUrl ?: ""            );
+        comment.profilePictureUrl?.let {
+        commentUserAvatar.loadImage(it)
 }
 commentUserName.text = comment.username
-val userColor = "[${levelColor.second}]"            commentUserLevel.text = userColor            commentUserLevel.setTextColor(levelColor.first)            commentUserTime.text = formatTimestamp(comment.timestamp)
+val userColor = "[${levelColor.second}]"            commentUserLevel.text = userColor            commentUserLevel.setTextColor(levelColor.first);
+        commentUserTime.text = formatTimestamp(comment.timestamp)
          }
 }
 
@@ -192,7 +209,8 @@ if (isReplying) commentsFragment.activity.getString(R.string.cancel) else "Reply
 
 fun editing(isEditing: Boolean) {        
         b
-if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(                R.string.edit            )        this.isEditing = isEditing    }
+if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(                R.string.edit            );
+        this.isEditing = isEditing    }
 
 fun registerSubComment(id: Int) {        
         s
@@ -211,7 +229,8 @@ subCommentIds.clear()
 private fun setVoteButtons(viewBinding: ItemCommentsBinding) {
 when (comment.userVoteType) {
         1 -> {
-        viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)                viewBinding.commentUpVote.alpha = 1f
+        viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_active_24);
+        viewBinding.commentUpVote.alpha = 1f
                 viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
             }
 -1 -> {
@@ -223,13 +242,16 @@ else -> {
         viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
         viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
              }
+            
+             }
             }
 }
 
 @SuppressLint("SimpleDateFormat")    
 private fun formatTimestamp(timestamp: String): String {
 return try {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT);
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             
 val parsedDate = dateFormat.parse(timestamp)            
 val currentDate = Date()            
@@ -241,6 +263,8 @@ return when {
         days > 0 -> "${days}d"                hours > 0 -> "${hours}h"                minutes > 0 -> "${minutes}m"
 else -> "now"            }
 }
+        
+}
         catch (e: Exception) {
         "now"}
 }
@@ -248,7 +272,8 @@ else -> "now"            }
 companion object {        
 @SuppressLint("SimpleDateFormat")        
 fun timestampToMillis(timestamp: String): Long {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT);
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             
 val parsedDate = dateFormat.parse(timestamp)
 return parsedDate?.time ?: 0        }

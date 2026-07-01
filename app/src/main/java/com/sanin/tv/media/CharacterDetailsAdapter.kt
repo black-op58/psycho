@@ -20,7 +20,8 @@ override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
     val binding = holder.binding
 val desc =            (if (character.id == 4004)                "![za wardo](https://media1.tenor.com/m/_z1tmCJnL2wAAAAd/za-warudo.gif) \n" else "") +                    (if (character.age != null && character.age != "null") "**${currActivity()!!.getString(R.string.age)}** ${character.age}  \n" else "") +                    (if (character.dateOfBirth != null && character.dateOfBirth.toString() != "??" && character.dateOfBirth.toString().isNotEmpty())                        "**${currActivity()!!.getString(R.string.birthday)}** ${character.dateOfBirth.toString()}  \n" else "") +                    (if (character.gender != null && character.gender != "null")                        "**${currActivity()!!.getString(R.string.gender)}** " + when (character.gender) {
         c
-else -> character.gender                        } + "  \n" else "") + "\n" + (character.description ?: "")        binding.characterDesc.isTextSelectable
+else -> character.gender                        } + "  \n" else "") + "\n" + (character.description ?: "");
+        binding.characterDesc.isTextSelectable
 val markWon = buildMarkwon(activity)
         markWon.setMarkdown(binding.characterDesc, desc.replace("~!", "||").replace("!~", "||"))
         binding.voiceActorRecycler.adapter = AuthorAdapter(character.voiceActor ?: arrayListOf())

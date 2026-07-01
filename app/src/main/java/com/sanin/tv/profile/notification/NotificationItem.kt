@@ -49,6 +49,8 @@ if (!canDeleteLocal && !canUnsubscribeActivity) return        binding.root.conte
 if (canDeleteLocal) {
         setTitle(R.string.delete)
  }
+        
+ }
         else {
         setTitle(R.string.activity_subscription)
             }
@@ -76,10 +78,14 @@ if (canUnsubscribeActivity) {
 if (activityId == null) {
         snackString(binding.root.context.getString(R.string.activity_unsubscribe_failed))
  }
+        
+ }
         else {
     val lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
 if (lifecycleOwner == null) {
         snackString(binding.root.context.getString(R.string.activity_unsubscribe_unavailable))
+ }
+        
  }
         else {
         lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
@@ -88,15 +94,21 @@ if (lifecycleOwner == null) {
 if (success) {
         snackString(binding.root.context.getString(R.string.activity_unsubscribed))
  }
+        
+ }
         else {
         snackString(binding.root.context.getString(R.string.activity_unsubscribe_failed))                                    }}}}}
 }
 if (canDeleteLocal) {
-        setNeutralButton(R.string.unsubscribe) { unsubscribeAction()
+        setNeutralButton(R.string.unsubscribe) {
+        unsubscribeAction()
  }
 }
+        
+}
         else {
-        setPosButton(R.string.unsubscribe) { unsubscribeAction() }}}
+        setPosButton(R.string.unsubscribe) {
+        unsubscribeAction() }}}
 setNegButton(R.string.no)
         show()
 }
@@ -121,8 +133,11 @@ val textMarginStart = 125.toPx
 if (user) {
     val iconParams = binding.notificationTypeIcon.layoutParams as FrameLayout.LayoutParams            iconParams.gravity = Gravity.TOP or Gravity.END            iconParams.topMargin = 8.toPx            iconParams.marginEnd = 12.toPx            binding.notificationTypeIcon.layoutParams = iconParams                        binding.notificationCover.visibility = View.GONE            binding.notificationCoverUser.visibility = View.VISIBLE            binding.notificationCoverUserContainer.visibility = View.VISIBLE
 if (commentNotification) {
-        binding.notificationCoverUser.setImageResource(R.drawable.ic_sanintv_round)                binding.notificationCoverUser.scaleX = 1.4f
+        binding.notificationCoverUser.setImageResource(R.drawable.ic_sanintv_round);
+        binding.notificationCoverUser.scaleX = 1.4f
                 binding.notificationCoverUser.scaleY = 1.4f
+}
+        
 }
         else {
         binding.notificationCoverUser.loadImage(notification.user?.avatar?.large)
@@ -130,13 +145,17 @@ if (commentNotification) {
 binding.notificationBannerImage.layoutParams.height = userHeight            binding.notificationGradiant.layoutParams.height = userHeight
 val textParams = binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams            textParams.marginStart = userHeight            textParams.marginEnd = 48.toPx            binding.notificationTextContainer.layoutParams = textParams
 }
+        
+}
         else {
-    val iconParams = binding.notificationTypeIcon.layoutParams as FrameLayout.LayoutParams            iconParams.gravity = Gravity.TOP or Gravity.END            iconParams.topMargin = 16.toPx            iconParams.marginEnd = 16.toPx            binding.notificationTypeIcon.layoutParams = iconParams                        binding.notificationCover.visibility = View.VISIBLE            binding.notificationCoverUser.visibility = View.VISIBLE            binding.notificationCoverUserContainer.visibility = View.GONE            binding.notificationCover.loadImage(if (newRelease) notification.image else notification.media?.coverImage?.large)            binding.notificationBannerImage.layoutParams.height = defaultHeight
+    val iconParams = binding.notificationTypeIcon.layoutParams as FrameLayout.LayoutParams            iconParams.gravity = Gravity.TOP or Gravity.END            iconParams.topMargin = 16.toPx            iconParams.marginEnd = 16.toPx            binding.notificationTypeIcon.layoutParams = iconParams                        binding.notificationCover.visibility = View.VISIBLE            binding.notificationCoverUser.visibility = View.VISIBLE            binding.notificationCoverUserContainer.visibility = View.GONE            binding.notificationCover.loadImage(if (newRelease) notification.image else notification.media?.coverImage?.large);
+        binding.notificationBannerImage.layoutParams.height = defaultHeight
             binding.notificationGradiant.layoutParams.height = defaultHeight            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart =                textMarginStart        }
     }
 
 private fun setBinding() {
-    val notificationType: NotificationType =            NotificationType.valueOf(notification.notificationType)        binding.notificationText.text = ActivityItemBuilder.getContent(notification)
+    val notificationType: NotificationType =            NotificationType.valueOf(notification.notificationType);
+        binding.notificationText.text = ActivityItemBuilder.getContent(notification)
         binding.notificationDate.text = ActivityItemBuilder.getDateTime(notification.createdAt)
         binding.notificationTypeIcon.setImageResource(getNotificationTypeIcon(notificationType))
 when (notificationType) {
@@ -272,14 +291,17 @@ NotificationType.SANINTV_UPDATE -> {
         image(user = true)
 }
 NotificationType.SUBSCRIPTION -> {
-        image(newRelease = true)                binding.notificationCoverUser.setOnClickListener {
+        image(newRelease = true);
+        binding.notificationCoverUser.setOnClickListener {
                     clickCallback(                        notification.mediaId ?: 0, null, NotificationClickType.MEDIA                    )
 }
 binding.notificationBannerImage.setOnClickListener {
         clickCallback(                        notification.mediaId ?: 0, null, NotificationClickType.MEDIA                    )}}}
 binding.notificationCoverUser.setOnLongClickListener {
-        dialog()            true}
+        dialog();
+        true}
 binding.notificationBannerImage.setOnLongClickListener {
-        dialog()            true}
+        dialog();
+        true}
 }
 }

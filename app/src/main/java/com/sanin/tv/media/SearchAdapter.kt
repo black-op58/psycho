@@ -39,16 +39,21 @@ private val type: SearchType) :    HeaderInterface() {
 if (s.toString().isBlank()) {
         activity.emptyMediaAdapter()
         CoroutineScope(Dispatchers.IO).launch {
-        delay(200)                        activity.runOnUiThread {
+        delay(200);
+        activity.runOnUiThread {
                             setHistoryVisibility(true)
                         }
 }
+}
+        
 }
         else {
         setHistoryVisibility(false)
         searchTitle()
                 }}}
-binding.searchBarText.addTextChangedListener(textWatcher)        binding.searchBarText.setOnEditorActionListener { _, actionId, _ ->
+binding.searchBarText.addTextChangedListener(textWatcher);
+        binding.searchBarText.setOnEditorActionListener {
+        _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
         EditorInfo.IME_ACTION_SEARCH -> {
         searchTitle()
@@ -57,7 +62,8 @@ binding.searchBarText.addTextChangedListener(textWatcher)        binding.searchB
                     true
 }
 else -> false            }}
-binding.searchBar.setEndIconOnClickListener { searchTitle()
+binding.searchBar.setEndIconOnClickListener {
+        searchTitle()
 }
 binding.searchResultGrid.setOnClickListener {
         it.alpha = 1f            binding.searchResultList.alpha = 0.33f            activity.style = 0            PrefManager.setVal(PrefName.SearchStyle, 0)
@@ -68,16 +74,19 @@ binding.searchResultList.setOnClickListener {
         activity.recycler()
          }
 if (Anilist.adult) {
-        binding.searchAdultCheck.visibility = View.VISIBLE            binding.searchAdultCheck.isChecked = adult            binding.searchAdultCheck.setOnCheckedChangeListener { _, b ->                adult = b                searchTitle()
+        binding.searchAdultCheck.visibility = View.VISIBLE            binding.searchAdultCheck.isChecked = adult            binding.searchAdultCheck.setOnCheckedChangeListener {
+        _, b ->                adult = b                searchTitle()
             }
 } else binding.searchAdultCheck.visibility = View.GONE        binding.searchList.apply {
 if (Anilist.userid != null) {
         visibility = View.VISIBLE                checkedState = when (listOnly) {
         null -> STATE_UNCHECKED                    true -> STATE_CHECKED                    false -> STATE_INDETERMINATE                }
-addOnCheckedStateChangedListener { _, state ->                    listOnly = when (state) {
+addOnCheckedStateChangedListener {
+        _, state ->                    listOnly = when (state) {
         STATE_CHECKED -> true                        STATE_INDETERMINATE -> false                        STATE_UNCHECKED -> null
 else -> null                    }}
-setOnTouchListener { _, event ->                    (event.actionMasked == MotionEvent.ACTION_DOWN).also {
+setOnTouchListener {
+        _, event ->                    (event.actionMasked == MotionEvent.ACTION_DOWN).also {
 if (it) checkedState = (checkedState + 1) % 3                        searchTitle()
                     }
 }

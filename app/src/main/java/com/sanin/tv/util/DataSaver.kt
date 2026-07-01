@@ -8,6 +8,8 @@ companion object {
 object : DataSaver {
     override fun compress(imageUrl: String): String = imageUrl        }
     }
+    
+    }
     }
 
 fun createDataSaver(): DataSaver {
@@ -34,6 +36,8 @@ if (ignoreJpg) imageUrl else getUrl(imageUrl)
 if (ignoreGif) imageUrl else getUrl(imageUrl)
 else -> getUrl(imageUrl)
             }
+}
+        
 }
         else {
         imageUrl        }
@@ -63,11 +67,17 @@ if (imageUrl.contains(".webp", true) || imageUrl.contains(".gif", true)) {
 if (!format) {
         // Preserve output image extension for animated images(.webp and .gif)                    "&q=$quality&n=-1"
 }
+        
+}
         else {                    // Do not preserve output Extension if User asked to convert into Jpeg                    "&output=jpg&q=$quality&n=-1"                }
+}
+        
 }
         else {
 if (format) {
         "&output=jpg&q=$quality"
+}
+        
 }
         else {                    "&output=webp&q=$quality"                }}
 }

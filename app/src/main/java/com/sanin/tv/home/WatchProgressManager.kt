@@ -20,6 +20,9 @@ data class WatchEntry(
     private const val serialVersionUID = 1L
     }
 
+    
+    }
+
     /** 0.0–1.0 progress fraction; 0 when duration unknown. */
     val progressFraction: Float
         get() = if (durationMs > 0L)
@@ -39,10 +42,13 @@ object WatchProgressManager {
     /** Record (or update) a watch entry.  Always kept newest-first, capped at 5. */
     fun record(entry: WatchEntry) {
     val list = getHistory().toMutableList()
-        list.removeAll { it.mediaId == entry.mediaId }
+        list.removeAll {
+        it.mediaId == entry.mediaId }
         list.add(0, entry);
         while (list.size > MAX_ENTRIES) list.removeAt(list.size - 1)
         PrefManager.setCustomVal(KEY_HISTORY, ArrayList(list))
+      }
+    
       }
     /** Returns up to 5 most-recently watched entries, newest first. */
     @Suppress("UNCHECKED_CAST")
@@ -50,12 +56,18 @@ object WatchProgressManager {
         (PrefManager.getNullableCustomVal(KEY_HISTORY, null, ArrayList::class.java)
                 as? ArrayList<WatchEntry>) ?: emptyList()
      }
+        
+     }
         catch (_: Exception) {
         emptyList()
+      }
+    
       }
     /** Persist the last-used extension (source) index globally. */
     fun saveLastExtensionIndex(index: Int) {
         PrefManager.setCustomVal(KEY_LAST_EXT, index)
+      }
+    
       }
     /** Returns the last-used extension index, or 0 if never set. */
     fun getLastExtensionIndex(): Int =

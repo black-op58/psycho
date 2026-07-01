@@ -28,6 +28,8 @@ if (DeviceUtil.isMiui || Build.VERSION.SDK_INT == Build.VERSION_CODES.S && Devic
 try {
         WebSettings.getDefaultUserAgent(context)
         }
+        
+        }
         catch (_: Exception) {
         // Avoid some crashes like when Chrome/WebView is being updated.        }
 }
@@ -52,7 +54,8 @@ fun parseHeaders(headers: Headers): Map<String, String> {
 return headers            // Keeping unsafe header makes webview throw [net::ERR_INVALID_ARGUMENT]            .filter { (name, value) ->                isRequestHeaderSafe(name, value)
             }
 .groupBy(keySelector = { (name, _) -> name }) { (_, value) -> value}
-.mapValues { it.value.getOrNull(0).orEmpty()
+.mapValues {
+        it.value.getOrNull(0).orEmpty()
 }
 }
 

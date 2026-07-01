@@ -31,6 +31,8 @@ companion object {
 return if (useAlarmManager) {
         AlarmManagerScheduler(context)
  }
+        
+ }
         else {
         WorkManagerScheduler(context)
             }
@@ -43,9 +45,12 @@ fun scheduleSingleWork(context: Context) {
         workManager.enqueueUniqueWork(                AnilistNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)                    .build()            )
         workManager.enqueueUniqueWork(                SubscriptionNotificationWorker.WORK_NAME + "_single",                androidx.work.ExistingWorkPolicy.REPLACE,                androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)                    .build()            )
         }
+    
+        }
     }
 
 enum class TaskType {
         COMMENT_NOTIFICATION,        ANILIST_NOTIFICATION,        SUBSCRIPTION_NOTIFICATION    }}
-interface Task {    suspend 
+interface Task {
+        suspend 
 fun execute(context: Context): Boolean}

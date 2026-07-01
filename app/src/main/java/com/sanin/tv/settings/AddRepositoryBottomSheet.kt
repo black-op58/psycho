@@ -17,8 +17,13 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
         onRepoAdded = listener
     }
 
+    
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.dialog_add_repository, container, false)
+      }
+    
       }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,8 +38,13 @@ class AddRepositoryBottomSheet : BottomSheetDialogFragment() {
                 Toast.makeText(requireContext(), R.string.repository_added, Toast.LENGTH_SHORT).show()
                 dismiss()
              }
+        
+             }
         }
-        view.findViewById<View>(R.id.repoCancelButton).setOnClickListener { dismiss()
+        view.findViewById<View>(R.id.repoCancelButton).setOnClickListener {
+        dismiss()
+ }
+    
  }
     }
 }

@@ -27,6 +27,8 @@ if (attrs != null) {
         strokeWidth = a.getFloat(                R.styleable.OutlineTextView_outlineWidth,                defaultStrokeWidth            )
         a.recycle()
  }
+        
+ }
         else {
         strokeColor = currentTextColor            strokeWidth = defaultStrokeWidth        }
 setStrokeWidth(strokeWidth)
@@ -40,13 +42,16 @@ if (isDrawing) return        super.invalidate()
      }
 override fun onDraw(canvas: Canvas) {
 if (strokeWidth > 0) {
-        isDrawing = true            super.onDraw(canvas)            paint.style = Paint.Style.STROKE
+        isDrawing = true            super.onDraw(canvas);
+        paint.style = Paint.Style.STROKE
             paint.strokeWidth = strokeWidth
 val colorTmp = paint.color            setTextColor(strokeColor)
         super.onDraw(canvas)
             setTextColor(colorTmp)
             paint.style = Paint.Style.FILL
             isDrawing = false
+}
+        
 }
         else {
         super.onDraw(canvas)

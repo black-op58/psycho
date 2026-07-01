@@ -56,7 +56,8 @@ class ExtensionHealthFragment : Fragment() {
         val checkedAt: Long = 0L,
         val error: String? = null
     ) {
-        enum class Status { GOOD, SLOW, DOWN, UNCHECKED }
+        enum class Status {
+        GOOD, SLOW, DOWN, UNCHECKED }
 
         val status: Status get() = when {
             checkedAt == 0L  -> Status.UNCHECKED
@@ -66,16 +67,24 @@ class ExtensionHealthFragment : Fragment() {
             else             -> Status.DOWN
         }
 
+        
+        }
+
         val displayLatency: String get() = when {
             checkedAt == 0L -> "—"
             error != null   -> "Error"
             else            -> "${statusMs}ms"
         }
 
+        
+        }
+
         val displayCheckedAt: String get() = when {
             checkedAt == 0L -> "Not checked yet"
             else            -> "Checked " + SimpleDateFormat("HH:mm:ss", Locale.getDefault())
                 .format(Date(checkedAt))
+         }
+    
          }
     }
 
@@ -94,13 +103,21 @@ class ExtensionHealthFragment : Fragment() {
             orientation = LinearLayout.VERTICAL
             setPadding(0, 0, 0, 0)
           }
-        progressBar = ProgressBar(requireContext()).also { root.addView(it)
+        
+          }
+        progressBar = ProgressBar(requireContext()).also {
+        root.addView(it)
+  }
+        
   }
         recheckButton = TextView(requireContext()).apply {
             text = "Re-check all"
             setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
             setPadding(48, 24, 48, 24)
-            setOnClickListener { pingAllSources()
+            setOnClickListener {
+        pingAllSources()
+ }
+        
  }
         }
         root.addView(recheckButton)
@@ -109,23 +126,34 @@ class ExtensionHealthFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@ExtensionHealthFragment.adapter
         }
+        
+        }
         root.addView(recyclerView)
 
         return root
+    }
+
+    
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadSources()
       }
+    
+      }
     override fun onDestroyView() {
         super.onDestroyView()
         pingJob?.cancel()
+      }
+    
       }
     private fun loadSources() {
         val sources = buildSourceList()
         adapter.submitList(sources)
         pingAllSources(sources)
+      }
+    
       }
     /**
      * Build the list of sources from installed extensions.
@@ -139,7 +167,12 @@ class ExtensionHealthFragment : Fragment() {
             val animeLoader = Class.forName("eu.kanade.tachiyomi.animesource.online.AnimeHttpSource")
             // Replace with your real extension registry — this is a stub
         }
+        
+        }
         catch (_: ClassNotFoundException) {
+        }
+
+        
         }
 
         return list.ifEmpty {
@@ -148,7 +181,8 @@ class ExtensionHealthFragment : Fragment() {
                 SourceHealth("stub_2", "AllAnime",   "https://allanime.to",     "ANIME"),
                 SourceHealth("stub_3", "MangaDex",   "https://api.mangadex.org","MANGA"),
                 SourceHealth("stub_4", "NovelUpdates","https://www.novelupdates.com","NOVEL"),
-            )
+)
+            }
          }
     }
 
@@ -162,10 +196,14 @@ class ExtensionHealthFragment : Fragment() {
                 async(Dispatchers.IO) {
                     pingSource(src)
                  }
+            
+                 }
             }.awaitAll()
 
             progressBar.visibility = View.GONE
             adapter.submitList(updated)
+         }
+    
          }
     }
 
@@ -178,13 +216,19 @@ class ExtensionHealthFragment : Fragment() {
                 requestMethod  = "HEAD"
                 instanceFollowRedirects = true
             }
+            
+            }
             conn.responseCode
             val elapsed = System.currentTimeMillis() - start
             conn.disconnect()
             src.copy(statusMs = elapsed, checkedAt = System.currentTimeMillis(), error = null)
          }
+        
+         }
         catch (e: Exception) {
         src.copy(statusMs = -1L, checkedAt = System.currentTimeMillis(), error = e.message)
+         }
+    
          }
     }
 
@@ -199,21 +243,32 @@ class ExtensionHealthFragment : Fragment() {
             val time:    TextView = root.getChildAt(4) as TextView
         }
 
+        
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
             val ctx = parent.context
             val row = LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL
                 setPadding(32, 20, 32, 20)
-                addView(TextView(ctx).apply { textSize = 20f })  // dot
+                addView(TextView(ctx).apply {
+        textSize = 20f })  // dot
                 addView(TextView(ctx).apply {
                     layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                     setPadding(16, 0, 0, 0)
                 })  // name
-                addView(TextView(ctx).apply { setPadding(8, 0, 8, 0); textSize = 10f })  // badge
-                addView(TextView(ctx).apply { setPadding(8, 0, 8, 0) })                  // latency
-                addView(TextView(ctx).apply { textSize = 10f })                          // time
+                addView(TextView(ctx).apply {
+        setPadding(8, 0, 8, 0); textSize = 10f })  // badge
+                addView(TextView(ctx).apply {
+        setPadding(8, 0, 8, 0) })                  // latency
+                addView(TextView(ctx).apply {
+        textSize = 10f })                          // time
+            }
+            
             }
             return VH(row)
+          }
+        
           }
         override fun onBindViewHolder(holder: VH, position: Int) {
             val src = getItem(position)
@@ -225,6 +280,8 @@ class ExtensionHealthFragment : Fragment() {
                 SourceHealth.Status.DOWN      -> "●" to ContextCompat.getColor(ctx, android.R.color.holo_red_dark)
                 SourceHealth.Status.UNCHECKED -> "○" to ContextCompat.getColor(ctx, android.R.color.darker_gray)
               }
+            
+              }
             holder.dot.text = dotChar
             holder.dot.setTextColor(dotColor)
             holder.name.text = src.name
@@ -233,9 +290,14 @@ class ExtensionHealthFragment : Fragment() {
             holder.time.text = src.displayCheckedAt
         }
 
+        
+        }
+
         private val DIFF = object : DiffUtil.ItemCallback<SourceHealth>() {
             override fun areItemsTheSame(a: SourceHealth, b: SourceHealth) = a.id == b.id
             override fun areContentsTheSame(a: SourceHealth, b: SourceHealth) = a == b
+        }
+    
         }
     }
 }
