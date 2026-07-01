@@ -213,14 +213,20 @@ if (a !is MainActivity) a.setNavigationTheme()}
         controller.hide(WindowInsetsCompat.Type.systemBars())
     }
 }
-    fun Activity.hideSystemBarsExtendView() {    WindowCompat.setDecorFitsSystemWindows(window, false)    hideSystemBars()}
+    fun Activity.hideSystemBarsExtendView() {
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    hideSystemBars()
+}
     fun Activity.showSystemBars() {
     WindowInsetsControllerCompat(window, window.decorView).let { controller ->
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
         controller.show(WindowInsetsCompat.Type.systemBars())
     }
 }
-    fun Activity.showSystemBarsRetractView() {    WindowCompat.setDecorFitsSystemWindows(window, true)    showSystemBars()}
+    fun Activity.showSystemBarsRetractView() {
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    showSystemBars()
+}
     fun Activity.setNavigationTheme() {
     val tv = TypedValue()    theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
 if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && tv.isColorType)        || (tv.type >= TypedValue.TYPE_FIRST_COLOR_INT && tv.type <= TypedValue.TYPE_LAST_COLOR_INT)    ) {        window.navigationBarColor = tv.data    }}/** * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding. * * When nesting multiple scrolling views, only call this method on the inner most scrolling view. */
