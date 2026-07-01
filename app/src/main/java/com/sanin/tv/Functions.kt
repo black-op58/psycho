@@ -188,7 +188,10 @@ when (this) {                2 -> AppCompatDelegate.MODE_NIGHT_YES              
 else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM            }        )    }
 if (immersiveMode) {
 if (navBarHeight == 0) {            ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))                ?.apply {                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
-if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx                }        }        WindowInsetsControllerCompat(            window,            window.decorView        ).hide(WindowInsetsCompat.Type.statusBars())
+if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
+            }
+        }
+        WindowInsetsControllerCompat(            window,            window.decorView        ).hide(WindowInsetsCompat.Type.statusBars())
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT        ) {            window.decorView.rootWindowInsets?.displayCutout?.apply {
 if (boundingRects.size > 0) {                    statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())                }            }
         }
@@ -196,12 +199,27 @@ if (boundingRects.size > 0) {                    statusBarHeight = min(boundingR
         else
 if (statusBarHeight == 0) {
     val windowInsets =                ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
-if (windowInsets != null) {                statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top                navBarHeight =                    windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
-if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx            }        }
+if (windowInsets != null) {
+                statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                navBarHeight =                    windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
+            }
+        }
 if (a !is MainActivity) a.setNavigationTheme()}
-    fun Activity.hideSystemBars() {    WindowInsetsControllerCompat(window, window.decorView).let { controller ->        controller.systemBarsBehavior =            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE        controller.hide(WindowInsetsCompat.Type.systemBars())    }}
+    fun Activity.hideSystemBars() {
+    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+    }
+}
     fun Activity.hideSystemBarsExtendView() {    WindowCompat.setDecorFitsSystemWindows(window, false)    hideSystemBars()}
-    fun Activity.showSystemBars() {    WindowInsetsControllerCompat(window, window.decorView).let { controller ->        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT        controller.show(WindowInsetsCompat.Type.systemBars())    }}
+    fun Activity.showSystemBars() {
+    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        controller.show(WindowInsetsCompat.Type.systemBars())
+    }
+}
     fun Activity.showSystemBarsRetractView() {    WindowCompat.setDecorFitsSystemWindows(window, true)    showSystemBars()}
     fun Activity.setNavigationTheme() {
     val tv = TypedValue()    theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
