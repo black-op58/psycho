@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themes">
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Purple</item>
+        <item>Pink</item>
+        <item>Saikou</item>
+        <item>Red</item>
+        <item>Lavender</item>
+        <item>BlueOLED</item>
+        <item>GreenOLED</item>
+        <item>PurpleOLED</item>
+        <item>PinkOLED</item>
+        <item>SaikouOLED</item>
+        <item>RedOLED</item>
+        <item>LavenderOLED</item>
+    </string-array>
+    <string-array name="tips">
+        <item>Swipe right to skip forward</item>
+        <item>Tap center to pause</item>
+        <item>Pinch to zoom</item>
+    </string-array>
+</resources>
